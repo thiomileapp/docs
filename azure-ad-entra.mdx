@@ -1,0 +1,92 @@
+---
+    title: Azure AD (Entra)
+    description: Auto-migrated from ClickUp Markdown (section: Azure AD (Entra)).
+    ---
+
+# {frontmatter.title}
+
+This documentation outlines the steps to integrate Single Sign-On (SSO) using Microsoft Azure Active Directory (AD) with MileApp. This integration allows users to authenticate using their Azure AD credentials.
+Before you begin, ensure you have the following:
+1. **Azure AD Subscription**: A valid Azure AD account with administrator privileges.
+2. **MileApp Access**: Access to the MileApp administration settings.
+3. **Application Registration**: An application registered in Azure AD for MileApp.
+###   
+
+### Step 1: Register MileApp in Azure AD
+1. **Log into the Azure Portal**: Navigate to [Azure Portal](https://portal.azure.com/).
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/181b0bec-d0c9-4178-8286-edda54c79f4e/image.png)
+
+2. **Create a New Application**:
+    *   Go to **Azure Active Directory** > **All aplication** > **New application**.
+    ![](https://t3837933.p.clickup-attachments.com/t3837933/1dadffde-7218-4a90-8bc3-b117ecf4ac2c/image.png)
+    *   Enter the following details:
+        *   **Name**: MileApp
+        *   Select the (**Non-gallery) option from the radio box** and click **Create.** 
+        ![](https://t3837933.p.clickup-attachments.com/t3837933/5e256be3-d13f-48e5-a58e-676f4704edf4/image.png)
+3. **Register**: Click on **Create** to create the application.
+###   
+
+### Step 2: Configure SSO in Azure AD
+1. **Navigate to the Registered Application**:
+    *   Find and select the MileApp application from the **App registrations** list.
+2. **Set Up SSO**:
+    *   In the left menu, click on **Single sign-on**.
+    *   Select **SAML** as the SSO method.
+    ![](https://t3837933.p.clickup-attachments.com/t3837933/2edc8d8d-ea82-475a-9efd-0b3e156fdd73/image.png)
+3. **Basic SAML Configuration**:
+    *   In the **Basic SAML Configuration** section, click on **Edit** and provide the following information:
+    ![](https://t3837933.p.clickup-attachments.com/t3837933/812d42f6-4584-47a0-92c1-6bfb5cd4b702/image.png)
+4. Enter a unique ID. Note: This ID will be used in the saml.config file for the service provider name. Therefore, note the ID. For e.g: you can enter the ID as [`https://your-mileapp-url.com`](https://your-mileapp-url.com)
+5. Next, click **Add reply URL**.
+6. Enter the application **callback URL** where the response will be posted. For now, you can enter a dummy URL e.g. [`https://your-mileapp-url.com/auth/sso`](https://your-mileapp-url.com/auth/sso)
+7. Select **Save**. Close the Basic SAML Configuration page.
+8. Now scroll down to Set up MileApp app. Copy the Login URL . You will need this URL on MileApp.
+9. **SAML Signing Certificate**:
+    *   Download the **Certificate (Base64)** by clicking on the **Download** button. This certificate will be used in MileApp for SSO configuration.
+
+### Step 3: Configure MileApp for SSO
+1. **Log into MileApp**: Access the settings menu of MileApp.
+2. **Navigate to SSO Settings**:
+    *   Go to **Setting** > **Integration** > **Azure** **SSO Configuration**.
+3. **Enter SSO Details:**
+    1. paste the **Login URL** that you copied from Azure.
+    2. upload the .cer file that you downloaded from Azure
+![](https://t3837933.p.clickup-attachments.com/t3837933/91deab44-78cb-4f7f-833c-43ade1acc944/image.png)
+1. After entering the required details, click on **Save** to apply the settings.
+### Step 4: Registering Users from Azure
+![](https://t3837933.p.clickup-attachments.com/t3837933/dcd165f0-debd-4c40-8e1b-7b7992ea4b7e/image.png)!\[photo\]
+#### Steps:
+1. Open the **Users and Groups** menu.
+2. Click **Add User/Group** to register users who can access MileApp.
+3. Only registered users in Azure can log in to MileApp using their Azure accounts.
+###   
+
+### **Login to MileApp via Microsoft Account with Azure SSO**
+1. **Complete the Setup Process**
+
+After successfully completing the setup steps for Azure SSO, you can proceed to log in to MileApp using your Microsoft account.
+
+2. **Access the Office Portal**
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/8f449da5-08a4-447a-abe1-c5950bd5e986/image.png)
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/b3a3888d-9098-469b-a523-131ff474ff7e/image.png)
+1. Open the Microsoft Office web portal at [https://www.office.com/](https://www.office.com/).
+2. Log in with your Microsoft account credentials.
+
+3. **Navigate to MileApp**
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/72eb3c9a-ba91-4ee3-8108-7836fae5daa5/image.png)
+1. Once logged in, click on the **App Launcher** (the grid icon) on the left-hand side of the screen.
+2. Select **MileApp** from the list of available applications to access the MileApp web platform.
+
+By following these steps, you will be successfully logged into MileApp through your Microsoft account integrated with Azure SSO.
+
+#### Notes:
+1. If you already have a MileApp account and want to integrate it with Azure SSO, ensure that the email registered in Azure AD matches the email used in your MileApp account.
+2. If the email registered in Azure AD differs from the email registered in MileApp, it will be considered a separate account.
+3. If a user has been invited through MileApp but has not completed the verification process via email and is then registered in Azure using the same email, they cannot log in to MileApp until the verification is complete. You can complete the verification process via email or delete the unverified user in the **User Settings** menu to allow access.
+#### Tips:
+1. Ensure you have **View** and **Create Integration** permissions to configure the integration.
+2. You can still set a password in MileApp even after your account is registered in Azure. The password can be used for logging in through the MileApp login page.
