@@ -16,10 +16,10 @@
           {
             "group": "MileApp V3",
       "pages": [
-        "synchronized-task-visit",
-        "routable-task",
+        "activating-deactivating-an-automation-2",
+        "advanced-permission",
         "creating-visit",
-        "build-a-routable-tasks-flow",
+        "assign-task-2",
         "create-a-routable-task",
         "create-one-task",
         "create-multiple-task",
@@ -69,7 +69,7 @@
       ]
           },
           {
-            "group": "Customization CACA",
+            "group": "Customization",
             "pages": [
               "essentials/settings",
               "essentials/navigation"
