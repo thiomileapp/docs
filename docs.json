@@ -16,6 +16,7 @@
           {
             "group": "MileApp V3",
       "pages": [
+        "register-to-mileapp",
         "activating-deactivating-an-automation-2",
         "advanced-permission",
         "creating-visit",
