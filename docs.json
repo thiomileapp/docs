@@ -9,7 +9,10 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "group": "MileApp V3",
+    "tabs": [
+      {
+        "tab": "Guides",
+        "group": "MileApp V3",
       "pages": [
         "synchronized-task-visit",
         "routable-task",
@@ -62,9 +65,6 @@
         "register-to-mileapp-2",
         "verify-account"
       ],
-    "tabs": [
-      {
-        "tab": "Guides",
         "groups": [
           {
             "group": "Getting started",
