@@ -23,9 +23,9 @@
           {
             "group": "Getting Started",
             "pages": [
-              "pages/getting-started/create-a-hub",
-              "pages/getting-started/create-a-flow",
-              "pages/getting-started/create-a-task",
+              "pages/getting-started/creating-a-hub",
+              "pages/getting-started/creating-a-flow",
+              "pages/getting-started/creating-a-task",
               "pages/getting-started/assigning-task"
             ]
           },
