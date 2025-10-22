@@ -21,6 +21,15 @@
             ]
           },
           {
+            "group": "Getting Started",
+            "pages": [
+              "pages/getting-started/create-a-hub",
+              "pages/getting-started/create-a-flow",
+              "pages/getting-started/create-a-task",
+              "pages/getting-started/assigning-task"
+            ]
+          },
+          {
             "group": "MileApp V3",
       "pages": [
         "activating-deactivating-an-automation-2",
