@@ -34,6 +34,15 @@
             ]
           },
           {
+            "group": "Flow",
+            "pages": [
+              "pages/flow/building-flow",
+              "pages/flow/building-introduction-to-flow",
+              "pages/flow/managing-flow",
+              "pages/flow/previewing-a-flow"
+            ]
+          },
+          {
             "group": "Customization",
             "pages": [
               "essentials/settings",
