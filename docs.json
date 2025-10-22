@@ -36,10 +36,28 @@
           {
             "group": "Flow",
             "pages": [
+              "pages/flow/introduction-to-flow",
               "pages/flow/building-flow",
-              "pages/flow/building-introduction-to-flow",
               "pages/flow/managing-flow",
-              "pages/flow/previewing-a-flow"
+              "pages/flow/previewing-a-flow",
+              {
+                "group": "Flow Builder",
+                "pages": [
+                  "pages/flow/flow-builder/page-initial-page",
+                  "pages/flow/flow-builder/page-mobile-app-page",
+                  "pages/flow/flow-builder/component-view",
+                  "pages/flow/flow-builder/component-input",
+                  "pages/flow/flow-builder/component-select",
+                  "pages/flow/flow-builder/component-photo",
+                  "pages/flow/flow-builder/component-signature",
+                  "pages/flow/flow-builder/component-timer",
+                  "pages/flow/flow-builder/component-voice-note",
+                  "pages/flow/flow-builder/configuration-task-list",
+                  "pages/flow/flow-builder/configuration-route",
+                  "pages/flow/flow-builder/configuration-time",
+                  "pages/flow/flow-builder/configuration-data-source"
+                ]
+              }
             ]
           },
           {
