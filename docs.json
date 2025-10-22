@@ -1,10 +1,10 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "MileApp Documentation",
   "logo": {
-    "light": "logo/logo-light.svg",
-    "dark": "logo/logo-dark.svg"
+    "light": "logo-light.svg",
+    "dark": "logo-dark.svg"
   },
   "colors": {
     "primary": "#16A34A",
