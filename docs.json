@@ -2,10 +2,6 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "MileApp Documentation",
-  "logo": {
-    "light": "logo-light.svg",
-    "dark": "logo-dark.svg"
-  },
   "colors": {
     "primary": "#02A8F3",
     "light": "#02A8F3",
@@ -40,13 +36,18 @@
               "pages/flow/building-flow",
               "pages/flow/managing-flow",
               "pages/flow/previewing-a-flow",
-              {
+              "pages/flow/flow-builder/component-view",
+                  {
                 "group": "Flow Builder",
                 "pages": [
                   "pages/flow/flow-builder/page-initial-page",
                   "pages/flow/flow-builder/page-mobile-app-page",
-                  "pages/flow/flow-builder/component-view",
-                  "pages/flow/flow-builder/component-input",
+                  {
+                    "group": "Component: Input",
+                    "pages": [
+                      "pages/flow/flow-builder/component-input"
+                    ]
+                  },
                   "pages/flow/flow-builder/component-select",
                   "pages/flow/flow-builder/component-photo",
                   "pages/flow/flow-builder/component-signature",
