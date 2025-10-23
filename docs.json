@@ -61,6 +61,20 @@
                   "pages/flow/flow-builder/component-select",
                   "pages/flow/flow-builder/component-photo",
                   "pages/flow/flow-builder/component-signature",
+                  {
+                    "group": "Component: Bill",
+                    "pages":[
+                      "pages/flow/flow-builder/component-bill/component-bill",
+                      "pages/flow/flow-builder/component-bill/creating-a-bill-component"
+                    ]
+                  },
+                  {
+                    "group": "Component: List",
+                    "pages":[
+                      "pages/flow/flow-builder/component-list/component-list",
+                      "pages/flow/flow-builder/component-list/creating-a-list-component"
+                    ]
+                  },
                   "pages/flow/flow-builder/component-timer",
                   "pages/flow/flow-builder/component-voice-note",
                   "pages/flow/flow-builder/configuration-task-list",
