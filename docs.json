@@ -45,7 +45,17 @@
                   {
                     "group": "Component: Input",
                     "pages": [
-                      "pages/flow/flow-builder/component-input"
+                      "pages/flow/flow-builder/component-input-type/component-input",
+                      "pages/flow/flow-builder/component-input-type/text",
+                      "pages/flow/flow-builder/component-input-type/date",
+                      "pages/flow/flow-builder/component-input-type/date-time",
+                      "pages/flow/flow-builder/component-input-type/time",
+                      "pages/flow/flow-builder/component-input-type/number",
+                      "pages/flow/flow-builder/component-input-type/address",
+                      "pages/flow/flow-builder/component-input-type/coordinate",
+                      "pages/flow/flow-builder/component-input-type/phone-number",
+                      "pages/flow/flow-builder/component-input-type/url",
+                      "pages/flow/flow-builder/component-input-type/currency"
                     ]
                   },
                   "pages/flow/flow-builder/component-select",
