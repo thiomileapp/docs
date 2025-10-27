@@ -114,6 +114,16 @@
                   "pages/task/managing-task/export-to-excel",
                   "pages/task/managing-task/do-task"
                 ]
+              },
+              "pages/task/filter-task-to-specify-the-report",
+              {
+                "group":"Tracking",
+                "pages":[
+                  "pages/task/tracking/introduction-to-tracking",
+                  "pages/task/tracking/general-information",
+                  "pages/task/tracking/icons-and-route-information",
+                  "pages/task/tracking/filter-the-tracking-history"
+                ]
               }
             ]
           },
