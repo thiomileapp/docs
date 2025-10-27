@@ -129,11 +129,17 @@
                 "group":"Schedule",
                 "pages":[
                   "pages/task/schedule/creating-task-schedule",
-                  "pages/task/schedule/repeat-cycle/repeat-daily",
-                  "pages/task/schedule/repeat-cycle/repeat-weekly",
-                  "pages/task/schedule/repeat-cycle/repeat-monthly",
-                  "pages/task/schedule/repeat-cycle/repeat-by-date",
-                  "pages/task/schedule/repeat-cycle/custom"
+                  {
+                    "group":"Repeat Cycle",
+                    "pages":[
+                      "pages/task/schedule/repeat-cycle/repeat-daily",
+                      "pages/task/schedule/repeat-cycle/repeat-weekly",
+                      "pages/task/schedule/repeat-cycle/repeat-monthly",
+                      "pages/task/schedule/repeat-cycle/repeat-by-date",
+                      "pages/task/schedule/repeat-cycle/custom"
+                    ]
+                  },
+                  "pages/task/schedule/manage-schedule"
                 ]
               }
             ]
