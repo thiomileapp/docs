@@ -92,7 +92,15 @@
               {
                 "group": "Creating Task",
                   "pages":[
-                    "page/task/task-menu"
+                    {
+                      "group": "Manual Task Input",
+                      "pages":[
+                        "page/task/creating-task/manual-task-input/manual-task-input",
+                        "page/task/creating-task/manual-task-input/creating-multiple-task",
+                        "page/task/creating-task/manual-task-input/creating-one-task"
+                      ]
+                    },
+                "page/task/creating-task/bulk-import-task"
                     ]
               }
             ]
