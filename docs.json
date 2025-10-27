@@ -102,6 +102,12 @@
                     },
                 "pages/task/creating-task/bulk-import-task"
                     ]
+              },
+              {
+                "group":"Managing Task",
+                "pages":[
+                  "pages/task/managing-task/viewing-editing-task"
+                ]
               }
             ]
           },
