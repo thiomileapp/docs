@@ -124,6 +124,17 @@
                   "pages/task/tracking/icons-and-route-information",
                   "pages/task/tracking/filter-the-tracking-history"
                 ]
+              },
+              {
+                "group":"Schedule",
+                "pages":[
+                  "pages/task/schedule/creating-task-schedule",
+                  "pages/task/schedule/repeat-daily",
+                  "pages/task/schedule/repeat-weekly",
+                  "pages/task/schedule/repeat-monthly",
+                  "pages/task/schedule/repeat-by-date",
+                  "pages/task/schedule/custom"
+                ]
               }
             ]
           },
