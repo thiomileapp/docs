@@ -88,19 +88,19 @@
           {
             "group": "Task",
             "pages": [
-              "page/task/task-menu",
+              "pages/task/task-menu",
               {
                 "group": "Creating Task",
                   "pages":[
                     {
                       "group": "Manual Task Input",
                       "pages":[
-                        "page/task/creating-task/manual-task-input/manual-task-input",
-                        "page/task/creating-task/manual-task-input/creating-multiple-task",
-                        "page/task/creating-task/manual-task-input/creating-one-task"
+                        "pages/task/creating-task/manual-task-input/manual-task-input",
+                        "pages/task/creating-task/manual-task-input/creating-multiple-task",
+                        "pages/task/creating-task/manual-task-input/creating-one-task"
                       ]
                     },
-                "page/task/creating-task/bulk-import-task"
+                "pages/task/creating-task/bulk-import-task"
                     ]
               }
             ]
