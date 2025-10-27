@@ -106,7 +106,13 @@
               {
                 "group":"Managing Task",
                 "pages":[
-                  "pages/task/managing-task/viewing-editing-task"
+                  "pages/task/managing-task/viewing-editing-task",
+                  "pages/task/managing-task/assigning-unassigning-task",
+                  "pages/task/managing-task/delete-task",
+                  "pages/task/managing-task/task-action",
+                  "pages/task/managing-task/filter-search-task",
+                  "pages/task/managing-task/export-to-excel",
+                  "pages/task/managing-task/do-task"
                 ]
               }
             ]
