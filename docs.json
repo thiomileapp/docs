@@ -306,7 +306,7 @@
             ]
           },
           {
-            "group":"Chat",
+            "group":"Help",
             "pages":["pages/chat-our-support-team"]
           },
           {
