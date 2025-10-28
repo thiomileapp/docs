@@ -206,8 +206,8 @@
                 "group":"Automation Event",
                 "pages":[
                   "pages/automation/automation-event/introduction",
-                  "pages/automation/automation-event/on-routing-finish",
-                  "pages/automation/automation-event/on-routing-dispatch"
+                  "pages/automation/automation-event/on-routing-finished",
+                  "pages/automation/automation-event/on-routing-dispatched"
                 ]
               },
               {
