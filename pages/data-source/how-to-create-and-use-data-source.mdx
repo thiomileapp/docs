@@ -1,0 +1,85 @@
+---
+    title: How to Create and Use Data Source
+---
+The data feature could help you simplify the process of filling in task information based on existing data at MileApp. This data could consist of information such as name, number, date, coordinate, and multiple options.
+
+You can access this feature on the [Data](https://web.mile.app/data/data-list) page. The data is consist of 2 sub-pages, Data, and Type.
+
+## Type
+Type is a menu that allows you to specify the data structure that will be utilized in the Data menu.
+
+Here, you can set the data type to suit your needs.
+![](https://t3837933.p.clickup-attachments.com/t3837933/b9e8b241-c583-4fac-9ba1-7bb3a46753d3/image.png)
+1. The name of the data type
+2. Data sources can be restricted to be accessed only by selected users
+3. If enabled, the data source can be used by a single organization. If disabled, the data source is unique per hub.
+4. Type of title field
+5. The type of data
+6. The field type can be adjusted to mandatory or optional using a toggle.
+7. The field can be set to appear directly in the table if enabled
+8. Additional information about the field (a tooltip will display in the data menu on the field description)
+9. You can add a field by clicking the text
+
+Types created can be used immediately in the data menu.
+![](https://t3837933.p.clickup-attachments.com/t3837933/47598b38-c95b-4568-aa12-5c74f4076c6d/image.png)
+## Data
+Data is created based on the structure of the data type that you have created.
+
+## Create data based on the newly formed type
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/946af939-64f8-48b2-8e80-ee7a45ccae2c/image.png)
+
+This is an example of Data based on the structure of the type that consists of a Primary key, 2 text fields, and 1 coordinate field. The data will be customizable based on your needs, you could add more than 1 custom field to make it easier for you to fill in Task information.
+
+## Configure Flow to Use Data
+You should set up a Flow to use this data in your task. After you create a flow or use an existing one, you could configure to use the Data by setting up the Data Source at the Flow Configuration.
+
+1. Choose the data type that you want to use on this flow
+2. Map the data based on the flow that you have created. Note that the Primary Key is required as it would be the trigger that will autofill the information on the Task. You could use Text Component for the Primary Key.
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/20608e91-7b23-434b-823e-18e3a53834a1/image.png)
+
+Once you set it up properly the Mobile App preview will have the Search icon on the input field, as shown below:
+![](https://t3837933.p.clickup-attachments.com/t3837933/f701a6cb-be75-4f2e-97a8-273df8c20b2b/image.png)
+
+## Use Data to Autofill Task Information
+You could use the Data to fill in the task information on 3 different methods:
+*   Single task input
+*   Bulk task input
+*   Task input on the mobile app
+
+### Single task input
+![](https://t3837933.p.clickup-attachments.com/t3837933/30d012cd-56bf-4049-9c3a-a5688ad4cd05/image.png)
+When you create a single task you could choose to use data by clicking the Search icon on the input field, as shown in the example. After you clicked the search icon, you will see this pop-up:
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/807a27c9-4545-42ad-b702-ddbfee830fd4/image.png)
+After that you could choose the Data, for example, 0001, the task information will be filled based on the information that has been set up on the Data page:
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/b7dfb0ed-9fe8-46dc-bd04-f3e17ab2c13c/image.png)
+
+### Bulk task input
+When you input tasks in bulk, you could use the data with 2 methods, typing directly on the field input or by importing the data.
+
+**The first method** is typing directly on the Primary Key input:
+![](https://t3837933.p.clickup-attachments.com/t3837933/54ea1b79-b20c-444e-b11f-1e308ac03b3a/image.png)
+If you type the correct Primary Key based on the Data that you have created, the input fields will be automatically filled based on the information in that Data as shown below:
+![](https://t3837933.p.clickup-attachments.com/t3837933/c87f254b-e5ff-49a6-b412-1d0aff464d52/image.png)
+
+**The second method** is to import the data, but you only have to input the primary key to autofill the information at the Bulk task input.
+![](https://t3837933.p.clickup-attachments.com/t3837933/54c0e1f6-41ac-468b-9200-14c6a126a6d6/image.png)
+
+Import the .xlsx file
+![](https://t3837933.p.clickup-attachments.com/t3837933/79ba21db-f003-4bb6-aa5c-eb29f0a5c668/image.png)
+After you import the .xlsx file, the bulk input fields, will be autofill based on the Data information:
+![](https://t3837933.p.clickup-attachments.com/t3837933/94885b4c-1332-4f28-987c-c2ba1b427b8d/image.png)
+
+### Task input on the mobile app
+Similar to the single task input at the MileApp web, on MileApp Field you could autofill the data by clicking the search icon on the task input field that has been set on the Data Source Flow Configuration.
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/7f06d8c1-c5f5-4a30-9e3d-ffdc18a9aeb2/image.png)
+
+After you click the search icon, you will see the pop-up menu below, you could choose which data that you want to use to autofill the task.
+![](https://t3837933.p.clickup-attachments.com/t3837933/9110c3f9-bfb2-4018-9852-fed05c637b47/image.png)
+
+After you choose the data, the task information will be auto filled with the data information:
+![](https://t3837933.p.clickup-attachments.com/t3837933/c4af005d-1b6d-40eb-98f4-45227cef732a/image.png)

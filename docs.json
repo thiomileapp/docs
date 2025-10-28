@@ -230,6 +230,52 @@
                   "pages/automation/managing-automation/deleting-an-automation",
                   "pages/automation/managing-automation/automation-log"
                 ]
+              },
+              {
+                "group":"Data Source",
+                "pages":[
+                  "pages/data-source/how-to-create-and-use-data-source"
+                ]
+              },
+              {
+                "group":"Configuration",
+                "pages":[
+                  "pages/configuration/start-trip-end-trip-feature",
+                  "pages/configuration/start-finish-icon-and-history"
+                ]
+              },
+              {
+                "group":"Setting",
+                "pages":[
+                  "pages/setting/introduction-to-setting-menu",
+                  "pages/setting/how-to-setup-multi-factor-authentication-mfa",
+                  "pages/setting/how-to-activate-single-login-device-limit",
+                  "pages/setting/team-management",
+                  {
+                    "group":"User Management",
+                    "pages":[
+                      "pages/setting/user-management/introduction",
+                      "pages/setting/user-management/verifying-account-for-newly-invited-user"
+                    ]
+                  },
+                  {
+                    "group":"Role and Permission Management",
+                    "pages":[
+                      "pages/setting/role-and-permission-management/introduction",
+                      "pages/setting/role-and-permission-management/field-permission",
+                      "pages/setting/role-and-permission-management/route-permission",
+                      "pages/setting/role-and-permission-management/billing-permission",
+                      "pages/setting/role-and-permission-management/managing-custom-role",
+                      "pages/setting/role-and-permission-management/setting-permission"
+                    ]
+                  },
+                  "pages/setting/hub-management",
+                  "pages/setting/organization-management",
+                  "pages/setting/how-to-generate-personal-access-token",
+                  "pages/setting/how-to-delete-your-organization",
+                  "pages/setting/trash",
+                  "pages/setting/how-to-manage-custom-module"
+                ]
               }
             ]
           },
