@@ -230,8 +230,10 @@
                   "pages/automation/managing-automation/deleting-an-automation",
                   "pages/automation/managing-automation/automation-log"
                 ]
-              },
-              {
+              }
+            ]
+          },
+          {
                 "group":"Data Source",
                 "pages":[
                   "pages/data-source/how-to-create-and-use-data-source"
@@ -276,9 +278,7 @@
                   "pages/setting/trash",
                   "pages/setting/how-to-manage-custom-module"
                 ]
-              }
-            ]
-          },
+              },
           {
             "group": "Customization",
             "pages": [
