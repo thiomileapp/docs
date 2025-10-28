@@ -141,6 +141,56 @@
                   },
                   "pages/task/schedule/manage-schedule"
                 ]
+              },
+              "pages/task/gallery"
+            ]
+          },
+          {
+            "group":"Route Optimization",
+            "pages":[
+              "pages/route-optimization/introduction-to-route-optimization",
+              {
+                "group":"Visit",
+                "pages":[
+                  "pages/route-optimization/visit/introduction",
+                  "pages/route-optimization/visit/visit-page",
+                  "pages/route-optimization/visit/filtering-and-editing-visit",
+                  "pages/route-optimization/visit/visit-page/how-to-delete-a-visit"
+                ]
+              },
+              {
+                "group":"Vehicle",
+                "pages":[
+                  "pages/route-optimization/vehicle/introduction",
+                  "pages/route-optimization/vehicle/how-to-create-a-vehicle",
+                  "pages/route-optimization/vehicle/filtering-and-editing-vehicle",
+                  "pages/route-optimization/vehicle/how-to-de;ete-a-vehicle"
+                ]
+              },
+              {
+                "group":"Configuration",
+                "pages":[
+                  "pages/route-optimization/configuration/introduction",
+                  "pages/route-optimization/configuration/cross-docking",
+                  "pages/route-optimization/configuration/auto-split",
+                  "pages/route-optimization/configuration/auto-merge",
+                  "pages/route-optimization/configuration/dynamic-visit-time",
+                  "pages/route-optimization/configuration/geotagging",
+                  "pages/route-optimization/configuration/visit-group",
+                  "pages/route-optimization/configuration/avoid-toll-roads"
+                ]
+              },
+              {
+                "group":"result",
+                "pages":[
+                  "pages/route-optimization/result/introduction",
+                  "pages/route-optimization/result/summary",
+                  "pages/route-optimization/result/vehicle-assignment",
+                  "pages/route-optimization/result/dropped-visit",
+                  "pages/route-optimization/result/vehicle-optimization-detail",
+                  "pages/route-optimization/result/visits-detail",
+                  "pages/route-optimization/result/search-filter-delete-result"
+                ]
               }
             ]
           },
