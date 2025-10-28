@@ -288,6 +288,27 @@
             ]
           },
           {
+            "group":"Minimum Device Requirement",
+            "pages":[
+              "pages/minimum-device-requirement/mobile"
+            ]
+          },
+          {
+            "group":"Dashboard",
+            "pages":[
+              "pages/dashboard/task"
+            ]
+          },
+          {
+            "group":"Integration",
+            "pages":[
+              "pages/integration/sso-with-azure-ad-entra"
+            ]
+          },
+          {
+            "pages":"pages/chat-our-support-team"
+          },
+          {
             "group": "Customization",
             "pages": [
               "essentials/settings",
