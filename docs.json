@@ -196,6 +196,44 @@
             ]
           },
           {
+            "group": "Automation",
+            "pages":[
+              "pages/automation/how-to-create-automation",
+              "pages/automation/name-of-the-automation",
+              "pages/automation/automation-flow",
+              "pages/automation/automation-rules",
+              {
+                "group":"Automation Event",
+                "pages":[
+                  "pages/automation/automation-event/introduction",
+                  "pages/automation/automation-event/on-routing-finish",
+                  "pages/automation/automation-event/on-routing-dispatch"
+                ]
+              },
+              {
+                "group":"Automation Type",
+                "pages":[
+                  "pages/automation/automation-type/introduction",
+                  "pages/automation/automation-type/assign-task",
+                  "pages/automation/automation-type/move-task",
+                  "pages/automation/automation-type/create-task",
+                  "pages/automation/automation-type/create-or-update-data-source",
+                  "pages/automation/automation-type/create-and-assign-task",
+                  "pages/automation/automation-type/webhook"
+                ]
+              },
+              {
+                "group":"Managing Automation",
+                "pages":[
+                  "pages/automation/managing-automation/viewing-editing-automation",
+                  "pages/automation/managing-automation/activating-deactivating-an-automation",
+                  "pages/automation/managing-automation/deleting-an-automation",
+                  "pages/automation/managing-automation/automation-log"
+                ]
+              }
+            ]
+          },
+          {
             "group": "Customization",
             "pages": [
               "essentials/settings",
