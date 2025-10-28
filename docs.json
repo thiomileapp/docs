@@ -155,7 +155,7 @@
                   "pages/route-optimization/visit/introduction",
                   "pages/route-optimization/visit/visit-page",
                   "pages/route-optimization/visit/filtering-and-editing-visit",
-                  "pages/route-optimization/visit/visit-page/how-to-delete-a-visit"
+                  "pages/route-optimization/visit/how-to-delete-a-visit"
                 ]
               },
               {
@@ -164,7 +164,7 @@
                   "pages/route-optimization/vehicle/introduction",
                   "pages/route-optimization/vehicle/how-to-create-a-vehicle",
                   "pages/route-optimization/vehicle/filtering-and-editing-vehicle",
-                  "pages/route-optimization/vehicle/how-to-de;ete-a-vehicle"
+                  "pages/route-optimization/vehicle/how-to-delete-a-vehicle"
                 ]
               },
               {
