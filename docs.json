@@ -280,6 +280,14 @@
                 ]
               },
           {
+            "group":"Billing",
+            "pages":[
+              "pages/billing/introduction",
+              "pages/billing/how-to-upgrade",
+              "pages/billing/billing-setting"
+            ]
+          },
+          {
             "group": "Customization",
             "pages": [
               "essentials/settings",
