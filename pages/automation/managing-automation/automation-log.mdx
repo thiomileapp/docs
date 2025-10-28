@@ -1,0 +1,38 @@
+---
+    title: Automation Log
+    description: Auto-migrated from ClickUp Markdown (section: Automation Log).
+    ---
+
+# {frontmatter.title}
+
+In this section, we will guide you on how to check the automation log. Follow these steps to effectively use the Automation Log page:
+## Accessing the Automation Log
+1. Navigate to the Flow/Automation page.
+2. Click on the icon labeled "Log".
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/3b813731-3c2f-4768-abd3-10ac427e1695/image.png)
+_Automation Log Icon_
+
+## Understanding the Automation Log Details
+The Automation Log provides detailed information about each automation event. Here are the key elements:
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/9b7f8c80-3d47-4cc8-8f43-69cd7600b574/image.png)
+_Automation Log Page_
+1. **Back** to the Automation page
+2. Filtering the Log:
+    1. **Select Status.** You can filter the logs by their status - either "Success" or "Failed".
+    2. **Search by date.** Filter the logs by a specific date. Note that only one date can be selected at a time.
+    3. **Search by Data ID.** You can filter the logs by Data ID. For example: `66628cec9e7efb1dd61a6a42`
+3. Log Details:
+    1. **Timestamp of Automation Activation**: This timestamp indicates when the automation type action was successfully executed. For instance, if the automation type is "Assign Task", this timestamp marks when the task was assigned to a field user according to your settings.
+    2. **Timestamp of Automation Trigger**: This timestamp indicates when the automation event was triggered, initiating the automation type action. For example, if the automation event is "Create Task", this timestamp marks when the task creation triggered the subsequent automation action.
+    3. **Data ID**. This ID identifies the source payload, such as Task ID or Routing Result ID, depending on the data you selected when setting up the automation.
+    4. **Status**. This shows the status of the automation log, either "Success" or "Failed". If the status is "Failed", the status code (e.g., 404) will also be displayed.
+4. Available Actions:
+    1. **View Payload Details**: Click to see the detailed payload information.
+    2. **Retry Log**: You have the option to retry an individual log entry. When you click on the retry icon, the detailed JSON of the log will be displayed. This allows you to review the log details before submitting.
+    3. **Download Log**: Download the automation log as a .json file.
+5. **Select Automation Log:** You can select specific logs to take action on.
+6. **Repush All:** After selecting specific logs, click this button to repush them all simultaneously.
+
+All Timestamps that are listed in the Automation Log are based on UTC (Universal Time Coordinated) time.
