@@ -191,7 +191,8 @@
                   "pages/route-optimization/result/visits-detail",
                   "pages/route-optimization/result/search-filter-delete-result"
                 ]
-              }
+              },
+              "pages/route-optimization/dispatch"
             ]
           },
           {
