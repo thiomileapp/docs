@@ -62,7 +62,9 @@ If you wish to know more information about the done task, you could click the ic
 
 <div align="center">
   <img src="https://t3837933.p.clickup-attachments.com/t3837933/6504e3db-93f2-44d5-bce6-6aade982ff58/image.png" alt="image" width="600" />
-</div> 1. **Task Title**
+</div>
+
+1. **Task Title**
 
 This is generated from the task title, if the task title is not mapped at the [flow configuration](https://web.mile.app/flow/flow) setting. We will show the flow name as the title of this done task information card.
 
@@ -112,13 +114,17 @@ Beside that you could also hover the icon for
 
 When you hover over the Ongoing Task icon that is dispatched from the route optimization. A tooltip will appear that will show you the estimated arrival time of this user, and if the user is estimated to be late at their next task location, we will show the estimation of how much is the delay.
 
-This tooltip will appear if these two requirements are fulfilled: \*   The task has been optimized and dispatched from the [route optimization](https://web.mile.app/route/visit) menu. \*   The user location history is updated, or the [Start Finish feature](https://web.mile.app/setting/permission) is active for that user so the user location history and time are recorded properly.
+This tooltip will appear if these two requirements are fulfilled:
+- The task has been optimized and dispatched from the [route optimization](https://web.mile.app/route/visit) menu.
+- The user location history is updated, or the [Start Finish feature](https://web.mile.app/setting/permission) is active for that user so the user location history and time are recorded properly.
 
 If those two conditions are fulfilled, new information will be generated for this Ongoing task icon, and you could see this tooltip when you hover over the Ongoing Task icon:
 
 <div align="center">
   <img src="https://t3837933.p.clickup-attachments.com/t3837933/da03beaa-cf89-4544-9547-2d5ea543a32f/image.png" alt="image" width="600" />
-</div> \*   **ETA**
+</div>
+
+- **ETA**
 
 _Example from the picture above: ETA 14:25_
 
@@ -140,15 +146,21 @@ If you hover above the Ongoing Task icon that is not optimized in the Routing me
 
 <div align="center">
   <img src="https://t3837933.p.clickup-attachments.com/t3837933/027a6a5c-ac2f-4904-8ac7-c60e93952bca/image.png" alt="image" width="600" />
-</div> **ETA,** _Example from the picture above: ETA 07:20_ This ETA will show you the **estimated arrival time of the user to this task location,** the calculation is based on the Last Update location of the user and the travel time that they need to reach this task location from their latest location history.
+</div>
+
+**ETA,** _Example from the picture above: ETA 07:20_ This ETA will show you the **estimated arrival time of the user to this task location,** the calculation is based on the Last Update location of the user and the travel time that they need to reach this task location from their latest location history.
 
 This feature enhances task management by providing users with valuable ETA predictions for tasks that are not been optimized within the routing menu. This feature will enable better decision-making, more transparency for your customer, improved customer service, and resource optimization, ultimately contributing to more efficient and effective task execution.
 
 This feature is also compatible to calculate mixed task; which is a combination of task that is not Optimized at Routing, and task that is Optimized through the Routing menu seamlessly.
 
-For example, see the picture below: <div align="center">
+For example, see the picture below:
+
+<div align="center">
   <img src="https://t3837933.p.clickup-attachments.com/t3837933/721f1131-76df-43b9-9a89-350183218123/image.png" alt="image" width="600" />
-</div> **A.** This is the last updated location history of the Field user. **B.** This is the "next task location"; we get the user's ETA to this location by calculating the time the user needs to reach the next task location from their last updated location. **C.** To calculate the task ETA after the "next task location"; we will calculate the time that is needed to get to the next task from the previous task location. We will repeat this calculation indefinitely as needed. For example, if you have 50 Tasks, this process is repeated for each task.
+</div>
+
+**A.** This is the last updated location history of the Field user. **B.** This is the "next task location"; we get the user's ETA to this location by calculating the time the user needs to reach the next task location from their last updated location. **C.** To calculate the task ETA after the "next task location"; we will calculate the time that is needed to get to the next task from the previous task location. We will repeat this calculation indefinitely as needed. For example, if you have 50 Tasks, this process is repeated for each task.
 
 ### Ongoing Task Information Card
 
@@ -156,7 +168,9 @@ Beside the extra information when you hover on the Ongoing Task icon, you could 
 
 <div align="center">
   <img src="https://t3837933.p.clickup-attachments.com/t3837933/cc4dc69b-2a10-4505-8397-facd0701a4e8/image.png" alt="image" width="600" />
-</div> 1. **Task Title**
+</div>
+
+1. **Task Title**
 
 This is generated from the task title, if the task title is not mapped at the [flow configuration](https://web.mile.app/flow/flow) setting. We will show the flow name as the title of this done task information card.
 
@@ -206,7 +220,9 @@ The Finish icon will show you the location where the user clicks the Finish butt
 
 <div align="center">
   <img src="https://t3837933.p.clickup-attachments.com/t3837933/8d26e8a2-b9e7-4f18-ae47-a97872ae52e8/image.png" alt="image" width="600" />
-</div> 1. **Finish Time**
+</div>
+
+1. **Finish Time**
 
 The Finish time is the time when the user clicks the Finish button in the mobile app.
 
@@ -230,7 +246,9 @@ For example, the first session's icons will show number 1 in front of the S and 
 
 ## Route Line Information
 
-These are 2 types of the Route line will be shown on the Tracking map: \*   Actual route based on the user location history update, and after the finish the Task. \*   The Unfinished trip route was generated based on the location of the Ongoing Task.
+These are 2 types of the Route line will be shown on the Tracking map:
+- Actual route based on the user location history update, and after the finish the Task.
+- The Unfinished trip route was generated based on the location of the Ongoing Task.
 
 ### Actual Route
 
