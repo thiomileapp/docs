@@ -1,0 +1,49 @@
+---
+title: "Configuration: Route"
+---
+
+Route configuration is a crucial step when creating tasks that are suitable for Route Optimization within your workflow. While route configuration is optional, we strongly recommend configuring at least three essential fields for visit details: Visit Name, Address, and Coordinate. Without this configuration, you can still perform routing optimization, but the values will not be saved to the data task.
+
+Please note that only compatible components can be chosen for routing configuration.
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/2e23f8fc-8210-4741-8d93-e517017c92af/10.png)
+
+1. Visit Name
+   - The component selected as Visit Name will be displayed as the "Name" on a Visit.
+   - Only input components with the type "Text" can be chosen as the Visit Name.
+   - If this field is left empty, the name of the visit will be taken from the Title in the Task List configuration.
+2. Address
+   - The component selected as Address will be shown as the "Address" on a Visit.
+   - Only input components with the type "Address" can be chosen as the Address.
+   - If this field is left empty, the address will be empty in the visit details, and you will need to input it manually for each visit
+3. Open Time
+   - The component chosen as Open Time will be displayed as the "Open Time" on a Visit.
+   - Open Time represents the start of the desired time window for executing the visit.
+   - Only input components with the type "Time" can be chosen as Open Time.
+4. Close Time
+   - The component chosen as Close Time will be displayed as the time below the Open Time on a Visit.
+   - Close Time represents the end of the desired time window for executing the visit.
+   - Only input components with the type "Time" can be chosen as Close Time.
+5. Visit Duration
+   - The component chosen as Visit Duration will be displayed as the "Visit Time" on a Visit.
+   - Visit Time represents the idle time in minutes after reaching each visit.
+   - Only input components with the type "Number" can be chosen as Visit Duration.
+   - Please note that the value for visit time must be an integer, as it represents minutes.
+6. Coordinate
+   - The component chosen as Coordinate will be shown as the "Coordinate" on a Visit.
+   - We highly recommend using the Input component with the type "Coordinate" and activating the "Geocode" feature. This ensures accurate mapping of the visit's location on the map.
+7. Tags
+   - The component selected as Tags will be shown as the "Visit tags" on a Visit.
+   - Visit tags are used to pair visits with vehicles or other relevant criteria. This is essential for optimizing routes by matching tags, thereby ensuring efficient assignments.
+   - Only input components with the type "Text" or "Select" can be chosen as Tags. You can use text input or a selection list to assign appropriate tags to visits. These capacity constraints provide you with the ability to define and track specific attributes related to your visits, such as weight, volume, and width. By using these constraints, you can ensure that the capacity and physical requirements of each visit are taken into account during the route optimization process. **Please note that the available constraint options may vary depending on the configuration set in the Routing/Configuration menu, and the values entered can be decimal with a maximum of 1 number after the comma.**
+1. Constraint: Weight
+   - The component chosen as Constraint Weight will be displayed as "Weight" on a Visit. This can be used to represent the total weight (Kg) of items included in the visit.
+   - Only input components with the type "Number" or "Currency" can be selected as the Constraint Weight.
+2. Constraint: Volume
+   - The component chosen as Constraint Volume will be displayed as the "Volume" of a Visit. This can be used to represent the total volume (m³) of items included in the visit.
+   - Only input components with the type "Number" or "Currency" can be selected as the Constraint Volume.
+3. Constraint: Width
+   - The component chosen as Constraint Width will be displayed as the "Width" of a Visit. This can be used to represent the total width (m) of items included in the visit.
+   - Only input components with the type "Number" or "Currency" can be selected as the Constraint Width.
+
+Please note that if a component is already chosen for one of the fields, it will not be available for selection in any other fields. For example, if you select the "Invoice" component as the "Visit Name," then "Invoice" will not be visible as an option for any other field, such as "Tag." By configuring these routing settings, you can ensure that your route optimization process operates smoothly and that visit details are accurately recorded in your tasks.

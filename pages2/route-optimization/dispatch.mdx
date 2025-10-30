@@ -1,0 +1,25 @@
+---
+title: "Dispatch"
+---
+
+Required Permission: \*   Dispatch result
+
+<img src="https://t3837933.p.clickup-attachments.com/t3837933/2bcc710c-c2c3-4d62-a101-58b131de4b46/image.png" alt="" /> Once you are satisfied with the optimization results, you can dispatch them. After dispatching, the tasks on the Task page will automatically update according to these results. Additionally, if you assign these visits to a user, they will be able to access the tasks through their mobile app. Information from the optimization results will be used to update this task. This information includes the ETA, ETD, task order, and task assignment. If you leave the user field **empty**, the task will also become **unassigned**. These additional details can be viewed on the Task page:
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/67b07b2c-dc6e-4f7f-965c-322518d163be/image.png)
+
+---
+
+Please find below the additional information sample that will be sent to the data task when dispatching the result of route optimization:
+
+```json
+"assignee"
+"assignedVehicleId"
+"distance": 9248
+"eta": "7:22:12"
+"etd": "7:37:12"
+"routePlannedOrder": 1
+"waitingTime": 0
+```
+
+If you are using the Cross Docking and Auto Split configuration, additional keys are sent during dispatching. For more detailed information, please refer to our [API documentation](https://apidoc.mile.app/#/Dispatch%20Routing%20Result/dispatch).

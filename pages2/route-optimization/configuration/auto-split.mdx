@@ -1,0 +1,39 @@
+---
+title: "Auto Split"
+---
+
+With Auto Split, the system will automatically split visits with a capacity of more than any single vehicle into several visits to generate results without dropping the large visit. This feature will only evaluate vehicles that have **matching tags** to determine if splitting is required.
+
+## Activate the Auto Split
+
+To activate Auto Split, follow these steps: 1. Go to the Routing/Configuration menu. 2. Check the "Auto Split" checkbox. 3. Two split types will be available: \*   Split capacity equally \*   Maximize vehicle capacity. Note: Only the first defined capacity will be considered in the routing optimization process. <img src="https://t3837933.p.clickup-attachments.com/t3837933/e52a7e03-f277-4597-9f94-613b61f085a8/image.png" alt="" /> _Auto Split Configuration_
+
+## Route Optimization
+
+**Example using "Split capacity equally" type**: <img src="https://t3837933.p.clickup-attachments.com/t3837933/c8b11397-4815-4f5d-936e-bdd1b29645b5/image.png" alt="" /> _The first segment of the visit "Sven Arvidsson" in vehicle 1_
+
+<img src="https://t3837933.p.clickup-attachments.com/t3837933/372a81d8-5c9a-494c-b909-ae1d60b33c6f/image.png" alt="" /> _The second segment of the visit "Sven Arvidsson" in vehicle 2_ The routing result for the visit "Sven Arvidsson" has been split into two visits equally, with each visit having a capacity of 1750 out of the total 3500.
+
+**Example using "Maximize vehicle capacity" type**: <img src="https://t3837933.p.clickup-attachments.com/t3837933/1a65a638-0965-4d03-97f6-a5a88a4ffcd6/image.png" alt="" /> _The first segment of the visit "Sven Arvidsson" in vehicle 1_
+
+<img src="https://t3837933.p.clickup-attachments.com/t3837933/63fe2627-4b06-42dc-801a-717d33aa8775/image.png" alt="" /> _The second segment of the visit "Sven Arvidsson" in vehicle 2_ As depicted, the first segment will utilize the maximum capacity of the vehicle, 3000, while the remaining capacity, 500, will be allocated to the second segment.
+
+## Exporting Data
+
+When exporting data, the "Other" sheet will include information about the Auto Split type. <img src="https://t3837933.p.clickup-attachments.com/t3837933/3705c597-9e51-48f0-9de5-f66f72cefc70/image.png" alt="" />
+
+## Dispatching Visits
+
+Upon clicking "Dispatch," the system initiates background processing to assign tasks based on routing results. If a visit is split into multiple segments, a new task is generated for each segment, maintaining data integrity and ensuring accurate capacity allocation. The original task's capacity is updated accordingly to reflect the split.
+
+**Important Note**: 1. It is **recommended** to configure the capacity constraint field with the component in the task from the Flow menu. Failure to do so may result in an empty capacity constraint in the Routing/Visit menu, which can be manually inputted later.
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/91725a1d-6b74-409a-9718-9bb41b3a9c02/image.png)
+
+_Route Configuration in Flow/Configuration menu_
+
+2. Upon dispatching, the detailed task will display information regarding the split type and split number. However, if the split visit is on the dropped list, it will retain the original task and remain "Unassigned."
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/d44374a6-e4d9-480f-a9e9-c46eb3b545de/image.png)
+
+3. If you exceed your task quota, failed dispatches may occur, as a new task is generated based on the split number during dispatching. 4. When Auto Split is used in conjunction with the Auto Merge feature, identical coordinate visits will not be split across different vehicles.

@@ -1,79 +1,104 @@
 ---
-    title: Creating A Flow
+title: "Creating A Flow"
 ---
 
-# {frontmatter.title}
+# Creating A Flow
 
-Flow is the process flow of a task; it defines the information that can be **viewed** and **filled** by the user when they are doing their job on the field.
-Flow is segregated into **pages**, and each page can have several **components** that are suited to the field process
+Flow is the process flow of a task; it defines the information that can be **viewed** and **filled** by the user when they are doing their job on the field. Flow is segregated into **pages**, and each page can have several **components** that are suited to the field process.
 
-MileApp lets you create a flow from scratch or edit one from an existing template from the [Flow](https://web.mile.app/flow/flow) page; some commonly used flows are
-*   Delivery
-*   Pickup
-*   Inspection
-*   Canvassing
-*   Field Sales
+MileApp lets you create a flow from scratch or edit one from an existing template from the [Flow](https://web.mile.app/flow/flow) page. Some commonly used flows are:
 
-MileApp has many ready-to-use editable templates to start with
+- Delivery
+- Pickup
+- Inspection
+- Canvassing
+- Field Sales
 
-![](https://t3837933.p.clickup-attachments.com/t3837933/77d9bc3f-1730-43d3-989b-f8baac31b492/image.png)
-_Creating a flow from an existing template from the Flow page_
+MileApp has many ready-to-use editable templates to start with.
 
-![](https://t3837933.p.clickup-attachments.com/t3837933/9e675fc4-9ba1-441c-b3b4-05892ced6a8d/image.png)
-_Various flow templates to start with_
+<div align="center">
+  <img src="https://t3837933.p.clickup-attachments.com/t3837933/77d9bc3f-1730-43d3-989b-f8baac31b492/image.png" alt="Creating a flow from an existing template from the Flow page" width="600" />
+  <p><i>Creating a flow from an existing template from the Flow page</i></p>
+</div>
+
+<div align="center">
+  <img src="https://t3837933.p.clickup-attachments.com/t3837933/9e675fc4-9ba1-441c-b3b4-05892ced6a8d/image.png" alt="Various flow templates to start with" width="600" />
+  <p><i>Various flow templates to start with</i></p>
+</div>
 
 Once you have created a flow from a template or a new one from scratch, you can start editing its pages and components.
 
 ## Pages
-The types of pages are
-*   **Initial Page** ➝ This page is shown to the user when the task is first created; all input information on this page needs to be filled in when the task is created; there can be only 1 Initial Page.
-*   **Normal Page** ➝ These pages are shown to the user when the task is being done; you can add multiple pages by using the **Add Page** button
 
-![](https://t3837933.p.clickup-attachments.com/t3837933/572c83f6-9507-47e0-9966-035213acb958/Flow.png)
+The types of pages are:
 
-Why is the Initial Page important?
-The normal life cycle of a task is
+- **Initial Page** ➝ This page is shown to the user when the task is first created; all input information on this page needs to be filled in when the task is created; there can be only 1 Initial Page.
+- **Normal Page** ➝ These pages are shown to the user when the task is being done; you can add multiple pages by using the **Add Page** button.
+
+<div align="center">
+  <img src="https://t3837933.p.clickup-attachments.com/t3837933/572c83f6-9507-47e0-9966-035213acb958/Flow.png" alt="Flow page structure" width="600" />
+</div>
+
+### Why is the Initial Page Important?
+
+The normal life cycle of a task is:
+
 1. **Task Created** ➝ When the admin or field user first creates the task
 2. **Task Assigned** ➝ When the admin is assigning the task to the field user
 3. **Task Done** ➝ When the field user has done the task
 
-In most cases, the user that creates the task is different from the one doing it _(for example, the admin creates the task, assigns it to the field user, and then the field user does the task);_ therefore_,_ the initial page distinguishes information to be inputted by the admin from the field user.
+In most cases, the user that creates the task is different from the one doing it _(for example, the admin creates the task, assigns it to the field user, and then the field user does the task)_; therefore, the initial page distinguishes information to be inputted by the admin from the field user.
 
 MileApp also allows the task to be created directly by the user doing it, skipping the assignment part altogether; in cases such as this, the initial page doesn't have any difference from the other pages.
 ## Components
-Each page can have one or more components to be used by the users; the types of components are
-*   **View** ➝ View component lets the user to show information; it can be of various types with a unique property; for example, a view of the type coordinate can be clicked to show its location on the map.
-*   **Input** ➝ The Input component is used for the user to fill in information such as text, time, or currency data
-*   **Select** ➝ The Select component is used for the user to input a choice from selection; it can be configured between button, checkbox, or dropdown type.
-*   **Photo** ➝ The Photo component enables users to take photos from Android or iOS devices
-*   **Signature** ➝ The Signature component will be shown as a signature pad where user can draw their signature.
-*   **Bill** ➝ The Bill component lets the user create billable items and calculate the total price for the user.
-*   **List** ➝ The List component lets the user build a list of items.
+
+Each page can have one or more components to be used by the users. The types of components are:
+
+- **View** ➝ View component lets the user show information; it can be of various types with a unique property; for example, a view of the type coordinate can be clicked to show its location on the map.
+- **Input** ➝ The Input component is used for the user to fill in information such as text, time, or currency data.
+- **Select** ➝ The Select component is used for the user to input a choice from selection; it can be configured between button, checkbox, or dropdown type.
+- **Photo** ➝ The Photo component enables users to take photos from Android or iOS devices.
+- **Signature** ➝ The Signature component will be shown as a signature pad where user can draw their signature.
+- **Bill** ➝ The Bill component lets the user create billable items and calculate the total price for the user.
+- **List** ➝ The List component lets the user build a list of items.
 
 ## Flow Configuration
 
 ### Task List
-Configuring which input field is the Title, Content, and Label will enable users to view the task's primary information in the task list; these fields can be configured from the Flow➝Configuration menu after selecting the flow.
 
-![](https://t3837933.p.clickup-attachments.com/t3837933/ccc0ae70-d610-4bf0-958f-07d16ed93fd6/image.png)
-_Configuring the Title, Content, and Label from the flow menu_
+Configuring which input field is the Title, Content, and Label will enable users to view the task's primary information in the task list. These fields can be configured from the Flow ➝ Configuration menu after selecting the flow.
 
-The Title, Content, and Label of a flow will be shown in the mobile field app and web task list while viewing the list of tasks; it is important that these are configured to show **primary** **information** to ease the **assigning** process.
+<div align="center">
+  <img src="https://t3837933.p.clickup-attachments.com/t3837933/ccc0ae70-d610-4bf0-958f-07d16ed93fd6/image.png" alt="Configuring the Title, Content, and Label from the flow menu" width="600" />
+  <p><i>Configuring the Title, Content, and Label from the flow menu</i></p>
+</div>
 
-![](https://t3837933.p.clickup-attachments.com/t3837933/5ebd04eb-a4b1-4f9d-9b08-7ef960e03b14/image.png)
-_The title, content, and label are shown as primary information in the task list menu on the web_
+The Title, Content, and Label of a flow will be shown in the mobile field app and web task list while viewing the list of tasks. It is important that these are configured to show **primary information** to ease the **assigning** process.
 
-![](https://t3837933.p.clickup-attachments.com/t3837933/1fbdb16f-cba9-420d-93b6-80f08908bc17/WhatsApp%20Image%202023-04-23%20at%2019.49.56.jpg)
-_The Title, Content, and Label are shown in the task list menu on the field app_
+<div align="center">
+  <img src="https://t3837933.p.clickup-attachments.com/t3837933/5ebd04eb-a4b1-4f9d-9b08-7ef960e03b14/image.png" alt="The title, content, and label are shown as primary information in the task list menu on the web" width="600" />
+  <p><i>The title, content, and label are shown as primary information in the task list menu on the web</i></p>
+</div>
+
+<div align="center">
+  <img src="https://t3837933.p.clickup-attachments.com/t3837933/1fbdb16f-cba9-420d-93b6-80f08908bc17/WhatsApp%20Image%202023-04-23%20at%2019.49.56.jpg" alt="The Title, Content, and Label are shown in the task list menu on the field app" width="400" />
+  <p><i>The Title, Content, and Label are shown in the task list menu on the field app</i></p>
+</div>
 
 ### Time
-There are two-time configurations for a flow,
+
+There are two time configurations for a flow:
+
 1. **Start Time** ➝ Time when the task will be shown to the assigned user
 2. **End Time** ➝ Time when the task will be hidden from the assigned user
 
 The default time configurations can be set by defining how many hours it should be from when the time task is created.
 
-![](https://t3837933.p.clickup-attachments.com/t3837933/3b4ee4e8-4ed3-4265-9c9a-bb6013d61d62/image.png)
-_Setting up Time configuration from Flow➝Confiugration➝Time menu_
+<div align="center">
+  <img src="https://t3837933.p.clickup-attachments.com/t3837933/3b4ee4e8-4ed3-4265-9c9a-bb6013d61d62/image.png" alt="Setting up Time configuration from Flow Configuration Time menu" width="600" />
+  <p><i>Setting up Time configuration from Flow ➝ Configuration ➝ Time menu</i></p>
+</div>
 
+<Note>
 Configuring Start Time and End Time will only set the default time when the task is created, but the user can still change both these values when the task is being created.
+</Note>

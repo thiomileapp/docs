@@ -1,0 +1,72 @@
+---
+title: "Creating a List Component"
+---
+
+This is a guide to creating a working List component. First off you have to set the Flow correctly in the web flow builder, and then after you set it correctly, you could use it to create a task.
+
+**Setting up the List flow on the web:**
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/3a0a0a7e-861b-4c17-ad8c-d376b2881c00/image.png)
+
+**Setting up Initial Page:**
+
+1. Flow name that you would use to create a Task
+2. List component name on the Initial page, you should use this name to refer to the list component from the mobile app page
+3. List type for this flow
+4. Add new type to specify the type of list to be used. For example, using a new type, "select" will show the Section add list.
+5. In the add list section, enter the list used in the list process. The example here is a list of Book and Rules. You can add as much data as needed. All the data is stored in the list master data.
+6. Total list contains information about the total of the added list.
+7. Added list data can be edited or deleted as needed.
+8. Visibility of this component will affect: Create Task on the Web and Mobile; and View Task on the mobile app, if the component is not visible, it won't be shown on the UI. But, the visibility of a component didn't affect the export function, both Visible & Hidden component data will be exported.
+
+**Setting up Page-N:**
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/cafb2644-110e-4856-b97b-86b1ab63523c/image.png)
+
+1. List the component name on the mobile app page, make sure you set the Component type to "List"
+2. The use list form that will be referred to by this List component, in this example we have referred it to the List component in the Initial page (2).
+3. List type for this flow
+4. Add a new type to specify the type of list to be used. For example, using a new type, "select" will show the Section add list. Field use list form has been filled with a list on the initial page so that data list will be referred to on this page.
+5. The data in the add list section is automatically filled because it refers to the list created on the initial page that has been stored in the master data list. This data can be added, edited, or deleted according to the steps at points 5 - 7.
+6. Toggle to disable or enable adding a new item to this list on the mobile app's task and affects this page so that it cannot add new lists or edit previous lists.
+
+**Setting up Mobile Preview:**
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/9ee5d8fc-a8c8-4eb8-a5cf-68847591ac7f/image.png)
+
+1. List the type of Text
+2. List the type of checkbox
+3. List the type of quantity
+4. Navigate to the Initial page
+5. Navigate to the mobile app page, you could add more pages as you need
+
+After you create a proper Flow with a List component, you could create a task using this Flow through the Import Task feature, as shown below:
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/3d31d014-b911-4782-b79e-c594071a0cbe/image.png)
+
+1. Click this button to add a new task in bulk
+2. Choose the flow with a List component that you have created
+3. This field will be filled with information you've put in the .xlsx file after importing the Task; you can view and edit the information here.
+4. The bulk import task field
+
+After you choose the List flow, you can follow the sequence below to download and edit the templates to import the Task:
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/6166e2ff-a2bd-4521-bb34-e497443d245a/5.png)
+
+1. After you choose a List flow that you want to import, download the templates for import.
+2. After clicking the download button, the .xlsx file should automatically download, and you should open it once it's downloaded.
+3. Fill in the information in the file
+4. Drag and drop the file to this field to import the task from the file that you have edited
+
+This is the structure of the .xlsx file that you need to fill with information on the List:
+
+![](https://t3837933.p.clickup-attachments.com/t3837933/67fe0cec-4f9b-4a27-a9e4-90b20fe9b243/6.png)
+
+1. Information from the Initial page will be needed to create a Task
+2. ID number of the List, different IDs will generate different tasks, and the ID should be linked with the mobile app ID (5).
+3. Information of the initial page, you could customize this based on your needs
+4. Information that will be shown on the mobile app task
+5. ID number of the list, a list could contain multiple items, and items will be shown separately based on ID (2).
+6. Title of the items that will be shown on the mobile app task
+
+If you follow the steps above accordingly, you should be able to use this List Flow in a task, and your field user could work on it on the mobile app.
