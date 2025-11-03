@@ -181,7 +181,7 @@
                 ]
               },
               {
-                "group":"result",
+                "group":"Result",
                 "pages":[
                   "pages/route-optimization/result/introduction",
                   "pages/route-optimization/result/summary",
