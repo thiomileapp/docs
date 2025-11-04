@@ -177,7 +177,8 @@
                   "pages/route-optimization/configuration/dynamic-visit-time",
                   "pages/route-optimization/configuration/geotagging",
                   "pages/route-optimization/configuration/visit-group",
-                  "pages/route-optimization/configuration/avoid-toll-roads"
+                  "pages/route-optimization/configuration/avoid-toll-roads",
+                  "pages/route-optimization/configuration/odd-even"
                 ]
               },
               {
