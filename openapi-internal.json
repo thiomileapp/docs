@@ -1078,12 +1078,6 @@
               }
             }
           },
-          "404": {
-            "description": "Data not found",
-            "schema": {
-              "$ref": "#/parameters/responses/notFound/schema"
-            }
-          },
           "401": {
             "description": "Expired Tracking",
             "schema": {
@@ -1094,6 +1088,12 @@
                 "status": false,
                 "message": "You can't track this task because it has expired."
               }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
             }
           },
           "500": {
