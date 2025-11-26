@@ -8,6 +8,9 @@
     "dark": "#028FCF"
   },
   "favicon": "/favicon.svg",
+  "search": {
+    "exclude": ["api-reference-internal/**"]
+  },
   "api": {
     "mdx": {
       "auth": {
@@ -314,26 +317,6 @@
             ]
           },
           {
-            "group": "Objects",
-            "pages": [
-              "api-reference/objects/task-object",
-              "api-reference/objects/location-history-object",
-              "api-reference/objects/export-config-object",
-              "api-reference/objects/task-schedule-object",
-              "api-reference/objects/vehicle-object",
-              "api-reference/objects/routing-object",
-              "api-reference/objects/flow-object",
-              "api-reference/objects/automation-object",
-              "api-reference/objects/data-source-object",
-              "api-reference/objects/data-type-object",
-              "api-reference/objects/user-object",
-              "api-reference/objects/role-object",
-              "api-reference/objects/hub-object",
-              "api-reference/objects/team-object",
-              "api-reference/objects/plugin-object"
-            ]
-          },
-          {
             "group": "Task",
             "openapi": {
               "source": "openapi/public/openapi-task.json",
@@ -392,6 +375,26 @@
             },
             "pages": [
               "api-reference/file/overview"
+            ]
+          },
+          {
+            "group": "Objects",
+            "pages": [
+              "api-reference/objects/task-object",
+              "api-reference/objects/location-history-object",
+              "api-reference/objects/export-config-object",
+              "api-reference/objects/task-schedule-object",
+              "api-reference/objects/vehicle-object",
+              "api-reference/objects/routing-object",
+              "api-reference/objects/flow-object",
+              "api-reference/objects/automation-object",
+              "api-reference/objects/data-source-object",
+              "api-reference/objects/data-type-object",
+              "api-reference/objects/user-object",
+              "api-reference/objects/role-object",
+              "api-reference/objects/hub-object",
+              "api-reference/objects/team-object",
+              "api-reference/objects/plugin-object"
             ]
           }
         ]

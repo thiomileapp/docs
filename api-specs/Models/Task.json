@@ -1,0 +1,2013 @@
+{
+  "components": {
+    "schemas": {
+      "Task": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An identity that is automatically generated as a technical identification of a task."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "The identity of the organizational account where the task was created and processed."
+          },
+          "flowId": {
+            "type": "string",
+            "description": "Identity of a flow that is used in the task creation process, (supporting data in identifying flows)."
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Unique ID to identify a hub."
+          },
+          "flow": {
+            "type": "string",
+            "description": "The flow name used in making a task, refers to the existing flow in the organization. When creating a task, you cannot use the flow with the name `Handover` because it has been used as a reserved key."
+          },
+          "organization": {
+            "type": "object",
+            "description": "Organization Entity Information: Encompasses the organization's name, email, and ID. This information is present in the task data upon task creation and processing.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "An unique identifier for the organization.This data will be displayed based on `organizationId`."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of organization.This data will be displayed based on `organizationId`."
+              },
+              "email": {
+                "type": "string",
+                "description": "Email of organization.This data will be displayed based on `organizationId`."
+              }
+            }
+          },
+          "hub": {
+            "type": "object",
+            "description": "Information of hub entity : contains hub name, hub id, coordinates.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "An unique identifier for the hub. This data will be displayed based on `hubId`."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of hub. This data will be displayed based on `hubId`."
+              },
+              "lat": {
+                "type": "number",
+                "description": "Coordinate latitude of hub. This data will be displayed based on `hubId`."
+              },
+              "lng": {
+                "type": "number",
+                "description": "Coordinate longitude of hub. This data will be displayed based on `hubId`."
+              }
+            }
+          },
+          "title": {
+            "type": "string",
+            "description": "The value of a task is used as the Title of the task, which will appear on task pages on the web and apps."
+          },
+          "content": {
+            "type": "string",
+            "description": "The value of a task is used as a Content, which will appear on task pages on the web and in apps."
+          },
+          "label": {
+            "type": "string",
+            "description": "The value of a task is used as a Label, which will appear on task pages on the web and in apps."
+          },
+          "status": {
+            "type": "string",
+            "description": "Status that describes the process of a task: <br> `Unassigned` : Tasks that have been created but have not been assigned to the user field <br> `Ongoing` : Tasks that have been assigned to the user field and are in progress <br> `Done` : Tasks that have been completed by the user field."
+          },
+          "assignee": {
+            "type": "array",
+            "description": "List of email that has been assigned the task.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assignedTo": {
+            "type": "object",
+            "description": "Detail information of assignee : contains field user name, email, hub, organization and user role.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "An unique identifier for the user.This data will be displayed based on `assignee`."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of user assignee.This data will be displayed based on `assignee`."
+              },
+              "email": {
+                "type": "string",
+                "description": "Email of user assignee.This data will be displayed based on `assignee`."
+              },
+              "hubId": {
+                "type": "array",
+                "description": "Hub Id of user assignee.This data will be displayed based on `assignee`.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "roleId": {
+                "type": "string",
+                "description": "ID role of user assignee.This data will be displayed based on `assignee`."
+              }
+            }
+          },
+          "assignedBy": {
+            "type": "string",
+            "description": "Email that assigned the task."
+          },
+          "assignedTime": {
+            "type": "datetime",
+            "description": "Date and time when the task is assigned."
+          },
+          "startTime": {
+            "type": "datetime",
+            "description": "The initial time for working on a task that can be set by the admin user when the task is created."
+          },
+          "endTime": {
+            "type": "datetime",
+            "description": "The deadline for completing tasks that can be set by the admin user when the task is created."
+          },
+          "updatedTime": {
+            "type": "datetime",
+            "description": "Information of time when the task was last updated."
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "information about the user who last modified a task. It provides details about the user who made the most recent update to the task, typically including their email address."
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email that created the task."
+          },
+          "createdFrom": {
+            "type": "string",
+            "description": "Identify where the task was created from: `WEB`, `API`, `Automation`, `Mobile`."
+          },
+          "createdTime": {
+            "type": "datetime",
+            "description": "Date and time when the task is created."
+          },
+          "doneBy": {
+            "type": "string",
+            "description": "Email that processed the task until it is done."
+          },
+          "doneCoordinate": {
+            "type": "float",
+            "description": "Coordinate where the task is done."
+          },
+          "doneTime": {
+            "type": "datetime",
+            "description": "Date and time when the task is finished."
+          },
+          "doneFrom": {
+            "type": "string",
+            "description": "Identify where the task was done from: WEB, MOBILE, System (for sample data)."
+          },
+          "openTaskTime": {
+            "type": "datetime",
+            "description": "openTaskTime is data when the task was last opened when it was still ongoing."
+          },
+          "waitingTime": {
+            "type": "integer",
+            "description": "Time provided (in minute) for a vehicle to wait before start travelling to the next visit."
+          },
+          "travelDuration": {
+            "type": "float",
+            "description": "The `travelDuration` is calculated as the time taken to travel between two consecutive visits and is measured in minutes. It is obtained by subtracting the `doneTime` of the current visit from the `doneTime` of the previous visit in the optimized route."
+          },
+          "duration": {
+            "type": "integer",
+            "description": "The `duration` in this context is also measured in minutes and represents the time taken to complete a particular visit or task. It is calculated by subtracting the `doneTime` of the current visit from th `page1DoneTime` of the same visit. This calculation allows us to determine the time it took to complete the specific task or visit, starting from when it was initiated (`page1DoneTime`) until it was marked as completed (`doneTime`)."
+          },
+          "distance": {
+            "type": "integer",
+            "description": "Estimated vehicle mileage (in meter)."
+          },
+          "eta": {
+            "type": "time",
+            "description": "Estimated Time Of Arrival at the destination."
+          },
+          "etd": {
+            "type": "time",
+            "description": "Estimated Time of Departure before start travelling to the next visit."
+          },
+          "assignedVehicleId": {
+            "type": "string",
+            "description": "The Unique ID is used to mark a vehicle during route optimization to ensure that the visit associated with this vehicle ID remains assigned to the same vehicle in the subsequent optimization route and does not get randomly assigned to another vehicle."
+          },
+          "assignedVehicle": {
+            "type": "object",
+            "description": "The purpose of marking a vehicle on a successfully optimized visit is to ensure that the visit can be assigned to the same vehicle in the next optimizer route.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "An unique identifier for the vehicle.This data will be displayed based on `assignedVehicleId`."
+              },
+              "assignee": {
+                "type": "string",
+                "description": "Users's email that assigned to the vehicle.This data will be displayed based on `assignedVehicleId`."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of vehicle.This data will be displayed based on `assignedVehicleId`."
+              },
+              "speed": {
+                "type": "string",
+                "description": "Assume the average speed (in km/h) of the vehicle.This data will be displayed based on `assignedVehicleId`."
+              },
+              "workingTime": {
+                "type": "object",
+                "description": "Working hours on vehicles containing: startTime, endTime, and multiday.This data will be displayed based on `assignedVehicleId`.",
+                "properties": {
+                  "startTime": {
+                    "type": "string",
+                    "description": "Time of departure of the vehicle from the hub.This data will be displayed based on `assignedVehicleId`."
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "description": "Maximum working time of vehicle to operate. This data will be displayed based on `assignedVehicleId`."
+                  },
+                  "multiday": {
+                    "type": "integer",
+                    "description": "Additional working days accumulatedbased on the number of days.This data will be displayed based on `assignedVehicleId`."
+                  }
+                }
+              }
+            }
+          },
+          "routePlannedOrder": {
+            "type": "integer",
+            "description": "The `routePlannedOrder` serves as the key to identify that a visit has been successfully optimized within a specific route. It also helps to determine the order of that visit within the optimized route."
+          },
+          "idleDuration": {
+            "type": "integer",
+            "description": "idleDuration is the total duration of the idle user while working on a task, the user is considered idle when the speed is less than 3 km/h"
+          },
+          "expectedCoordinate": {
+            "type": "string",
+            "description": "Coordinates used in MileField to display routes on google maps."
+          },
+          "expectedDoneTime": {
+            "type": "string",
+            "description": "Timestamp for expectation done time for the task."
+          },
+          "createdCoordinate": {
+            "type": "string",
+            "description": "Coordinate where the task is created."
+          },
+          "useGeoLock": {
+            "type": "boolean",
+            "description": "A flag used to indicate whether a task employs geolock or not. Geolock is a feature that restricts task access based on predefined geographic locations and radius. When useGeoLock is set to true, it means that the task uses geolock to limit access based on the task's specified geographic parameters."
+          },
+          "geoLock": {
+            "type": "object",
+            "description": "Define geolocation-based access restrictions for tasks. It is an array of objects that contain information about allowed locations and their corresponding radius. Tasks are accessible only when accessed from within the specified locations and within the defined radius. If an attempt is made to access the task from outside the allowed area, access will be denied.",
+            "properties": {
+              "geoLocation": {
+                "type": "string",
+                "description": "Detailed location of lattidude and longitude."
+              },
+              "radius": {
+                "type": "integer",
+                "description": "Radius of the geolock feature."
+              }
+            }
+          },
+          "geoLockTrigger": {
+            "type": "string",
+            "description": "The identifier for geolock usage is triggered when a task begins or when a task is completed."
+          },
+          "refId": {
+            "type": "string",
+            "description": "Task reference identity that involves multiple flows."
+          },
+          "idLocal": {
+            "type": "string",
+            "description": "Id / Identity of a task created by mobile."
+          },
+          "orderIndex": {
+            "type": "float",
+            "description": "By default this number is generated based on the task created time in epoch format, orderIndex is used to define the order of this Task in the Task list. User can define it by number value."
+          },
+          "isSample": {
+            "type": "boolean",
+            "description": "An identifier is used to distinguish whether this task is sample data or user-generated real data."
+          },
+          "histories": {
+            "type": "array",
+            "description": "History identity when a task was created, modified, or deleted.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "An unique identifier for the task history."
+                },
+                "action": {
+                  "type": "string",
+                  "description": "Actions taken on tasks. There are 7 types of *action*:`create`,`put`,`patch`, `delete`, `assign`, `unassign`, `move`."
+                },
+                "notes": {
+                  "type": "string",
+                  "description": "Detailed explanation of history. Usually use a combination of **action** and **changeBy**."
+                },
+                "changeData": {
+                  "type": "object",
+                  "description": "An object that contains task data before the action is performed."
+                },
+                "createdAt": {
+                  "type": "datetime",
+                  "description": "The date the history was created."
+                }
+              }
+            }
+          },
+          "deviceInformation": {
+            "type": "array",
+            "description": "An information about device that used by user for complete the task."
+          },
+          "routingResultId": {
+            "type": "string",
+            "description": "This key is related to the Cross Docking configuration. When a user dispatches the result, a handover task is generated for the Sub Hub. This key serves to distinguish the Handover task from other tasks within MileApp."
+          },
+          "parentTaskId": {
+            "type": "string",
+            "description": "This key is associated with the Auto Split configuration. If the routing result suggests a visit that needs to be split into two or more visits, upon dispatch, we generate the split tasks. The parentTaskId signifies the main task that has been split."
+          },
+          "autoSplit": {
+            "type": "string",
+            "description": "This key indicates the type of Auto Split used, which can be either `Equal` or `Maximize`. It indicates the method employed for splitting tasks."
+          },
+          "splitNumber": {
+            "type": "string",
+            "description": "This key identifies the segment of the split task, corresponding to the Auto Split configuration. It helps in tracking the divided tasks effectively. <br>**Example**: `1/2, 2/2`"
+          },
+          "useVisitGroup": {
+            "type": "string",
+            "description": "A flag indicating whether the routing optimization considers visits within the same group. This ensures that visits within the same group are assigned to the same vehicle and prioritized sequentially."
+          },
+          "visitGroup": {
+            "type": "string",
+            "description": "This key indicates that visits belong to the same group if they are set to the same name. The routing solution will suggest assigning visits with the same group to the same vehicle."
+          },
+          "visitGroupPriority": {
+            "type": "string",
+            "description": "Priority ranges from 0 to 100, with the default value set to 0. A lower number indicates a higher priority compared to other visits within the same group."
+          },
+          "vehicleSubHubDistanceLimit": {
+            "type": "string",
+            "description": "This key stores the value of the maximum distance a vehicle sub hub can travel. It is related to cross docking."
+          },
+          "doneOrder": {
+            "type": "integer",
+            "description": "Generated when the task done for flagging the sequence of completed tasks."
+          },
+          "isLastDoneOrder": {
+            "type": "boolean",
+            "description": "Generated when the task done for flagging the latest completed task."
+          },
+          "inLocation": {
+            "type": "time",
+            "description": "Generated when user enter the range (50m) of task coordinates. This feature activated when task has geoloc feature."
+          },
+          "outLocation": {
+            "type": "time",
+            "description": "Generated when user out the range (50m) of task coordinates after inLocation recorded."
+          },
+          "travelDistance": {
+            "type": "time",
+            "description": "This key depends on doneOrder key, generated when task done by calculating distance between done tasks and distance between Hub to task if done order is 1"
+          }
+        },
+        "example": {
+          "_id": "6352736c628401059b37a2e2",
+          "organizationId": "6153defcbd80d354e0708a74",
+          "flowId": "632ac456c400337f183d14ff",
+          "hubId": "615bb662bd32b7726709acd2",
+          "flow": "Delivery",
+          "organization": {
+            "_id": "63e083f9b934ff3dc2180132",
+            "name": "mileapp",
+            "email": "john@gmail.com"
+          },
+          "hub": {
+            "id": "64006d2da2b2125d925642d2",
+            "name": "bandung",
+            "lat": -6.91266,
+            "lng": 107.60791,
+            "deleteAccess": true
+          },
+          "title": "Safira",
+          "content": "Neo soho",
+          "label": "Jakarta",
+          "status": "DONE",
+          "assignee": [
+            "leandro@mile.app"
+          ],
+          "assignedTo": {
+            "_id": "641807adbfaea73910208b0f",
+            "name": "Leandro",
+            "email": "leandro@mile.app",
+            "hubId": [
+              "64180853e480b10a631c8452"
+            ],
+            "roleId": "64d2ebcd340ac136d87e96f4"
+          },
+          "assignedBy": "john@gmail.com",
+          "assignedTime": "2023-10-16T07:14:45+00:00",
+          "startTime": "2023-10-16T07:12:00+00:00",
+          "endTime": "2023-10-17T07:12:00+00:00",
+          "updatedTime": "2023-10-16T07:14:45+00:00",
+          "updatedBy": "john@gmail.com",
+          "createdBy": "john@gmail.com",
+          "createdFrom": "WEB",
+          "createdTime": "2023-10-16T07:13:31+00:00",
+          "doneBy": "leandro@mile.app",
+          "doneCoordinate": "-6.17525,106.79028",
+          "doneTime": "2023-10-17T07:10:00+00:00",
+          "doneFrom": "MOBILE",
+          "openTaskTime": "2023-10-16T07:10:00+00:00",
+          "waitingTime": 7,
+          "travelDuration": 1346.83,
+          "duration": 10,
+          "distance": 375,
+          "eta": "10:03:34",
+          "etd": "11:43:22",
+          "assignedVehicleId": "6153defcbd80d354e0708a74",
+          "assignedVehicle": {
+            "_id": "63870d38158a183a414a2a6b",
+            "assignee": "john@gmail.com",
+            "name": "Test Vehicle",
+            "speed": 24,
+            "workingTime": {
+              "startTime": "09:00",
+              "endTime": "18:00",
+              "multiday": 0
+            }
+          },
+          "routePlannedOrder": 1,
+          "idleDuration": 0,
+          "expectedCoordinate": "-6.0091023,166.8726861",
+          "expectedDoneTime": "2023-10-17T07:10:00+00:00",
+          "createdCoordinate": "-6.179763,106.708670",
+          "useGeoLock": true,
+          "geoLock": {
+            "geolocation": "-8.2700558,111.7131245",
+            "radius": 50
+          },
+          "geoLockTrigger": "onTaskStart",
+          "refId": "task01",
+          "idLocal": "6352736c628401059b37a2e2",
+          "orderIndex": 169744041128541,
+          "isSample": false,
+          "doneOrder": 3,
+          "isLastDoneOrder": true,
+          "inLocation": "2022-10-17T06:20:23+00:00",
+          "outLocation": "2022-10-17T06:20:23+00:00",
+          "travelDistance": 20542.8,
+          "taskType": "task",
+          "parentId": "64b4e719dc92e91ae936d664",
+          "subId": ["64b4e719dc92e91ae936d665", "64b4e719dc92e91ae936d666"],
+          "workflow": {
+            "_id": "workflow123",
+            "name": "3-Step Vehicle Inspection",
+            "steps": [
+              {"order": 1, "flowName": "Engine Check", "flowId": "flow_engine_123"},
+              {"order": 2, "flowName": "Body Check", "flowId": "flow_body_456"},
+              {"order": 3, "flowName": "Document Check", "flowId": "flow_doc_789"}
+            ],
+            "organizationId": "6153defcbd80d354e0708a74"
+          },
+          "workflowId": "workflow_vehicle_inspection_v2",
+          "histories": [
+            {
+              "_id": "652ce29b5180e397fd049174",
+              "action": "create",
+              "notes": "Created by John",
+              "changeData": {
+                "flow": "Delivery",
+                "hubId": "615bb662bd32b7726709acd2",
+                "startTime": "2023-10-16T14:12:00.000+07:00",
+                "endTime": "2023-10-17T14:12:00.000+07:00",
+                "createdFrom": "WEB",
+                "assignee": [],
+                "customerName-1": "Safira",
+                "customerAddress": "Neo soho jakarta",
+                "customerCoordinate": "-6.17525,106.79028",
+                "organization": {
+                  "_id": "63e083f9b934ff3dc2180132",
+                  "name": "mileapp",
+                  "email": "john@gmail.com"
+                },
+                "title": "Safira",
+                "content": "Neo soho jakarta",
+                "expectedCoordinate": "-6.17525,106.79028",
+                "organizationId": "6153defcbd80d354e0708a74",
+                "flowId": "632ac456c400337f183d14ff",
+                "status": "UNASSIGNED",
+                "hub": {
+                  "id": "64006d2da2b2125d925642d2",
+                  "name": "bandung",
+                  "lat": -6.91266,
+                  "lng": 107.60791
+                },
+                "orderIndex": 169744041128541,
+                "createdBy": "john@gmail.com"
+              },
+              "createdAt": "2023-10-16T07:13:31.300000Z"
+            }
+          ],
+          "deviceInformation": {
+            "os": "13"
+          },
+          "routingResultId": "65e05c0985a87f0f5a395fe2",
+          "parentTaskId": "65e05a37eed1c9235633a1b2",
+          "autoSplit": "Equal",
+          "splitNumber": "1/2"
+        }
+      },
+      "Flow": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the flow record, often used for database or system reference."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the flow."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of flow. Name must be unique at organization. When creating a flow, you cannot use the flow with the name `Handover` because it has been used as a reserved key."
+          },
+          "pages": {
+            "type": "array",
+            "description": "Settings that will define the detail information of flow structure.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "An unique identifier for the flow pages. Usually this id used as order page."
+                },
+                "components": {
+                  "type": "array",
+                  "description": "An object containing detail information and configuration for components.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "An unique identifier for flow component. The value that cannot be input is the reserved key task. <br> **To see the details of reserved key of task, please follow <a href='#tag/task_model'> this link </a>**"
+                      },
+                      "component": {
+                        "type": "string",
+                        "description": "Type of Component.  There are 10 types of *component*:`select`,`input`,`photo`,`signature`,`view`,`bill`,`list`,`timer`,`voice`,`capture`"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "Title of Component."
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Data Type of Component. There are 9 options of *type* if *component* is **input**: `String`,`Date`,`Datetime`,`Time`,`Numeric`,`Address`,`Geolocation`,`PhoneNumber`,`URL`,`Currency`. <br> There are 10 options of *type* if *component* is **view**: `String`,`Date`,`Datetime`,`Time`,`Numeric`,`Address`,`Geolocation`,`PhoneNumber`,`URL`,`Currency`,`Image`"
+                      },
+                      "default": {
+                        "type": "string",
+                        "description": "Default Value of Component."
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Component values will be displayed in other components.Field only exist, if *component* is **view** or **bill** or **list**"
+                      },
+                      "routeAs": {
+                        "type": "string",
+                        "description": "Flag trigger of routing data.There are 8 types of `routeAs`:<br>`VisitName`,`Address`,`OpenTime`,`CloseTime`,`VisitDuration`,`Coordinate`,`Tag`,`Constraint.weight`"
+                      },
+                      "showAs": {
+                        "type": "string",
+                        "description": "Flag trigger to display data in the task list. The value of component, which will appear on task pages on the web and apps. There are 3 types of `showAs`:<br>`title`,`content`,`label`"
+                      },
+                      "required": {
+                        "type": "boolean",
+                        "description": "Flag that mark field as required or not on flow component."
+                      },
+                      "visible": {
+                        "type": "boolean",
+                        "description": "Flag on flow component that will make task field visible or not."
+                      },
+                      "useUnit": {
+                        "type": "boolean",
+                        "description": "To set input type number using unit. Field only exist, if *component* is **number**"
+                      },
+                      "units": {
+                        "type": "array",
+                        "description": "Value of units for input type number component. Field only exist, if *component* is **number** and *useUnit* is **true**",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "useGeoLock": {
+                        "type": "boolean",
+                        "description": "Flag Trigger of geolock feature on mobile devices. Field only exist, if *component* is **coordinate**"
+                      },
+                      "radius": {
+                        "type": "integer",
+                        "description": "Distance in units (m) to use geolock. Field only exist, if *component* is **coordinate**"
+                      },
+                      "geoLockTrigger": {
+                        "type": "string",
+                        "description": "Trigger to determine when the geolock will be used. There are 2 types of `geoLockTrigger`:<br>`onTaskDone`,`onTaskStart`. Field only exist, if *component* is **coordinate**"
+                      },
+                      "useGeocode": {
+                        "type": "boolean",
+                        "description": "To set coordinate use geocode. Field only exist, if *component* is **coordinate**"
+                      },
+                      "geocodeAs": {
+                        "type": "string",
+                        "description": "To reference geocode use the address component id. Field only exist, if *component* is **coordinate** and *useGeocode* is **true**"
+                      },
+                      "onSelect": {
+                        "type": "array",
+                        "description": "Detailed object data of the selected event. Field only exist, if *component* is **select**",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "options": {
+                              "type": "array",
+                              "description": "Option on select component that when it is selected will trigger an action.",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "action": {
+                              "type": "string",
+                              "description": "Desired action if that option is selected. There are 3 types of `action`:<br>`show`,`hide`,`fill`"
+                            },
+                            "componentAffected": {
+                              "type": "array",
+                              "description": "Components that will be affected by the selected action. There are 7 types of `componentAffected`:<br> `text`, `date`, `dateTime`, `time`, `number`, `address`, `coordinate`.",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "options": {
+                        "type": "array",
+                        "description": "Detail value of select component.",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "min": {
+                        "type": "integer",
+                        "description": "Minimum value of component. Field only exist, if *component* is **select** or **photo**"
+                      },
+                      "max": {
+                        "type": "integer",
+                        "description": "Maximum value of component. Field only exist, if *component* is **select** or **photo**"
+                      },
+                      "categories": {
+                        "type": "array",
+                        "description": "Value of category for photo component. Field only exist, if *component* is **photo**",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "watermark": {
+                        "type": "boolean",
+                        "description": "Configuration for users to enable watermark on photos when creating tasks. The default value of the watermark is `false`. Field only exist, if *component* is **photo**"
+                      },
+                      "addNew": {
+                        "type": "boolean",
+                        "description": "Configuration to allow users to add new items to the task bill or task list. Field only exist, if *component* is **bill** or **list**"
+                      },
+                      "addNewType": {
+                        "type": "string",
+                        "description": "Way to add a new list. There are 2 types of `addNewType`:<br>`input`,`select`. Field only exist, if *component* is **list**."
+                      },
+                      "addNewData": {
+                        "type": "array",
+                        "description": "Detailed list of item names. Field only exist, if *component* is **list** and *addNewType* is **select**"
+                      },
+                      "addNewValidationType": {
+                        "type": "string",
+                        "description": "Configuration to set the data type validation used. There are 5 types of `addNewValidationType`:<br>`noValidation`,`text`,`number`,`textAndNumber`,`custom`. Field only exist, if *component* is **list** and *addNewType* is **input**."
+                      },
+                      "addNewValidation": {
+                        "type": "string",
+                        "description": "Regex validation details following `addNewValidationType`. Field only exist, if *component* is **list** and *addNewType* is **input**."
+                      },
+                      "masterItems": {
+                        "type": "array",
+                        "description": "Detail data object of the master items contain `name` and`unit_price`. Field only exist, if *component* is **bill**",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Name of the bill item."
+                            },
+                            "unit_price": {
+                              "type": "integer",
+                              "description": "Price of the bill item."
+                            }
+                          }
+                        }
+                      },
+                      "masterCosts": {
+                        "type": "array",
+                        "description": "Detail data object of the master costs contain `type`,`name` and `amount`. Field only exist, if *component* is **bill**",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Name of bill cost."
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "Type of bill cost.  There are 2 types of `type`:<br>`discount`,`cost`."
+                            },
+                            "amount": {
+                              "type": "integer",
+                              "description": "Amount of bill cost ."
+                            }
+                          }
+                        }
+                      },
+                      "costs": {
+                        "type": "array",
+                        "description": "Cost data available on the billing component. Field only exist, if *component* is **bill**",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "useDataSource": {
+                        "type": "boolean",
+                        "description": "Configuration to use the data source as a item in the selected component. Field only exist, if *component* is **list** or **bill**"
+                      },
+                      "autoStart": {
+                        "type": "boolean",
+                        "description": "Configuration to initiate the time when users open a task on a mobile device. Field only exist, if *component* is **timer**"
+                      },
+                      "reset": {
+                        "type": "boolean",
+                        "description": "Configuration to enable the reset function of the timer on mobile device. Field only exist, if *component* is **timer**"
+                      },
+                      "unpausable": {
+                        "type": "boolean",
+                        "description": "Configuration to remove the pause timer function on mobile device. Field only exist, if *component* is **timer**"
+                      },
+                      "maxDuration": {
+                        "type": "integer",
+                        "description": "The maximum time configuration for using the voice component ranges from 0 to 10 minutes. Field only exist, if *component* is **voice**"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "configurations": {
+            "type": "array",
+            "description": "An object containing various configuration settings for advance setting of the flow.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "ID of configuration. There are 3 types of id : `startTime`,`endTime`,`dataSource`"
+                },
+                "adjustment": {
+                  "type": "string",
+                  "description": "Value of configuration adjusment. Field only exist, if **id** is `startTime` and `endTime`"
+                },
+                "list": {
+                  "type": "array",
+                  "description": "Detail configuration of mapping data source to flow. Field only exist, if **id** is `dataSource`.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "typeId": {
+                        "type": "string",
+                        "description": "Unique identifier key for reference to data type."
+                      },
+                      "fields": {
+                        "type": "array",
+                        "description": "Data type field for mapping to flow component.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Fields from the data source."
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "Title from the data source."
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "Type of component."
+                            },
+                            "componentId": {
+                              "type": "string",
+                              "description": "ID of component"
+                            },
+                            "primaryKey": {
+                              "type": "boolean",
+                              "description": "A primary key is a unique identifier from the data source. One data source only has one primary key."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Indicating whether the flow is marked as default (false means it's not default)."
+          },
+          "orderIndex": {
+            "type": "integer",
+            "description": "Identifier to order flow. User can define it by number value."
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version of flow. The version will increase when the user makes changes to the flow."
+          },
+          "createdBy": {
+            "description": "A user email, representing the user who created flow.",
+            "type": "string"
+          },
+          "updatedBy": {
+            "description": "A user email, representing the user who updated flow.",
+            "type": "string"
+          },
+          "createdTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the date and time when this flow data was initially created."
+          },
+          "updatedTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the last time the flow data was updated. It includes date and time information."
+          }
+        },
+        "example": {
+          "_id": "652ce78ef9b7c075850d4e06",
+          "organizationId": "641807adbfaea73910208b09",
+          "name": "Delivery",
+          "pages": [
+            {
+              "id": "page0",
+              "components": [
+                {
+                  "component": "input",
+                  "id": "text",
+                  "title": "Text",
+                  "type": "String",
+                  "default": "",
+                  "routeAs": "VisitName",
+                  "showAs": "title",
+                  "required": true,
+                  "visible": true,
+                  "addNewData": [],
+                  "masterItems": [],
+                  "useDataSource": true
+                },
+                {
+                  "component": "input",
+                  "id": "date",
+                  "title": "Date",
+                  "type": "Date",
+                  "default": "2023-10-16",
+                  "routeAs": null,
+                  "showAs": "content",
+                  "required": false,
+                  "visible": true
+                },
+                {
+                  "component": "input",
+                  "id": "datetime",
+                  "title": "Datetime",
+                  "type": "Datetime",
+                  "default": null,
+                  "routeAs": null,
+                  "showAs": "label",
+                  "required": false,
+                  "visible": true
+                },
+                {
+                  "component": "input",
+                  "id": "time",
+                  "title": "Time",
+                  "type": "Time",
+                  "default": null,
+                  "routeAs": "OpenTime",
+                  "showAs": null,
+                  "required": false,
+                  "visible": true
+                },
+                {
+                  "component": "input",
+                  "id": "number",
+                  "title": "Number",
+                  "type": "Numeric",
+                  "default": null,
+                  "routeAs": "Constraint.weight",
+                  "showAs": null,
+                  "required": false,
+                  "visible": true,
+                  "useUnit": true,
+                  "units": [
+                    "KG",
+                    "G",
+                    "M3",
+                    "CBM"
+                  ]
+                },
+                {
+                  "component": "input",
+                  "id": "address",
+                  "title": "Address",
+                  "type": "Address",
+                  "default": null,
+                  "routeAs": "Address",
+                  "showAs": null,
+                  "required": false,
+                  "visible": true,
+                  "addNewData": [],
+                  "masterItems": []
+                },
+                {
+                  "component": "input",
+                  "id": "coordinate",
+                  "title": "Coordinate",
+                  "type": "Geolocation",
+                  "default": null,
+                  "routeAs": "Coordinate",
+                  "showAs": "expectedCoordinate",
+                  "required": false,
+                  "visible": true,
+                  "useGeoLock": true,
+                  "radius": 5,
+                  "geoLockTrigger": "onTaskStart",
+                  "useGeocode": true,
+                  "geocodeAs": "address",
+                  "addNewData": [],
+                  "masterItems": []
+                },
+                {
+                  "component": "input",
+                  "id": "phone",
+                  "title": "Phone",
+                  "type": "PhoneNumber",
+                  "default": null,
+                  "routeAs": null,
+                  "showAs": null,
+                  "required": false,
+                  "visible": true
+                },
+                {
+                  "component": "input",
+                  "id": "url",
+                  "title": "Url",
+                  "type": "URL",
+                  "default": null,
+                  "routeAs": null,
+                  "showAs": null,
+                  "required": false,
+                  "visible": true
+                },
+                {
+                  "component": "input",
+                  "id": "currency",
+                  "title": "Currency",
+                  "type": "String",
+                  "default": null,
+                  "routeAs": "Tag",
+                  "showAs": null,
+                  "required": false,
+                  "visible": true
+                }
+              ]
+            },
+            {
+              "id": "page1",
+              "title": "Page 1",
+              "components": [
+                {
+                  "component": "view",
+                  "id": "viewText",
+                  "type": "String",
+                  "title": "View text",
+                  "value": "$text",
+                  "visible": true
+                },
+                {
+                  "component": "select",
+                  "id": "select",
+                  "title": "Select",
+                  "min": 0,
+                  "max": 1,
+                  "default": null,
+                  "routeAs": null,
+                  "showAs": null,
+                  "options": [
+                    "A",
+                    "B"
+                  ],
+                  "type": "dropdown",
+                  "onSelect": [
+                    {
+                      "options": [
+                        "A"
+                      ],
+                      "action": "show",
+                      "componentAffected": [
+                        "signature"
+                      ]
+                    }
+                  ],
+                  "visible": true
+                },
+                {
+                  "component": "photo",
+                  "id": "photo",
+                  "title": "Photo",
+                  "min": 0,
+                  "max": 1,
+                  "visible": true,
+                  "tags": null,
+                  "categories": [
+                    "Family room",
+                    "Kitchen",
+                    "Bathroom"
+                  ]
+                },
+                {
+                  "component": "signature",
+                  "id": "signature",
+                  "title": "Signature",
+                  "required": false,
+                  "visible": true
+                },
+                {
+                  "component": "bill",
+                  "id": "bill",
+                  "title": "Bill",
+                  "addNew": true,
+                  "value": null,
+                  "masterItems": [
+                    {
+                      "name": "Snack",
+                      "unit_price": 10000
+                    },
+                    {
+                      "name": "Drink",
+                      "unit_price": 5000
+                    }
+                  ],
+                  "masterCosts": [
+                    {
+                      "type": "discount",
+                      "name": "Discount",
+                      "amount": 500
+                    },
+                    {
+                      "type": "cost",
+                      "name": "Ongkir",
+                      "amount": 3000
+                    }
+                  ],
+                  "costs": [
+                    "Discount",
+                    "Ongkir"
+                  ],
+                  "visible": true,
+                  "required": false
+                },
+                {
+                  "component": "list",
+                  "id": "list",
+                  "title": "List",
+                  "type": "checkbox",
+                  "value": null,
+                  "addNew": true,
+                  "visible": true,
+                  "addNewData": [
+                    "Book",
+                    "Paper"
+                  ],
+                  "addNewType": "select"
+                },
+                {
+                  "component": "timer",
+                  "id": "timer",
+                  "title": "Timer",
+                  "autoStart": false,
+                  "reset": false,
+                  "visible": true
+                }
+              ]
+            }
+          ],
+          "configurations": [
+            {
+              "id": "startTime",
+              "adjustment": 0
+            },
+            {
+              "id": "endTime",
+              "adjustment": 24
+            },
+            {
+              "id": "dataSource",
+              "list": [
+                {
+                  "typeId": "6507f50b1985dfa2f202aaa8",
+                  "fields": [
+                    {
+                      "id": "dataId",
+                      "title": "Customer Name",
+                      "type": "primaryKey",
+                      "componentId": "text",
+                      "primaryKey": true
+                    },
+                    {
+                      "id": "customerAddress",
+                      "title": "Customer Address",
+                      "type": "text",
+                      "componentId": "address",
+                      "primaryKey": false
+                    },
+                    {
+                      "id": "customerCoordinate",
+                      "title": "Customer Coordinate",
+                      "type": "geolocation",
+                      "componentId": "coordinate",
+                      "primaryKey": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "isDefault": false,
+          "orderIndex": 52,
+          "version": 2,
+          "createdBy" : "jhon@sample.com",
+          "updatedBy" : "jhon@sample.com",
+          "createdTime": "2023-10-16T07:45:26.980000Z",
+          "updatedTime": "2023-10-16T07:34:38.009000Z"
+        }
+      },
+      "DataType": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the data type record, often used for database or system reference."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the data type, which is used to identify and reference it."
+          },
+          "fields": {
+            "type": "array",
+            "description": "Array of data type fields.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Identifier for the field and is used to reference it in the data type."
+                },
+                "primaryKey": {
+                  "type": "boolean",
+                  "description": "A primary key is a unique identifier for each record in the data type, and it helps in distinguishing and retrieving specific records."
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "This indicates that data in this field is mandatory or not. When someone is entering data into this data source, they must provide a value for this field or not."
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Human-readable label or title for the field, which describes what kind of data this field holds."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of field."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "This specifies the data type for the field."
+                },
+                "default": {
+                  "type": "string",
+                  "description": "Default value of field."
+                },
+                "show": {
+                  "type": "string",
+                  "description": "Once set into **true**, field will be shown when someone create data source."
+                },
+                "optionData": {
+                  "type": "array",
+                  "description": "If data type is option, list of option will be saved in this key."
+                }
+              }
+            }
+          },
+          "limitUser": {
+            "type": "boolean",
+            "description": "Setting to limit data source usage by users. If the value is true, only specific users can view the data source. and if the value is false, all users can view the data source."
+          },
+          "commonData": {
+            "type": "boolean",
+            "description": "By default the data source is unique by hub, but if the `commonData` configuration value is true, the data source is unique by organization. This setting is not changeable after creation."
+          },
+          "createdBy": {
+            "description": "A user email, representing the user who created data type.",
+            "type": "string"
+          },
+          "updatedBy": {
+            "description": "A user email, representing the user who updated data type.",
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the data type."
+          },
+          "updatedTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the last time the data type was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the date and time when data type was initially created."
+          }
+        },
+        "example": {
+          "_id": "652519fbae7713c86b0895d5",
+          "name": "Customer",
+          "fields": [
+            {
+              "id": "dataId",
+              "title": "id",
+              "description": null,
+              "type": "primaryKey",
+              "default": null,
+              "required": true,
+              "visible": true,
+              "show": true,
+              "optionData": [],
+              "primaryKey": true
+            }
+          ],
+          "limitUser": true,
+          "commonData": false,
+          "createdBy": "jhon@mile.app",
+          "updatedBy": "jhon@mile.app",
+          "organizationId": "64c70f5730ae176dbf0267f6",
+          "updatedTime": "2023-10-10 09:31:39",
+          "createdTime": "2023-10-10 09:31:39"
+        }
+      },
+      "DataSource": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the data source record, often used for database or system reference."
+          },
+          "dataId": {
+            "type": "string",
+            "description": "Name or unique identifier value associated with data source."
+          },
+          "dataTypeId": {
+            "type": "string",
+            "description": "Unique identifier key for reference to data type."
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Identifier for the hub that owns or manages the data source. `hubId` is **not required** if the `commonData` configuration for the data type is true."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the data source."
+          },
+          "limitUser": {
+            "type": "array",
+            "description": "List of email that can see the data source.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data_type": {
+            "type": "object",
+            "description": "Data type that related into data source.",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "An unique identifier for the data type record, often used for database or system reference."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the data type, which is used to identify and reference it."
+              }
+            }
+          },
+          "createdBy": {
+            "description": "A user email, representing the user who created data source.",
+            "type": "string"
+          },
+          "updatedBy": {
+            "description": "A user email, representing the user who updated data source.",
+            "type": "string"
+          },
+          "updatedTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the last time the data source was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the date and time when the data source was initially created."
+          }
+        },
+        "example": {
+          "_id": "652645edd9a0427a4d01b64c",
+          "dataId": "Customer1",
+          "dataTypeId": "652519fbae7713c86b0895d5",
+          "hubId": "64c863d1d7e8d0458d004fcd",
+          "organizationId": "64c70f5730ae176dbf0267f6",
+          "limitUser": [
+            "jhon@mile.app"
+          ],
+          "data_type": {
+            "_id": "652519fbae7713c86b0895d5",
+            "name": "Customer"
+          },
+          "createdBy": "jhon@mile.app",
+          "updatedBy": "jhon@mile.app",
+          "updatedTime": "2023-10-11 06:51:25",
+          "createdTime": "2023-10-11 06:51:25"
+        }
+      },
+      "TaskSchedule": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the task schedule record, often used for database or system reference."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of task schedule. User can define task schedule name with task's flow name combined with running time, or something else."
+          },
+          "periode": {
+            "type": "string",
+            "description": "The period or frequency at which the task is scheduled."
+          },
+          "flow": {
+            "type": "string",
+            "description": "The flow or process associated with this task schedule."
+          },
+          "flowId": {
+            "type": "string",
+            "description": "The identifier id of flow associated with this task schedule."
+          },
+          "task": {
+            "type": "object",
+            "description": "Details of the task to be performed."
+          },
+          "assignee": {
+            "type": "array",
+            "description": "List of email that has been assigned the task.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startTime": {
+            "type": "date",
+            "description": "The start date of the task schedule."
+          },
+          "endTime": {
+            "type": "date",
+            "description": "The end date of the task schedule."
+          },
+          "schedules": {
+            "type": "array",
+            "description": "Specific time(s) at which the task is scheduled to occur.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "string",
+                  "description": "Time of the task schedule will be executed."
+                },
+                "day": {
+                  "type": "string",
+                  "description": "Day of the task schedule will be executed."
+                },
+                "date": {
+                  "type": "string",
+                  "description": "Date of the task schedule will be executed."
+                }
+              }
+            }
+          },
+          "timeSchedules": {
+            "type": "array",
+            "description": "Time schedule data has a certain format based on **schedules** which are generated by the system.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "logExecuted" : {
+            "description" : "Logs related to the execution of this task schedule. It includes details such as the execution status, task ID, message, and last execution time.",
+            "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "The last status of task scheduler. Indicates the current status of the scheduled task. Available values are: <br> `PENDING` : The task scheduler has been created and is waiting to be processed <br> `SUCCESS` : The task was successfully created by the task scheduler <br> `FAILED` : The task failed to create by the task scheduler"
+                },
+                "taskId": {
+                  "type": "string",
+                  "description": "The last generated taskId of executed schedule."
+                },
+                "message": {
+                  "type": "array of string",
+                  "description": "List of messages from last executed schedule."
+                },
+                "lastExecute": {
+                  "type": "string",
+                  "description": "The last timestamp of executed schedule."
+                }
+              }
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Identifier for the hub that owns or manages the task schedule."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the task schedule."
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "The email associated with the user whose update this schedule data."
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "The email associated with the user whose create this schedule data."
+          },
+          "updatedTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the date and time when this schedule data was updated."
+          },
+          "createdTime": {
+            "type": "datetime",
+            "description": "Timestamp represents the date and time when this schedule data was initially created."
+          }
+        },
+        "example": {
+          "_id": "660cefb919bd9a16b34ef411",
+          "name": "House inspection routing",
+          "periode": "daily",
+          "flow": "House Inspection",
+          "task": {
+            "customerName": "Alpha testing",
+            "addressCustomer": "JL P Button No 18",
+            "coordinateCustomer": "-6.31022,107.09073"
+          },
+          "assignee": [
+            "alif+10@paket.id"
+          ],
+          "startTime": "2024-04-03",
+          "endTime": "2024-04-30",
+          "schedules": [
+            {
+              "time": [
+                "06:00"
+              ]
+            }
+          ],
+          "timeSchedules": [
+            "06:00"
+          ],
+          "logExecuted": {
+            "status": "SUCCESS",
+            "taskId": "660cf063978ca5439e409fa2",
+            "message": [
+              "taskId: 660cf063978ca5439e409fa2",
+              "Task has been created successfully."
+            ],
+            "lastExecute": "2024-04-03 06:00:03"
+          },
+          "hubId": "660cd7bfebcc9870d163b6b7",
+          "organizationId": "660cd75cdbd3401dc874c7b8",
+          "updatedBy": "jhon@paket.id",
+          "createdBy": "jhon@paket.id",
+          "updatedTime": "2024-04-03T06:00:03+00:00",
+          "createdTime": "2024-04-03T05:57:13+00:00"
+        }
+      },
+      "Automation": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the automation that generated by system."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of automation."
+          },
+          "event": {
+            "type": "string",
+            "description": "Act as a trigger that start an automation. There are 4 different types <br> **onTaskCreated**: Automation will happen when a task is created. <br> **onTaskFinished**: Automation will happen when a task is finished (status task: Done). <br> **onTaskAssigned**: Automation will happen when a task is assigned to field user(s). <br> **onDataSourceCreated**: Automation will happen when a datasource is created."
+          },
+          "automationType": {
+            "type": "string",
+            "description": "Automation's type. The changes you want to automate. There are 6 different types: <br> **createTask**: The task will create when an event happens. <br> **createAssignTask**: will create assigned task when an event happens. <br> **moveTask**: The task will move to the selected hub when an event happens. <br> **assignTask**: The task will automatically assigned to the selected user on a hub when an event happens. <br> **webhook**: The data task or data source will sent to the specific URL when an event happens.<br> **createOrUpdateDataSource**: The data source will create or update when an event happens."
+          },
+          "dataType": {
+            "type": "string",
+            "description": "Automation's data type to describe that automation is running on a **task** or **data** module."
+          },
+          "automationDetails": {
+            "type": "object",
+            "description": "Set of fields according to the selected automation type.",
+            "properties": {
+              "flow": {
+                "description": "FlowName to select specific task format to be created on automation event. When creating or updating a automation, you cannot use the flow with the name `Handover` because it has been used as a reserved key. Field only exist, if *automationType* is **createTask** and **createAssignTask**",
+                "type": "string"
+              },
+              "flowId": {
+                "description": "Identifier of Flow to select specific task for event to happens. When creating or updating a automation. `flowId` is required for dataType is task and all automationType value.",
+                "type": "string"
+              },
+              "taskData": {
+                "description": "The task will be created with the given data (different flow may have different sets of field). Field only exist, if *automationType* is **createTask** and **createAssignTask** <br>The value can be set as static value such as: `'Jakarta'`.<br>or set as dynamic value according to `rules.flow` such as : `'$refFlow.name'`",
+                "type": "array"
+              },
+              "hubId": {
+                "description": "Hub identifier to define task location when an event happens. Field only exist, if *automationType* is **moveTask** and **createAssignTask**. To use a dynamic hub, you can utilize the hubId with the value `$refFlow.hubId` in the **createAssignTask** type. ",
+                "type": "string"
+              },
+              "assignee": {
+                "description": "List of email that has been assigned the task. Worker's email that assigned to the task. One task can be assigned by multiple worker. Field only exist, if *automationType* is **assignTask** and **createAssignTask** ",
+                "type": "array"
+              },
+              "reassignment": {
+                "description": "Type of reassigment that will be auto assign when user created task. Field only exist, if *event* is **onTaskFinished** or **onTaskCreated** and *automationType* is **createAssignTask**. <br> There are 3 types of *reassigment* if *event* is **onTaskFinished** :`assignee`,`assignedBy`,`doneBy`. <br> and there are 2 type of *reassigment* if *event* is **onTaskCreated** :`assignee`,`assignedBy`.",
+                "type": "string"
+              },
+              "url": {
+                "description": "The address that payloads are sent to. Field only exist, if *automationType* is **webhook**",
+                "type": "string"
+              },
+              "headers": {
+                "description": "Used to to provide additional information when default headers are not enough then they can use a custom header configuration. Field only exist, if *automationType* is **webhook**",
+                "type": "array"
+              },
+              "dataTypeId": {
+                "description": "Data Type Id to select specific data source format to be executed on automation event. Field only exist, if *automationType* is **createOrUpdateDataSource**",
+                "type": "string"
+              },
+              "dataTypeName": {
+                "description": "Data Type Name is not required. our system will set the value according to dataTypeId.",
+                "type": "string"
+              },
+              "dataId": {
+                "description": "Data Id to select specific flow's component id format to be executed on automation event. Field only exist, if *automationType* is **createOrUpdateDataSource**. Value can be set as dynamic values according to the data source that has been mapped with the flow such as : `$refFlow.pickupNumber`",
+                "type": "string"
+              },
+              "dataSource": {
+                "description": "The data source will be created or updated with the given data (different data type id may have different sets of field). Field only exist, if *automationType* is **createOrUpdateDataSource**. The value can be set as static value such as: `'Jakarta'`.<br>or set as dynamic value according to `rules.flow` such as : `'$refFlow.phoneNumber'`",
+                "type": "array"
+              },
+              "updateLimitUser": {
+                "type": "boolean",
+                "description": "Configuration to run automation using user limit. If `updateLimitUser` has a value of true, users can execute automation using either 'limitUser' or 'limitType'. And if `updateLimitUser` has a value of false, the automation will run without using a user limit.Field only exist, if *automationType* is **createOrUpdateDataSource**."
+              },
+              "replaceLimitUser": {
+                "type": "boolean",
+                "description": "Configuration to replace the current user limit. If `replaceLimitUser` is set to `true`, the automation will replace the existing user limit using either `limitUser` or `limitType`. If `replaceLimitUser` is set to `false`, the automation will run without modifying the existing user limit. This field only exists if *automationType* is **createOrUpdateDataSource**. Note: `updateLimitUser` and `replaceLimitUser` cannot both be set to `true` at the same time."
+              },
+              "limitUser": {
+                "type": "array",
+                "description": "Data source automation will be created using user restrictions based on user emails in the same organization or can be empty if the data source can be accessed by all users. Field only exist, if *automationType* is **createOrUpdateDataSource** and *updateLimitUser* or *replaceLimitUser* is **true**.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "limitType": {
+                "type": "string",
+                "description": "Data source automation will be created using user restrictions determined based **assignee**, **assignedBy** and **doneBy** when completing a task. Field only exist, if *automationType* is **createOrUpdateDataSource** and *updateLimitUser* or *replaceLimitUser* is **true**."
+              }
+            }
+          },
+          "rules": {
+            "type": "object",
+            "description": "Act as an automation's criteria. Criteria that must be true to run an Automation. ",
+            "properties": {
+              "flow": {
+                "description": "FlowName to select specific task for event to happens. When creating or updating a automation, you cannot use the flow with the name `Handover` because it has been used as a reserved key. `flow` is required for dataType is task and all automationType value.",
+                "type": "string"
+              },
+              "flowId": {
+                "description": "Identifier of Flow to select specific task for event to happens. When creating or updating a automation. `flowId` is required for dataType is task and all automationType value.",
+                "type": "string"
+              },
+              "dataTypeId": {
+                "description": "DataTypeId to select specific data source for event to happens. `dataTypeId` is required for dataType is data and automationType is createTask or webhook",
+                "type": "string"
+              },
+              "fields": {
+                "description": "**Example for dataType 'task'** <br> Additional automation's filter. <br>Use <a href='#tag/Flow/operation/flowFields'>GET /flow-fields API</a> to get the list of structure data.<br>`fields` is required for **all automationType value except `webhook`**.<br>**Example:** <br>`{`<br>`'name'`:`'roger'`,<br>`'address'`:`'kemayoran'`<br>`}` <br><br> **Example for dataType 'data'** <br> Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of structure data.<br>`fields` is required for **automationType is `createTask`**.<br>**Example:** <br>`{`<br>`'name'`:`'roger'`,<br>`'address'`:`'kemayoran'`<br>`}`",
+                "type": "object"
+              },
+              "schema": {
+                "description": "A combination of `rules.flow` and `rules.fields` generated by the system.",
+                "type": "string"
+              }
+            }
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "The identifier for the organization that generated by system."
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Automation's active state, only active automation will proceed by system"
+          },
+          "createdTime": {
+            "type": "datetime",
+            "description": "Time at which the automation was created."
+          },
+          "updatedTime": {
+            "type": "datetime",
+            "description": "Time at which the automation was updated."
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email that created the automation."
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "Email that updated the automation."
+          }
+        },
+        "example": {
+          "_id": "654c79dd6c763c3d337ce792",
+          "name": "automation create task",
+          "event": "onTaskCreated",
+          "automationType": "assignTask",
+          "dataType": "task",
+          "automationDetails": {
+            "assignee": [
+              "john@gmail.com"
+            ],
+            "hubId": "64180853e480b10a631c8452"
+          },
+          "rules": {
+            "fields": {
+              "customerName": "automation"
+            },
+            "flow": "Delivery",
+            "schema": "flow:customerName"
+          },
+          "organizationId": "641807adbfaea73910208b09",
+          "isActive": true,
+          "createdBy": "john@gmail.com",
+          "updatedBy": "john@gmail.com",
+          "updatedTime": "2023-11-09T10:56:56+00:00",
+          "createdTime": "2023-11-09T10:56:56+00:00"
+        }
+      },
+      "LocationHistory": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the location history record, often used for database or system reference."
+          },
+          "taskId": {
+            "type": "string",
+            "description": "An identifier for the task associated with this location data."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email associated with the user whose location is being tracked."
+          },
+          "lat": {
+            "type": "number",
+            "description": "The latitude coordinate of the location."
+          },
+          "lon": {
+            "type": "number",
+            "description": "The longitude coordinate of the location."
+          },
+          "speed": {
+            "type": "integer",
+            "description": "The speed at which the user was moving at this particular location."
+          },
+          "distance": {
+            "type": "integer",
+            "description": "The distance covered by the user from the previous recorded location."
+          },
+          "distanceToDest": {
+            "type": "number",
+            "description": "Distance estimated from the next location."
+          },
+          "duration": {
+            "type": "integer",
+            "description": "The time duration for which this location data was recorded."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes associated with this location data."
+          },
+          "eventName": {
+            "type": "string",
+            "description": "A flagging of location history with value otw, nearBy and done."
+          },
+          "isLatest": {
+            "type": "boolean",
+            "description": "A value indicating whether this entry represents the latest location data."
+          },
+          "time": {
+            "type": "integer",
+            "description": "The timestamp indicating when this location data was recorded."
+          },
+          "startTime": {
+            "type": "string",
+            "description": "The timestamp indicating when this location data recording started."
+          },
+          "trackedTime": {
+            "type": "integer",
+            "description": "The total time duration for which the user was tracked at this location."
+          },
+          "finish": {
+            "description": "Details about the finish of the activity. Includes the latitude, longitude, finish time, notes, total duration, and total distance.",
+            "type": "object",
+            "properties": {
+              "lat": {
+                "type": "number",
+                "description": "The latitude coordinate of the finish location."
+              },
+              "lon": {
+                "type": "number",
+                "description": "The longitude coordinate of the finish location."
+              },
+              "finishTime": {
+                "type": "string",
+                "description": "The latitude coordinate of the finish location."
+              },
+              "totalDuration": {
+                "type": "integer",
+                "description": "The total time duration for which this location data was recorded."
+              },
+              "totalDistance": {
+                "type": "integer",
+                "description": "The total distance covered by the user from this recorded location data."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Additional notes associated with this finish data."
+              }
+            }
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "An identifier for the organization associated with this location data."
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "The email associated with the user whose update this location history data."
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "The email associated with the user whose create this location history data."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "The timestamp indicating when this location data entry was last updated."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "The timestamp indicating when this location data entry was created."
+          },
+          "createdFrom": {
+            "type": "string",
+            "description": "A flagging for describe location history created from, default value generated by system is `mileAppField`."
+          }
+        },
+        "example": {
+          "_id": "660cd75cdbd3401dc874c7b8_jhon@sample.com_152445s",
+          "taskId": "65ef3a9dd7150f717c4470b2",
+          "email": "jhon@sample.com",
+          "lat": -6.45182,
+          "lon": 106.94098,
+          "speed": 0,
+          "distance": 0,
+          "duration": 0,
+          "notes": "This task must be done before end of the day.",
+          "isLatest": false,
+          "time": 1712117783789,
+          "startTime": "2023-12-21 16:00:14",
+          "trackedTime": 50,
+          "finish": {
+            "lat": -6.45182,
+            "lon": 106.94098,
+            "finishTime": "2023-12-21 16:50:14",
+            "totalDuration": 0,
+            "totalDistance": 0,
+            "notes": "This task finish ontime"
+          },
+          "organizationId": "660cd75cdbd3401dc874c7b8",
+          "updatedBy": "jhon@sample.com",
+          "createdBy": "jhon@sample.com",
+          "updatedTime": "2024-04-03 04:17:58",
+          "createdTime": "2023-12-22 15:24:45"
+        }
+      },
+      "ExportConfig": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the export config record, often used for database or system reference."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "An identifier for the organization associated with this export config data."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of export config."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of Export Config."
+          },
+          "flowIds": {
+            "type": "array",
+            "description": "The flow identifier used to filter the components refers only to the selected flow IDs. Use <a href='#tag/Flow/operation/getflow' target='_blank'>Flow /flows API</a> to get the list of flow id.<br>**Example:** `['66a988d53ae08a7ab52867c2']`"
+          },
+          "fields": {
+            "description": "The fields to be included in the exported data that ref to Flow reserved key and User fields.",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "An unique identifier for flow component. The value that cannot be input is the reserved key task."
+              },
+              "component": {
+                "type": "string",
+                "description": "Type of Component."
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of Component."
+              },
+              "source": {
+                "type": "string",
+                "description": "Flag for reserved key Component."
+              }
+            }
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "The timestamp indicating when this export config data entry was last updated."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "The timestamp indicating when this export config entry was created."
+          }
+        },
+        "example": {
+          "_id": "67109c63b2ef7545bd0c9ad2",
+          "name": "Report Daily Morning",
+          "description": "Template for daily report with bill item detail",
+          "collection": "task",
+          "fields": [
+            {
+              "component": "input",
+              "id": "_id",
+              "type": "String",
+              "source": "reservedKey",
+              "title": "Id"
+            },
+            {
+              "component": "input",
+              "id": "flow",
+              "type": "String",
+              "source": "reservedKey",
+              "title": "Flow"
+            },
+            {
+              "component": "input",
+              "id": "hub",
+              "type": "String",
+              "source": "reservedKey",
+              "title": "Hub"
+            },
+            {
+              "component": "input",
+              "id": "title",
+              "type": "String",
+              "source": "reservedKey",
+              "title": "Title"
+            },
+            {
+              "component": "input",
+              "id": "status",
+              "type": "String",
+              "source": "reservedKey",
+              "title": "Status"
+            },
+            {
+              "component": "input",
+              "id": "orderNumber",
+              "title": "Order Number",
+              "type": "String",
+              "default": null,
+              "routeAs": null,
+              "showAs": "title",
+              "required": false,
+              "visible": true,
+              "page": "page0"
+            },
+            {
+              "component": "bill",
+              "id": "billItem",
+              "title": "Bill Item",
+              "addNew": true,
+              "required": false,
+              "value": null,
+              "editable": [],
+              "costs": [
+                "Discount",
+                "Shipping Cost"
+              ],
+              "visible": true,
+              "masterItems": [
+                {
+                  "name": "Snack",
+                  "unit_price": 10000
+                },
+                {
+                  "name": "Cold Drink",
+                  "unit_price": 5000
+                },
+                {
+                  "name": "Bread",
+                  "unit_price": 7000
+                },
+                {
+                  "name": "Egg",
+                  "unit_price": 2500
+                }
+              ],
+              "masterCosts": [
+                {
+                  "type": "discount",
+                  "name": "Discount",
+                  "amount": 10000
+                },
+                {
+                  "type": "cost",
+                  "name": "Shipping Cost",
+                  "amount": 7000
+                }
+              ],
+              "page": "page0",
+              "additionalField": [
+                "billItem.Discount",
+                "billItem.Shipping Cost",
+                "billItem.totalCost"
+              ]
+            }
+          ],
+          "organizationId": "66791b2bf001a712b77b3622",
+          "updatedTime": "2024-10-17T05:26:01.929000Z",
+          "createdTime": "2024-10-17T05:10:59.675000Z"
+        }
+      }
+    }
+  }
+}
