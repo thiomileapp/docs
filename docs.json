@@ -8,6 +8,16 @@
     "dark": "#028FCF"
   },
   "favicon": "/favicon.svg",
+  "api": {
+    "mdx": {
+      "auth": {
+        "method": "bearer"
+      }
+    },
+    "playground": {
+      "display": "interactive"
+    }
+  },
   "navigation": {
     "tabs": [
       {
@@ -292,21 +302,22 @@
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
+        "openapi": "openapi-public.json",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Getting Started",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/introduction",
+              "api-reference/authentication",
+              "api-reference/data-formats",
+              "api-reference/status-codes"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Task",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/task/overview"
             ]
           }
         ]

@@ -1,0 +1,95 @@
+---
+title: 'Authentication'
+description: 'Learn how to authenticate your API requests using access tokens'
+---
+
+## Overview
+
+MileApp authenticates your API requests using your account's access token. If a request doesn't include a valid key, MileApp returns an invalid request error. If a request includes a deleted or expired key, MileApp returns an authentication error.
+
+All requests need a **Bearer Token** for authentication.
+
+```bash
+Authorization: Bearer <your_access_token>
+```
+
+## Generate Access Token
+
+For security, MileApp only shows you a secret or restricted access token one time. Store the key in a safe place where you won't lose it. If you lose the key, you can delete it and create another.
+
+<Steps>
+  <Step title="Sign in to MileApp">
+    Visit [https://web.mile.app](https://web.mile.app) and enter your user email address and password.
+  </Step>
+  <Step title="Navigate to Personal Token">
+    Go to **Profile → Personal Token**.
+
+    <div align="center">
+      <img src="/images/api/profile1.png" alt="Navigate to Profile" width="600" />
+    </div>
+  </Step>
+  <Step title="Create New Token">
+    Click **New** to create a new token.
+  </Step>
+  <Step title="Configure Token">
+    Fill in the token name (this is typically used to describe the token's purpose) and choose the expiration date in the Void input.
+
+    <div align="center">
+      <img src="/images/api/token2.png" alt="Token Configuration" width="600" />
+    </div>
+  </Step>
+  <Step title="Generate and Copy">
+    Click **Generate**.
+
+    <Warning>
+    **You can't reveal a secret key after creation.** After you create a secret or restricted access token, we display the value before you save it. You must copy the value before saving it because you can't reveal it later.
+    </Warning>
+
+    <div align="center">
+      <img src="/images/api/copytoken3.png" alt="Copy Token" width="600" />
+    </div>
+  </Step>
+</Steps>
+
+## Using the Token
+
+Include the token in the `Authorization` header of your API requests:
+
+```bash
+curl -X GET "https://apiweb.mile.app/api/v3/tasks" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json"
+```
+
+## Protecting Against Key Leakage
+
+Access tokens are a form of account credentials, like a username and password. If bad actors obtain a secret key, they can use it to harm your business and other parties in the MileApp ecosystem. MileApp users own the responsibility of keeping access tokens safe.
+
+<AccordionGroup>
+  <Accordion title="Use secure key management systems (KMS)">
+    When you create a secret live mode key from the MileApp Dashboard, it is only revealed once. Immediately copy the key to a KMS, which is designed to handle sensitive information with encryption and access controls. Make sure you don't leave a copy of the key in the local file.
+  </Accordion>
+  <Accordion title="Don't share secret keys using insecure means">
+    Don't share keys in emails, chat messages, or customer support messages. MileApp never asks you for your access token.
+  </Accordion>
+  <Accordion title="Don't store keys in source code repositories">
+    Bad actors might scan public source repositories for leaked keys. Even if the source repository is private, it could be shared with team members on their development environments.
+  </Accordion>
+  <Accordion title="Don't embed secret keys in applications">
+    Bad actors can exploit secret keys by matching a certain string pattern in the application. Avoid embedding keys in applications such as client tools, SDKs, and mobile apps.
+  </Accordion>
+</AccordionGroup>
+
+## Handle Leaked Secret Keys
+
+If you identified a secret key leak (such as if a key is accidentally published to GitHub):
+
+1. **Immediately delete the key** from MileApp Dashboard
+2. **Replace your integration** with a new key
+3. If you detected abnormal behaviors without confirming the leak, create a new access token proactively while investigating the root cause
+
+<Note>
+If MileApp detects that your access token has been exposed, we will immediately notify you. Depending on the imposed risk and activity on the account, we might decide to roll the key on your behalf.
+</Note>
+
+MileApp doesn't guarantee that we will detect all leaked keys. You're responsible for following the best practices to prevent potential key leaks and ensure your integration with MileApp is secure.

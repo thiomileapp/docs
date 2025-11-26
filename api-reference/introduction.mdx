@@ -1,33 +1,62 @@
 ---
 title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+description: 'Welcome to MileApp API Documentation'
 ---
 
+## Introduction
+
+The MileApp API uses RESTful API standards, which are widely recognized in the industry for simplicity and effectiveness in designing networked applications. Our API has predictable resource-oriented URLs, accepts JSON request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+
+MileApp API provides a suite of simple and flexible API endpoints to read, modify, add, or delete data.
+
 <Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
+All API requests should use the secured endpoint: **HTTPS**
 </Note>
 
-## Welcome
+## Overview
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+MileApp APIs are plain JSON over HTTP and use the following HTTP verbs:
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+| Method | Purpose |
+|--------|---------|
+| **GET** | The GET method is employed for straightforward information retrieval concerning your account, resources, or environment. This read-only operation ensures that the requested information is returned in the form of a JSON object. Any request made using the GET method is purely informational and does not bring about changes to the queried objects. |
+| **POST** | When the goal is to create a new object, the POST method is specified in the request. This method includes all the attributes necessary for the creation of a new object. Initiating a POST request to the target endpoint triggers the process of creating a new resource. |
+| **PUT** | For updating information pertaining to a resource in your account, the PUT method is available. Similar to the DELETE method, PUT is idempotent. It facilitates the setting of the target state using provided values, irrespective of the current state of those values. |
+| **PATCH** | Certain resources support partial modifications, and for these cases, the PATCH method comes into play. In contrast to PUT, which typically demands a complete representation of a resource, a PATCH request is a set of instructions detailing how to modify a resource, focusing only on specific attributes that require updating. |
+| **DELETE** | When the objective is to permanently remove a resource from your account and environment, the DELETE method is utilized. This method is characterized by its idempotent nature, meaning that whether the specified object is found or not, the end result remains the same. |
 
-## Authentication
+## Base URL
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API requests should be made to:
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
 ```
+https://apiweb.mile.app/api/v3
+```
+
+## Rate Limit
+
+This limit is applied on an organization-wide basis irrespective of factors such as the number of agents or IP addresses used to make the calls. If a tenant exceeds these limits, they will receive a `429` error (too many requests).
+
+| Limit | Time Window |
+|-------|-------------|
+| 100 requests | 1 second |
+
+<Warning>
+If you encounter a 429 error, wait 60 seconds before retrying the API request.
+</Warning>
+
+The purpose of a rate limit is to maintain a good user experience for all API users. Without a rate limit, API endpoints can flood the server with requests that overwhelm the system and negatively impact all users.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api-reference/authentication">
+    Learn how to authenticate your API requests
+  </Card>
+  <Card title="Data Formats" icon="code" href="/api-reference/data-formats">
+    Understand the data types used in our API
+  </Card>
+  <Card title="Status Codes" icon="circle-exclamation" href="/api-reference/status-codes">
+    HTTP status codes and error handling
+  </Card>
+</CardGroup>
