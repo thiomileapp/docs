@@ -1,0 +1,102 @@
+{
+  "components": {
+    "schemas": {
+      "Plugin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique plugin identifier (MongoDB ObjectId). **Example**: `68b440c9dad4c5d45707f6d2`"
+          },
+          "name": {
+            "type": "string",
+            "description": "Plugin display name (3-100 characters). **Example**: `Custom Dashboard Widget`"
+          },
+          "description": {
+            "type": "string",
+            "description": "Plugin functional description (10-500 characters). **Example**: `A custom widget for displaying real-time analytics data`"
+          },
+          "resourceFile": {
+            "type": "string",
+            "description": "Original filename of the JavaScript resource. **Example**: `1756656087_Custom-Dashboard-Widget.js`"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true,
+            "description": "Full URL to the plugin icon (if available). **Example**: `https://cdn.mile.app/plugins/icons/1756656087_dashboard-widget.svg`"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier. 'system' for global plugins, organization ID for custom plugins. **Example**: `686cc0ff083ca8093204f002` or `system`"
+          },
+          "resourceUrl": {
+            "type": "string",
+            "description": "Full URL where the JavaScript resource is hosted. **Example**: `https://cdn.mile.app/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js`"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email address of the user who created the plugin. **Example**: `user@mile.app`"
+          },
+          "updatedBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "Email address of the user who last updated the plugin. May be null if never updated. **Example**: `user@mile.app`"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the plugin was created. **Format**: `YYYY-MM-DDTHH:mm:ss.ffffffZ`. **Example**: `2025-08-31T10:30:00.000000Z`"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the plugin was last updated. **Format**: `YYYY-MM-DDTHH:mm:ss.ffffffZ`. **Example**: `2025-08-31T10:35:00.000000Z`"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "Organization display name. 'Global' for system plugins, actual organization name for custom plugins. **Example**: `MileApp` or `Global`"
+          },
+          "isUsed": {
+            "type": "boolean",
+            "description": "Indicates if the plugin is currently active/installed in your organization. **Example**: `false`"
+          },
+          "customModuleId": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of associated custom module or null if standalone. **Example**: `null` or `62846484ed5be87b6f4358f3`"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description", 
+          "resourceFile",
+          "organizationId",
+          "resourceUrl",
+          "createdBy",
+          "createdTime",
+          "updatedTime",
+          "organizationName",
+          "isUsed"
+        ],
+        "example": {
+          "id": "68b440c9dad4c5d45707f6d2",
+          "name": "Custom Dashboard Widget",
+          "description": "A custom widget for displaying real-time analytics data",
+          "resourceFile": "1756656087_Custom-Dashboard-Widget.js",
+          "icon": "https://cdn.mile.app/plugins/icons/1756656087_dashboard-widget.svg",
+          "organizationId": "686cc0ff083ca8093204f002",
+          "resourceUrl": "https://cdn.mile.app/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js",
+          "createdBy": "user@mile.app",
+          "updatedBy": "user@mile.app",
+          "createdTime": "2025-08-31T10:30:00.000000Z",
+          "updatedTime": "2025-08-31T10:35:00.000000Z",
+          "organizationName": "MileApp",
+          "isUsed": false,
+          "customModuleId": null,
+          "status": "active"
+        }
+      }
+    }
+  }
+}

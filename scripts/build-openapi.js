@@ -109,11 +109,18 @@ function mergeSpec(base, module) {
     base.definitions = base.definitions || {};
     Object.assign(base.definitions, module.definitions);
   }
-  // Merge components.schemas (OpenAPI 3.0)
+  // Merge components.schemas (OpenAPI 3.0) - also add to definitions for Swagger 2.0 compatibility
   if (module.components?.schemas && Object.keys(module.components.schemas).length > 0) {
-    base.components = base.components || {};
-    base.components.schemas = base.components.schemas || {};
-    Object.assign(base.components.schemas, module.components.schemas);
+    // If base is Swagger 2.0 (has swagger field), merge into definitions
+    if (base.swagger) {
+      base.definitions = base.definitions || {};
+      Object.assign(base.definitions, module.components.schemas);
+    } else {
+      // Otherwise merge into components.schemas
+      base.components = base.components || {};
+      base.components.schemas = base.components.schemas || {};
+      Object.assign(base.components.schemas, module.components.schemas);
+    }
   }
   // Merge x-webhooks
   if (module['x-webhooks'] && Object.keys(module['x-webhooks']).length > 0) {
