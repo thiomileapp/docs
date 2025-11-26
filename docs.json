@@ -398,25 +398,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "Internal API",
-        "hidden": true,
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": [
-              "api-reference-internal/introduction"
-            ]
-          },
-          {
-            "group": "Internal Task",
-            "openapi": {
-              "source": "openapi/internal/openapi-full.json",
-              "directory": "api-reference-internal"
-            }
-          }
-        ]
       }
     ],
     "global": {
