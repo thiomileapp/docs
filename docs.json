@@ -8,6 +8,9 @@
     "dark": "#028FCF"
   },
   "favicon": "/favicon.svg",
+  "search": {
+    "exclude": ["api-reference-internal/**"]
+  },
   "api": {
     "mdx": {
       "auth": {
