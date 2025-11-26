@@ -19,3 +19,7 @@ test-findings/
 # Logs
 *.log
 npm-debug.log*
+
+# Claude Code
+.claude/
+**/.claude/
