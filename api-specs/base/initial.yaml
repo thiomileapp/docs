@@ -1,0 +1,410 @@
+swagger: '2.0'
+info:
+  title: MileApp API Documentation
+  termsOfService: 'https://mile.app/terms-conditions/'
+  contact:
+    email: support@mile.app
+    url: 'https://apidoc.mile.app/'
+  x-logo:
+    url: 'https://apidoc.mile.app/themes/assets/img/mileapp.png'
+  description: >
+    # Introduction
+
+    The MileApp API are using RESTful API standard, which is widely recognized in the industry for its simplicity and effectiveness in designing networked applications. Our API has predictable resource-oriented URLs, accepts JSON request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+    The MileApp API differs for every account as we release new versions and tailor functionality.
+
+    ## Overview
+    
+    MileApp APIs are plain JSON over HTTP and use the following HTTP verbs:
+
+     | COMMAND | PURPOSE |
+     |---|---|
+     | GET | The GET method is employed for straightforward information retrieval concerning your account, resources, or environment. This read-only operation ensures that the requested information is returned in the form of a JSON object. The attributes within this object can then be leveraged to formulate additional queries. Importantly, any request made using the GET method is purely informational and does not bring about changes to the queried objects. |
+     | POST | When the goal is to create a new object, the POST method is specified in the request. This method includes all the attributes necessary for the creation of a new object. Initiating a POST request to the target endpoint triggers the process of creating a new resource. |
+     | PUT | For updating information pertaining to a resource in your account, the PUT method is available. Similar to the DELETE method, PUT is idempotent. It facilitates the setting of the target state using provided values, irrespective of the current state of those values. Requests using the PUT method eliminate the need to inspect the current attributes of the object being modified. |
+     | PATCH | Certain resources support partial modifications, and for these cases, the PATCH method comes into play. In contrast to PUT, which typically demands a complete representation of a resource, a PATCH request is a set of instructions detailing how to modify a resource, focusing only on specific attributes that require updating. |
+     | DELETE | When the objective is to permanently remove a resource from your account and environment, the DELETE method is utilized. This method is characterized by its idempotent nature, meaning that whether the specified object is found or not, the end result remains the same. If the object exists, it is deleted; if not, a response indicates its non-existence. |
+    
+     
+    Note: All API requests should hit the secured endpoint: HTTPS
+    
+    ## Rate Limit
+    
+    This limit is applied on an organization wide basis irrespective of factors such as the number of agents or IP addresses used to make the calls.
+    If a tenant exceeds these limits, they will receive a 429 error (too many requests). If you encounter a 429 error, wait 60 seconds before retrying the API request. <br>
+    The purpose of a rate limit is to maintain a good user experience for all API users. Without a rate limit, API endpoints can flood the server with requests that overwhelm the system and negatively impact all users.
+    
+    
+     | Limit Hit | Time |
+     |---|---|
+     | 100 | 1 second |
+    
+    ## Format
+    
+    In the modeling environment there are the following model types for modeling global data types. A global data type is modeled with format, example and description.
+    
+     | Data Type | Description |
+     |---|---|
+     | Integer | An integer data type represents some range of mathematical integers.<br>Integral data types may be of different sizes and may or may not be allowed to contain negative values.<br>**Examples:**<br>`10, 200, 2500` |
+     | Float | Float number, also known as a floating-point number consists of a set of digits and a decimal point, which separates the fractional part of the number from the whole part.<br>The term "floating" refers to the fact that the decimal point can "float" to represent values with a varying number of digits before and after the decimal point.<br>**Examples:**<br>`2.1, 14.2, 100.5` |
+     | String | Alphanumeric characters<br>**Examples:**<br>`"Jakarta50", "Malang", "Solo Raya", "45", "Bandung_90an"` |
+     | Boolean | Representing logical values.<br>**Examples:**<br>`TRUE, FALSE` |
+     | Datetime | The DateTime value type represents dates and times.<br>with values ranging from 00:00:00 (midnight), January 1, 0001 Anno Domini (Common Era)<br>through 11:59:59 P.M., December 31, 9999 A.D. (C.E.) in the Gregorian calendar.<br><b>Format:</b><br>`Y-m-d H:i:s`<br>`Y-m-d\TH:i:s.vP`<br>`Y-m-d\TH:i:sP`<br><b>Examples:</b><br>`"2022-07-13 03:16:40"`<br>`"2022-07-13T03:16:40+00:00"`<br>`"2022-07-13T03:16:40"` |
+     | Time | The TIME data type consists of a time in hour, minutes, seconds, optional fractions of a second, and optional time zone.<br><b>Format:</b><br>`H:i:s`<br>`H:i`<br><b>Examples:</b><br>`"08:30:00"`<br>`"08:30"` |
+     | Object | An Object data type is a method for encoding key-value pairs.<br>A single field value may contain one or more sets of key-value pairs.<br><b>Format:</b><br>`{"key1": "value1", "key2": "value2", "keyN": "valueN"}` |
+     | Array | An array type is a user-defined data type consisting of an ordered set of elements of a single data type.<br>in this case, elements of a single data type is String<br><b>Format for **Array of String**:</b><br>`["string1", "string2", "stringN"]`<b><br><br>Format for **Array of Objects**:</b><br>`[{"object":"1"},{"object":"2"},{"object":"n"}]` |
+     
+    ## Status Code
+    
+    MileApp uses conventional HTTP response codes to indicate the success or failure of an API request. In general: <br> Codes in the **2xx** range indicate success. <br>Codes in the **4xx** range indicate an error that failed given the information provided (e.g., a required parameter was omitted, etc.). Some **4xx** errors that could be handled programmatically (e.g., a body request invalid) include an error code that briefly explains the error reported. <br>Codes in the **5xx** range indicate an error with MileApp’s servers (these are rare).
+    
+    | Code | Text | Description |
+      |---|---|---|
+      | 200 | Success | Indicates that the request has succeeded. |
+      | 201 | Created | Indicates that the request has succeeded and has led to the creation of a resource. |
+      | 401 | Unauthorized | Indicates that the client request has not been completed because it lacks valid authentication credentials for the requested resource. |
+      | 400 | Bad Request | Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing). |
+      | 405 | Method not Allowed | Indicates that the server knows the request method, but the target resource doesn't support this method. |
+      | 406 | Not Acceptable | Indicates that the server cannot produce a response matching the list of acceptable values defined in the request's proactive content negotiation headers, and that the server is unwilling to supply a default representation. Only `application/json` and `*/*` are supported. |
+      | 409 | Conflict | Indicates a request conflict with current state of the target resource. |
+      | 413 | Payload Too Large | Indicates that the request entity is larger than limits defined by server. |
+      | 429 | Too Many Requests | Indicates the user has sent too many requests in a given amount of time. |
+      | 500 | Unexpected Server Error | Indicates error at MileApp’s side (these are rare). |
+      | 502 | Bad Gateway | Indicates that the server, while acting as a gateway or proxy, received an invalid response from the upstream server (these are rare). |
+      | 503 | Service Unavailable | Indicates the server is not ready to handle the request (these are rare). |
+      | 504 |	Gateway Timeout | Indicates that the server did not get a response in time that it needed in order to complete the request (these are rare). |
+    
+    # Authentication
+
+    MileApp authenticates your API requests using your account’s access token. If a request doesn’t include a valid key, MileApp returns an invalid request error. If a request includes a deleted or expired key, MileApp returns an authentication error.
+    Follow the instruction to create, reveal, and delete access token.
+
+    ## Generate access token
+
+    For security, MileApp only shows you a secret or restricted access token one time. Store the key in a safe place where you won’t lose it. To help yourself remember where you stored it, you can leave a note on the key in the Dashboard. If you lose the key, you can delete it and create another.
+    <br>All requests need an Bearer Token for authentication. Generate your access token here:
+    
+    - Visit <a href="https://web.mile.app" target="_blank">https://web.mile.app</a>.
+    
+    - Enter your user email address and password.
+    
+    - Sign in to your account.
+    
+    - Navigate to <b>Profile -> Personal Token</b>.
+    
+    - Click <b>New</b> to create a new token.
+    
+    - Fill in the token name (this is typically used to describe the token's purpose) and choose the expiration date in the Void input.
+    
+    - Click <b>Generate</b>.
+
+    
+    <b>You can't reveal a secret key that you created.</b><br> After you create a secret or restricted access token, we display the value before you save it. You must copy the value before saving it because you can’t reveal it later.
+    
+    <img src="https://apidoc.mile.app//assets/images/profile1.png" alt="">
+    <img src="https://apidoc.mile.app//assets/images/token2.png" alt="">
+    <img src="https://apidoc.mile.app//assets/images/copytoken3.png" alt="">
+
+    ## Protecting against key leakage
+
+    Access token are a form of account credentials, like a username and password. If bad actors obtain a secret key, they can use it to harm your business and other parties in the MileApp ecosystem.
+    MileApp users own the responsibility of keeping Access token safe. Here are some best practices for how to do that.
+
+    - Use secure key management systems (KMS) to store secret keys. When you create a secret live mode key from the MileApp Dashboard, it is only revealed once. Immediately copy the key to a KMS, which is designed to handle sensitive information with encryption and access controls. Make sure you don’t leave a copy of the key in the local file.
+
+    - Don’t share secret keys using insecure means. Don’t share keys in emails, chat messages, or customer support messages. MileApp never asks you for your access token.
+
+    - Don’t store keys in source code repositories (such as GitHub). Bad actors might scan public source repositories for leaked keys. Even if the source repository is private, it could be shared with team members on their development environments.
+
+    - Don’t embed secret keys in applications. Bad actors can exploit secret keys by matching a certain string pattern in the application. Avoid embedding keys in applications such as client tools, SDKs, and mobile apps.
+
+    
+    ## Handle leaked secret keys
+
+    If you identified a secret key leak, such as if a key is accidentally published to GitHub， immediately delete the key from MileApp Dashboard and replace your integration with the new key. If you detected abnormal behaviors without confirming that the access token is leaked, we recommended that you create new access token proactively while investigating the root cause in parallel.
+    If MileApp detects that access token has been exposed, we will immediately notify you. It’s crucial for businesses to act promptly to reduce potential damages and financial losses caused by unauthorized use of the leaked key. Depending on the imposed risk and activity on the account, we might decide to roll the key on your behalf. In this case you will receive notifications about any action taken.
+    MileApp doesn’t guarantee that we will detect all leaked keys. You’re responsible for following the best practices to prevent potential key leaks and ensure your integration with MileApp is secure.
+
+tags:
+  - name : Vehicle
+    description: The vehicle represents a car, bike, truck, or other form of transportation used in your organization. They are utilized to optimize the route planning process, determining the most efficient path for completing multiple tasks or visits. The vehicle attributes contain IDs, capacity, speed, working hours, tags, and constraints. **To see the details of vehicle object, please follow <a href='#tag/vehicle_model'> this link </a>**.
+  - name : Routing
+    description: >
+      The **Routing** refers to process of finding the most effective routes for vehicles to travel from one visit to another. The optimization process will generate a result that could update the respective task data when dispatched. With the ability to handle complex constraints and variables such as capacity, time windows, and vehicle availability, the API can be customized to meet the specific needs of any business or organization. **This section is for the v2 of routing api, if you still use the old one, please follow <a href="/v1"> this link </a> to see documentation**. <br> <br>**Routing results** are collection of route optimization's results that already successfully processed and saved in the database. Routing results contains list of routed visits and dropped visits. <br> 1. routed visits are sequence recommendation of visits/tasks list according to most suitable vehicle and best route. <br> 2. dropped visits are list of tasks/visits that out of range of the calculation. <br><br> **To see the details of routing object, please follow <a href="#tag/route_model"> this link </a>**
+
+      ## Why use Route Optimization
+      
+      With Route Optimization API, you can establish or refine an automated dispatch or route planning process that improves the operational efficiency of your transportation needs. With parameters to express your unique operational objectives and constraints, and an algorithm built on top of the trusted Google Maps data, the service generates the best possible route plans to meet those constraints. Some use-case examples follow:
+      
+      - A **logistics company** uses Route Optimization to optimize the assignments of all next-day shipments, providing a route for each shipment that optimizes for distance and time efficiency, cost saving, on time delivery, and driver and end customer satisfaction.
+      
+      - A **field service provider** uses Route Optimization to find the optimal route and sequence for technician's service appointments, and re-optimize when condition changes occur, such as en route delays.
+      
+      - An **on demand food delivery** company uses Route Optimization in their real-time dispatch process to choose the best active driver to pick up several new orders and insert it in their existing routes.
+      
+      - A **medical service provider** uses Route Optimization to map health providers to appointments, improving the efficiency of the routes for each provider across their day.
+
+      ## How Route Optimization works
+
+      The Route Optimization API uses a number of inputs to return a route plan. Inputs include vehicles, visits or shipments, configurations, and constraints. A route plan includes tasks assignment to vehicles, the multi-stop routes for each vehicle, and the related metrics.
+
+  - name : Webhook
+    description : >
+      A webhook is a mechanism in web development and APIs that allows real-time communication between applications or services. It enables one application to send data to another application whenever a specific event or trigger occurs. Webhooks are commonly used to automate and integrate systems, enabling seamless data exchange and event-driven workflows. In our end, you can follow <a href="https://doc.clickup.com/3837933/p/h/3n3zd-81962/aa00834626ae24f/3n3zd-154042"> **this doc** </a> to set up the webhook.
+      
+      # How does it works
+
+      When your application endpoint is enabled on MileApp to receive events, MileApp will push real-time notifications to it. These notifications contain the type of event, the epoch timestamp of when it occurred, and any relevant data for that event. On your side you can then use that to integrate MileApp with existing or new software.
+
+      # Delivery Attempts and Retries
+
+      When viewing information about a specific event through the <a href="https://webdev.mile.app/flow/automation">Automation</a> tab, there will be and information about how many times MileApp attempted to send an event to the endpoint. This shows the latest response from client endpoint, a list of all attempted webhooks, and the respective HTTP status codes MileApp received, there also a retry button for manually retry webhooks. <br><br>
+      <img src="https://v3docdev.mile.app/assets/images/retry_webhook.png" alt="">
+      Our webhook is designed to ensure reliable delivery by automatically retrying under certain conditions. The key details are as follows:<br><br>
+      <b>Retry Conditions</b>:<br>
+      The webhook request will <b>retry up to 3 times</b> if any of the following conditions occur:<br>
+          - The server returns an <b>HTTP status that is not 200</b> (indicating failure).<br>
+          - The server takes longer than <b>30 seconds</b> to respond (timeout).<br><br>
+      <b>Retry Timing</b>:<br>
+      If the first attempt fails, the webhook will automatically retry <b>every 2 minutes</b>.<br>
+      Example:<br>
+          - First failure → Retry after 2 minutes.<br>
+          - Second failure → Retry again after 2 minutes.<br>
+          - Third failure → Final retry after another 2 minutes.<br>
+      After <b>3 failed attempts</b>, the retry process will stop.<br><br>
+
+      The purpose of this approach is to ensure the reliability and responsiveness of our webhook. By automatically retrying, we can increase the likelihood of successfully delivering messages or taking other actions by the webhook. It also helps in addressing potential issues that may arise, such as slow network connections or disruptions on the server side.<br><br>
+      Thus, our webhook has been programmed to take proactive action in addressing situations where the server response does not meet expectations or when response times exceed the specified limit.
+
+      # Quick Response Requirement
+
+      When your application receives a webhook from our service, it is crucial to return an HTTP 200 status code within 30 seconds to confirm successful receipt and avoid timeouts and retries. To maintain responsiveness, do not include complex business logic in the initial processing of the webhook. If the webhook triggers any long-running or computationally intensive tasks, offload these to a background process or a separate system. This ensures that your webhook handler remains efficient and promptly returns the required HTTP 200 response.
+
+      # Failure Monitoring and Notification Process
+
+      Our system continuously monitors the integration's performance by tracking the success and failure rates of operations. If a significant number of failures occur, this could indicate a problem with the integration. To ensure timely intervention, we have implemented an automated notification mechanism.<br><br>
+      <b>Failure Threshold</b><br>
+      - <b>Start counter:</b> Operation calculation will start from the first time the failure occurs.<br>
+      - <b>Threshold Level:</b> If the failure rate exceeds more than 5 times and 80% or more than 50 times in total of operations within a 1-hour time frame, the system will trigger a notification event.<br>
+      - <b>Failure Rate Calculation:</b> The failure rate is calculated as the percentage of failed operations out of the total operations attempted within the monitored period.<br><br>
+      As soon as the system identifies that the failure rate has exceeded the threshold, it will automatically send an email notification to all owners email.
+
+  - name : Task
+    description : A task is an item of work intended for completion by an assignee. It can embody activities like pickups, deliveries, planning, inspections, sales visits, or other work-related actions within your organization. Tasks encompass essential attributes, including IDs, flow, time, status indicators, assignee information, order index, and other pertinent data. The content of a task is configurable based on your specified flow settings. For instance, tasks can serve as visits during the route optimization process, functioning as pivotal elements. The task can also represent a visit in route optimization, please follow <a href='#tag/Routing'> this link </a> to read more detail. <br><br> **To see the details of task object, please follow <a href='#tag/task_model'> this link </a>**
+  - name : Location History
+    description : Location history is data that stores the user's location points that are sent periodically from the MileApp mobile application if the user activates the tracking feature. However, this endpoint can also be useful for integration into the user's IoT devices such as GPS or other mobile trackers. All location data sent can be visualized in MileApp in real time and makes it easier for users to monitor field activities more accurately. <br> <br> <b> Related Guide <a href="https://doc.clickup.com/3837933/p/h/3n3zd-81962/aa00834626ae24f/3n3zd-95602"> Start Finish Feature </a></b>
+  - name : Task Schedule
+    description : Task Schedule is a mechanism to generate tasks according to the schedule that is set by you. The task schedule attributes consist of IDs, repetition period data (daily, weekly, etc.), flow structure, task content, and time of the schedule's start & end. This schedule could help you to set a task that will be repeated at a certain period. <br><br> **To see the details of task schedule object, please follow <a href='#tag/task_schedule_model'> this link </a>**
+  - name : Activity
+    description : An Activity represents a workflow execution instance consisting of multiple sequential tasks (steps). Each activity is a master task that orchestrates a series of child tasks based on a predefined workflow. Activities enable you to manage complex multi-step processes where each step can be assigned to different workers and tracked independently. The activity master automatically updates its status based on the completion of child tasks through the ActivityConsumer. Activity attributes consist of IDs, workflow reference, child task IDs (subId array), aggregated assignees, status indicators, and embedded workflow data.
+  - name : Data Import
+    description : The Data Import module allows users to upload and import data source records from Excel or CSV files. Import operations are processed in the background via queue system for scalability and can handle large datasets. The import process validates data against data type schemas, tracks processing status in real-time, and generates detailed reports including failed records for review. All import activities can be monitored through import-monitoring endpoints with 30-day data retention.
+  - name : Export Task
+    description : The Export Task module provides functionality to export task data and data source records to various formats (XLSX, JSON). It supports both direct export for small datasets and background processing for large exports. Users can customize exports using export configurations, filter data by multiple criteria, and monitor export operations through export logs. Export files are stored securely with 30-day retention period.
+  - name : Export Config
+    description : The Export Config module is used to save and manage the specific fields that a user wants included in export results. This allows users to customize their exported data by selecting only the necessary fields for each export, ensuring that the output contains exactly the information they need. <br><br> **To see the details of export config object, please follow <a href='#tag/export_config_model'> this link </a>**
+  - name : Flow
+    description : Flow in MileApp is the mobile field application workflow, setting it correctly is critical to the success of the field workers in doing their job efficiently. Flow attributes consist of IDs, pages, components, configurations, and time. The Flow will be used at Task, Automation, or Schedule.<br><br> **To see the details of flow object, please follow <a href='#tag/flow_model'> this link </a>**
+  - name : Automation
+    description : Automation enables you to set up automation based on tasks' events and data source’s events. It might help you automate creation of tasks, task assignment, task placement, task webhook, data source update, datasource creation, and data source webhook. Automation attributes consist of IDs, automation name, automation type, automation details, and rules. <br><br> **To see the details of automation object, please follow <a href='#tag/automation_model'> this link </a>**
+  - name : Data Source
+    description : The Data source could help you simplify the process of filling in task information based on existing data at MileApp. This data could consist of information such as name, number, date, coordinate, and multiple options. The Data typically represents entities such as customers, products, employees, suppliers, or any other critical data elements that are used across the application. <br><br> **To see the details of data source object, please follow <a href="#tag/data_source_model"> this link </a>**
+  - name : Data Type
+    description : The Data type is the structure of data fields that is customizable to suit your business needs. Data type attributes consist of IDs, name, field details, type, and primary key. This data type structure will be used at Data Source and Flow. <br><br> **To see the details of data type object, please follow <a href="#tag/data_type_model"> this link </a>**
+  - name : User
+    description : User data includes information contained within a user account, such as details that define a user’s hub access and role within the system. Hub access determines the locations or areas of the application a user can access or the specific actions they can perform. User attributes consist of the user ID, name, email, and status. <br>MileApp provides five predefined user roles, and you can create custom roles based on your organization’s needs. The predefined roles are **Owner, Admin, Planner, and Field user**. A user can only hold one role at a time but can be granted access to multiple hubs.
+  - name : Role
+    description : This API enables you to retrieve a list of predefined roles and any custom roles associated with your account. By making a GET request to this API, you can obtain information about the available roles within the system. The predefined roles refer to a set of role types that are already defined by the system. In this particular case, the predefined roles include Finance, Owner, Planner, Admin, and Field User. Additionally, the API may also return any custom roles that have been created within your account. **To see the details of role object, please follow <a href="#tag/role_model"> this link </a>**.
+  - name : Hub
+    description : >
+      In our system, a Hub is a fundamental entity within an organization, serving as the central point for managing various operational components. It acts as the parent structure for a wide range of resources and functionalities, including tasks, visits, users, vehicles, routing results, routing configurations, and data sources. **To see the details of hub object, please follow <a href="#tag/hub_model"> this link </a>**
+
+      # Conceptual Understanding of Hubs
+
+      - **User Perspective:** For users, a Hub represents their headquarters or primary working area. It is where they carry out their daily activities and manage their tasks effectively. Each user interacts with the Hub to access resources and perform operations specific to their roles.
+
+      - **Task Perspective:** From the perspective of task management, the Hub signifies the working area for tasks. It is the location where tasks are initiated, monitored, and completed. The Hub facilitates organization and efficiency in task execution.
+
+      - **Routing Perspective:** In the context of routing and logistics, a Hub serves as a critical location for vehicles. It is where vehicles begin their routes, return after completing their journeys, and may make strategic stops along the way. The routing module relies on the Hub to optimize vehicle assignments and manage routes effectively.
+
+  - name : App Integration
+    description : This api allows you to manage Integration of enterprise app. Currently available for azure. **To see the details of integration object, please follow <a href="#tag/app_integration_model"> this link </a>**
+  - name : Team
+    description : This api allows you to manage teams. It serves as a tool to effectively manage and restrict user task assignments within your organization. **To see the details of team object, please follow <a href="#tag/team_model"> this link </a>**
+  - name : Plugin
+    description : The Plugin API allows developers to create and manage custom add-ons within the Mile V3 platform. Plugins enable dynamic functionality through JavaScript resources and custom icons, allowing organizations to extend platform capabilities with custom features and integrations. **To see the details of plugin object, please follow <a href="#tag/plugin_model"> this link </a>**
+  - name : File
+    description : The endpoint serves as a gateway for accessing private files through our API. This function enables authorized users to view files that are restricted or intended for specific access. It acts as a secure passage, allowing authenticated individuals to access these files programmatically. By utilizing this endpoint, users can seamlessly retrieve and interact with private files within our system, ensuring controlled and authorized access to sensitive information.
+  
+  - name: route_model
+    x-displayName: Routing object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Routing" />
+  - name: vehicle_model
+    x-displayName: Vehicle object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Vehicle" />
+
+  - name: module_model
+    x-displayName: Custom module object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Module" />
+
+  - name: team_model
+    x-displayName: Team object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Team" />
+
+  - name: user_model
+    x-displayName: User object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/User" />
+
+  - name: hub_model
+    x-displayName: Hub object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Hub" />
+
+  - name: role_model
+    x-displayName: Role object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Role" />
+
+  - name: data_type_model
+    x-displayName: Data type object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/DataType" />
+
+  - name: data_source_model
+    x-displayName: Data source object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/DataSource" />
+  
+    
+  - name: task_model
+    x-displayName: Task object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Task" />
+
+  - name: location_history_model
+    x-displayName: Location history object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/LocationHistory" />
+
+  - name: export_config_model
+    x-displayName: Export Config object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/ExportConfig" />
+
+  - name: app_integration_model
+    x-displayName: App Integration object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/AppIntegration" />
+
+  - name: task_schedule_model
+    x-displayName: Task Schedule object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/TaskSchedule" />
+
+  - name: automation_model
+    x-displayName: Automation object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Automation" />
+  
+  - name: flow_model
+    x-displayName: Flow object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Flow" />
+
+  - name: plugin_model
+    x-displayName: Plugin object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Plugin" />
+
+  - name: Activity
+    description: Activity represents a master-child task structure created from workflow templates. An activity consists of a master task using ActivityWorkflow flow and multiple child tasks (steps) based on workflow configuration. Activities provide comprehensive task management with status synchronization, assignment coordination, and workflow-based automation for complex business processes.
+
+  - name: Workflow
+    description: Workflow is a template system for creating multi-step task processes with field mappings between steps. It defines the sequence of flows (task types) that need to be completed, allowing for data transfer and transformation between steps. Workflows serve as reusable templates for complex business processes and can be used to create activities with master-child task architecture.
+
+x-tagGroups:
+  - name: Task
+    tags:
+      - Task
+      - Location History
+      - Task Schedule
+  - name: Import & Export
+    tags:
+      - Data Import
+      - Export Task
+      - Export Config
+  - name: Routing
+    tags:
+      - Vehicle
+      - Routing
+      - Routing Result
+  - name: Flow
+    tags:
+      - Flow
+      - Automation
+      - Webhook
+  - name: Data
+    tags:
+      - Data Source
+      - Data Type
+  - name: Setting
+    tags:
+      - User
+      - Role
+      - Hub
+      - Data Version
+      - Team
+      - Custom Module
+      - App Integration
+      - Plugin
+  - name: File
+    tags:
+      - File
+
+  - name: Objects
+    tags:
+      - task_model
+      - location_history_model
+      - export_config_model
+      - task_schedule_model
+      - vehicle_model
+      - route_model
+      - flow_model
+      - automation_model
+      - data_source_model
+      - data_type_model
+      - user_model
+      - role_model
+      - hub_model
+      - team_model
+      - plugin_model
+      
+      
+      
+
+
+
+securityDefinitions:
+  AccessToken:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+    description: Please use a valid Bearer token to authenticate. The token should be in the form of a JWT. The token must be included in the `Authorization` header using the `Bearer <token>` format.
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api/v3
+host: 'apiweb.mile.app'
+
+# servers:
+#   - url: 'https://apiweb.mile.app/api/v3'
+paths:
+

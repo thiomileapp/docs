@@ -1,0 +1,446 @@
+swagger: '2.0'
+info:
+  title: MileApp API Documentation
+  termsOfService: 'https://mile.app/terms-conditions/'
+  contact:
+    email: support@mile.app
+    url: 'https://apidoc.mile.app/'
+  x-logo:
+    url: 'https://apidoc.mile.app/themes/assets/img/mileapp.png'
+  description: >
+    # Introduction
+
+    Welcome to MileApp API Documentation! You can use this API to access all our API endpoints. All request and response bodies, including errors, are encoded in JSON. MileApp API provides a suite of simple and flexible API endpoints to read, modify, add or delete data.
+
+    ## Overview
+    
+    MileApp APIs are plain JSON over HTTP and use the following HTTP verbs:
+
+     | COMMAND | PURPOSE |
+     |---|---|
+     | GET | The GET method is employed for straightforward information retrieval concerning your account, resources, or environment. This read-only operation ensures that the requested information is returned in the form of a JSON object. The attributes within this object can then be leveraged to formulate additional queries. Importantly, any request made using the GET method is purely informational and does not bring about changes to the queried objects. |
+     | POST | When the goal is to create a new object, the POST method is specified in the request. This method includes all the attributes necessary for the creation of a new object. Initiating a POST request to the target endpoint triggers the process of creating a new resource. |
+     | PUT | For updating information pertaining to a resource in your account, the PUT method is available. Similar to the DELETE method, PUT is idempotent. It facilitates the setting of the target state using provided values, irrespective of the current state of those values. Requests using the PUT method eliminate the need to inspect the current attributes of the object being modified. |
+     | PATCH | Certain resources support partial modifications, and for these cases, the PATCH method comes into play. In contrast to PUT, which typically demands a complete representation of a resource, a PATCH request is a set of instructions detailing how to modify a resource, focusing only on specific attributes that require updating. |
+     | DELETE | When the objective is to permanently remove a resource from your account and environment, the DELETE method is utilized. This method is characterized by its idempotent nature, meaning that whether the specified object is found or not, the end result remains the same. If the object exists, it is deleted; if not, a response indicates its non-existence. |
+    
+     
+    Note: All API requests should hit the secured endpoint: HTTPS
+    
+    ## Rate Limit
+    
+    This limit is applied on an organization wide basis irrespective of factors such as the number of agents or IP addresses used to make the calls.
+    
+    
+     | Limit Hit | Time |
+     |---|---|
+     | 100 | 1 second |
+    
+    ## Format
+    
+    In the modeling environment there are the following model types for modeling global data types. A global data type is modeled with format, example and description.
+    
+     | Data Type | Description |
+     |---|---|
+     | Integer | An integer data type represents some range of mathematical integers.<br>Integral data types may be of different sizes and may or may not be allowed to contain negative values.<br><b>Example:</b><br><span style="color:#9012fe; font-weight:bolder;">10, 200, 2500</span> |
+     | Float | Float number, also known as a floating-point number consists of a set of digits and a decimal point, which separates the fractional part of the number from the whole part.<br>The term "floating" refers to the fact that the decimal point can "float" to represent values with a varying number of digits before and after the decimal point.<br><b>Example:</b><br><span style="color:#9012fe; font-weight:bolder;">2.1, 14.2, 100.5</span> |
+     | String | Alphanumeric characters<br><b>Example:</b><br><span style="color:#9012fe; font-weight:bolder;">Jakarta50, Malang, Solo Raya, 45, Bandung_90an</span> |
+     | Boolean | Representing logical values.<br><b>Example:</b><br><span style="color:#9012fe; font-weight:bolder;">TRUE, FALSE</span> |
+     | Datetime | The DateTime value type represents dates and times.<br>with values ranging from 00:00:00 (midnight), January 1, 0001 Anno Domini (Common Era)<br>through 11:59:59 P.M., December 31, 9999 A.D. (C.E.) in the Gregorian calendar.<br><b>Format:</b><br><span style="color:#9012fe; font-weight:bolder;">Y-m-d H:i:s<br>Y-m-d\TH:i:s.vP<br>Y-m-d\TH:i:sP</span><br><b>Example:</b><br><span style="color:#9012fe; font-weight:bolder;">2022-07-13 03:16:40<br>2022-07-13T03:16:40+00:00<br>2022-07-13T03:16:40</span> |
+     | Time | The TIME data type consists of a time in hour, minutes, seconds, optional fractions of a second, and optional time zone.<br><b>Format:</b><br><span style="color:#9012fe; font-weight:bolder;">H:i:s<br>H:i</span><br><b>Example:</b><br><span style="color:#9012fe; font-weight:bolder;">08:30:00<br>08:30</span> |
+     | Object | An Object data type is a method for encoding key-value pairs.<br>A single field value may contain one or more sets of key-value pairs.<br><b>Format:</b><br><pre style="color:#9012fe; font-weight:bolder;">{key1: value1,key2: value2,keyN: valueN}</pre> |
+     | Array | An array type is a user-defined data type consisting of an ordered set of elements of a single data type.<br>in this case, elements of a single data type is String<br><b>Format for <span style="color:#9012fe; font-weight:bolder;">Array of String</span>:</b><br><pre style="color:#9012fe; font-weight:bolder;">["string1", "string2", "stringN"]</pre><b>Format for <span style="color:#9012fe; font-weight:bolder;">Array of Objects</span>:</b><br><pre style="color:#9012fe; font-weight:bolder;">[{"object":"1"},{"object":"2"},{"object":"n"}] |
+     
+    ## Status Code
+    
+    Description: Response from POST data will return json data which contain status with HTTP status code = 200.
+    
+    
+    Success has the status code 200.
+    
+    
+    Error has the status code 4xx and contains error message in the body. Refer to the table below to understand what each code means.
+    
+    | Error Code | Text | Description |
+      |---|---|---|
+      | 401 | Unauthorized | For example, all API requires the API key to be sent and if it is missing, the status code is returned |
+      | 400 | Bad Request | For example, the `Create Task` requires `flow` type to be sent and if it is missing, the status code is returned |
+      | 404 | Not Found | This status code is returned when the request contains invalid ID or URL itself. For example, the `Read Task by ID` API requires taskid to be sent and if it is incorrect ID, the status code is returned |
+      | 405 | Method not Allowed | This API request used the wrong HTTP method. For example, API `Get Task by ID` used GET method, when you sent PUT method, the status code is returned, as this API allows only GET method |
+      | 406 | Unsupported Accept Header | Only application/json and */* are supported |
+      | 409 | Conflict | Indicates a request conflict with current state of the target resource |
+      | 413 | Payload Too Large | Indicates that the request entity is larger than limits defined by server |
+      | 429 | Too Many Requests | Indicates the user has sent too many requests in a given amount of time |
+      | 500 | Unexpected Server Error | This indicate error at MileApp’s side |
+      | 503 | Service Unavailable | The server is not ready to handle the request |
+      | 504 |	Gateway Timeout | Indicates that the server did not get a response in time that it needed in order to complete the request |
+    
+    
+    Most errors will also return a message contains more information to help you debug.
+    
+    
+    For example, `Create Task` requires `flow` and if it is missing, the status code 400 will returned and some message will show
+    
+    ## Failed Code System
+    
+    All failed responses include a standardized `failedCode` field to provide machine-readable failed identification. This enables consistent failed handling across different languages and integrations.
+    
+    ### Failed Code Format
+    
+    The failed code follows a structured format: **`{module}-{type}`**
+    
+    - **Module Code**: Identifies the system component (max 5 characters)
+    - **Failed Type Code**: Identifies the specific failed type (3-digit number)
+    
+    ### Module Codes Reference
+    
+    | Module                   | Module Codes                         | Description                                                                                             |
+      | :----------------------- | :------------------------------------------------------------------------ | :----------------------|
+      | **Authentication** | `auth`                               | Manages user **authentication** and **authorization**, controlling access to system resources and functionality. |
+      | **Task** | - Task: `task`<br>- Schedule: `sched`<br>- Location history: `lochi`<br>- Dispatch: `disp` | Handles the complete **lifecycle of task resources**, from creation and scheduling to dispatch and real-time location tracking. |
+      | **Routing** | - Route: `route`<br>- Vehicle: `vehic`<br>- Configuration: `conf`<br>- Geotagging: `geo`<br>- Capacity constraint: `capac`<br>- Result: `reslt`<br>- Result history :`rhist` | Provides a comprehensive suite for **route optimization** and **planning**, including vehicle management, capacity constraints, and result logging. |
+      | **Flow** | - Flow: `flow`<br>- Automation: `auto`<br>- Flow template: `templ`<br>- Flow log: `flog` | Handles the creation and management of flow templates—the blueprints for repeatable processes. The module also contains the automation logic, which is responsible for executing these flows as automated tasks, with logs for monitoring. |
+      | **Data Management** | - Data source: `data`<br>- Data type: `dtype` | Governs the management of all **data sources** and **data types** within the organization, ensuring data reusable and manageable. |
+      | **Settings** | - User: `user`<br>- Role: `role`<br>- Hub: `hub`<br>- Password Policy: `passp`<br>- Privacy Policy: `priv`<br>- Custom Module: `cmod`<br>- Organization Data: `orgdt`<br>- Organization: `org`<br>- Team: `Team`<br>- Permission `perm`<br>- Trash: `trash`<br>- App integration: `appin` | Manages the core administrative and configuration entities, including user and team **provisioning**, role-based **permissions**, and various organizational settings. |
+      | **Billing** | - License: `lcns`<br>- Subscription: `subs`<br>- Invoice: `invce`<br>- Payment `pymnt` | Handles all **billing** and **subscription** operations, including license management, invoices, and payment processing. |
+      | **Data Version** | `dver`                               | Implements **data versioning** for critical resources like tasks, results, and visits, maintaining a history of changes. |
+      | **App Version** | `versn`                              | Responsible for **application version management** and tracking, ensuring compatibility and managing updates. |
+      | **System** | `sys`                                | Contains system-level operations and configurations that are not directly exposed as API endpoints but are critical for overall application functionality. |
+
+
+
+    ### Common Failed Code Examples
+
+    | Failed Code   | Description                      | Example Message                    |
+      |---------------|---------------------------------|----------------------------------|
+      | `auth-001`    | Required authentication field missing | The email field is required        |
+      | `auth-004`    | Invalid email format             | The email must be a valid email address |
+      | `auth-005`    | Invalid password format          | Password does not meet requirements |
+      | `sys-036`     | Rate limit exceeded             | Too many requests                  |
+      | `sys-045`     | Internal server error           | Internal server error              |
+
+
+    ### Error Type Codes
+    
+    #### Validation Failed (001-030)
+    
+    | Code  | Description                | Common Causes                         |
+      |-------|----------------------------|-------------------------------------|
+      | `001` | Required field missing     | Field not provided in request       |
+      | `002` | Unique constraint violation| Duplicate value for unique field    |
+      | `003` | Invalid format/pattern     | Value doesn't match expected format |
+      | `004` | Invalid email format       | Email validation failed             |
+      | `005` | Invalid password format    | Password doesn't meet requirements  |
+      | `006` | Invalid phone format       | Phone number validation failed      |
+      | `007` | Invalid URL format         | URL format validation failed        |
+      | `008` | Invalid date/time format   | Date/time format incorrect          |
+      | `009` | Invalid numeric format     | Number validation failed            |
+      | `010` | Invalid boolean format     | Boolean validation failed           |
+      | `011` | Invalid array format       | Array structure validation failed   |
+      | `012` | Invalid coordinates format | Latitude/longitude validation failed|
+      | `013` | Invalid JSON format        | JSON structure validation failed    |
+      | `014` | Confirmation mismatch      | Field confirmation validation failed|
+      | `015` | Invalid file format        | File type or size validation failed |
+      | `016` | Invalid string format      | String pattern validation failed    |
+      | `017` | Invalid enum/choice value  | Value not in allowed options        |
+      | `018` | Invalid time format        | Time format validation failed       |
+      | `019` | Invalid IP address format  | IP address validation failed        |
+      | `020` | Invalid UUID format        | UUID format validation failed       |
+      | `021` | Invalid MAC address format | MAC address validation failed       |
+      | `030` | Custom validation failed   | Custom business rule validation failed |
+
+    
+    ### Business Logic Failed (031-099)
+    
+    **ℹ️ Important Note:** Business logic failed codes are module-specific. Each module may implement the same failed code differently based on its business context. For example, `task-033` means "Task not found", while `user-033` means "User not found". Always consider the module prefix when handling these failed.
+    
+    | Code  | General Description    | Common Causes                  |
+      |-------|-----------------------|-------------------------------|
+      | `031` | Duplicate entry       | Record already exists          |
+      | `032` | Invalid state/condition| Operation not allowed in current state |
+      | `033` | Not found             | Resource doesn't exist         |
+      | `034` | Unauthorized access   | Missing or invalid authentication |
+      | `035` | Forbidden operation   | Insufficient permissions      |
+      | `036` | Rate limit exceeded   | Too many requests             |
+      | `040` | Limit exceeded        | Resource limit reached        |
+      | `045` | Server error          | Internal processing error     |
+
+
+    ## Authentication
+    
+    All requests need an Bearer Token for authentication. Generate your API Key here:
+    <ol><li>Visit <a href="https://web.mile.app" target="_blank">https://web.mile.app</a></li><li>Enter your user email address and password</li><li><b>Sign in</b></li><li>Go to <b>Profile -> Personal Token</b></li><li>Click on <b>Generate</b></li></ol>
+    
+    <img src="https://apidoc.mile.app/assets/images/profile.png" alt="">
+    <img src="https://apidoc.mile.app/assets/images/token.png" alt="">
+
+tags:
+  - name : Vehicle
+    description: The vehicle represents a car, bike, truck, or other form of transportation used in your organization. They are utilized to optimize the route planning process, determining the most efficient path for completing multiple tasks or visits. The vehicle attributes contain IDs, capacity, speed, working hours, tags, and constraints.
+  - name : Routing
+    description: The **Routing** refers to process of finding the most effective routes for vehicles to travel from one visit to another. The optimization process will generate a result that could update the respective task data when dispatched. With the ability to handle complex constraints and variables such as capacity, time windows, and vehicle availability, the API can be customized to meet the specific needs of any business or organization. <br> <br>**Routing results** are collection of route optimization's results that already successfully processed and saved in the database. Routing results contains list of routed visits and dropped visits. <br> 1. routed visits are sequence recommendation of visits/tasks list according to most suitable vehicle and best route. <br> 2. dropped visits are list of tasks/visits that out of range of the calculation.
+  - name : Webhook
+    description : A webhook is a mechanism in web development and APIs that allows real-time communication between applications or services. It enables one application to send data to another application whenever a specific event or trigger occurs. Webhooks are commonly used to automate and integrate systems, enabling seamless data exchange and event-driven workflows. In our end, you can follow <a href="https://doc.clickup.com/3837933/p/h/3n3zd-81962/aa00834626ae24f/3n3zd-154042"> **this doc** </a> to set up the webhook.
+  - name : Task
+    description : A task is an item of work intended for completion by an assignee. It can embody activities like pickups, deliveries, planning, inspections, sales visits, or other work-related actions within your organization. Tasks encompass essential attributes, including IDs, flow, time, status indicators, assignee information, order index, and other pertinent data. The content of a task is configurable based on your specified flow settings. For instance, tasks can serve as visits during the route optimization process, functioning as pivotal elements. The task can also represent a visit in route optimization, please follow <a href='#tag/Routing'> this link </a> to read more detail. <br><br> **To see the details of task object, please follow <a href='#tag/task_model'> this link </a>**
+  - name : Location History
+    description : Location history is data that is sent from the MileApp Field mobile app or sent from API. The location history will be sent regularly from the mobile app if the Start Finish feature is active based on the permission setting at the user's role. There were two types of location history, as stated below <br> 1. The first type of location history contains IDs, email, latitude longitude, speed, distance, duration, and timestamp. <br> 2. The second type is the Start Finish data, for this type the data structure should contain IDs, email, latitude longitude, speed, distance, duration, timestamp, start time, finish time, finish latitude longitude, notes, and data object.
+  - name : Task Schedule
+    description : Task Schedule is a mechanism to generate tasks according to the schedule that is set by you. The task schedule attributes consist of IDs, repetition period data (daily, weekly, etc.), flow structure, task content, and time of the schedule’s start & end. This schedule could help you to set a task that will be repeated at a certain period.
+  - name : Flow
+    description : Flow in MileApp is the mobile field application workflow, setting it correctly is critical to the success of the field workers in doing their job efficiently. Flow attributes consist of IDs, pages, components, configurations, and time. The Flow will be used at Task, Automation, or Schedule.
+  - name : Automation
+    description : Automation enables you to set up automation based on tasks' events and data source’s events. It might help you automate creation of tasks, task assignment, task placement, task webhook, data source update, datasource creation, and data source webhook. Automation attributes consist of IDs, automation name, automation type, automation details, and rules.
+  - name : Data
+    description : The Data source could help you simplify the process of filling in task information based on existing data at MileApp. This data could consist of information such as name, number, date, coordinate, and multiple options. The Data typically represents entities such as customers, products, employees, suppliers, or any other critical data elements that are used across the application.
+  - name : Data Type
+    description : The Data type is the structure of data fields that is customizable to suit your business needs. Data type attributes consist of IDs, name, field details, type, and primary key. This data type structure will be used at Data Source and Flow.
+  - name : User
+    description : User data will include information that is contained in a user account. It defines the hub access and role that different types of users have within the system. Hub access is used to restrict or define the locations within which a user can access or perform certain actions within the application. User attributes consist of ID, name, email, and status. There are five different types of roles that MileApp provides, and you can create a new custom role depending on your organization. <br>The predefined roles are <br> 1. Finance <br> 2. Owner <br> 3. Planner <br> 4. Admin <br> 5. Field User <br> Note A user can only have one (1) role at a time but can be granted access to multiple hubs.
+  - name : Role
+    description : This API enables you to retrieve a list of predefined roles and any custom roles associated with your account. By making a GET request to this API, you can obtain information about the available roles within the system. The predefined roles refer to a set of role types that are already defined by the system. In this particular case, the predefined roles include Finance, Owner, Planner, Admin, and Field User. Additionally, the API may also return any custom roles that have been created within your account.
+  - name : Hub
+    description : Hub is an essential element within an organization as it acts as the parent for tasks / visits, users, vehicles, routing results, routing configurations, and data sources. From the user's perspective, a hub is like a headquarters or working area for them to work. From a task perspective, the hub represents the working area of the task. From the routing module perspective, a hub refers to a central location where vehicles start their routes, return at the end of their routes, and may also make stops during their routes. Hub attributes consist of ID, name, address, and coordinate.
+  - name : Authentication
+    description : Authentication flow, if user not using otp once it will return http code 200 and token data, but if user using otp once login it will return http code 202 dan token session id. If using otp after login user redirect into otp page with session id and validate into api. So user cannot open otp page without valid ID. USer with otp will able to login after using POST /secret success.
+  - name : Data Version
+    description : Data version logic <br> 1. As default when user has no activity at data source it will return current time <br> 2. As long as user has no activity at data source it will always return current time <br> 3. If there's an activity, data version will return latest update time <br> 4. If user has no activity for 3 days, data version will back to return current time (redis expired 3 days)
+  - name : Custom Module
+    description : A "custom module" is like a personalized menu option in MileApp. It's something you can create and customize to make it easy to access specific features or content.
+  - name : Organization Data
+    description : Organization Data provides a flexible key-value storage system for managing dynamic configurations, plugin settings, and custom data at the organization level. This feature allows you to store any JSON structure with a unique name identifier, making it ideal for plugin configurations, feature flags, custom settings, or any structured data that needs to be accessed across your organization. The data field accepts any valid JSON object, providing maximum flexibility for various use cases.
+  - name : Internal Tools
+  - name : Plugin
+    description : The Plugin API allows developers to manage custom add-ons and extensions within the Mile V3 platform. Plugins enable dynamic functionality through JavaScript resources and custom icons, supporting both organization-specific and system-wide (global) plugins. This API provides comprehensive CRUD operations for plugin management, including file uploads, validation, and secure resource hosting. <b> To see the details of plugin object, please follow <a href='#tag/plugin_model'>this link</a></b>
+  - name : Licenses
+    description: "This API provides information about licenses, including their names, product IDs, billing details, and associated features. <b> To see the details of license object, please follow <a href='#tag/license_model'>this link</a></b>"
+  - name : Subscriptions
+    description : "API documentation for MileApp billing system. <b> To see the details of subscription object, please follow <a href='#tag/subscription_model'>this link</a></b>"
+  - name : Invoices
+    description : "API documentation for MileApp billing system. <b> To see the details of subscription object, please follow <a href='#tag/invoice_model'>this link</a></b>"
+  - name : Version Management
+    description : "API documentation for version management. <b> To see the details of version object, please follow <a href='#tag/version_model'>this link</a></b>"
+  - name : Listener
+    description : "API documentation for MileApp billing system."
+  - name : Configuration
+  - name : Capacity Constraint
+  - name : Geo Tagging
+  - name : File
+    description : The endpoint serves as a gateway for accessing private files through our API. This function enables authorized users to view files that are restricted or intended for specific access. It acts as a secure passage, allowing authenticated individuals to access these files programmatically. By utilizing this endpoint, users can seamlessly retrieve and interact with private files within our system, ensuring controlled and authorized access to sensitive information.
+  - name : Token
+    description : personal access token is a secure way for users to authenticate with your API. It's typically used when users want to access their own data or perform actions on their behalf programmatically, such as using a mobile app to interact with their account.
+  - name : Currency
+    description : The Currency API provides access to currency reference data including ISO codes, symbols, and locale information. This endpoint supports filtering by ISO 4217 currency codes and returns active currencies sorted by country code. Currency data is publicly accessible for listing, while administrative operations (create, update, delete) require organization edit permissions.
+
+  - name: route_model
+    x-displayName: Routing object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/RoutingInternal" />
+  - name: vehicle_model
+    x-displayName: Vehicle object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/VehicleInternal" />
+
+  - name: module_model
+    x-displayName: Custom module object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Module" />
+
+  - name: team_model
+    x-displayName: Team object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/TeamInternal" />
+
+  - name: organization_model
+    x-displayName: Organization object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/OrganizationInternal" />
+
+  - name: user_model
+    x-displayName: User object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/UserInternal" />
+
+  - name: hub_model
+    x-displayName: Hub object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/HubInternal" />
+
+  - name: role_model
+    x-displayName: Role object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/RoleInternal" />
+
+  - name: data_type_model
+    x-displayName: Data type object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/DataTypeInternal" />
+
+  - name: data_source_model
+    x-displayName: Data source object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/DataSourceInternal" />
+  
+    
+  - name: task_model
+    x-displayName: Task object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/TaskInternal" />
+
+  - name: location_history_model
+    x-displayName: Location history object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/LocationHistoryInternal" />
+
+  - name: task_schedule_model
+    x-displayName: Task Schedule object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/TaskScheduleInternal" />
+
+  - name: automation_model
+    x-displayName: Automation object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/AutomationInternal" />
+
+  - name: module_model
+    x-displayName: Custom module object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/CustomModuleInternal" />
+  
+  - name: flow_model
+    x-displayName: Flow object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/FlowInternal" />
+
+  - name: plugin_model
+    x-displayName: Plugin object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/PluginInternal" />
+
+  - name: invoice_model
+    x-displayName: Invoice Object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/InvoiceInternal" />
+  - name: license_model
+    x-displayName: License Object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/LicenseInternal" />
+  - name: subscription_model
+    x-displayName: Subscription Object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/Subscription" />
+  - name: version_model
+    x-displayName: Version Object
+    description: |
+      <SchemaDefinition schemaRef="#/x-components/schemas/VersionInternal" />
+
+  - name: Activity
+    description: Activity represents a master-child task structure created from workflow templates. An activity consists of a master task using ActivityWorkflow flow and multiple child tasks (steps) based on workflow configuration. Activities provide comprehensive task management with status synchronization, assignment coordination, and workflow-based automation for complex business processes.
+
+  - name: Workflow
+    description: Workflow is a template system for creating multi-step task processes with field mappings between steps. It defines the sequence of flows (task types) that need to be completed, allowing for data transfer and transformation between steps. Workflows serve as reusable templates for complex business processes and can be used to create activities with master-child task architecture.
+
+x-tagGroups:
+  - name: Task
+    tags:
+      - Task
+      - Location History
+      - Task Schedule
+      - Activity
+  - name: Routing
+    tags:
+      - Vehicle
+      - Routing
+      - Configuration
+      - Capacity Constraint
+      - Geotagging
+  - name: Flow
+    tags:
+      - Flow
+      - Automation
+      - Workflow
+      - Webhook
+  - name: Data
+    tags:
+      - Data
+      - Data Type
+  - name: Setting
+    tags:
+      - User
+      - Role
+      - Hub
+      - Data Version
+      - Version Management
+      - Password Policy
+      - Privacy Policy
+      - Custom Module
+      - Organization Data
+      - Organization
+  - name: File
+    tags:
+      - File
+  - name: Billing
+    tags:
+      - Licenses
+      - Subscriptions
+      - Invoices
+      - Listener
+      - Payment Methods
+  - name: Dashboard
+    tags:
+      - Dashboard
+  - name: Authentication
+    tags:
+      - Authentication
+      - Token
+  - name: Reference
+    tags:
+      - Currency
+  - name : Internal Tools
+    tags:
+      - Internal Tools
+  - name: Objects
+    tags:
+      - task_model
+      - location_history_model
+      - task_schedule_model
+      - vehicle_model
+      - route_model
+      - flow_model
+      - automation_model
+      - data_source_model
+      - data_type_model
+      - organization_model
+      - user_model
+      - role_model
+      - hub_model
+      - team_model
+      - module_model
+      - plugin_model
+      - invoice_model
+      - license_model
+      - subscription_model
+      - version_model
+      
+
+
+
+securityDefinitions:
+  AccessToken:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+    description: Please use a valid Bearer token to authenticate. The token should be in the form of a JWT. The token must be included in the `Authorization` header using the `Bearer <token>` format.
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api/v3
+host: 'apiweb.mile.app'
+
+# servers:
+#   - url: 'https://apiweb.mile.app/api/v3'
+# paths:
+
