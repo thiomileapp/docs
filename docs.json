@@ -8,9 +8,6 @@
     "dark": "#028FCF"
   },
   "favicon": "/favicon.svg",
-  "search": {
-    "exclude": ["api-reference-internal/**"]
-  },
   "api": {
     "mdx": {
       "auth": {
@@ -396,25 +393,6 @@
               "api-reference/objects/team-object",
               "api-reference/objects/plugin-object"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Internal API",
-        "hidden": true,
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": [
-              "api-reference-internal/introduction"
-            ]
-          },
-          {
-            "group": "Internal Task",
-            "openapi": {
-              "source": "openapi/internal/openapi-full.json",
-              "directory": "api-reference-internal"
-            }
           }
         ]
       }
