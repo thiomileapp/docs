@@ -1,0 +1,29 @@
+---
+title: "Internal API Introduction"
+description: "MileApp Internal API Documentation - For internal use only"
+---
+
+# MileApp Internal API
+
+This is the internal API documentation for MileApp. These endpoints are for internal use only and are not part of the public API.
+
+## Authentication
+
+All internal API endpoints require authentication using a Bearer token.
+
+```bash
+curl -X GET "https://apiweb.mile.app/api/v3/endpoint" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Base URL
+
+```
+https://apiweb.mile.app/api/v3
+```
+
+## Important Notes
+
+- These endpoints are for internal use only
+- API behavior may change without notice
+- Not covered by public API SLAs

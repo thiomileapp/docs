@@ -82,6 +82,21 @@ function getJsonFiles(dirPath) {
 }
 
 function mergeSpec(base, module) {
+  // Fix misplaced security in responses BEFORE merging
+  if (module.paths) {
+    for (const pathKey of Object.keys(module.paths)) {
+      const pathItem = module.paths[pathKey];
+      for (const method of ['get', 'post', 'put', 'patch', 'delete', 'options', 'head']) {
+        if (pathItem[method] && pathItem[method].responses) {
+          // Remove 'security' as a response code key
+          if (pathItem[method].responses.security) {
+            delete pathItem[method].responses.security;
+          }
+        }
+      }
+    }
+  }
+
   // Merge paths
   if (module.paths && Object.keys(module.paths).length > 0) {
     base.paths = base.paths || {};
@@ -488,12 +503,275 @@ function addMissingSchemas(spec) {
   return spec;
 }
 
+// Remove misplaced security keys from responses
+function fixMisplacedSecurity(spec) {
+  if (!spec.paths) return spec;
+
+  for (const pathKey of Object.keys(spec.paths)) {
+    const pathItem = spec.paths[pathKey];
+    for (const method of ['get', 'post', 'put', 'patch', 'delete', 'options', 'head']) {
+      if (pathItem[method]) {
+        const operation = pathItem[method];
+        // Remove security from responses object (it's not valid there)
+        if (operation.responses) {
+          // Remove 'security' as a response code key (it should be at operation level)
+          if (operation.responses.security) {
+            delete operation.responses.security;
+          }
+          // Also check inside each response
+          for (const code of Object.keys(operation.responses)) {
+            if (operation.responses[code] && typeof operation.responses[code] === 'object' && operation.responses[code].security) {
+              delete operation.responses[code].security;
+            }
+          }
+        }
+      }
+    }
+  }
+  return spec;
+}
+
+// Remove 'examples' from inside schema objects (OpenAPI 3.0: examples should be at media type level, not schema level)
+function fixExamplesInSchemas(obj) {
+  if (typeof obj !== 'object' || obj === null) return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(fixExamplesInSchemas);
+  }
+
+  const result = {};
+  for (const [key, value] of Object.entries(obj)) {
+    // Remove 'examples' key from schema objects (detected by presence of type/properties)
+    if (key === 'examples' && (obj.type || obj.properties || obj.$ref)) {
+      // Skip this key - it's misplaced inside schema
+      continue;
+    }
+    result[key] = fixExamplesInSchemas(value);
+  }
+  return result;
+}
+
+// Fix path parameter typos like {param) to {param} and trim whitespace
+function fixPathTypos(spec) {
+  if (!spec.paths) return spec;
+
+  const fixedPaths = {};
+  for (const pathKey of Object.keys(spec.paths)) {
+    // Fix typos: replace ) with } in path parameters, and trim whitespace
+    let fixedKey = pathKey.replace(/\{([^}]+)\)/g, '{$1}').trim();
+    fixedPaths[fixedKey] = spec.paths[pathKey];
+  }
+  spec.paths = fixedPaths;
+  return spec;
+}
+
+// Fix invalid parameter properties
+function fixInvalidParameters(spec) {
+  if (!spec.paths) return spec;
+
+  // Valid OpenAPI 3.0 parameter properties
+  const validParamProps = new Set([
+    'name', 'in', 'description', 'required', 'deprecated', 'allowEmptyValue',
+    'style', 'explode', 'allowReserved', 'schema', 'example', 'examples',
+    'content', '$ref'
+  ]);
+
+  function fixParam(param) {
+    if (!param || typeof param !== 'object') return param;
+    if (param['$ref']) return param; // Don't modify $ref params
+
+    const fixed = {};
+    for (const [key, value] of Object.entries(param)) {
+      if (validParamProps.has(key)) {
+        fixed[key] = value;
+      } else if (key === 'min' || key === 'max' || key === 'minimum' || key === 'maximum') {
+        // Move min/max to schema
+        fixed.schema = fixed.schema || { type: 'integer' };
+        if (key === 'min' || key === 'minimum') {
+          fixed.schema.minimum = value;
+        } else {
+          fixed.schema.maximum = value;
+        }
+      }
+      // Skip other invalid properties
+    }
+    return fixed;
+  }
+
+  for (const pathKey of Object.keys(spec.paths)) {
+    const pathItem = spec.paths[pathKey];
+    for (const method of ['get', 'post', 'put', 'patch', 'delete', 'options', 'head']) {
+      if (pathItem[method] && pathItem[method].parameters) {
+        pathItem[method].parameters = pathItem[method].parameters.map(fixParam);
+      }
+    }
+    // Also fix path-level parameters
+    if (pathItem.parameters) {
+      pathItem.parameters = pathItem.parameters.map(fixParam);
+    }
+  }
+  return spec;
+}
+
+// Fix broken $ref links that reference non-existent schemas
+function fixBrokenSchemaRefs(spec) {
+  const schemas = spec.components?.schemas || {};
+
+  function fixRef(obj) {
+    if (typeof obj !== 'object' || obj === null) return obj;
+
+    if (Array.isArray(obj)) {
+      return obj.map(fixRef);
+    }
+
+    const result = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (key === '$ref' && typeof value === 'string' && value.startsWith('#/components/schemas/')) {
+        const schemaName = value.replace('#/components/schemas/', '');
+        if (!schemas[schemaName]) {
+          // Replace broken ref with generic object schema
+          return { type: 'object', description: `See ${schemaName} schema` };
+        }
+      }
+      result[key] = fixRef(value);
+    }
+    return result;
+  }
+
+  // Fix refs in paths
+  if (spec.paths) {
+    spec.paths = fixRef(spec.paths);
+  }
+  // Fix refs in schemas themselves
+  if (spec.components?.schemas) {
+    spec.components.schemas = fixRef(spec.components.schemas);
+  }
+  return spec;
+}
+
+// Fix response objects that are missing schema but have examples
+function fixResponseSchemas(spec) {
+  if (!spec.paths) return spec;
+
+  for (const pathKey of Object.keys(spec.paths)) {
+    const pathItem = spec.paths[pathKey];
+    for (const method of ['get', 'post', 'put', 'patch', 'delete', 'options', 'head']) {
+      if (pathItem[method] && pathItem[method].responses) {
+        const responses = pathItem[method].responses;
+        for (const code of Object.keys(responses)) {
+          const response = responses[code];
+          if (response && response.content) {
+            for (const mediaType of Object.keys(response.content)) {
+              const content = response.content[mediaType];
+              // If content has examples but no schema, add a generic schema
+              if (content && content.examples && !content.schema) {
+                content.schema = { type: 'object' };
+              }
+            }
+          }
+          // Fix headers that have $ref (should be object, not $ref)
+          if (response && response.headers && response.headers['$ref']) {
+            delete response.headers;
+          }
+        }
+      }
+    }
+  }
+  return spec;
+}
+
+// Fix properties that have string values instead of schema objects
+// This happens when source JSON has `"type": "object"` at the wrong level (as a property)
+function fixMalformedProperties(obj, parentKey = '') {
+  if (typeof obj !== 'object' || obj === null) return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => fixMalformedProperties(item, parentKey));
+  }
+
+  const result = {};
+  for (const [key, value] of Object.entries(obj)) {
+    // If we're inside a "properties" object
+    if (parentKey === 'properties' && typeof value === 'string') {
+      // This is a malformed property - it should be an object but is a string
+      // Convert to proper schema based on the string value
+      const typeValue = value.toLowerCase();
+      if (typeValue === 'object' || typeValue === 'string' || typeValue === 'array' ||
+          typeValue === 'number' || typeValue === 'integer' || typeValue === 'boolean') {
+        result[key] = { type: typeValue };
+      } else {
+        // Default to string type
+        result[key] = { type: 'string' };
+      }
+    } else {
+      result[key] = fixMalformedProperties(value, key);
+    }
+  }
+  return result;
+}
+
+// Fix schema objects with empty required arrays and other invalid schema issues
+function fixSchemaIssues(spec) {
+  function fixSchema(schema) {
+    if (typeof schema !== 'object' || schema === null) return schema;
+
+    if (Array.isArray(schema)) {
+      return schema.map(fixSchema);
+    }
+
+    const result = {};
+    for (const [key, value] of Object.entries(schema)) {
+      // Remove empty required arrays (they cause validation errors)
+      if (key === 'required' && Array.isArray(value) && value.length === 0) {
+        continue; // Skip this property
+      }
+      // Fix nullable that's not boolean
+      if (key === 'nullable' && typeof value !== 'boolean') {
+        result[key] = value === 'true' || value === true;
+        continue;
+      }
+      // Fix format values that aren't standard
+      if (key === 'format' && typeof value === 'string') {
+        const validFormats = ['int32', 'int64', 'float', 'double', 'byte', 'binary', 'date', 'date-time', 'password', 'email', 'uuid', 'uri', 'hostname', 'ipv4', 'ipv6'];
+        if (!validFormats.includes(value)) {
+          continue; // Remove invalid format
+        }
+      }
+      result[key] = fixSchema(value);
+    }
+    return result;
+  }
+
+  // Fix schemas in components
+  if (spec.components?.schemas) {
+    for (const schemaName of Object.keys(spec.components.schemas)) {
+      spec.components.schemas[schemaName] = fixSchema(spec.components.schemas[schemaName]);
+    }
+  }
+
+  // Fix inline schemas in paths
+  if (spec.paths) {
+    spec.paths = fixSchema(spec.paths);
+  }
+
+  return spec;
+}
+
 // Main function to apply all Mintlify compatibility fixes
 function applyMintlifyFixes(spec) {
   console.log('  🔧 Applying Mintlify compatibility fixes...');
 
-  // Fix broken $ref links first
+  // Fix broken $ref links first (Laravel-style refs)
   fixBrokenRefs(spec);
+
+  // Fix misplaced security in responses
+  spec = fixMisplacedSecurity(spec);
+
+  // Fix path parameter typos like {param) -> {param} and trim whitespace
+  spec = fixPathTypos(spec);
+
+  // Fix invalid parameter properties (min, max, etc.)
+  spec = fixInvalidParameters(spec);
 
   // Fix all types recursively
   spec = fixInvalidTypes(spec);
@@ -508,6 +786,21 @@ function applyMintlifyFixes(spec) {
 
   // Add missing schemas
   spec = addMissingSchemas(spec);
+
+  // Fix broken schema $ref links (non-existent schema references)
+  spec = fixBrokenSchemaRefs(spec);
+
+  // Fix response objects missing schema but having examples, and fix invalid headers
+  spec = fixResponseSchemas(spec);
+
+  // Remove misplaced examples from inside schema objects
+  spec = fixExamplesInSchemas(spec);
+
+  // Fix malformed properties that have string values instead of schema objects
+  spec = fixMalformedProperties(spec);
+
+  // Fix schema issues (empty required arrays, invalid formats, etc.)
+  spec = fixSchemaIssues(spec);
 
   // Convert HTML to Markdown in all descriptions
   spec = convertDescriptionsToMarkdown(spec);

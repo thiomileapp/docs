@@ -303,7 +303,6 @@
       },
       {
         "tab": "API Reference",
-        "openapi": "openapi-public.json",
         "groups": [
           {
             "group": "Getting Started",
@@ -316,9 +315,32 @@
           },
           {
             "group": "Task",
+            "openapi": {
+              "source": "openapi-public.json",
+              "directory": "api-reference"
+            },
             "pages": [
               "api-reference/task/overview"
             ]
+          }
+        ]
+      },
+      {
+        "tab": "Internal API",
+        "hidden": true,
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api-reference-internal/introduction"
+            ]
+          },
+          {
+            "group": "Internal Task",
+            "openapi": {
+              "source": "openapi-internal.json",
+              "directory": "api-reference-internal"
+            }
           }
         ]
       }
