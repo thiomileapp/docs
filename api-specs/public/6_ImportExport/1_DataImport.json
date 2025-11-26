@@ -1,0 +1,981 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Data Import"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "multipart/form-data",
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/data/import": {
+      "post": {
+        "summary": "Import data source from file",
+        "description": "This endpoint allows users to upload a file (CSV, XLS, or XLSX) containing data source records for import. The file is validated and processed in the background via queue. The import process supports multiple import types: datasource, task, visit, and route. After upload, the import is queued for processing and can be monitored via the import-monitoring endpoints.<br><br>**Background Processing:**<br>- Queue Name: `readingImportDatasource`<br>- Processing is chunked for large files<br>- Status updates are tracked in real-time<br><br>**File Requirements:**<br>- Max Size: 20MB<br>- Supported Formats: CSV, XLS, XLSX<br>- File structure must match the data type schema<br><br>**Important Notes:**<br>- For datasource import: `dataTypeId` is required<br>- For datasource with hub-specific data: `hubId` is required (depends on `commonData` setting)<br>- Failed records are exported to a separate file for review<br>- Template file is generated based on data type schema",
+        "tags": [
+          "Data Import"
+        ],
+        "operationId": "ImportData",
+        "deprecated": false,
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "The file containing data to import. Supported formats: CSV, XLS, XLSX. Maximum file size: 20MB.<br>**Example:** `datasource_import.xlsx`"
+          },
+          {
+            "name": "dataTypeId",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "The identifier for the data type. Required for datasource import type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example:** `63db2fb476bc679c540369c4`"
+          },
+          {
+            "name": "hubId",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": "The identifier for the hub. Required if the data type has `commonData` set to false (hub-specific data). Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `63c63ab1b6972d3150348172`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - File uploaded and import process queued",
+            "schema": {
+              "type": "object",
+              "title": "ImportDataResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Import monitoring record created for this import.",
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Import monitoring ID"
+                    },
+                    "organizationId": {
+                      "type": "string",
+                      "description": "Organization ID"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Import type",
+                      "enum": [
+                        "datasource",
+                        "task",
+                        "visit",
+                        "route"
+                      ]
+                    },
+                    "hubId": {
+                      "type": "string",
+                      "description": "Hub ID (if applicable)"
+                    },
+                    "filename": {
+                      "type": "string",
+                      "description": "Original uploaded filename"
+                    },
+                    "totalRows": {
+                      "type": "integer",
+                      "description": "Total rows in the file"
+                    },
+                    "totalValid": {
+                      "type": "integer",
+                      "description": "Total valid rows (initially 0, updated during processing)"
+                    },
+                    "totalInvalid": {
+                      "type": "integer",
+                      "description": "Total invalid rows (initially 0, updated during processing)"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Import status",
+                      "enum": [
+                        "onprocess",
+                        "success",
+                        "partially",
+                        "failed"
+                      ]
+                    },
+                    "dataTypeId": {
+                      "type": "string",
+                      "description": "Data type ID (for datasource import)"
+                    },
+                    "dataTypeName": {
+                      "type": "string",
+                      "description": "Data type name (for datasource import)"
+                    },
+                    "fileTemplate": {
+                      "type": "string",
+                      "description": "URL to download template file"
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "description": "Email of user who initiated the import"
+                    },
+                    "createdTime": {
+                      "type": "string",
+                      "description": "Timestamp when import was created"
+                    },
+                    "updatedTime": {
+                      "type": "string",
+                      "description": "Timestamp when import was last updated"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Import process has been queued successfully",
+                "data": {
+                  "_id": "65f8a4c2d9e3b1234567890a",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "type": "datasource",
+                  "hubId": "63c63ab1b6972d3150348172",
+                  "filename": "outlets_import.xlsx",
+                  "totalRows": 150,
+                  "totalValid": 0,
+                  "totalInvalid": 0,
+                  "status": "onprocess",
+                  "dataTypeId": "63db2fb476bc679c540369c4",
+                  "dataTypeName": "OutletDetail",
+                  "fileTemplate": "https://staticdev.mile.app/dev-mile/templates/template_OutletDetail.xlsx",
+                  "totalChunks": 3,
+                  "processedChunks": 0,
+                  "createdBy": "john.doe@mile.app",
+                  "createdTime": "2024-03-18 10:30:45",
+                  "updatedTime": "2024-03-18 10:30:45"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "The file field is required.",
+                "failedCode": "import-001"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing authentication token",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Unauthorized",
+                "failedCode": "auth-001"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to import data",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "You do not have permission to perform this action",
+                "failedCode": "auth-003"
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - Invalid file format or data type not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "The file must be a file of type: csv, xls, xlsx.",
+                "failedCode": "import-002"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Internal server error",
+                "failedCode": "import-045"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST \"https://apiweb.mile.app/api/v3/data/import\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\\n  -F \"file=@/path/to/datasource_import.xlsx\" \\\n  -F \"dataTypeId=63db2fb476bc679c540369c4\" \\\n  -F \"hubId=63c63ab1b6972d3150348172\""
+          }
+        ]
+      }
+    },
+    "/import-monitoring": {
+      "get": {
+        "summary": "Read import monitoring records",
+        "description": "This endpoint retrieves a paginated list of import monitoring records. These records track the status and progress of all data import operations initiated by users in the organization. You can filter by import type, status, data type, and other criteria.<br><br>**Use Cases:**<br>- Monitor ongoing imports<br>- Review completed imports<br>- Download failed records for correction<br>- Track import history<br><br>**Polling Recommendation:**<br>For real-time status updates of ongoing imports, poll this endpoint every 3-5 seconds while import status is 'onprocess'.",
+        "tags": [
+          "Data Import"
+        ],
+        "operationId": "GetImportMonitoring",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "description": "Page number for pagination.<br>**Example:** `1`<br>**Default:** `1`"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "description": "Number of records per page.<br>**Example:** `20`<br>**Default:** `20`<br>**Max:** `100`"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter by import type. Comma-separated for multiple types.<br>**enum:** `datasource`, `task`, `visit`, `route`<br>**Example:** `datasource,task`"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter by import status. Comma-separated for multiple statuses.<br>**enum:** `onprocess`, `success`, `partially`, `failed`<br>**Example:** `onprocess,success`"
+          },
+          {
+            "name": "dataTypeId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter by data type ID (for datasource imports only). Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example:** `63db2fb476bc679c540369c4`"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Sort by field.<br>**Example:** `createdTime`, `updatedTime`, `status`<br>**Default:** `createdTime`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Sort order.<br>**enum:** `asc`, `desc`<br>**Default:** `desc`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "ImportMonitoringListResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Paginated list of import monitoring records.",
+                  "type": "object",
+                  "properties": {
+                    "current_page": {
+                      "type": "integer",
+                      "description": "Current page number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "Array of import monitoring records",
+                      "items": {
+                        "$ref": "#/definitions/ImportMonitoringObject"
+                      }
+                    },
+                    "first_page_url": {
+                      "type": "string",
+                      "description": "URL to first page"
+                    },
+                    "from": {
+                      "type": "integer",
+                      "description": "Starting record number"
+                    },
+                    "last_page": {
+                      "type": "integer",
+                      "description": "Last page number"
+                    },
+                    "last_page_url": {
+                      "type": "string",
+                      "description": "URL to last page"
+                    },
+                    "links": {
+                      "type": "array",
+                      "description": "Pagination links",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "next_page_url": {
+                      "type": "string",
+                      "description": "URL to next page"
+                    },
+                    "path": {
+                      "type": "string",
+                      "description": "Base path for pagination"
+                    },
+                    "per_page": {
+                      "type": "integer",
+                      "description": "Records per page"
+                    },
+                    "prev_page_url": {
+                      "type": "string",
+                      "description": "URL to previous page"
+                    },
+                    "to": {
+                      "type": "integer",
+                      "description": "Ending record number"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total records"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "current_page": 1,
+                  "data": [
+                    {
+                      "_id": "65f8a4c2d9e3b1234567890a",
+                      "organizationId": "63c61d865347e356d05e3052",
+                      "type": "datasource",
+                      "hubId": "63c63ab1b6972d3150348172",
+                      "filename": "outlets_import.xlsx",
+                      "totalRows": 150,
+                      "totalValid": 145,
+                      "totalInvalid": 5,
+                      "status": "partially",
+                      "dataTypeId": "63db2fb476bc679c540369c4",
+                      "dataTypeName": "OutletDetail",
+                      "fileTemplate": "https://staticdev.mile.app/dev-mile/templates/template_OutletDetail.xlsx",
+                      "fileFailedImported": "https://staticdev.mile.app/dev-mile/failed/failed_outlets_import_65f8a4c2d9e3b1234567890a.xlsx",
+                      "processedAt": "2024-03-18 10:32:15",
+                      "processingDuration": 90,
+                      "totalChunks": 3,
+                      "processedChunks": 3,
+                      "createdBy": "john.doe@mile.app",
+                      "updatedBy": "system",
+                      "createdTime": "2024-03-18 10:30:45",
+                      "updatedTime": "2024-03-18 10:32:15"
+                    },
+                    {
+                      "_id": "65f8a3b1c8d2a0123456789b",
+                      "organizationId": "63c61d865347e356d05e3052",
+                      "type": "task",
+                      "hubId": "63c63ab1b6972d3150348172",
+                      "filename": "tasks_import.csv",
+                      "totalRows": 500,
+                      "totalValid": 500,
+                      "totalInvalid": 0,
+                      "status": "success",
+                      "flowId": "63d8c9b0dbd5ef20a627dd86",
+                      "flowName": "Delivery",
+                      "fileTemplate": "https://staticdev.mile.app/dev-mile/templates/template_task_import.xlsx",
+                      "processedAt": "2024-03-18 10:25:30",
+                      "processingDuration": 120,
+                      "totalChunks": 5,
+                      "processedChunks": 5,
+                      "createdBy": "jane.smith@mile.app",
+                      "updatedBy": "system",
+                      "createdTime": "2024-03-18 10:23:30",
+                      "updatedTime": "2024-03-18 10:25:30"
+                    }
+                  ],
+                  "first_page_url": "https://apiweb.mile.app/api/v3/import-monitoring?page=1",
+                  "from": 1,
+                  "last_page": 5,
+                  "last_page_url": "https://apiweb.mile.app/api/v3/import-monitoring?page=5",
+                  "links": [
+                    {
+                      "url": null,
+                      "label": "&laquo; Previous",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/import-monitoring?page=1",
+                      "label": "1",
+                      "active": true
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/import-monitoring?page=2",
+                      "label": "2",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/import-monitoring?page=2",
+                      "label": "Next &raquo;",
+                      "active": false
+                    }
+                  ],
+                  "next_page_url": "https://apiweb.mile.app/api/v3/import-monitoring?page=2",
+                  "path": "https://apiweb.mile.app/api/v3/import-monitoring",
+                  "per_page": 20,
+                  "prev_page_url": null,
+                  "to": 20,
+                  "total": 95
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Invalid status value",
+                "failedCode": "import-003"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Unauthorized",
+                "failedCode": "auth-001"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Internal server error",
+                "failedCode": "import-045"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X GET \"https://apiweb.mile.app/api/v3/import-monitoring?type=datasource&status=onprocess&limit=20&page=1\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+          }
+        ]
+      }
+    },
+    "/import-monitoring/{id}": {
+      "get": {
+        "summary": "Read import monitoring record by ID",
+        "description": "This endpoint retrieves detailed information about a specific import monitoring record by its ID. Use this to check the status and results of a particular import operation.<br><br>**Use Cases:**<br>- Get detailed status of a specific import<br>- Download failed records file<br>- Retrieve import statistics<br>- Monitor import progress",
+        "tags": [
+          "Data Import"
+        ],
+        "operationId": "GetImportMonitoringById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The import monitoring record ID.<br>**Example:** `65f8a4c2d9e3b1234567890a`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "ImportMonitoringDetailResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Import monitoring record details.",
+                  "$ref": "#/definitions/ImportMonitoringObject"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "_id": "65f8a4c2d9e3b1234567890a",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "type": "datasource",
+                  "hubId": "63c63ab1b6972d3150348172",
+                  "filename": "outlets_import.xlsx",
+                  "totalRows": 150,
+                  "totalValid": 145,
+                  "totalInvalid": 5,
+                  "status": "partially",
+                  "dataTypeId": "63db2fb476bc679c540369c4",
+                  "dataTypeName": "OutletDetail",
+                  "fileTemplate": "https://staticdev.mile.app/dev-mile/templates/template_OutletDetail.xlsx",
+                  "fileFailedImported": "https://staticdev.mile.app/dev-mile/failed/failed_outlets_import_65f8a4c2d9e3b1234567890a.xlsx",
+                  "errorMessage": null,
+                  "processedAt": "2024-03-18 10:32:15",
+                  "processingDuration": 90,
+                  "totalChunks": 3,
+                  "processedChunks": 3,
+                  "createdBy": "john.doe@mile.app",
+                  "updatedBy": "system",
+                  "createdTime": "2024-03-18 10:30:45",
+                  "updatedTime": "2024-03-18 10:32:15"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Import monitoring record not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Import monitoring record not found",
+                "failedCode": "import-004"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Unauthorized",
+                "failedCode": "auth-001"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "failedCode": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "Internal server error",
+                "failedCode": "import-045"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X GET \"https://apiweb.mile.app/api/v3/import-monitoring/65f8a4c2d9e3b1234567890a\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ImportMonitoringObject": {
+      "title": "ImportMonitoringObject",
+      "type": "object",
+      "description": "Complete import monitoring record with all fields from the ImportMonitoring model",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Unique identifier for the import monitoring record generated by system.<br>**Example:** `65f8a4c2d9e3b1234567890a`"
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Organization ID that owns this import.<br>**Example:** `63c61d865347e356d05e3052`"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of import. Determines which type-specific fields are populated.<br>**enum:** `datasource`, `task`, `visit`, `route`<br>**Example:** `datasource`",
+          "enum": [
+            "datasource",
+            "task",
+            "visit",
+            "route"
+          ]
+        },
+        "hubId": {
+          "type": "string",
+          "description": "Hub ID associated with this import (if applicable).<br>**Example:** `63c63ab1b6972d3150348172`"
+        },
+        "filename": {
+          "type": "string",
+          "description": "Original filename of the uploaded file.<br>**Example:** `outlets_import.xlsx`"
+        },
+        "totalRows": {
+          "type": "integer",
+          "description": "Total number of rows in the imported file (excluding header).<br>**Example:** `150`"
+        },
+        "totalValid": {
+          "type": "integer",
+          "description": "Total number of valid rows successfully imported.<br>**Example:** `145`"
+        },
+        "totalInvalid": {
+          "type": "integer",
+          "description": "Total number of invalid rows that failed validation or import.<br>**Example:** `5`"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the import process.<br>- `onprocess`: Import is currently being processed<br>- `success`: All rows imported successfully<br>- `partially`: Some rows succeeded, some failed<br>- `failed`: Import completely failed<br>**enum:** `onprocess`, `success`, `partially`, `failed`<br>**Example:** `partially`",
+          "enum": [
+            "onprocess",
+            "success",
+            "partially",
+            "failed"
+          ]
+        },
+        "fileTemplate": {
+          "type": "string",
+          "description": "URL to download the template file for this import type. Template is generated based on data type schema or flow configuration.<br>**Example:** `https://staticdev.mile.app/dev-mile/templates/template_OutletDetail.xlsx`"
+        },
+        "fileFailedImported": {
+          "type": "string",
+          "description": "URL to download file containing failed records. Only available when status is 'partially' or 'failed' and there are invalid rows. File includes error messages for each failed row.<br>**Example:** `https://staticdev.mile.app/dev-mile/failed/failed_outlets_import_65f8a4c2d9e3b1234567890a.xlsx`"
+        },
+        "dataTypeId": {
+          "type": "string",
+          "description": "**[Datasource Import Only]** Data type ID for datasource imports. This field is populated only when type='datasource'.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get valid data type IDs.<br>**Example:** `63db2fb476bc679c540369c4`"
+        },
+        "dataTypeName": {
+          "type": "string",
+          "description": "**[Datasource Import Only]** Data type name for datasource imports. This field is populated only when type='datasource'.<br>**Example:** `OutletDetail`"
+        },
+        "flowId": {
+          "type": "string",
+          "description": "**[Task Import Only]** Flow ID for task imports. This field is populated only when type='task'. Note: Full task import implementation may still be in progress.<br>Use <a href='#tag/Flow/operation/getflow'>GET /flows API</a> to get valid flow IDs.<br>**Example:** `63d8c9b0dbd5ef20a627dd86`"
+        },
+        "flowName": {
+          "type": "string",
+          "description": "**[Task Import Only]** Flow name for task imports. This field is populated only when type='task'. Note: Full task import implementation may still be in progress.<br>**Example:** `Delivery`"
+        },
+        "visitTypeId": {
+          "type": "string",
+          "description": "**[Visit Import Only - Future]** Visit type ID for visit imports. This field will be populated when type='visit'. Feature may be under development.<br>**Example:** `64a5c8d2e9f1b2345678901c`"
+        },
+        "visitTypeName": {
+          "type": "string",
+          "description": "**[Visit Import Only - Future]** Visit type name for visit imports. This field will be populated when type='visit'. Feature may be under development.<br>**Example:** `Customer Visit`"
+        },
+        "routeConfigId": {
+          "type": "string",
+          "description": "**[Route Import Only - Future]** Route configuration ID for route imports. This field will be populated when type='route'. Feature may be under development.<br>**Example:** `65b6d9e3f0a2c3456789012d`"
+        },
+        "routeConfigName": {
+          "type": "string",
+          "description": "**[Route Import Only - Future]** Route configuration name for route imports. This field will be populated when type='route'. Feature may be under development.<br>**Example:** `Daily Route Config`"
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "Error message if the import completely failed. Populated when status='failed'.<br>**Example:** `File validation failed: Invalid data type ID`"
+        },
+        "processedAt": {
+          "type": "string",
+          "description": "Timestamp when the import processing was completed. Format: Y-m-d H:i:s<br>**Example:** `2024-03-18 10:32:15`"
+        },
+        "processingDuration": {
+          "type": "integer",
+          "description": "Duration of import processing in seconds. Calculated as difference between processedAt and createdTime.<br>**Example:** `90`"
+        },
+        "totalChunks": {
+          "type": "integer",
+          "description": "Total number of chunks the file was divided into for processing. Large files are processed in chunks for better performance.<br>**Example:** `3`"
+        },
+        "processedChunks": {
+          "type": "integer",
+          "description": "Number of chunks that have been processed. Use this with totalChunks to calculate processing progress.<br>**Example:** `3`"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Email of the user who initiated the import.<br>**Example:** `john.doe@mile.app`"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Email of the user/system that last updated this record. Usually 'system' for background processing updates.<br>**Example:** `system`"
+        },
+        "createdTime": {
+          "type": "string",
+          "description": "Timestamp when the import was created. Format: Y-m-d H:i:s<br>**Example:** `2024-03-18 10:30:45`"
+        },
+        "updatedTime": {
+          "type": "string",
+          "description": "Timestamp when the record was last updated. Format: Y-m-d H:i:s<br>**Example:** `2024-03-18 10:32:15`"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "title": "ErrorResponse",
+      "type": "object",
+      "description": "Standard error response structure",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Always false for error responses"
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable error message"
+        },
+        "failedCode": {
+          "type": "string",
+          "description": "Error code for debugging and error tracking"
+        }
+      },
+      "required": [
+        "status",
+        "message"
+      ]
+    }
+  },
+  "parameters": {
+    "pageInQuery": {
+      "name": "page",
+      "in": "query",
+      "required": false,
+      "type": "integer",
+      "description": "Page number for pagination.<br>**Example:** `1`<br>**Default:** `1`"
+    },
+    "limitInQuery": {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "type": "integer",
+      "description": "Number of records per page.<br>**Example:** `20`<br>**Default:** `20`"
+    },
+    "responses": {
+      "badRequest": {
+        "schema": {
+          "$ref": "#/definitions/ErrorResponse"
+        }
+      },
+      "notFound": {
+        "schema": {
+          "$ref": "#/definitions/ErrorResponse"
+        }
+      },
+      "serverError": {
+        "schema": {
+          "$ref": "#/definitions/ErrorResponse"
+        }
+      }
+    }
+  }
+}

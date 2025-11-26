@@ -1,0 +1,2593 @@
+{
+  "swagger": "2.0",
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/results": {
+      "get": {
+        "summary": "Read routing results",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "result",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "description": "This API endpoint allows you to retrieve a list of routing optimization results by specifying different parameters for filtering and sorting.",
+        "parameters": [
+          {
+            "name": "resultCode",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "An unique value for result optimization data serving as an alternative identifier. **Example:** `Route-20230801-001`"
+          },
+          {
+            "$ref": "#/parameters/hubIdInQuery"
+          },
+          {
+            "$ref": "#/parameters/pageInQuery"
+          },
+          {
+            "$ref": "#/parameters/limitInQuery"
+          },
+          {
+            "name": "s",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Search routing results by result name or assignee email. **Example:** `routing`"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Sort the result-set in ascending or descending order based on selected field. <br>**Example:** `name`, `hubId`, `hubCoordinate`, etc. **Default:** `createdTime`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Choose ascending or descending order for sorting the results. **Example:** `asc` or `desc`. **Default:** `desc`"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "List of fields to include in the response, separated by comma `(,)` delimiter.<br>**Example:** `createdTime,configurationId,createdBy,resultTotal,name,configuration`"
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Retrieves results starting from this date onwards. Supports the following formats: <br> `Y-m-d` **Example:** `2023-08-08` <br>`Y-m-d H:i:S` **Example:** `2023-08-08 00:00:00` <br> `Y-m-dTH:i:s.sssZ`. **Example:** `2023-08-08T00:00:00.000Z`"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Retrieves results up to this specified date. Use in combination with `dateFrom` to define a date range. Supports the following formats: <br> `Y-m-d` **Example:** `2023-08-08` <br>`Y-m-d H:i:S` **Example:** `2023-08-08 00:00:00` <br> `Y-m-dTH:i:s.sssZ`. **Example:** `2023-08-08T00:00:00.000Z` "
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "ResultGetSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Object of pagination data.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "description": "List of routing results object",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "current_page": 1,
+                  "data": [
+                    {
+                      "_id": "6352736c628401059b37a2e2",
+                      "name": "Result Today",
+                      "configurationId": null,
+                      "configuration": {
+                        "defaultVisitTime": 10,
+                        "defaultSpeed": 15,
+                        "multitrip": false,
+                        "returnToHub": true,
+                        "useAllVehicle": false,
+                        "clustering": false,
+                        "capacityConstraint": [
+                          "weight"
+                        ],
+                        "name": "Configuration Default",
+                        "autoSpeed": false,
+                        "autoSplit": "none",
+                        "useOddEven": true,
+                        "oddEvenTime": [
+                          {
+                            "startTime": "07:00",
+                            "endTime": "10:00"
+                          },
+                          {
+                            "startTime": "17:00",
+                            "endTime": "20:00"
+                          }
+                        ]
+                      },
+                      "routingDate": "2023-08-08",
+                      "resultCode": "1129812812",
+                      "finishTime": "2023-02-06T01:20:36+00:00",
+                      "updatedTime": "2023-02-06T01:20:36+00:00",
+                      "createdTime": "2023-02-06T01:18:36+00:00",
+                      "resultTotal": {
+                        "routing": 1,
+                        "dropped": 1,
+                        "total": 2
+                      },
+                      "createdBy": "635f6a9a8e47b604ed5f5e08",
+                      "user": {
+                        "name": "Marshall Teach"
+                      }
+                    }
+                  ],
+                  "first_page_url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=1",
+                  "from": 1,
+                  "last_page": 1,
+                  "last_page_url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=45",
+                  "links": [
+                    {
+                      "url": null,
+                      "label": "&laquo; Previous",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=1",
+                      "label": "1",
+                      "active": true
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=2",
+                      "label": "2",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=3",
+                      "label": "3",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=4",
+                      "label": "4",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=5",
+                      "label": "5",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=6",
+                      "label": "6",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=7",
+                      "label": "7",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=8",
+                      "label": "8",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=9",
+                      "label": "9",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=10",
+                      "label": "10",
+                      "active": false
+                    },
+                    {
+                      "url": null,
+                      "label": "...",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=44",
+                      "label": "44",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=45",
+                      "label": "45",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=2",
+                      "label": "Next &raquo;",
+                      "active": false
+                    }
+                  ],
+                  "next_page_url": "https://apiweb.mile.app/api/v3/results?hubId=635f6ad98e47b604ed5f5e09&limit=10&sortBy=createdTime&sortOrder=DESC&fields=createdTime%2CconfigurationId%2CcreatedBy%2CresultTotal%2Cname%2Cconfiguration&page=2",
+                  "path": "https://apiweb.mile.app/api/v3/results",
+                  "per_page": 10,
+                  "prev_page_url": null,
+                  "to": 10,
+                  "total": 1
+                },
+                "status": true
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/result/{resultId}": {
+      "get": {
+        "summary": "Read routing result by ID",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "result/id1",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "description": "This API endpoint allows you to retrieve the details of a specific routing result by providing its unique identifier.",
+        "parameters": [
+          {
+            "name": "resultId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the routing result that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "title": "ResultGetSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Object of routing result data.",
+                  "type": "array"
+                }
+              },
+              "example": {
+                "data": {
+                  "_id": "6352736c628401059b37a2e2",
+                  "name": "Result Today",
+                  "result": {
+                    "resultCode": "Route-20230801-001",
+                    "routing": [
+                      {
+                        "vehicleId": "63da418fc05c0d0269071cf3",
+                        "vehicleName": "B001ACB 1",
+                        "assignee": "roberto@mile.app",
+                        "workingTime": {
+                          "startTime": "08:00",
+                          "endTime": "17:00"
+                        },
+                        "vehicleTags": [
+                          "West",
+                          "Odd"
+                        ],
+                        "isOddEven": true,
+                        "oddEven": "even",
+                        "trips": [
+                          {
+                            "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                            "coordinate": "-6.17148,106.82649",
+                            "isHub": true,
+                            "weight": 0,
+                            "travelTime": 0,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "8:00:00",
+                            "etd": "8:00:00",
+                            "distance": 0,
+                            "order": 0
+                          },
+                          {
+                            "visitId": "taskId-63994a54e1528d445641d9a2",
+                            "visitName": "Visit 1",
+                            "address": "Neo Soho, Jakarta Barat",
+                            "coordinate": "-6.261532638313604,106.80685970157342",
+                            "isHub": false,
+                            "tags": [
+                              "West",
+                              "Odd"
+                            ],
+                            "timeWindow": {
+                              "startTime": null,
+                              "endTime": null
+                            },
+                            "weight": 0,
+                            "travelTime": 31,
+                            "visitTime": 17,
+                            "waitingTime": 0,
+                            "eta": "8:30:46",
+                            "etd": "8:47:46",
+                            "distance": 12817,
+                            "order": 1,
+                            "allowOddEven": true
+                          },
+                          {
+                            "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                            "coordinate": "-6.17148,106.82649",
+                            "isHub": true,
+                            "weight": 0,
+                            "travelTime": 3,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "9:41:12",
+                            "etd": "9:41:12",
+                            "distance": 974,
+                            "order": 3
+                          }
+                        ],
+                        "totalWeight": 0,
+                        "vehicleMaxWeight": 100,
+                        "vehicleMinWeight": 0,
+                        "weightPercentage": "0%",
+                        "fixedCost": 0,
+                        "totalNodes": 3,
+                        "totalVisits": 1,
+                        "speed": 25,
+                        "totalTravelTime": 69,
+                        "totalDistance": 27996,
+                        "totalVisitTime": 34,
+                        "totalWaitingTime": 0,
+                        "totalSpentTime": 103
+                      }
+                    ],
+                    "dropped": [
+                      {
+                        "id": "taskId-63970a49cc6ae973f90929e2",
+                        "name": "Visit 2",
+                        "address": "Gambir Jakarta",
+                        "coordinate": "-6.17148,106.82649",
+                        "timeWindow": {
+                          "startTime": null,
+                          "endTime": null
+                        },
+                        "visitTime": "20",
+                        "capacity": {
+                          "weight": 20.12345
+                        },
+                        "tags": [
+                          "63da418fc05c0d0269071cf2"
+                        ],
+                        "assignedVehicleId": "63da418fc05c0d0269071cf2",
+                        "isHub": false,
+                        "reason": "No vehicle with matching tags",
+                        "visitId": "taskId-63970a49cc6ae973f90929e2",
+                        "visitName": "Visit 2"
+                      }
+                    ],
+                    "summary": {
+                      "routedVisits": 1,
+                      "droppedVisits": 1,
+                      "totalVisits": 2,
+                      "usedVehicles": 1,
+                      "unusedVehicles": 0,
+                      "totalVehicles": 1,
+                      "totalDistance": 22666,
+                      "totalTravelTime": 34,
+                      "totalVisitTime": 12,
+                      "totalWaitingTime": 0,
+                      "totalSpentTime": 22712,
+                      "minFinishTime": "09:41:12",
+                      "maxFinishTime": "09:41:12",
+                      "avgFinishTime": "09:41:12",
+                      "avgSpeed": 30,
+                      "capacityConstraint": [
+                        {
+                          "name": "weight",
+                          "optimized": 100,
+                          "available": 300,
+                          "percentage": 33.3
+                        }
+                      ]
+                    }
+                  },
+                  "hubId": "635f6ad98e47b604ed5f5e09",
+                  "hubCoordinate": "-6.17148,106.82649",
+                  "configurationId": null,
+                  "configuration": {
+                    "defaultVisitTime": 10,
+                    "defaultSpeed": 15,
+                    "multitrip": false,
+                    "returnToHub": true,
+                    "useAllVehicle": true,
+                    "clustering": false,
+                    "capacityConstraint": [
+                      "weight"
+                    ],
+                    "name": "Configuration Default",
+                    "autoSpeed": false,
+                    "tripsPerVehicle": -1,
+                    "useOddEven": true,
+                    "oddEvenTime": [
+                      {
+                        "startTime": "07:00",
+                        "endTime": "10:00"
+                      },
+                      {
+                        "startTime": "17:00",
+                        "endTime": "20:00"
+                      }
+                    ]
+                  },
+                  "routingDate": "2023-08-08",
+                  "resultCode": "1129812812",
+                  "finishTime": "2023-02-06T01:20:36+00:00",
+                  "updatedTime": "2023-02-06T01:20:36+00:00",
+                  "createdTime": "2023-02-06T01:18:36+00:00",
+                  "resultTotal": {
+                    "routing": 1,
+                    "dropped": 1,
+                    "total": 2
+                  },
+                  "organizationId": "635f6a998e47b604ed5f5e02",
+                  "createdBy": "635f6a9a8e47b604ed5f5e08",
+                  "user": {
+                    "name": "Marshall Teach"
+                  }
+                },
+                "status": true
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update routing result by ID",
+        "tags": [
+          "Routing"
+        ],
+        "description": "The API PUT request for Routing Result by ID serves to update the existing routing result using the provided payload data. This action involves a comprehensive replacement of all present data within the routing result with the new information supplied in the payload. It's important to exercise caution when utilizing this request, as improper handling could lead to unintended data loss. <br> <br> In addition to the primary effects, the successful execution of the PUT request triggers an automatic recalculation of the summary associated with the modified routing result. This step ensures that the summary remains synchronized with the updated data, providing an accurate representation of the routing result's current state.",
+        "operationId": "result/id",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "resultId",
+            "in": "path",
+            "required": false,
+            "type": "string",
+            "description": "Unique identifier for the routing result that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PUT~1ResultRequestUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "ResultGetSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Object of routing result data.",
+                  "type": "array"
+                }
+              },
+              "example": {
+                "status": true,
+                "property": {
+                  "_id": "6352736c628401059b37a2e2",
+                  "name": "Result Today",
+                  "result": {
+                    "resultCode": "Route-20230801-001",
+                    "routing": [
+                      {
+                        "vehicleId": "63da418fc05c0d0269071cf3",
+                        "vehicleName": "B001ACB 1",
+                        "assignee": "roberto@mile.app",
+                        "workingTime": {
+                          "startTime": "08:00",
+                          "endTime": "17:00"
+                        },
+                        "vehicleTags": [
+                          "West",
+                          "Odd"
+                        ],
+                        "isOddEven": true,
+                        "oddEven": "even",
+                        "trips": [
+                          {
+                            "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                            "coordinate": "-6.17148,106.82649",
+                            "isHub": true,
+                            "weight": 0,
+                            "travelTime": 0,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "8:00:00",
+                            "etd": "8:00:00",
+                            "distance": 0,
+                            "order": 0
+                          },
+                          {
+                            "visitId": "taskId-63994a54e1528d445641d9a2",
+                            "visitName": "Visit 1",
+                            "address": "Neo Soho, Jakarta Barat",
+                            "coordinate": "-6.261532638313604,106.80685970157342",
+                            "isHub": false,
+                            "tags": [
+                              "West",
+                              "Odd"
+                            ],
+                            "timeWindow": {
+                              "startTime": null,
+                              "endTime": null
+                            },
+                            "weight": 0,
+                            "travelTime": 31,
+                            "visitTime": 17,
+                            "waitingTime": 0,
+                            "eta": "8:30:46",
+                            "etd": "8:47:46",
+                            "distance": 12817,
+                            "order": 1,
+                            "allowOddEven": true
+                          },
+                          {
+                            "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                            "coordinate": "-6.17148,106.82649",
+                            "isHub": true,
+                            "weight": 0,
+                            "travelTime": 3,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "9:41:12",
+                            "etd": "9:41:12",
+                            "distance": 974,
+                            "order": 3
+                          }
+                        ],
+                        "totalWeight": 0,
+                        "vehicleMaxWeight": 100,
+                        "vehicleMinWeight": 0,
+                        "weightPercentage": "0%",
+                        "fixedCost": 0,
+                        "totalNodes": 3,
+                        "totalVisits": 1,
+                        "speed": 25,
+                        "totalTravelTime": 69,
+                        "totalDistance": 27996,
+                        "totalVisitTime": 34,
+                        "totalWaitingTime": 0,
+                        "totalSpentTime": 103
+                      }
+                    ],
+                    "dropped": [
+                      {
+                        "id": "taskId-63970a49cc6ae973f90929e2",
+                        "name": "Visit 2",
+                        "address": "Gambir Jakarta",
+                        "coordinate": "-6.17148,106.82649",
+                        "timeWindow": {
+                          "startTime": null,
+                          "endTime": null
+                        },
+                        "visitTime": "20",
+                        "capacity": {
+                          "weight": 20.12345
+                        },
+                        "tags": [
+                          "63da418fc05c0d0269071cf2"
+                        ],
+                        "assignedVehicleId": "63da418fc05c0d0269071cf2",
+                        "isHub": false,
+                        "reason": "No vehicle with matching tags",
+                        "visitId": "taskId-63970a49cc6ae973f90929e2",
+                        "visitName": "Visit 2"
+                      }
+                    ],
+                    "summary": {
+                      "routedVisits": 1,
+                      "droppedVisits": 1,
+                      "totalVisits": 2,
+                      "usedVehicles": 1,
+                      "unusedVehicles": 0,
+                      "totalVehicles": 1,
+                      "totalDistance": 22666,
+                      "totalTravelTime": 34,
+                      "totalVisitTime": 12,
+                      "totalWaitingTime": 0,
+                      "totalSpentTime": 22712,
+                      "minFinishTime": "09:41:12",
+                      "maxFinishTime": "09:41:12",
+                      "avgFinishTime": "09:41:12",
+                      "avgSpeed": 30,
+                      "capacityConstraint": [
+                        {
+                          "name": "weight",
+                          "optimized": 100,
+                          "available": 300,
+                          "percentage": 33.3
+                        }
+                      ]
+                    }
+                  },
+                  "hubId": "635f6ad98e47b604ed5f5e09",
+                  "hubCoordinate": "-6.17148,106.82649",
+                  "configurationId": null,
+                  "configuration": {
+                    "defaultVisitTime": 10,
+                    "defaultSpeed": 15,
+                    "multitrip": false,
+                    "returnToHub": true,
+                    "useAllVehicle": true,
+                    "clustering": false,
+                    "capacityConstraint": [
+                      "weight"
+                    ],
+                    "name": "Configuration Default",
+                    "autoSpeed": false,
+                    "tripsPerVehicle": -1,
+                    "useOddEven": true,
+                    "oddEvenTime": [
+                      {
+                        "startTime": "07:00",
+                        "endTime": "10:00"
+                      },
+                      {
+                        "startTime": "17:00",
+                        "endTime": "20:00"
+                      }
+                    ]
+                  },
+                  "routingDate": "2023-08-08",
+                  "createdTime": "2023-02-06T01:18:36+00:00",
+                  "resultTotal": {
+                    "routing": 1,
+                    "dropped": 1,
+                    "total": 2
+                  },
+                  "organizationId": "635f6a998e47b604ed5f5e02",
+                  "createdBy": "635f6a9a8e47b604ed5f5e08",
+                  "updatedTime": "2023-02-06T06:59:03+00:00",
+                  "user": {
+                    "name": "Marshall Teach"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update partially routing result by ID",
+        "tags": [
+          "Routing"
+        ],
+        "description": "When using the PATCH method with this API, it's important to note that the result summary is not recalculated. This API is specifically designed for renaming the result without triggering the recalculation of associated data or summaries. If any changes requiring recalculation are necessary, consider using the appropriate PUT API to initiate recalculation processes.",
+        "operationId": "patch/result/id",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "resultId",
+            "in": "path",
+            "required": false,
+            "type": "string",
+            "description": "Unique identifier for the routing result that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PATCH~1ResultRequestUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "ResultGetSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "Message of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Object of routing result data.",
+                  "type": "array"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "_id": "6352736c628401059b37a2e2",
+                  "name": "Result Today",
+                  "result": {
+                    "resultCode": "Route-20230801-001",
+                    "routing": [
+                      {
+                        "vehicleId": "63da418fc05c0d0269071cf3",
+                        "vehicleName": "B001ACB 1",
+                        "assignee": "roberto@mile.app",
+                        "workingTime": {
+                          "startTime": "08:00",
+                          "endTime": "17:00"
+                        },
+                        "vehicleTags": [
+                          "West",
+                          "Odd"
+                        ],
+                        "isOddEven": true,
+                        "oddEven": "even",
+                        "trips": [
+                          {
+                            "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                            "coordinate": "-6.17148,106.82649",
+                            "isHub": true,
+                            "weight": 0,
+                            "travelTime": 0,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "8:00:00",
+                            "etd": "8:00:00",
+                            "distance": 0,
+                            "order": 0
+                          },
+                          {
+                            "visitId": "taskId-63994a54e1528d445641d9a2",
+                            "visitName": "Visit 1",
+                            "address": "Neo Soho, Jakarta Barat",
+                            "coordinate": "-6.261532638313604,106.80685970157342",
+                            "isHub": false,
+                            "tags": [
+                              "West",
+                              "Odd"
+                            ],
+                            "timeWindow": {
+                              "startTime": null,
+                              "endTime": null
+                            },
+                            "weight": 0,
+                            "travelTime": 31,
+                            "visitTime": 17,
+                            "waitingTime": 0,
+                            "eta": "8:30:46",
+                            "etd": "8:47:46",
+                            "distance": 12817,
+                            "order": 1,
+                            "allowOddEven": true
+                          },
+                          {
+                            "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                            "coordinate": "-6.17148,106.82649",
+                            "isHub": true,
+                            "weight": 0,
+                            "travelTime": 3,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "9:41:12",
+                            "etd": "9:41:12",
+                            "distance": 974,
+                            "order": 3
+                          }
+                        ],
+                        "totalWeight": 0,
+                        "vehicleMaxWeight": 100,
+                        "vehicleMinWeight": 0,
+                        "weightPercentage": "0%",
+                        "fixedCost": 0,
+                        "totalNodes": 3,
+                        "totalVisits": 1,
+                        "speed": 25,
+                        "totalTravelTime": 69,
+                        "totalDistance": 27996,
+                        "totalVisitTime": 34,
+                        "totalWaitingTime": 0,
+                        "totalSpentTime": 103
+                      }
+                    ],
+                    "dropped": [
+                      {
+                        "id": "taskId-63970a49cc6ae973f90929e2",
+                        "name": "Visit 2",
+                        "address": "Gambir Jakarta",
+                        "coordinate": "-6.17148,106.82649",
+                        "timeWindow": {
+                          "startTime": null,
+                          "endTime": null
+                        },
+                        "visitTime": "20",
+                        "capacity": {
+                          "weight": 20.12345
+                        },
+                        "tags": [
+                          "63da418fc05c0d0269071cf2"
+                        ],
+                        "assignedVehicleId": "63da418fc05c0d0269071cf2",
+                        "isHub": false,
+                        "reason": "No vehicle with matching tags",
+                        "visitId": "taskId-63970a49cc6ae973f90929e2",
+                        "visitName": "Visit 2"
+                      }
+                    ],
+                    "summary": {
+                      "routedVisits": 1,
+                      "droppedVisits": 1,
+                      "totalVisits": 2,
+                      "usedVehicles": 1,
+                      "unusedVehicles": 0,
+                      "totalVehicles": 1,
+                      "totalDistance": 22666,
+                      "totalTravelTime": 34,
+                      "totalVisitTime": 12,
+                      "totalWaitingTime": 0,
+                      "totalSpentTime": 22712,
+                      "minFinishTime": "09:41:12",
+                      "maxFinishTime": "09:41:12",
+                      "avgFinishTime": "09:41:12",
+                      "avgSpeed": 30,
+                      "capacityConstraint": [
+                        {
+                          "name": "weight",
+                          "optimized": 100,
+                          "available": 300,
+                          "percentage": 33.3
+                        }
+                      ]
+                    }
+                  },
+                  "hubId": "635f6ad98e47b604ed5f5e09",
+                  "hubCoordinate": "-6.17148,106.82649",
+                  "configurationId": null,
+                  "configuration": {
+                    "defaultVisitTime": 10,
+                    "defaultSpeed": 15,
+                    "multitrip": false,
+                    "returnToHub": true,
+                    "useAllVehicle": true,
+                    "clustering": false,
+                    "capacityConstraint": [
+                      "weight"
+                    ],
+                    "name": "Configuration Default",
+                    "autoSpeed": false,
+                    "tripsPerVehicle": -1,
+                    "useOddEven": true,
+                    "oddEvenTime": [
+                      {
+                        "startTime": "07:00",
+                        "endTime": "10:00"
+                      },
+                      {
+                        "startTime": "17:00",
+                        "endTime": "20:00"
+                      }
+                    ]
+                  },
+                  "routingDate": "2023-08-08",
+                  "createdTime": "2023-02-06T01:18:36+00:00",
+                  "resultTotal": {
+                    "routing": 1,
+                    "dropped": 1,
+                    "total": 2
+                  },
+                  "organizationId": "635f6a998e47b604ed5f5e02",
+                  "createdBy": "635f6a9a8e47b604ed5f5e08",
+                  "updatedTime": "2023-02-06T06:59:03+00:00",
+                  "user": {
+                    "name": "Marshall Teach"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete routing result by ID",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "Deleteresult/id",
+        "deprecated": false,
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "resultId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the routing result that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "title": "ResultGetSuccess",
+              "properties": {
+                "_id": {
+                  "description": "ID of deleted routing result.",
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "Message of response.",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "_id": "61e9754ce857492fd34de7c2",
+                "status": true,
+                "message": "Result successfully deleted."
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/routing": {
+      "post": {
+        "summary": "Route optimize",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "routing",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/routing-request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Object of details result routing data.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "data": {
+                  "name": "Result 01-24-2023 02:54:09",
+                  "status": "done",
+                  "resultCode": "Route-20230801-001",
+                  "result": {
+                    "routing": [
+                      {
+                        "vehicleId": "6352736c628401059b37a2e2",
+                        "vehicleName": "B001ACB",
+                        "assignee": "miguel@mile.app",
+                        "workingTime": {
+                          "startTime": "08:00:00",
+                          "endTime": "17:00:00"
+                        },
+                        "vehicleTags": [
+                          "Even",
+                          "East"
+                        ],
+                        "isOddEven": true,
+                        "trips": [
+                          {
+                            "visitId": "hub-6352736c628401059b37a2e2",
+                            "coordinate": "-6.17527,106.82581",
+                            "weight": 0,
+                            "volume": 0,
+                            "isHub": true,
+                            "travelTime": 0,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "08:00:00",
+                            "etd": "08:00:00",
+                            "distance": 0,
+                            "order": 0
+                          },
+                          {
+                            "visitId": "task-6311cc36db29775ad01694e6",
+                            "visitName": "Visit 1",
+                            "address": "Neo Soho, Jakarta Barat",
+                            "coordinate": "-6.230815251666679,106.75684387903198",
+                            "tags": [
+                              "Even",
+                              "East"
+                            ],
+                            "allowOddEven": true,
+                            "isHub": false,
+                            "weight": 100,
+                            "volume": 150,
+                            "travelTime": 34,
+                            "visitTime": 12,
+                            "waitingTime": 0,
+                            "eta": "08:34:00",
+                            "etd": "08:46:00",
+                            "distance": 22666,
+                            "order": 1
+                          }
+                        ],
+                        "totalWeight": 0,
+                        "vehicleMaxWeight": 300,
+                        "vehicleMinWeight": 0,
+                        "weightPercentage": "0%",
+                        "totalVolume": 0,
+                        "vehicleMaxVolume": 1000,
+                        "vehicleMinVolume": 0,
+                        "volumePercentage": "0%",
+                        "fixedCost": 0,
+                        "totalNodes": 2,
+                        "totalVisits": 1,
+                        "speed": 30,
+                        "totalTravelTime": 34,
+                        "totalDistance": 22666
+                      }
+                    ],
+                    "dropped": [
+                      {
+                        "id": "63970a49cc6ae973f90929e2",
+                        "name": "Visit 2",
+                        "address": "Gambir Jakarta",
+                        "coordinate": "-6.17148,106.82649",
+                        "timeWindow": {
+                          "startTime": "08:00:00",
+                          "endTime": "16:00:00"
+                        },
+                        "visitTime": 10,
+                        "capacity": {
+                          "weight": 2500,
+                          "volume": 6000
+                        },
+                        "tags": [
+                          "Even",
+                          "East"
+                        ],
+                        "weight": 2500,
+                        "volume": 6000,
+                        "isHub": false,
+                        "reason": "Dropped due to constraint"
+                      }
+                    ],
+                    "summary": {
+                      "routedVisits": 1,
+                      "droppedVisits": 1,
+                      "totalVisits": 2,
+                      "usedVehicles": 1,
+                      "unusedVehicles": 0,
+                      "totalVehicles": 1,
+                      "totalDistance": 22666,
+                      "totalTravelTime": 34,
+                      "totalVisitTime": 12,
+                      "totalWaitingTime": 0,
+                      "totalSpentTime": 22712,
+                      "minFinishTime": "08:46:00",
+                      "maxFinishTime": "08:46:00",
+                      "avgFinishTime": "08:46:00",
+                      "avgSpeed": 30,
+                      "capacityConstraint": [
+                        {
+                          "name": "weight",
+                          "optimized": 100,
+                          "available": 300,
+                          "percentage": 33.3
+                        },
+                        {
+                          "name": "volume",
+                          "optimized": 150,
+                          "available": 1000,
+                          "percentage": 15
+                        }
+                      ]
+                    },
+                    "countryCode": "IDN",
+                    "resultCode": "Route-20230801-001"
+                  },
+                  "hubId": "6352736c628401059b37a2e2",
+                  "hubCoordinate": "-6.17148,106.82649",
+                  "configuration": {
+                    "name": "Configuration Default",
+                    "defaultSpeed": 10,
+                    "defaultVisitTime": 10,
+                    "autoSplit": "none",
+                    "multitrip": false,
+                    "clustering": false,
+                    "returnToHub": false,
+                    "useAllVehicle": false,
+                    "autoSpeed": false,
+                    "autoMerge": false,
+                    "capacityConstraint": [
+                      "weight",
+                      "width",
+                      "volume"
+                    ],
+                    "crossDockingType": "all",
+                    "subHubs": [
+                      {
+                        "id": "660ce14bf7613e566145fe86",
+                        "name": "Testing",
+                        "address": "Jalan Kalimaro, Cirebon Kabupaten 45694, Indonesia",
+                        "coordinate": "-6.84337,108.71348"
+                      }
+                    ]
+                  },
+                  "createdTime": "2023-01-24T07:54:09+00:00",
+                  "resultTotal": {
+                    "routing": 1,
+                    "dropped": 1,
+                    "total": 2
+                  },
+                  "organizationId": "635f6a998e47b604ed5f5e02",
+                  "createdBy": "635f6a9a8e47b604ed5f5e08",
+                  "updatedTime": "2023-01-24T07:54:09+00:00",
+                  "_id": "63cf8ea11209ff54de2c15d2",
+                  "user": {
+                    "name": "Vasco Da Gama"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/dispatch": {
+      "post": {
+        "summary": "Dispatch routing result",
+        "description": "Dispatch Routing Result API facilitates the practical implementation of recommended routes generated by a route optimization algorithm. This process involves translating the algorithm's output into real-world actions. When the route optimization algorithm is executed, it computes the most efficient and cost-effective routes for a fleet of vehicles to navigate through multiple designated locations, such as delivery points and service stops. In our case, **dispatching** means assigning visits to particular vehicles and users. Once the dispatching process is completed, several key attributes are added to each task to provide comprehensive route information. These attributes include **assignedVehicle**, **assignedVehicleId**, **assignee**, **distance**, **eta**, **etd**, **routePlannedOrder**, **waitingTime**, and other related fields you can find the details below:\n        \n\n        \n\n        | Field | Type | Description | \n\n        |---|---|---| \n\n        | assignedVehicle | <a href='#section/Introduction/Format'>object</a> | The details of the assigned vehicle for the route. It containing the following details: <br>\n        **Assignee email:** The email address of the assigned user. <br>\n        **Assignee name:** The name of the assigned vehicle. <br>\n        **Speed:** The speed at which the vehicle operates. <br>\n        **Working time:** The duration of time the vehicle is operational. <br>\n        **Vehicle ID:** The unique identifier of the assigned vehicle. |\n\n        | assignedVehicleId | <a href='#section/Introduction/Format'>string</a> | The Unique ID is used to mark a vehicle during route optimization to ensure that the visit associated with this vehicle ID remains assigned to the same vehicle in the subsequent optimization route and does not get randomly assigned to another vehicle. |\n\n        | assignee | <a href='#section/Introduction/Format'>array of string</a> | Lists the users who have been assigned to the route. |\n\n        | distance | <a href='#section/Introduction/Format'>integer</a> | Indicates the distance between locations along the route, measured in meters. |\n\n        | eta | <a href='#section/Introduction/Format'>string</a> | Stands for Estimated Time of Arrival. Provides an estimated arrival time at a specific hub or location. |\n\n        | etd | <a href='#section/Introduction/Format'>string</a> | Stands for Estimated Time of Departure. Provides an estimated departure time from a given hub or location. |\n\n        | routePlannedOrder | <a href='#section/Introduction/Format'>integer</a> | The\u00a0routePlannedOrder\u00a0serves as the key to identify that a visit has been successfully optimized within a specific route. It also helps to determine the order of that visit within the optimized route. |\n\n        | waitingTime | <a href='#section/Introduction/Format'>integer</a> | Represents the waiting time at a particular hub or location before proceeding to the subsequent destination or action. Expressed in units such as minutes. |\n\n        | routingResultId | <a href='#section/Introduction/Format'>string</a> | Contains information about which result is being dispatched. |\n\n        \n\n        There are several cases where dispatch not only carries out assignments to users, but also carries out additional business processes to adjust the configuration algorithm during the routing process, including: <br><br>\n        \n\n        **Dispatch with Cross Docking**. When  optimizing routes using cross docking, the dispatch process changes quite a bit. It creates a new task to move items from the main hub to the sub-hubs named `Handover`. Remember, the task's location is now moved to the sub-hubs since they'll handle the final delivery.\n        At the main hub, it will only have the handover tasks and the tasks that are directly delivered from the main hub to the final destination. These tasks include relevant information such as `Handover From` (taken from the assignee vehicle), `Handover To` (user input), and `List Order` (task title).\n        The dispatch process will also generate a new task flow named `Handover` if you haven't used cross docking before.\n        \n\n        \n\n        **Dispatch with Auto Split**. When using the auto split feature in routing optimization, a single visit may be divided into multiple visits, resulting in the creation of new tasks upon dispatching. For example, if a visit with a capacity of 100kg is split into two visits, each with a capacity of 50kg, the system will generate a new task while retaining the original task. Consequently, there will be two tasks in total.<br>\n        - **Original Task Update**: The capacity of the original task will be adjusted from 100kg to 50kg to reflect the split.<br>\n        - **New Task Creation**: A new task will be generated with a capacity of 50kg, corresponding to the split visit.<br>\n        In dispatch with autosplit, there will be a several key attributes are added to each task :\n        \n\n        \n\n        | Field | Type | Description | \n\n        |---|---|---| \n\n        | autoSplit | <a href='#section/Introduction/Format'>string</a> | This field contains the type of auto-split used in routing optimization. |\n\n        | splitNumber | <a href='#section/Introduction/Format'>string</a> | This field contains the value indicating the segment of a split visit. For instance, if the task has the value `2/3`, it signifies that this task is the second segment out of a total of 3 segments. (This key is associated with the auto-split configuration). |\n\n        ",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "dispatch",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/route-dispatch-request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "ResultGetSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "success": {
+                  "description": "Number of task success dispatched.",
+                  "type": "string"
+                },
+                "failed": {
+                  "description": "Number of task failed dispatched.",
+                  "type": "string"
+                },
+                "statusCode": {
+                  "description": "Status code of response.",
+                  "type": "string"
+                },
+                "tasks": {
+                  "description": "List of details task dispatched.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              },
+              "example": {
+                "status": true,
+                "success": 1,
+                "failed": 0,
+                "statusCode": 200,
+                "tasks": [
+                  {
+                    "_id": "63970a49cc6ae973f90929e2",
+                    "title": null,
+                    "status": true,
+                    "message": "success",
+                    "action": "update"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/reorder-visits": {
+      "post": {
+        "summary": "Reorder visits",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "reorder-visits",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "description": "This API endpoint allows you to reorder a given list of visits based on the current coordinate, optimizing the sequence of the visits.",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reorder-visits-request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/reorder-visits-response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/result/{resultId}/history": {
+      "get": {
+        "summary": "Read routing result history by result ID",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "resultHistory",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "description": "This API endpoint allows you to retrieve the details of a specific routing result history by providing its unique identifier.",
+        "parameters": [
+          {
+            "name": "resultId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the routing result that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "ResultGetSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Object of pagination data.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "description": "List of routing result histories object",
+                        "type": "Object"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "$ref": "#/definitions/responseRoutingResultHistory"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "route-dispatch-request": {
+      "title": "route-dispatch-request",
+      "example": {
+        "resultId": "6352736c628401059b37a2e2"
+      },
+      "type": "object",
+      "properties": {
+        "resultId": {
+          "type": "string",
+          "description": "Unique identifier for the routing result that generated by system. **Example:** `6352736c628401059b37a2e2`"
+        }
+      },
+      "required": [
+        "resultId"
+      ]
+    },
+    "route-optimize-request": {
+      "title": "route-optimize-request",
+      "example": {
+        "name": "Result 01-24-2023 02:54:09",
+        "hub": "6352736c628401059b37a2e2",
+        "resultCode": "Route-20230801-001",
+        "routing": {
+          "visits": [
+            {
+              "id": "6311cc36db29775ad01694e6",
+              "name": "Visit 1",
+              "address": "Neo Soho, Jakarta Barat",
+              "coordinate": "-6.230815251666679,106.75684387903198",
+              "timeWindow": {
+                "startTime": "08:00:00",
+                "endTime": "16:00:00"
+              },
+              "visitTime": 10,
+              "capacity": {
+                "weight": 100,
+                "volume": 150
+              },
+              "tags": [
+                "Even",
+                "East"
+              ]
+            },
+            {
+              "id": "63970a49cc6ae973f90929e2",
+              "name": "Visit 2",
+              "address": "Gambir Jakarta",
+              "coordinate": "-6.17148,106.82649",
+              "timeWindow": {
+                "startTime": "08:00:00",
+                "endTime": "16:00:00"
+              },
+              "visitTime": 10,
+              "capacity": {
+                "weight": 2500,
+                "volume": 6000
+              },
+              "tags": [
+                "Even",
+                "East"
+              ]
+            }
+          ],
+          "vehicles": [
+            {
+              "id": "6352736c628401059b37a2e2",
+              "name": "B001ACB",
+              "assignee": "miguel@mile.app",
+              "capacity": {
+                "weight": {
+                  "max": 300,
+                  "min": 0
+                },
+                "volume": {
+                  "max": 1000,
+                  "min": 0
+                }
+              },
+              "tags": [
+                "Even",
+                "East"
+              ],
+              "speed": 15,
+              "fixedCost": 0,
+              "oddEven": "even",
+              "workingTime": {
+                "startTime": "08:00",
+                "endTime": "17:00"
+              }
+            }
+          ],
+          "configuration": {
+            "name": "Configuration Default",
+            "defaultSpeed": 10,
+            "defaultVisitTime": 10,
+            "autoSplit": "none",
+            "multitrip": false,
+            "clustering": false,
+            "returnToHub": false,
+            "useAllVehicle": false,
+            "autoSpeed": false,
+            "capacityConstraint": [
+              "weight",
+              "width",
+              "volume"
+            ]
+          }
+        }
+      },
+      "type": "object",
+      "properties": {
+        "hub": {
+          "type": "string"
+        },
+        "resultCode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "routing",
+        "hub",
+        "resultCode"
+      ]
+    },
+    "routing-request": {
+      "title": "routing-request",
+      "example": {
+        "name": "Result 01-24-2023 02:54:09",
+        "hubId": "6352736c628401059b37a2e2",
+        "hubCoordinate": "-6.17148,106.82649",
+        "configuration": {
+          "name": "Configuration Default",
+          "capacityConstraint": [
+            "weight",
+            "width",
+            "volume"
+          ],
+          "multitrip": false,
+          "returnToHub": false,
+          "clustering": "none",
+          "useAllVehicle": false,
+          "autoSpeed": false,
+          "defaultSpeed": 10,
+          "defaultVisitTime": 10,
+          "autoSplit": "none",
+          "autoMerge": false,
+          "crossDockingType": "all",
+          "subHubs": [
+            {
+              "id": "660ce14bf7613e566145fe86",
+              "name": "Testing",
+              "address": "Jalan Kalimaro, Cirebon Kabupaten 45694, Indonesia",
+              "coordinate": "-6.84337,108.71348"
+            }
+          ],
+          "multidayOption": "from hub",
+          "useOddEven": true,
+          "oddEvenTime": [
+            {
+              "startTime": "07:00",
+              "endTime": "10:00"
+            },
+            {
+              "startTime": "17:00",
+              "endTime": "20:00"
+            }
+          ]
+        },
+        "routingDate": "2023-08-08",
+        "resultCode": "Route-20230801-001",
+        "visits": [
+          {
+            "id": "taskId-6311cc36db29775ad01694e6",
+            "name": "Visit 1",
+            "address": "Neo Soho, Jakarta Barat",
+            "coordinate": "-6.230815251666679,106.75684387903198",
+            "timeWindow": {
+              "startTime": "08:00:00",
+              "endTime": "16:00:00"
+            },
+            "visitTime": 10,
+            "capacity": {
+              "weight": 100,
+              "volume": 150
+            },
+            "tags": [
+              "Even",
+              "East"
+            ]
+          },
+          {
+            "id": "taskId-63970a49cc6ae973f90929e2",
+            "name": "Visit 2",
+            "address": "Gambir Jakarta",
+            "coordinate": "-6.17148,106.82649",
+            "timeWindows": [
+              {
+                "startTime": "08:00:00",
+                "endTime": "16:00:00"
+              }
+            ],
+            "visitTime": 10,
+            "capacity": {
+              "weight": 2500,
+              "volume": 6000
+            },
+            "tags": [
+              "Even",
+              "East"
+            ]
+          }
+        ],
+        "vehicles": [
+          {
+            "id": "6352736c628401059b37a2e2",
+            "name": "B001ACB",
+            "assignee": "miguel@mile.app",
+            "capacity": {
+              "weight": {
+                "max": 300,
+                "min": 0
+              },
+              "volume": {
+                "max": 1000,
+                "min": 0
+              }
+            },
+            "tags": [
+              "Even",
+              "East"
+            ],
+            "speed": 15,
+            "fixedCost": 0,
+            "oddEven": "even",
+            "workingTime": {
+              "startTime": "08:00",
+              "endTime": "17:00"
+            }
+          }
+        ],
+        "background": true
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The desired name for the routing result. Users have the flexibility to define a custom name for the result.\u00a0**Default:** `Routing m-d H:i`. <br>**Example:** `Routing 01-03 10:53`"
+        },
+        "hubId": {
+          "type": "string",
+          "description": {
+            "$ref": "#/parameters/descriptions/hubId"
+          }
+        },
+        "hubCoordinate": {
+          "type": "string",
+          "description": "Coordinate of the hub. The hub coordinates represent the geographic coordinates (latitude and longitude) of the central location or starting point for the route optimization process. **Example:** `-6.230815251666679,106.75684387903198`"
+        },
+        "configuration": {
+          "type": "array",
+          "description": "Configuration settings for route optimization. The default values for these configuration settings are taken from the menu route configuration at web.mile.app.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of configuration,<br>can be set as anything, it is used as reference in result. <br>**Example**: `Configuration Default`"
+              },
+              "capacityConstraint": {
+                "type": "array of string",
+                "description": "A list of dynamic capacity types according to user needs. These constraints define the capacity limitations of the vehicles for each constraint type, such as weight, volume, etc. <br>**Example**: `['weight','volume']`"
+              },
+              "multitrip": {
+                "type": "boolean",
+                "description": "When enabled, the vehicle will calculate the estimated travel time to return to the hub as the last trip.<br>**Default:** `false`"
+              },
+              "numberOfMultitrip": {
+                "type": "integer",
+                "description": "Specify the maximum number of trips a vehicle is allowed to make once activate **multitrip**. In the context of this parameter, a **trip** is defined as a series of visits assigned to vehicle. When a trip is completed, the vehicle returns to the hub, ready for its next trip.<br>**Default:** `5` **Min:** `1` **Max:** `10`"
+              },
+              "returnToHub": {
+                "type": "boolean",
+                "description": "When enabled, the vehicle will calculate the estimated travel time to return to the hub as the last trip.<br> **Default:** `false`"
+              },
+              "clustering": {
+                "type": "string",
+                "description": "Option : `none,normal,balanced,non-overlap` <br><br> Clustering optimizes your routes by efficiently grouping visits into clusters. There are four clustering types available: <br><br> `none`: No clustering will be applied. Use this option if you do not want to group visits. <br><br> `normal`: The system automatically groups visits based on proximity. This is useful if you want clustering to be handled based solely on location. <br><br> `balanced`: Visits are first distributed evenly among clusters to ensure a fair workload, and then grouped based on proximity. This ensures each vehicle receives a similar number of visits. <br><br> `non-overlap`: Use this option if you want to strictly avoid overlap between routes and assigned vehicles. The system ensures that visits and route areas do not intersect between vehicles. <br><br>**Default:** `none`"
+              },
+              "useAllVehicle": {
+                "type": "boolean",
+                "description": "When enabled, the API will force all active vehicles to be used for route optimization. <br>**Default:** `false`"
+              },
+              "autoSpeed": {
+                "type": "boolean",
+                "description": "When enabled,\u00a0automatically adjusts the speed of all vehicles. If disabled, each vehicle will need to have its speed manually configured. <br>**Default:** `false`"
+              },
+              "defaultSpeed": {
+                "type": "integer",
+                "description": "Default value of the average speed of the vehicle in km/h. The speed cannot be less than 5 km/h. If not filled, the default value for speed is set to 25 km/h. <br>**Example:** `15`"
+              },
+              "defaultVisitTime": {
+                "type": "integer",
+                "description": "Idle time in minutes after arriving at each destination. This parameter represents the time needed for activities such as goods handover, waiting for customers, parking vehicles, etc., based on the business requirements. It will be used if any visit doesn't have Visit Time set explicitly. <br>**Example:** `10`"
+              },
+              "crossDockingType": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "all",
+                  "drop"
+                ],
+                "description": "Route visits through sub-hubs before reaching the final destination for efficient distribution. There are 2 types of crossDockingType: <br> `all`  (all visit is routed through sub-hubs before reaching the final destination) and `drop` (visits primarily go to the final destination from the main hub, with only dropped visits being routed through sub-hubs). <br>**Default:** `none`"
+              },
+              "subHubs": {
+                "type": "array",
+                "description": "When using cross docking, it's essential to include the subHubs data. These sub-hubs are vital for determining the routing of visits before they reach their final destination. You can designate more than one sub-hub, with a maximum limit of 10 sub-hubs per request. Each sub-hub consists of four key attributes: `id`, `name`, `address`, and `coordinate`. <br>Before sending the sub-hub data, there are several crucial points to remember: ensure that the hub specified as the sub-hub is valid and you have access to the hub chosen as the sub-hub, as only hubs with accessible permissions can be used.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the hub that generated by system. **Example**: `642634bde1428d414838c882`"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name of hub. **Example**: `Hub transit Jakarta`"
+                    },
+                    "address": {
+                      "type": "string",
+                      "description": "Address of the hub. **Example:** `'Neo Soho, Jakarta Barat'`"
+                    },
+                    "coordinate": {
+                      "type": "string",
+                      "description": "Coordinate of hub. **Example:** `'-6.230815251666679,106.82562818235002'`"
+                    }
+                  }
+                }
+              },
+              "autoSplit": {
+                "type": "string",
+                "description": "The auto-split feature automatically splits visits with a capacity greater than the maximum capacity of the vehicle into two or more visits. This parameter specifies the strategy used for auto-splitting and can take one of three values: `none` (no auto-split), `equal` (auto-split into equal-sized visits), and `maximize` (auto-split to maximize vehicle capacity usage). <br>**Default:** `none`",
+                "enum": [
+                  "none",
+                  "equal",
+                  "maximize"
+                ]
+              },
+              "autoMerge": {
+                "type": "boolean",
+                "description": "Default value is `false`. If set to `true`, whenever there is more than one visit with the exact latitude and longitude present, it will considered as one visit so that the solution doesn't place these visits in different vehicles. Note: Auto merge cannot be enabled when auto split is true.",
+                "enum": [
+                  true,
+                  false
+                ]
+              },
+              "multidayOption": {
+                "type": "string",
+                "description": "Option : `last visit,from hub`<br>  Configure the starting location of a vehicle for each new day in multiday routes. Choose between two modes: Start over `from hub` where the vehicle begins each new day from the designated hub regardless of its last location, or Continue from the `last visit` where the vehicle starts the new day from the location of the previous days final stop. <br>**Default:** `last visit`"
+              },
+              "useOddEven": {
+                "type": "boolean",
+                "description": "Enable or disable the odd-even restriction feature. When enabled (true), the system will consider odd-even traffic rules in route optimization based on vehicle license plates and routing date. <br>**Default:** `false`"
+              },
+              "oddEvenTime": {
+                "type": "array",
+                "description": "Defines time ranges when odd-even rules are enforced. Can contain one or more time ranges. Time format: HH:mm (24-hour format). <br>**Example:** `[{'startTime': '07:00', 'endTime': '10:00'}, {'startTime': '17:00', 'endTime': '20:00'}]`",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "startTime": {
+                      "type": "string",
+                      "description": "Start time of the odd-even restriction period. **Example:** `07:00`"
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "description": "End time of the odd-even restriction period. **Example:** `10:00`"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resultCode": {
+          "type": "string",
+          "description": "This key allows users to assign unique values for result optimization data as per their requirements. If not provided, the response will automatically generate a unique resultCode. Additionally, the `resultCode` key can be used as a filter to categorize API responses efficiently. **Default:** `Unique Timestamp` **Example:** `Route-20230801-001`"
+        },
+        "routingDate": {
+          "type": "string",
+          "description": "Determines the routing date to comply with odd-even traffic regulations applicable on that day. This date is used to check whether vehicles are allowed to enter odd-even restricted areas based on their license plate numbers. **Format:** `Y-m-d` **Example:** `2023-08-08`"
+        },
+        "visits": {
+          "type": "array",
+          "description": "List of visits used for routing. Each visit represents a destination to be included in the optimized route.",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "address",
+              "coordinate"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for each visit. Visit ID's format might indicate the type of visit. Example visit IDs : <br> `taskId-6311cc36db29775ad01694e6` (Visit related to a task. You can set the visitId with this prefix on the payload of routing to tell the system that the visitId is related to a task.) <br> `hub-630ed6a4c2688c3ade723063` (Visit related to a hub. These visits are generated by the system when the routing process is finished. Normally, this kind of visit only appears on the first visit of the vehicle's trip, but if **configuration.returnToHub = true**, this type of visit will appear on the last visit of the vehicle's trip.) <br> `reload-hub-630ed6a4c2688c3ade723063` (Reload visit related to a hub. When **configuration.multitrip = true**, a visit might appear more often than usual because it allows a vehicle to go back to the hub to reload. This kind of visit has a visit ID with the prefix of **reload-hub-**)"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the visit, which can be a destination name, customer name, or any relevant identifier for the visit. <br>**Example:** `'Visit 1'`"
+              },
+              "address": {
+                "type": "string",
+                "description": "Location of the visit, specified as an address. **Example:** `'Neo Soho, Jakarta Barat'`"
+              },
+              "coordinate": {
+                "type": "string",
+                "description": "The geographic coordinates (latitude and longitude) of the visit, used in engine calculations to find the distance and travel time between visits. The format should be `latitude,longitude`. <br>**Example:** `'-6.230815251666679,106.75684387903198'`"
+              },
+              "capacity": {
+                "type": "object",
+                "description": "Capacity is used for route optimization purposes, is dynamic based on user needs. Each constraints have maximum value equal to `9999999999`<br>**Example:** `{'width': 100, 'volume': 150}`"
+              },
+              "timeWindow": {
+                "type": "object",
+                "description": "Opening and closing hours as a time span for the destination to be visited. The time window represents the allowable time for arrival at the visit, and it uses the 24-hour format. If not specified, the visit can be visited at any time. **Note:** This field is not considered when `timeWindows` is provided. <br>**Example:** `{'startTime': '08:00', 'endTime': '17:00'}`",
+                "properties": {
+                  "startTime": {
+                    "type": "string",
+                    "description": "Opening time of the visit. **Example:** `08:00:00`"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "description": "Closing time of the visit. **Example:** `17:00:00`"
+                  }
+                }
+              },
+              "timeWindows": {
+                "type": "array",
+                "description": "Array of time windows for the destination to be visited. Each time window represents an allowable time period for arrival at the visit, using the 24-hour format. When this field is provided, the `timeWindow` field will be ignored. If not specified, the visit can be visited at any time. <br>**Example:** `[{'startTime': '08:00', 'endTime': '12:00'}, {'startTime': '14:00', 'endTime': '17:00'}]`",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "startTime": {
+                      "type": "string",
+                      "description": "Opening time of the time window. **Example:** `08:00:00`"
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "description": "Closing time of the time window. **Example:** `17:00:00`"
+                    }
+                  }
+                }
+              },
+              "visitTime": {
+                "type": "integer",
+                "description": "Idle time in minutes after arriving at the destination. This parameter represents the time needed for activities such as goods handover, waiting for customers, parking vehicles, etc., based on business requirements. <br>**Example:** `10`"
+              },
+              "tags": {
+                "type": "array",
+                "maxItems": 10,
+                "items": {
+                  "type": "string"
+                },
+                "description": "Tags of the visit. Visits that have tags will be assigned to vehicles with the same tags. This allows you to group visits based on specific characteristics or requirements. <br>**Example:** `['Even', 'East']`"
+              }
+            }
+          }
+        },
+        "vehicles": {
+          "type": "array",
+          "description": "List of vehicles used for routing. Each vehicle represents a specific vehicle available for the route optimization process.",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for the vehicle generated by the system. This identifier is used to distinguish and track individual vehicles during the optimization process. <br>**Example**: `6352736c628401059b37a2e2`"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the vehicle, which can be a number plate, vehicle brand, or any relevant identifier for the vehicle. This name is used to distinguish and label each vehicle in the route optimization results.<br>**Example**: `B001ACB`"
+              },
+              "speed": {
+                "type": "integer",
+                "description": "Default value of the average speed of the vehicle in km/h. The speed parameter represents the expected average speed at which the vehicle will travel during the route. It cannot be less than 5 km/h. If not specified, the default value for speed is set to 25 km/h.  <br>**Example:** `15`"
+              },
+              "fixedCost": {
+                "type": "integer",
+                "description": "The Cost Factor value range is set from 0 to 100, with the default value being 0. A lower number signifies a higher priority for routing optimization purposes. <br>**Example:** `0`"
+              },
+              "oddEven": {
+                "type": "string",
+                "enum": [
+                  "even",
+                  "odd"
+                ],
+                "description": "Indicates whether the vehicle license plate is classified as odd or even based on the last digit. This is used to determine if the vehicle can enter odd-even restricted areas on specific dates. **Options:** `even` (last digit is 0,2,4,6,8) or `odd` (last digit is 1,3,5,7,9). <br>**Example:** `even`"
+              },
+              "assignee": {
+                "type": "string",
+                "description": "Worker's email that is assigned to the vehicle. Each vehicle can only be assigned to one worker, and this parameter helps to manage the vehicle assignments. <br>**Example**: `miguel@mile.app`"
+              },
+              "capacity": {
+                "type": "array",
+                "description": "Capacity constraints for the vehicle, used for route optimization purposes. The constraints have minimum and maximum values to limit the shelter that can be accommodated by the vehicle for different capacity types, such as weight, volume, etc.<br>**Example**:<br>`{`<br>`'weight':{'min':10,'max':1000},`<br>`'volume':{'min':10,'max':1000}`<br>`}` ",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "{constraint-n}.min": {
+                      "type": "numeric",
+                      "description": "Minimum value of capacity constraint. **Example:** `10`"
+                    },
+                    "{constraint-n}.max": {
+                      "type": "numeric",
+                      "description": "Maximum value of capacity constraint. **Example:** `1000`"
+                    }
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "maxItems": 10,
+                "items": {
+                  "type": "string"
+                },
+                "description": "The tags parameter is used for route optimization purposes. Visits that have tags will be assigned to vehicles that have the same tags. This allows you to group vehicles based on specific characteristics or requirements, such as vehicle type, region, or other custom attributes. <br>**Example**: `['Even','East']`"
+              },
+              "workingTime": {
+                "type": "array",
+                "description": "Working hours of the vehicle, containing startTime and endTime. The time is specified in the 24-hour format, and it defines the time span during which the vehicle is available for routing tasks. <br>**Example**:<br>`{`<br>`'startTime':'08:00',`<br>`'endTime':'17:00'`<br>`}`",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "startTime": {
+                      "type": "string",
+                      "description": "Time of departure of the vehicle from the hub the 24-hour format. **Example:** `08:00`"
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "description": "The maximum time limit for the vehicle to operate the 24-hour format. In the context of multi-day working schedules, users can sum the hours from different days. For example, if the vehicle works from 08:00  to 17:00  for two consecutive days, the end time can be represented as 41:00  (on the first day it end at 17 then + 24 hours for add 1 day after). **Example:** `17:00`"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "background": {
+          "type": "boolean",
+          "description": "When the background parameter is set to `true` , the routing will be processed in the background. In this mode, the API call will return quickly with a response indicating that the routing request has been received and is being processed asynchronously in the background. When the background parameter is set to `false` (default), the routing will be processed directly via the API, and the response will be provided immediately. This means that the API call will wait for the route optimization process to complete before returning the results to the user. <br> **Default:** `false`"
+        }
+      },
+      "required": [
+        "vehicles",
+        "visits",
+        "hubId"
+      ]
+    },
+    "reorder-visits-request": {
+      "title": "reorder-visits-request",
+      "type": "object",
+      "properties": {
+        "currentCoordinate": {
+          "type": "string",
+          "description": "The current latitude and longitude to calculate the order from.",
+          "example": "-7.76287840866215,113.24105028153643"
+        },
+        "visits": {
+          "type": "array",
+          "description": "List of visits to be reordered.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for each visit. Visit ID's format might indicate the type of visit. Example visit IDs : <br> `taskId-6311cc36db29775ad01694e6` (Visit related to a task. You can set the visitId with this prefix on the payload of routing to tell the system that the visitId is related to a task.)"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the visit, which can be a destination name, customer name, or any relevant identifier for the visit. <br>**Example:** `'Visit 1'`"
+              },
+              "address": {
+                "type": "string",
+                "description": "Location of the visit, specified as an address. **Example:** `'Neo Soho, Jakarta Barat'`"
+              },
+              "coordinate": {
+                "type": "string",
+                "description": "The geographic coordinates (latitude and longitude) of the visit, used in engine calculations to find the distance and travel time between visits. The format should be `latitude,longitude`. <br>**Example:** `'-6.230815251666679,106.75684387903198'`"
+              },
+              "timeWindow": {
+                "type": "array",
+                "description": "Opening and closing hours as a time span for the destination to be visited. The time window represents the allowable time for arrival at the visit, and it uses the 24-hour format. If not specified, the visit can be visited at any time.  <br>**Example:** `{'startTime': '08:00', 'endTime': '17:00'}`",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "startTime": {
+                      "type": "string",
+                      "description": "Opening time of the visit. **Example:** `08:00:00`"
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "description": "Closing time of the visit. **Example:** `17:00:00`"
+                    }
+                  }
+                }
+              },
+              "visitTime": {
+                "type": "integer",
+                "description": "Idle time in minutes after arriving at the destination. This parameter represents the time needed for activities such as goods handover, waiting for customers, parking vehicles, etc., based on business requirements. <br>**Example:** `10`"
+              }
+            }
+          }
+        }
+      },
+      "example": {
+        "currentCoordinate": "-7.76287840866215,113.24105028153643",
+        "visits": [
+          {
+            "id": "taskId-6865263cdbb431345b0b0a04",
+            "name": "Order 2",
+            "address": "Bangil",
+            "coordinate": "-7.5976243,112.7845343",
+            "timeWindow": {
+              "startTime": "07:00",
+              "endTime": "23:00"
+            },
+            "visitTime": "30"
+          },
+          {
+            "id": "taskId-6865263cdbb431345b0b0a02",
+            "name": "Order 1",
+            "address": "Probolinggo",
+            "coordinate": "-7.86316,113.30510534699638",
+            "timeWindow": {
+              "startTime": "07:00",
+              "endTime": "23:00"
+            },
+            "visitTime": "30"
+          }
+        ]
+      },
+      "required": [
+        "currentCoordinate",
+        "visits"
+      ]
+    },
+    "reorder-visits-response": {
+      "title": "reorder-visits-response",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Status of response."
+        },
+        "statusCode": {
+          "type": "integer",
+          "description": "Status code of response."
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "boolean",
+                "description": "Status detail of response."
+              },
+              "message": {
+                "type": "string",
+                "description": "Message of response."
+              },
+              "_id": {
+                "type": "string",
+                "description": "ID of task."
+              },
+              "orderIndex": {
+                "type": "integer",
+                "description": "Order Index of task."
+              }
+            }
+          }
+        }
+      },
+      "example": {
+        "status": true,
+        "statusCode": 200,
+        "data": [
+          {
+            "status": true,
+            "message": "Success.",
+            "_id": "6865263cdbb431345b0b0a02",
+            "orderIndex": 17515144251
+          },
+          {
+            "status": true,
+            "message": "Success.",
+            "_id": "6865263cdbb431345b0b0a04",
+            "orderIndex": 17515144252
+          }
+        ]
+      }
+    },
+    "default_header": {},
+    "PUT/ResultRequestUpdate": {
+      "title": "PUT/ResultRequestUpdate",
+      "example": {
+        "result": {
+          "routing": [
+            {
+              "vehicleId": "63da418fc05c0d0269071cf3",
+              "vehicleName": "B001ACB 1",
+              "assignee": "roberto@mile.app",
+              "workingTime": {
+                "startTime": "08:00",
+                "endTime": "17:00"
+              },
+              "vehicleTags": [
+                "West",
+                "Odd"
+              ],
+              "trips": [
+                {
+                  "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                  "coordinate": "-6.17148,106.82649",
+                  "isHub": true,
+                  "weight": 0,
+                  "travelTime": 0,
+                  "visitTime": 0,
+                  "waitingTime": 0,
+                  "eta": "8:00:00",
+                  "etd": "8:00:00",
+                  "distance": 0,
+                  "order": 0
+                },
+                {
+                  "visitId": "taskId-63994a54e1528d445641d9a2",
+                  "visitName": "Visit 1",
+                  "address": "Neo Soho, Jakarta Barat",
+                  "coordinate": "-6.261532638313604,106.80685970157342",
+                  "isHub": false,
+                  "tags": [
+                    "West",
+                    "Odd"
+                  ],
+                  "timeWindow": {
+                    "startTime": null,
+                    "endTime": null
+                  },
+                  "weight": 0,
+                  "travelTime": 31,
+                  "visitTime": 17,
+                  "waitingTime": 0,
+                  "eta": "8:30:46",
+                  "etd": "8:47:46",
+                  "distance": 12817,
+                  "order": 1
+                },
+                {
+                  "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                  "coordinate": "-6.17148,106.82649",
+                  "isHub": true,
+                  "weight": 0,
+                  "travelTime": 3,
+                  "visitTime": 0,
+                  "waitingTime": 0,
+                  "eta": "9:41:12",
+                  "etd": "9:41:12",
+                  "distance": 974,
+                  "order": 3
+                }
+              ],
+              "totalWeight": 0,
+              "vehicleMaxWeight": 100,
+              "vehicleMinWeight": 0,
+              "weightPercentage": "0%",
+              "speed": 25,
+              "totalTravelTime": 69,
+              "totalDistance": 27996,
+              "totalVisitTime": 34,
+              "totalWaitingTime": 0,
+              "totalSpentTime": 103
+            }
+          ],
+          "dropped": [
+            {
+              "id": "taskId-63970a49cc6ae973f90929e2",
+              "name": "Visit 2",
+              "address": "Gambir Jakarta",
+              "coordinate": "-6.17148,106.82649",
+              "timeWindow": {
+                "startTime": null,
+                "endTime": null
+              },
+              "visitTime": "20",
+              "capacity": {
+                "weight": 20.12345
+              },
+              "tags": [
+                "63da418fc05c0d0269071cf2"
+              ],
+              "assignedVehicleId": "63da418fc05c0d0269071cf2",
+              "isHub": false,
+              "reason": "No vehicle with matching tags",
+              "visitId": "taskId-63970a49cc6ae973f90929e2",
+              "visitName": "Visit 2"
+            }
+          ]
+        }
+      },
+      "type": "object",
+      "required": [
+        "result"
+      ],
+      "properties": {
+        "result": {
+          "type": "array",
+          "description": "The routing result which includes information about countryCode, resultCode, routing details, and dropped results.",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "endTime",
+              "multiday"
+            ],
+            "properties": {
+              "routing": {
+                "type": "array",
+                "description": "A list of vehicles that have successfully undergone route optimization.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "vehicleId": {
+                      "description": "The unique identifier for the vehicle generated by the system. <br>**Example**: `6352736c628401059b37a2e2`",
+                      "type": "string"
+                    },
+                    "vehicleName": {
+                      "description": "The name of the vehicle used for reference, such as a number plate or vehicle brand. <br>**Example**: `B001ACB`",
+                      "type": "string"
+                    },
+                    "vehicleTags": {
+                      "description": "Tags assigned to the vehicle for route optimization purposes. Visits with matching tags will be assigned to vehicles with the same tags. <br>**Example**: `['West','Odd']`",
+                      "type": "array of string"
+                    },
+                    "assignee": {
+                      "description": "The email address of the worker assigned to the vehicle. Each vehicle can only be assigned to one worker. <br>**Example**: `roberto@mile.app`",
+                      "type": "string"
+                    },
+                    "speed": {
+                      "description": "The default average speed of the vehicle. The speed cannot be less than 5 km/h. If not provided, the default value is 25 km/h. <br>**Example:** `15`",
+                      "type": "integer"
+                    },
+                    "workingTime": {
+                      "description": "The working hours of the vehicle, including the start time, end time, and whether it spans multiple days. If not provided, the system will use the configuration values for routing purposes. <br>**Example**:<br>`{`<br>`startTime':'08:00',`<br>`endTime':'17:00`<br>`}`",
+                      "type": "array"
+                    },
+                    "total{Constraint}": {
+                      "description": "The sum of constraints for visits routed on this vehicle. **Example:** `100`",
+                      "type": "numeric"
+                    },
+                    "vehicleMax{Constraint}": {
+                      "description": "The maximum constraint capacity of this vehicle. **Example:** `200`",
+                      "type": "numeric"
+                    },
+                    "vehicleMin{Constraint}": {
+                      "description": "The minimum constraint capacity of this vehicle. **Example:** `50`",
+                      "type": "numeric"
+                    },
+                    "{Constraint}Percentage": {
+                      "description": "The percentage of constraint capacity used by this vehicle. Calculated as **totalConstraint/vehicleMaxConstraint**. <br>**Example:** `50%`",
+                      "type": "string"
+                    },
+                    "totalTravelTime": {
+                      "description": "The sum of travel times for visits routed on this vehicle, in minutes. **Example:** `100`",
+                      "type": "numeric"
+                    },
+                    "totalDistance": {
+                      "description": "The sum of distances traveled for each visit on this vehicle, in meters. **Example:** `500`",
+                      "type": "numeric"
+                    },
+                    "trips": {
+                      "description": "The list of routed visits for each vehicle.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "visitId": {
+                            "description": "The unique identifier for the visit. <br>**Example:** `6311cc36db29775ad01694e6`",
+                            "type": "string"
+                          },
+                          "coordinate": {
+                            "description": " coordinates of the visit, used for engine calculations to find distance and travel time between visits. <br>**Example:** `-6.230815251666679,106.75684387903198`",
+                            "type": "string"
+                          },
+                          "visitName": {
+                            "description": "The name of the visit, which can be given a descriptive name based on the destination, customer, or other relevant information.  <br>**Example:** `Visit 1`",
+                            "type": "string"
+                          },
+                          "visitAddress": {
+                            "description": "The location of the visit.  <br>**Example:** `Neo Soho, Jakarta Barat`",
+                            "type": "string"
+                          },
+                          "tags": {
+                            "description": "Tags associated with the visit. Visits with matching tags will be assigned to vehicles with the same tags.<br>**Example:** `['West', 'Odd']`",
+                            "type": "array of string"
+                          },
+                          "timeWindow": {
+                            "description": "The time span during which the visit can be made, specified as opening and closing hours. If not provided, the visit can be made at any time. <br>If this is not filled then the destination can be visited anytime.  <br>**Example:** `{'startTime': value, 'endTime': value}`",
+                            "type": "array"
+                          },
+                          "travelTime": {
+                            "description": "The estimated travel time from the previous trip to the current trip, in minutes. <br>**Example:** `10`",
+                            "type": "integer"
+                          },
+                          "waitingTime": {
+                            "description": "The idle time after arriving at the destination. This accounts for activities such as handing over goods, waiting for customers, and parking vehicles. <br>**Example:** `10`",
+                            "type": "integer"
+                          },
+                          "eta": {
+                            "description": "The estimated time of arrival at the current trip. <br>**Example:** `09:34:00` ",
+                            "type": "string"
+                          },
+                          "etd": {
+                            "description": "The estimated time of departure at the current trip. <br>**Example:** `09:34:00` ",
+                            "type": "string"
+                          },
+                          "distance": {
+                            "description": "The distance from the previous trip to the current trip, in meters. <br>**Example:** `22666`",
+                            "type": "string"
+                          },
+                          "order": {
+                            "description": "The order of the visit handled by each vehicle's trips. Visits with smaller order values will be served first. <br>**Example:** `1`",
+                            "type": "integer"
+                          },
+                          "tripOrder": {
+                            "description": "This field exists only when multitrip is activated and the vehicle handles multiple trips. It distinguishes the list of visits on vehicle trips based on the vehicle's starting point or vehicle's reload from the hub. <br>**Example:** `1`",
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "dropped": {
+                "type": "array",
+                "description": "Collection of trips/visits that can't optimized for some reason (failed to be routed)",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "The unique identifier for the visit that was dropped. <br>**Example:** `6311cc36db29775ad01694e6`",
+                      "type": "string"
+                    },
+                    "address": {
+                      "description": "The location of the dropped visit. <br>**Example:** `Neo Soho, Jakarta Barat`",
+                      "type": "string"
+                    },
+                    "capacity": {
+                      "description": "The capacity constraints for the dropped visit, used for route optimization purposes. Each constraint has a maximum value of 9999999999. <br>**Example:** `{'width': 100, 'height': 150}`",
+                      "type": "array of object"
+                    },
+                    "coordinate": {
+                      "description": "The coordinates of the dropped visit, used for engine calculations to find distance and travel time between visits. <br>**Example:** `-6.230815251666679,106.75684387903198`",
+                      "type": "string"
+                    },
+                    "visitTime": {
+                      "description": "The idle time after arriving at the destination. This accounts for activities such as handing over goods, waiting for customers, and parking vehicles, based on the specific business needs. <br>**Example:** `10`",
+                      "type": "integer"
+                    },
+                    "tags": {
+                      "description": "Tags associated with the dropped visit. Visits with matching tags would have been assigned to vehicles with the same tags. <br>**Example:** `['West', 'Odd']`",
+                      "type": "array of string"
+                    },
+                    "reason": {
+                      "description": "The reason why the visit was dropped. <br>**Example:** `Dropped due to constraint`",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PATCH/ResultRequestUpdate": {
+      "title": "PATCH/ResultRequestUpdate",
+      "example": {
+        "name": "result test"
+      },
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The desired name for the routing result. Users have the flexibility to define a custom name for the result. **Default**: `Result Today` "
+        }
+      }
+    },
+    "responseRoutingResultHistory": {
+      "data": [
+        {
+          "_id": "66adaea3d533150505027084",
+          "resultId": "66ad80fbd430be4fcd5986d2",
+          "action": "move",
+          "description": " Visit  moved to vehicle KH 3267 GI by User",
+          "visits": [
+            {
+              "visitId": "taskId-66ab5b4c91c39b50a8345b21",
+              "visitName": "Susana Vargas"
+            }
+          ],
+          "organizationId": "667ce3df3e8b610d2b142372",
+          "createdTime": "2024-08-03T04:14:27.000000Z",
+          "vehicleFrom": "dropped",
+          "vehicleTo": "KH 3267 GI",
+          "createdFrom": "WEB",
+          "createdType": "individualMove",
+          "createdBy": "User",
+          "version": 2,
+          "updatedTime": "2024-08-03T04:14:27.739000Z"
+        },
+        {
+          "_id": "66adae6bd533150505027083",
+          "resultId": "66ad80fbd430be4fcd5986d2",
+          "action": "move",
+          "description": " Visit  moved to vehicle L 1637 KIE by User",
+          "visits": [
+            {
+              "visitId": "taskId-668b6532b1ba313e4d62c7a5",
+              "visitName": "Valentine Carter"
+            }
+          ],
+          "organizationId": "667ce3df3e8b610d2b142372",
+          "createdTime": "2024-08-03T04:13:31.000000Z",
+          "vehicleFrom": "KH 3267 GI",
+          "vehicleTo": "L 1637 KIE",
+          "createdFrom": "WEB",
+          "createdType": "individualMove",
+          "createdBy": "User",
+          "version": 1,
+          "updatedTime": "2024-08-03T04:13:31.980000Z"
+        }
+      ],
+      "status": true
+    }
+  }
+}

@@ -1,0 +1,1571 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Vehicle"
+  },
+  "host": "apiwebdev.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/vehicles": {
+      "get": {
+        "summary": "Read vehicle",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "getVehicles",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/hubIdInQuery"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "This field will search vehicles according to similar value of vehicle name.<br>**Example:** `B 1234 TEST`"
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "This field will search vehicles according to similar value of vehicle tags.<br>**Example:** `jakarta`"
+          },
+          {
+            "name": "assignee",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "This field will search vehicles according to similar value of vehicle assignee.<br>**Example:** `jhon@mile.app`"
+          },
+          {
+            "$ref": "#/parameters/pageInQuery"
+          },
+          {
+            "$ref": "#/parameters/limitInQuery"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on vehicle objects.<br>**Example:** `name`, `assignee`, `speed`, `hubId`, etc.<br>**Default:** `createdTime`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortOrder is to decide ascending or descending order **Example:** `asc` or `desc`. **Default:** `desc`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "getVehicleSuccess",
+              "properties": {
+                "current_page": {
+                  "description": "The current page of data.",
+                  "type": "integer"
+                },
+                "data": {
+                  "description": "List of object vehicles.",
+                  "type": "array"
+                },
+                "first_page_url": {
+                  "description": "Url to open the first page of data.",
+                  "type": "url"
+                },
+                "from": {
+                  "description": "Data order start from at current page.",
+                  "type": "integer"
+                },
+                "last_page": {
+                  "description": "The number of last page.",
+                  "type": "integer"
+                },
+                "last_page_url": {
+                  "description": "Url to open the last page of data.",
+                  "type": "url"
+                },
+                "path": {
+                  "description": "The base path without query string.",
+                  "type": "url"
+                },
+                "per_page": {
+                  "description": "The number of showing data per page.",
+                  "type": "integer"
+                },
+                "to": {
+                  "description": "Data order last at current page.",
+                  "type": "integer"
+                },
+                "total": {
+                  "description": "Total of vehicles data.",
+                  "type": "integer"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "data": [
+                  {
+                    "name": "Mini Van 34",
+                    "assignee": "leandro@mile.app",
+                    "speed": 30,
+                    "fixedCost": 15,
+                    "tags": [
+                      "Ganjil",
+                      "Depok",
+                      "B1124CC"
+                    ],
+                    "workingTime": {
+                      "startTime": "08:00",
+                      "endTime": "17:00",
+                      "multiday": 0
+                    },
+                    "capacity": {
+                      "width": {
+                        "min": 10,
+                        "max": 1000
+                      },
+                      "height": {
+                        "min": 10,
+                        "max": 1000
+                      }
+                    },
+                    "organizationId": "621dd813eb3ebf16b94dbde3",
+                    "hubId": "621dd813eb3ebf16b94d6969",
+                    "updatedTime": "2022-07-13T03:16:40+00:00",
+                    "createdTime": "2022-07-13T03:16:40+00:00",
+                    "_id": "62ce3918d3f3e1681a3a54b2"
+                  }
+                ],
+                "first_page_url": "http://apiweb.mile.app/api/v3/vehicles?q=truck%201&page=1",
+                "from": 1,
+                "last_page": 1,
+                "last_page_url": "http://apiweb.mile.app/api/v3/vehicles?q=truck%201&page=1",
+                "links": [
+                  {
+                    "url": null,
+                    "label": "&laquo; Previous",
+                    "active": false
+                  },
+                  {
+                    "url": "http://apiweb.mile.app/api/v3/vehicles?q=truck%201&page=1",
+                    "label": "1",
+                    "active": true
+                  },
+                  {
+                    "url": null,
+                    "label": "Next &raquo;",
+                    "active": false
+                  }
+                ],
+                "next_page_url": null,
+                "path": "http://apiweb.mile.app/api/v3/vehicles",
+                "per_page": 10,
+                "prev_page_url": null,
+                "to": 1,
+                "total": 1
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/vehicle/{vehicleId}": {
+      "get": {
+        "summary": "Read vehicle by ID",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "getVehicleById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the vehicle that generated by system.<br>**Example**: `62ce3918d3f3e1681a3a54b2`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "getVehicleByIdSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "Detail of object vehicle.",
+                  "type": "array"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "name": "Mini Van 34",
+                  "assignee": "leandro@mile.app",
+                  "speed": 30,
+                  "fixedCost": 15,
+                  "tags": [
+                    "Ganjil",
+                    "Depok",
+                    "B1124CC"
+                  ],
+                  "workingTime": {
+                    "startTime": "08:00",
+                    "endTime": "17:00",
+                    "multiday": 0
+                  },
+                  "capacity": {
+                    "width": {
+                      "min": 10,
+                      "max": 1000
+                    },
+                    "height": {
+                      "min": 10,
+                      "max": 1000
+                    }
+                  },
+                  "organizationId": "621dd813eb3ebf16b94dbde3",
+                  "hubId": "621dd813eb3ebf16b94d6969",
+                  "updatedTime": "2022-07-13T03:16:40+00:00",
+                  "createdTime": "2022-07-13T03:16:40+00:00",
+                  "_id": "62ce3918d3f3e1681a3a54b2"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "title": "getVehicleByIdSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object vehicle.",
+                  "type": "array"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "data not found",
+                "data": []
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update vehicle by ID",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "UpdateVehicleById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the vehicle that generated by system.<br>**Example**: `62ce3918d3f3e1681a3a54b2`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PUTVehicleRequestUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object vehicle.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "name": "Mini Van 54",
+                  "assignee": "leandro@mile.app",
+                  "speed": 30,
+                  "fixedCost": 15,
+                  "tags": [
+                    "Ganjil",
+                    "Depok",
+                    "B1124CC"
+                  ],
+                  "workingTime": {
+                    "startTime": "08:00",
+                    "endTime": "17:00",
+                    "multiday": 0
+                  },
+                  "capacity": {
+                    "width": {
+                      "min": 10,
+                      "max": 1000
+                    },
+                    "height": {
+                      "min": 10,
+                      "max": 1000
+                    }
+                  },
+                  "organizationId": "621dd813eb3ebf16b94dbde3",
+                  "hubId": "621dd813eb3ebf16b94d6969",
+                  "updatedTime": "2022-07-13T03:16:40+00:00",
+                  "createdTime": "2022-07-13T03:16:40+00:00",
+                  "_id": "62ce3918d3f3e1681a3a54b2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update partially vehicle by ID",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "UpdatePartialVehicleById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the vehicle that generated by system.<br>**Example**: `62ce3918d3f3e1681a3a54b2`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PATCHVehicleRequestPartialUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object vehicle.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "name": "Mini Van 35",
+                  "assignee": "leandro@mile.app",
+                  "speed": 30,
+                  "fixedCost": 15,
+                  "tags": [
+                    "Ganjil",
+                    "Depok",
+                    "B1124CC"
+                  ],
+                  "workingTime": {
+                    "startTime": "08:00",
+                    "endTime": "17:00",
+                    "multiday": 0
+                  },
+                  "capacity": {
+                    "width": {
+                      "min": 10,
+                      "max": 1000
+                    },
+                    "height": {
+                      "min": 10,
+                      "max": 1000
+                    }
+                  },
+                  "organizationId": "621dd813eb3ebf16b94dbde3",
+                  "hubId": "621dd813eb3ebf16b94d6969",
+                  "updatedTime": "2022-07-13T03:16:40+00:00",
+                  "createdTime": "2022-07-13T03:16:40+00:00",
+                  "_id": "62ce3918d3f3e1681a3a54b2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete vehicle by ID",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "deleteVehicleById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the vehicle that generated by system.<br>**Example**: `62ce3918d3f3e1681a3a54b2`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "getVehicleByIdSuccess",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "Detail of object vehicle.",
+                  "type": "array"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": true,
+                "data": {
+                  "name": "Mini Van 34",
+                  "assignee": "leandro@mile.app",
+                  "speed": 30,
+                  "fixedCost": 15,
+                  "tags": [
+                    "Ganjil",
+                    "Depok",
+                    "B1124CC"
+                  ],
+                  "workingTime": {
+                    "startTime": "08:00",
+                    "endTime": "17:00",
+                    "multiday": 0
+                  },
+                  "capacity": {
+                    "width": {
+                      "min": 10,
+                      "max": 1000
+                    },
+                    "height": {
+                      "min": 10,
+                      "max": 1000
+                    }
+                  },
+                  "organizationId": "621dd813eb3ebf16b94dbde3",
+                  "hubId": "621dd813eb3ebf16b94d6969",
+                  "updatedTime": "2022-07-13T03:16:40+00:00",
+                  "createdTime": "2022-07-13T03:16:40+00:00",
+                  "_id": "62ce3918d3f3e1681a3a54b2"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          },
+          "security": [
+            {
+              "AccessToken": []
+            }
+          ]
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/vehicle": {
+      "post": {
+        "summary": "Create vehicle",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "CreateVehicle",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/POSTVehicleRequestCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkCreateResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object vehicle.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "name": "Mini Van 54",
+                  "assignee": "leandro@mile.app",
+                  "speed": 30,
+                  "fixedCost": 15,
+                  "tags": [
+                    "Ganjil",
+                    "Depok",
+                    "B1124CC"
+                  ],
+                  "workingTime": {
+                    "startTime": "08:00",
+                    "endTime": "17:00",
+                    "multiday": 0
+                  },
+                  "capacity": {
+                    "width": {
+                      "min": 10,
+                      "max": 1000
+                    },
+                    "height": {
+                      "min": 10,
+                      "max": 1000
+                    }
+                  },
+                  "organizationId": "621dd813eb3ebf16b94dbde3",
+                  "hubId": "621dd813eb3ebf16b94d6969",
+                  "updatedTime": "2022-07-13T03:16:40+00:00",
+                  "createdTime": "2022-07-13T03:16:40+00:00",
+                  "_id": "62ce3918d3f3e1681a3a54b2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/vehicles/": {
+      "post": {
+        "summary": "Bulk create vehicle",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "CreateVehicleBulk",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/POSTVehiclesRequestCreateBulk"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "VehicleBulkCreateResponse",
+              "properties": {
+                "success": {
+                  "description": "Total success created vehicles.",
+                  "type": "integer"
+                },
+                "failed": {
+                  "description": "Total failed create vehicles.",
+                  "type": "integer"
+                },
+                "data": {
+                  "description": "List of vehicle reated.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "description": "Vehicle ID",
+                        "type": "string"
+                      },
+                      "message": {
+                        "description": "Message of create vehicle",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "success": 2,
+                "failed": 0,
+                "data": [
+                  {
+                    "_id": "62ce3918d3f3e1681a3a54b2",
+                    "message": "Success"
+                  },
+                  {
+                    "_id": "62ce3918d3f3e1681a3a8237",
+                    "message": "Success"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/vehicles/{hubId}/hub": {
+      "delete": {
+        "summary": "Delete vehicle by Hub",
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "deleteBulkVehicleByHubId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hubId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The identifier for the hub that generated by system. Use <a href='#Setting_Hub'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `634e98498ce07d29474a7e29`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": true,
+                "message": "All vehicles has successfully deleted."
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "data not found",
+                "data": []
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "POSTVehicleRequestCreate": {
+      "title": "POSTVehicleRequestCreate",
+      "example": {
+        "name": "Mini Van 54",
+        "assignee": "leandro@mile.app",
+        "speed": 30,
+        "fixedCost": 15,
+        "tags": [
+          "Ganjil",
+          "Depok",
+          "B1124CC"
+        ],
+        "workingTime": {
+          "startTime": "08:00",
+          "endTime": "17:00",
+          "multiday": 0
+        },
+        "breakTime": {
+          "startTime": "11:00",
+          "endTime": "11:30"
+        },
+        "hubId": "621dd813eb3ebf16b94d6969",
+        "capacity": {
+          "width": {
+            "min": 10,
+            "max": 1000
+          },
+          "height": {
+            "min": 10,
+            "max": 1000
+          }
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "assignee",
+        "workingTime",
+        "hubId"
+      ],
+      "properties": {
+        "hubId": {
+          "type": "string",
+          "description": "The identifier for the hub that generated by system. Use <a href='#Setting_Hub'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `621dd813eb3ebf16b94d6969`"
+        },
+        "name": {
+          "description": "The name of the vehicle, which can be a number plate, vehicle brand, or any relevant identifier for the vehicle. This name is used to distinguish and label each vehicle in the route optimization results.<br>**Example**: `Mini Van 54`",
+          "type": "string"
+        },
+        "assignee": {
+          "description": "Worker's email that is assigned to the vehicle. Each vehicle can only be assigned to one worker, and this parameter helps to manage the vehicle assignments.<br>**Example**: `leandro@mile.app`",
+          "type": "string"
+        },
+        "workingTime": {
+          "type": "array",
+          "description": "Working hours of the vehicle, containing **startTime**, **endTime**, and **multiday**. The time is specified in the 24-hour format, and it defines the time span during which the vehicle is available for routing tasks. In this example, the multiday value is set to 1, indicating that the vehicle's working hours span two consecutive calendar days. The vehicle starts its shift at 9:00 AM and continues until 4:00 PM the next day. <br>**Example**:<br>`{`<br>`'startTime':'08:00',`<br>`'endTime':'17:00',`<br>`'multiday':0`<br>`}`",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "endTime",
+              "multiday"
+            ],
+            "properties": {
+              "startTime": {
+                "type": "string",
+                "description": "Time of departure of the vehicle from the hub.<br>**Example:** `08:00`",
+                "required": true
+              },
+              "endTime": {
+                "type": "string",
+                "description": "Maximum working time of vehicle to operate.<br>**Example:** `17:00`",
+                "required": true
+              },
+              "multiday": {
+                "type": "integer",
+                "minimum": 0,
+                "required": true,
+                "description": "Additional working days accumulatedbased on the number of days.<br>**Example**: `0`<br>Implementation of **multiday** is used to add **endTime** value,<br>which means **endTime** = **endTime** + (24 hours * **multiday**)"
+              }
+            }
+          }
+        },
+        "breakTime": {
+          "type": "array",
+          "description": "Indicates that the data inside represents the break time for the vehicle. containing: **startTime**, and **endTime**.",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "endTime"
+            ],
+            "properties": {
+              "startTime": {
+                "type": "string",
+                "description": "The starting time of the break.<br>**Example:** `08:00`",
+                "required": true
+              },
+              "endTime": {
+                "type": "string",
+                "description": "The ending time of the break.<br>**Example:** `17:00`",
+                "required": true
+              }
+            }
+          }
+        },
+        "speed": {
+          "type": "string",
+          "description": "The average speed of the vehicle in kilometers per hour (km/h). Must not be less than 5 km/h.<br>**Example**: `30`<br>**Default**: `25`"
+        },
+        "fixedCost": {
+          "type": "integer",
+          "description": "The Cost Factor value range is set from 0 to 100, with the default value being 0. A lower number signifies a higher priority for routing optimization purposes. <br>**Example:** `15`<br>**Default:** `0`"
+        },
+        "tags": {
+          "type": "array",
+          "maxItems": 10,
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags used for route optimization purposes. Visits with matching tags will be assigned to vehicles with the same tags.<br>**Example**: `['Ganjil','Depok','B1124CC']`"
+        },
+        "capacity": {
+          "type": "array",
+          "description": "Capacity specifications for route optimization, which are dynamic based on user needs. Includes minimum and maximum values for weight and volume.<br>**Example**:<br>`{`<br>`'weight':{'min':10,'max':1000},`<br>`'volume':{'min':10,'max':1000}`<br>`}`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "{constraint-n}": {
+                "type": "array",
+                "description": "Key of capacity constraints, each with a minimum and maximum value. <br>**Example**:  `{'min':10,'max':1000}`",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "min",
+                    "max"
+                  ],
+                  "properties": {
+                    "min": {
+                      "type": "integer",
+                      "description": "Minimum value of capacity constraint. Less than .max<br>**Example:** `10`"
+                    },
+                    "max": {
+                      "type": "integer",
+                      "description": "Maximum value of capacity constraint. Greater than .min<br>**Example:** `1000`"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "POSTVehiclesRequestCreateBulk": {
+      "title": "POSTVehiclesRequestCreateBulk",
+      "example": {
+        "vehicles": [
+          {
+            "name": "Mini Van 24",
+            "assignee": "roberto@mile.app",
+            "speed": 30,
+            "fixedCost": 15,
+            "tags": [
+              "Ganjil",
+              "Depok",
+              "B1124CC"
+            ],
+            "workingTime": {
+              "startTime": "08:00",
+              "endTime": "17:00",
+              "multiday": 0
+            },
+            "breakTime": {
+              "startTime": "11:00",
+              "endTime": "11:30"
+            },
+            "hubId": "621dd813eb3ebf16b94d6969",
+            "capacity": {
+              "width": {
+                "min": 10,
+                "max": 1000
+              },
+              "heigh": {
+                "min": 10,
+                "max": 1000
+              }
+            }
+          },
+          {
+            "name": "Mini Van 25",
+            "assignee": "",
+            "speed": 30,
+            "tags": [
+              "Ganjil",
+              "Depok",
+              "B1124CC"
+            ],
+            "workingTime": {
+              "startTime": "08:00",
+              "endTime": "17:00",
+              "multiday": 0
+            },
+            "breakTime": {
+              "startTime": "11:00",
+              "endTime": "11:30"
+            },
+            "hubId": "621dd813eb3ebf16b94d6969"
+          }
+        ]
+      },
+      "type": "object",
+      "required": [
+        "vehicles"
+      ],
+      "properties": {
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "hubId"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The name of vehicle. User can define vehicle name with vehicle's license plate, vehicle brand, or something else. **Example**: `Mini Van 25`",
+                "required": true
+              },
+              "assignee": {
+                "type": "string",
+                "description": "Worker's email that assigned to the vehicle. One vehicle can only be assigned by one worker.<br>**Example**: `roberto@mile.app`",
+                "required": true
+              },
+              "workingTime": {
+                "type": "array",
+                "required": true,
+                "description": "Working hours on vehicles containing: **startTime**, **endTime**, and **multiday**.<br>**Example**:<br>`{`<br>`'startTime':'08:00',`<br>`'endTime':'17:00',`<br>`'multiday':0`<br>`}`",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "startTime",
+                    "endTime",
+                    "multiday"
+                  ],
+                  "properties": {
+                    "startTime": {
+                      "type": "string",
+                      "description": "Time of departure of the vehicle from the hub **Example:** `08:00`",
+                      "required": true
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "description": "Maximum working time of vehicle to operate. **Example:** `17:00`",
+                      "required": true
+                    },
+                    "multiday": {
+                      "type": "integer",
+                      "required": true,
+                      "description": "Additional working days accumulatedbased on the number of days. **Example**: `0`<br>Implementation of **multiday** is used to add **endTime** value, which means **endTime** = **endTime** + (24 hours * **multiday**)"
+                    }
+                  }
+                }
+              },
+              "breakTime": {
+                "type": "array",
+                "description": "Indicates that the data inside represents the break time for the vehicle. containing: **startTime**, and **endTime**.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "startTime",
+                    "endTime"
+                  ],
+                  "properties": {
+                    "startTime": {
+                      "type": "string",
+                      "description": "The starting time of the break.<br>**Example:** `08:00`",
+                      "required": true
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "description": "The ending time of the break.<br>**Example:** `17:00`",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "speed": {
+                "type": "integer",
+                "description": "Assume the average speed (in km/h) of the vehicle.Speed cannot be less than 5 km/h. **Example**: `30`**Default**: `25`"
+              },
+              "fixedCost": {
+                "type": "integer",
+                "description": "The Cost Factor value range is set from 0 to 100, with the default value being 0. A lower number signifies a higher priority for routing optimization purposes.<br>**Example:** `15`**Default:** `0`"
+              },
+              "tags": {
+                "type": "array",
+                "maxItems": 10,
+                "items": {
+                  "type": "string"
+                },
+                "description": "The tag is used for route optimization purposes. Visits that have tags will be assigned to vehicles that have the same tags.<br>**Example**: `['Ganjil','Depok','B1124CC']`"
+              },
+              "hubId": {
+                "type": "string",
+                "description": {
+                  "$ref": "#/parameters/descriptions/hubId"
+                }
+              },
+              "capacity": {
+                "type": "array",
+                "description": "Capacity is used for route optimization purposes, it's dynamic based on user needs. It has minimum and maximum value as the limit for the shelter<br>that can be accommodated by the vehicle.<br>**Example**:<br>`{`<br>`'weight':{'min':10,'max':1000},`<br>`'volume':{'min':10,'max':1000}`<br>`}`",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "startTime",
+                    "endTime",
+                    "multiday"
+                  ],
+                  "properties": {
+                    "{constraint-n}": {
+                      "type": "array",
+                      "description": "Key of capacity constraint. **Example**:  `{'min':10,'max':1000}`",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "description": "Minimum value of capacity constraint. Less than .max **Example:** `10`"
+                          },
+                          "max": {
+                            "type": "integer",
+                            "description": "Maximum value of capacity constraint. Greater than .min **Example:** `1000`"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PUTVehicleRequestUpdate": {
+      "title": "PUTVehicleRequestUpdate",
+      "example": {
+        "name": "Mini Van 34",
+        "assignee": "leandro@mile.app",
+        "speed": 15,
+        "fixedCost": 15,
+        "tags": [
+          "Ganjil",
+          "Depok",
+          "B1124CC"
+        ],
+        "workingTime": {
+          "startTime": "08:00",
+          "endTime": "17:00",
+          "multiday": 0
+        },
+        "breakTime": {
+          "startTime": "11:00",
+          "endTime": "11:30"
+        },
+        "capacity": {
+          "width": {
+            "min": 10,
+            "max": 1000
+          },
+          "heigh": {
+            "min": 10,
+            "max": 1000
+          }
+        },
+        "hubId": "621dd813eb3ebf16b94d6969"
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "hubId"
+      ],
+      "properties": {
+        "name": {
+          "description": "The name of vehicle. User can define vehicle name with vehicle's license plate, vehicle brand, or something else.<br>**Example**: `Mini Van 54`",
+          "type": "string"
+        },
+        "assignee": {
+          "description": "Worker's email that assigned to the vehicle. One vehicle can only be assigned by one worker.<br>**Example**: `leandro@mile.app`",
+          "type": "string"
+        },
+        "workingTime": {
+          "type": "array",
+          "description": "Working hours on vehicles containing: **startTime**, **endTime**, and **multiday**.<br>**Example**:<br>`{`<br>`'startTime':'08:00',`<br>`'endTime':'17:00',`<br>`'multiday':0`<br>`}`",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "endTime",
+              "multiday"
+            ],
+            "properties": {
+              "startTime": {
+                "type": "string",
+                "description": "Time of departure of the vehicle from the hub.<br>**Example:** `08:00`",
+                "required": true
+              },
+              "endTime": {
+                "type": "string",
+                "description": "Maximum working time of vehicle to operate.<br>**Example:** `17:00`",
+                "required": true
+              },
+              "multiday": {
+                "type": "integer",
+                "minimum": 0,
+                "required": true,
+                "description": "Additional working days accumulatedbased on the number of days.<br>**Example**: `0`<br>Implementation of **multiday** is used to add **endTime** value,<br>which means **endTime** = **endTime** + (24 hours * **multiday**)"
+              }
+            }
+          }
+        },
+        "breakTime": {
+          "type": "array",
+          "description": "Indicates that the data inside represents the break time for the vehicle. containing: **startTime**, and **endTime**.",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "endTime"
+            ],
+            "properties": {
+              "startTime": {
+                "type": "string",
+                "description": "The starting time of the break.<br>**Example:** `08:00`",
+                "required": true
+              },
+              "endTime": {
+                "type": "string",
+                "description": "The ending time of the break.<br>**Example:** `17:00`",
+                "required": true
+              }
+            }
+          }
+        },
+        "speed": {
+          "type": "string",
+          "description": "Assume the average speed (in km/h) of the vehicle.Speed cannot be less than 5 km/h.<br>**Example**: `30`<br>**Default**: `25`"
+        },
+        "fixedCost": {
+          "type": "integer",
+          "description": "The Cost Factor value range is set from 0 to 100, with the default value being 0. A lower number signifies a higher priority for routing optimization purposes.<br>**Example:** `15`<br>**Default:** `0`"
+        },
+        "tags": {
+          "type": "array",
+          "description": "The tag is used for route optimization purposes. Visits that have tags will be assigned to vehicles that have the same tags.<br>**Example**: `['Ganjil','Depok','B1124CC']`"
+        },
+        "hubId": {
+          "type": "string",
+          "description": {
+            "$ref": "#/parameters/descriptions/hubId"
+          }
+        },
+        "capacity": {
+          "type": "array",
+          "description": "Capacity is used for route optimization purposes, it's dynamic based on user needs. It has minimum and maximum value as the limit for the shelter that can be accommodated by the vehicle.<br>**Example**:<br>`{`<br>`'weight':{'min':10,'max':1000},`<br>`'volume':{'min':10,'max':1000}`<br>`}`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "{constraint-n}": {
+                "type": "array",
+                "description": "Key of capacity constraint.<br>**Example**:  `{'min':10,'max':1000}`",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "min",
+                    "max"
+                  ],
+                  "properties": {
+                    "min": {
+                      "type": "integer",
+                      "description": "Minimum value of capacity constraint. Less than .max<br>**Example:** `10`"
+                    },
+                    "max": {
+                      "type": "integer",
+                      "description": "Maximum value of capacity constraint.<br>Greater than .min<br>**Example:** `1000`"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PATCHVehicleRequestPartialUpdate": {
+      "title": "PATCHVehicleRequestPartialUpdate",
+      "example": {
+        "name": "Mini Van 35",
+        "assignee": "leandro@mile.app",
+        "speed": 30,
+        "fixedCost": 15,
+        "tags": [
+          "Ganjil",
+          "Depok",
+          "B1124CC"
+        ],
+        "workingTime": {
+          "startTime": "08:00",
+          "endTime": "17:00",
+          "multiday": 0
+        },
+        "breakTime": {
+          "startTime": "11:00",
+          "endTime": "11:30"
+        },
+        "capacity": {
+          "width": {
+            "min": 10,
+            "max": 1000
+          },
+          "heigh": {
+            "min": 10,
+            "max": 1000
+          }
+        },
+        "hubId": "621dd813eb3ebf16b94d6969"
+      },
+      "type": "object",
+      "required": [],
+      "properties": {
+        "name": {
+          "description": "The name of vehicle. User can define vehicle name with vehicle's license plate, vehicle brand, or something else.<br>**Example**: `Mini Van 54`",
+          "type": "string"
+        },
+        "assignee": {
+          "description": "Worker's email that assigned to the vehicle. One vehicle can only be assigned by one worker.<br>**Example**: `leandro@mile.app`",
+          "type": "string"
+        },
+        "workingTime": {
+          "type": "array",
+          "description": "Working hours on vehicles containing: **startTime**, **endTime**, and **multiday**.<br>**Example**:<br>`{`<br>`'startTime':'08:00',`<br>`'endTime':'17:00',`<br>`'multiday':0`<br>`}`",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "endTime",
+              "multiday"
+            ],
+            "properties": {
+              "startTime": {
+                "type": "string",
+                "description": "Time of departure of the vehicle from the hub.<br>**Example:** `08:00`",
+                "required": true
+              },
+              "endTime": {
+                "type": "string",
+                "description": "Maximum working time of vehicle to operate.<br>**Example:** `17:00`",
+                "required": true
+              },
+              "multiday": {
+                "type": "integer",
+                "minimum": 0,
+                "required": true,
+                "description": "Additional working days accumulatedbased on the number of days.<br>**Example**: `0`<br>Implementation of **multiday** is used to add **endTime** value,<br>which means **endTime** = **endTime** + (24 hours * **multiday**)"
+              }
+            }
+          }
+        },
+        "breakTime": {
+          "type": "array",
+          "description": "Indicates that the data inside represents the break time for the vehicle. containing: **startTime**, and **endTime**.",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "endTime"
+            ],
+            "properties": {
+              "startTime": {
+                "type": "string",
+                "description": "The starting time of the break.<br>**Example:** `08:00`",
+                "required": true
+              },
+              "endTime": {
+                "type": "string",
+                "description": "The ending time of the break.<br>**Example:** `17:00`",
+                "required": true
+              }
+            }
+          }
+        },
+        "speed": {
+          "type": "string",
+          "description": "Assume the average speed (in km/h) of the vehicle.Speed cannot be less than 5 km/h.<br>**Example**: `30`<br>**Default**: `25`"
+        },
+        "fixedCost": {
+          "type": "integer",
+          "description": "The Cost Factor value range is set from 0 to 100, with the default value being 0. A lower number signifies a higher priority for routing optimization purposes.<br>**Example:** `15`<br>**Default:** `0`"
+        },
+        "tags": {
+          "type": "array",
+          "description": "The tag is used for route optimization purposes. Visits that have tags will be assigned to vehicles that have the same tags.<br>**Example**: `['Ganjil','Depok','B1124CC']`"
+        },
+        "hubId": {
+          "type": "string",
+          "description": {
+            "$ref": "#/parameters/descriptions/hubId"
+          }
+        },
+        "capacity": {
+          "type": "array",
+          "description": "Capacity is used for route optimization purposes, it's dynamic based on user needs. It has minimum and maximum value as the limit for the shelter that can be accommodated by the vehicle.<br>**Example**:<br>`{`<br>`'weight':{'min':10,'max':1000},`<br>`'volume':{'min':10,'max':1000}`<br>`}`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "{constraint-n}": {
+                "type": "array",
+                "description": "Key of capacity constraint.<br>**Example**:  `{'min':10,'max':1000}`",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "min",
+                    "max"
+                  ],
+                  "properties": {
+                    "min": {
+                      "type": "integer",
+                      "description": "Minimum value of capacity constraint. Less than .max<br>**Example:** `10`"
+                    },
+                    "max": {
+                      "type": "integer",
+                      "description": "Maximum value of capacity constraint.<br>Greater than .min<br>**Example:** `1000`"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

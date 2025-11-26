@@ -1,0 +1,114 @@
+---
+title: 'Data Formats'
+description: 'Understanding data types used in MileApp API'
+---
+
+## Overview
+
+In the MileApp API, there are several data types used for modeling global data types. Each data type is modeled with format, example, and description.
+
+## Data Types
+
+### Integer
+
+An integer data type represents some range of mathematical integers. Integral data types may be of different sizes and may or may not be allowed to contain negative values.
+
+**Examples:**
+```
+10, 200, 2500
+```
+
+### Float
+
+Float number, also known as a floating-point number, consists of a set of digits and a decimal point, which separates the fractional part of the number from the whole part. The term "floating" refers to the fact that the decimal point can "float" to represent values with a varying number of digits before and after the decimal point.
+
+**Examples:**
+```
+2.1, 14.2, 100.5
+```
+
+### String
+
+Alphanumeric characters.
+
+**Examples:**
+```
+"Jakarta50", "Malang", "Solo Raya", "45", "Bandung_90an"
+```
+
+### Boolean
+
+Representing logical values.
+
+**Examples:**
+```
+true, false
+```
+
+### Datetime
+
+The DateTime value type represents dates and times, with values ranging from 00:00:00 (midnight), January 1, 0001 Anno Domini (Common Era) through 11:59:59 P.M., December 31, 9999 A.D. (C.E.) in the Gregorian calendar.
+
+**Supported Formats:**
+
+| Format | Example |
+|--------|---------|
+| `Y-m-d H:i:s` | `2022-07-13 03:16:40` |
+| `Y-m-d\TH:i:s.vP` | `2022-07-13T03:16:40.000+00:00` |
+| `Y-m-d\TH:i:sP` | `2022-07-13T03:16:40+00:00` |
+| `Y-m-d\TH:i:s` | `2022-07-13T03:16:40` |
+
+### Time
+
+The TIME data type consists of a time in hour, minutes, seconds, optional fractions of a second, and optional time zone.
+
+**Supported Formats:**
+
+| Format | Example |
+|--------|---------|
+| `H:i:s` | `08:30:00` |
+| `H:i` | `08:30` |
+
+### Object
+
+An Object data type is a method for encoding key-value pairs. A single field value may contain one or more sets of key-value pairs.
+
+**Format:**
+```json
+{
+  "key1": "value1",
+  "key2": "value2",
+  "keyN": "valueN"
+}
+```
+
+### Array
+
+An array type is a user-defined data type consisting of an ordered set of elements of a single data type.
+
+**Array of Strings:**
+```json
+["string1", "string2", "stringN"]
+```
+
+**Array of Objects:**
+```json
+[
+  {"object": "1"},
+  {"object": "2"},
+  {"object": "n"}
+]
+```
+
+## Summary Table
+
+| Data Type | Description | Example |
+|-----------|-------------|---------|
+| Integer | Mathematical integers | `10`, `200`, `2500` |
+| Float | Decimal numbers | `2.1`, `14.2`, `100.5` |
+| String | Alphanumeric characters | `"Jakarta50"`, `"Malang"` |
+| Boolean | Logical values | `true`, `false` |
+| Datetime | Date and time values | `2022-07-13T03:16:40+00:00` |
+| Time | Time values | `08:30:00` |
+| Object | Key-value pairs | `{"key": "value"}` |
+| Array | Ordered set of elements | `["a", "b", "c"]` |

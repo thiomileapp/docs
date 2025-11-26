@@ -1,0 +1,155 @@
+---
+title: 'Status Codes'
+description: 'HTTP status codes and error handling in MileApp API'
+---
+
+## Overview
+
+MileApp uses conventional HTTP response codes to indicate the success or failure of an API request.
+
+- Codes in the **2xx** range indicate success
+- Codes in the **4xx** range indicate an error that failed given the information provided
+- Codes in the **5xx** range indicate an error with MileApp's servers (these are rare)
+
+## HTTP Status Codes
+
+<Tabs>
+  <Tab title="Public API">
+    | Code | Text | Description |
+    |------|------|-------------|
+    | 200 | Success | Indicates that the request has succeeded. |
+    | 201 | Created | Indicates that the request has succeeded and has led to the creation of a resource. |
+    | 400 | Bad Request | Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing). |
+    | 401 | Unauthorized | Indicates that the client request has not been completed because it lacks valid authentication credentials for the requested resource. |
+    | 404 | Not Found | This status code is returned when the request contains invalid ID or URL itself. |
+    | 405 | Method not Allowed | Indicates that the server knows the request method, but the target resource doesn't support this method. |
+    | 406 | Not Acceptable | Indicates that the server cannot produce a response matching the list of acceptable values defined in the request's proactive content negotiation headers. Only `application/json` and `*/*` are supported. |
+    | 409 | Conflict | Indicates a request conflict with current state of the target resource. |
+    | 413 | Payload Too Large | Indicates that the request entity is larger than limits defined by server. |
+    | 429 | Too Many Requests | Indicates the user has sent too many requests in a given amount of time. |
+    | 500 | Unexpected Server Error | Indicates error at MileApp's side (these are rare). |
+    | 502 | Bad Gateway | Indicates that the server, while acting as a gateway or proxy, received an invalid response from the upstream server (these are rare). |
+    | 503 | Service Unavailable | Indicates the server is not ready to handle the request (these are rare). |
+    | 504 | Gateway Timeout | Indicates that the server did not get a response in time that it needed in order to complete the request (these are rare). |
+  </Tab>
+  <Tab title="Internal API">
+    | Code | Text | Description |
+    |------|------|-------------|
+    | 200 | Success | Indicates that the request has succeeded. |
+    | 201 | Created | Indicates that the request has succeeded and has led to the creation of a resource. |
+    | 400 | Bad Request | For example, the `Create Task` requires `flow` type to be sent and if it is missing, the status code is returned. |
+    | 401 | Unauthorized | For example, all API requires the API key to be sent and if it is missing, the status code is returned. |
+    | 404 | Not Found | This status code is returned when the request contains invalid ID or URL itself. For example, the `Read Task by ID` API requires taskid to be sent and if it is incorrect ID, the status code is returned. |
+    | 405 | Method not Allowed | This API request used the wrong HTTP method. For example, API `Get Task by ID` used GET method, when you sent PUT method, the status code is returned. |
+    | 406 | Unsupported Accept Header | Only `application/json` and `*/*` are supported. |
+    | 409 | Conflict | Indicates a request conflict with current state of the target resource. |
+    | 413 | Payload Too Large | Indicates that the request entity is larger than limits defined by server. |
+    | 429 | Too Many Requests | Indicates the user has sent too many requests in a given amount of time. |
+    | 500 | Unexpected Server Error | This indicates error at MileApp's side. |
+    | 503 | Service Unavailable | The server is not ready to handle the request. |
+    | 504 | Gateway Timeout | Indicates that the server did not get a response in time that it needed in order to complete the request. |
+
+    Most errors will also return a message containing more information to help you debug.
+  </Tab>
+</Tabs>
+
+## Error Response Format
+
+When an error occurs, the API returns a JSON response with the following structure:
+
+```json
+{
+  "status": false,
+  "message": "Error description here"
+}
+```
+
+---
+
+## Failed Code System
+
+<Note>
+The Failed Code System is available for **Internal API** responses only.
+</Note>
+
+All failed responses include a standardized `failedCode` field to provide machine-readable failed identification. This enables consistent failed handling across different languages and integrations.
+
+### Failed Code Format
+
+The failed code follows a structured format: **`{module}-{type}`**
+
+- **Module Code**: Identifies the system component (max 5 characters)
+- **Failed Type Code**: Identifies the specific failed type (3-digit number)
+
+### Module Codes Reference
+
+| Module | Module Codes | Description |
+|--------|--------------|-------------|
+| **Authentication** | `auth` | Manages user authentication and authorization, controlling access to system resources and functionality. |
+| **Task** | `task`, `sched`, `lochi`, `disp` | Handles the complete lifecycle of task resources, from creation and scheduling to dispatch and real-time location tracking. |
+| **Routing** | `route`, `vehic`, `conf`, `geo`, `capac`, `reslt`, `rhist` | Provides a comprehensive suite for route optimization and planning, including vehicle management, capacity constraints, and result logging. |
+| **Flow** | `flow`, `auto`, `templ`, `flog` | Handles the creation and management of flow templates—the blueprints for repeatable processes. |
+| **Data Management** | `data`, `dtype` | Governs the management of all data sources and data types within the organization. |
+| **Settings** | `user`, `role`, `hub`, `passp`, `priv`, `cmod`, `orgdt`, `org`, `team`, `perm`, `trash`, `appin` | Manages the core administrative and configuration entities. |
+| **Billing** | `lcns`, `subs`, `invce`, `pymnt` | Handles all billing and subscription operations. |
+| **Data Version** | `dver` | Implements data versioning for critical resources. |
+| **App Version** | `versn` | Responsible for application version management. |
+| **System** | `sys` | Contains system-level operations and configurations. |
+
+### Common Failed Code Examples
+
+| Failed Code | Description | Example Message |
+|-------------|-------------|-----------------|
+| `auth-001` | Required authentication field missing | The email field is required |
+| `auth-004` | Invalid email format | The email must be a valid email address |
+| `auth-005` | Invalid password format | Password does not meet requirements |
+| `sys-036` | Rate limit exceeded | Too many requests |
+| `sys-045` | Internal server error | Internal server error |
+
+### Validation Errors (001-030)
+
+<Accordion title="View all validation error codes">
+| Code | Description | Common Causes |
+|------|-------------|---------------|
+| `001` | Required field missing | Field not provided in request |
+| `002` | Unique constraint violation | Duplicate value for unique field |
+| `003` | Invalid format/pattern | Value doesn't match expected format |
+| `004` | Invalid email format | Email validation failed |
+| `005` | Invalid password format | Password doesn't meet requirements |
+| `006` | Invalid phone format | Phone number validation failed |
+| `007` | Invalid URL format | URL format validation failed |
+| `008` | Invalid date/time format | Date/time format incorrect |
+| `009` | Invalid numeric format | Number validation failed |
+| `010` | Invalid boolean format | Boolean validation failed |
+| `011` | Invalid array format | Array structure validation failed |
+| `012` | Invalid coordinates format | Latitude/longitude validation failed |
+| `013` | Invalid JSON format | JSON structure validation failed |
+| `014` | Confirmation mismatch | Field confirmation validation failed |
+| `015` | Invalid file format | File type or size validation failed |
+| `016` | Invalid string format | String pattern validation failed |
+| `017` | Invalid enum/choice value | Value not in allowed options |
+| `018` | Invalid time format | Time format validation failed |
+| `019` | Invalid IP address format | IP address validation failed |
+| `020` | Invalid UUID format | UUID format validation failed |
+| `021` | Invalid MAC address format | MAC address validation failed |
+| `030` | Custom validation failed | Custom business rule validation failed |
+</Accordion>
+
+### Business Logic Errors (031-099)
+
+<Warning>
+Business logic failed codes are **module-specific**. Each module may implement the same failed code differently based on its business context. For example, `task-033` means "Task not found", while `user-033` means "User not found". Always consider the module prefix when handling these failures.
+</Warning>
+
+<Accordion title="View all business logic error codes">
+| Code | General Description | Common Causes |
+|------|---------------------|---------------|
+| `031` | Duplicate entry | Record already exists |
+| `032` | Invalid state/condition | Operation not allowed in current state |
+| `033` | Not found | Resource doesn't exist |
+| `034` | Unauthorized access | Missing or invalid authentication |
+| `035` | Forbidden operation | Insufficient permissions |
+| `036` | Rate limit exceeded | Too many requests |
+| `040` | Limit exceeded | Resource limit reached |
+| `045` | Server error | Internal processing error |
+</Accordion>
