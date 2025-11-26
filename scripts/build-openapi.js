@@ -23,7 +23,9 @@ const BASE_DIR = path.join(API_SPECS, 'base');
 const PUBLIC_DIR = path.join(API_SPECS, 'public');
 const INTERNAL_DIR = path.join(API_SPECS, 'internal');
 const MODELS_DIR = path.join(API_SPECS, 'Models');
-const OUTPUT_DIR = PROJECT_ROOT;
+const OUTPUT_DIR = path.join(PROJECT_ROOT, 'openapi');
+const OUTPUT_PUBLIC = path.join(OUTPUT_DIR, 'public');
+const OUTPUT_INTERNAL = path.join(OUTPUT_DIR, 'internal');
 
 // Helper functions
 function loadYaml(filePath) {
@@ -117,6 +119,28 @@ function mergeSpec(base, module) {
   if (module['x-webhooks'] && Object.keys(module['x-webhooks']).length > 0) {
     base['x-webhooks'] = base['x-webhooks'] || {};
     Object.assign(base['x-webhooks'], module['x-webhooks']);
+  }
+  // Merge x-components.schemas into definitions (non-standard extension used by some files)
+  // Also fix $ref paths from #/x-components/schemas/ to #/definitions/
+  if (module['x-components']?.schemas && Object.keys(module['x-components'].schemas).length > 0) {
+    base.definitions = base.definitions || {};
+    Object.assign(base.definitions, module['x-components'].schemas);
+    // Fix $ref paths in the module's paths to point to definitions instead of x-components
+    const fixXComponentRefs = (obj) => {
+      if (typeof obj !== 'object' || obj === null) return;
+      if (Array.isArray(obj)) {
+        obj.forEach(fixXComponentRefs);
+        return;
+      }
+      for (const [key, value] of Object.entries(obj)) {
+        if (key === '$ref' && typeof value === 'string' && value.startsWith('#/x-components/schemas/')) {
+          obj[key] = value.replace('#/x-components/schemas/', '#/definitions/');
+        } else if (typeof value === 'object') {
+          fixXComponentRefs(value);
+        }
+      }
+    };
+    fixXComponentRefs(module.paths);
   }
 }
 
@@ -552,6 +576,7 @@ function fixExamplesInSchemas(obj) {
 }
 
 // Fix path parameter typos like {param) to {param} and trim whitespace
+// Also merges HTTP methods when duplicate paths occur after normalization
 function fixPathTypos(spec) {
   if (!spec.paths) return spec;
 
@@ -559,7 +584,22 @@ function fixPathTypos(spec) {
   for (const pathKey of Object.keys(spec.paths)) {
     // Fix typos: replace ) with } in path parameters, and trim whitespace
     let fixedKey = pathKey.replace(/\{([^}]+)\)/g, '{$1}').trim();
-    fixedPaths[fixedKey] = spec.paths[pathKey];
+
+    // If the normalized path already exists, merge HTTP methods instead of overwriting
+    if (fixedPaths[fixedKey]) {
+      console.log(`    ⚠️  Merging duplicate path after normalization: ${pathKey} -> ${fixedKey}`);
+      const existingPathItem = fixedPaths[fixedKey];
+      const newPathItem = spec.paths[pathKey];
+
+      // Merge HTTP methods from both path items
+      for (const method of ['get', 'post', 'put', 'patch', 'delete', 'options', 'head', 'parameters']) {
+        if (newPathItem[method] && !existingPathItem[method]) {
+          existingPathItem[method] = newPathItem[method];
+        }
+      }
+    } else {
+      fixedPaths[fixedKey] = spec.paths[pathKey];
+    }
   }
   spec.paths = fixedPaths;
   return spec;
@@ -710,13 +750,42 @@ function fixMalformedProperties(obj, parentKey = '') {
   return result;
 }
 
+// Fix schemas that are just example data (missing type property)
+function fixExampleSchemas(spec) {
+  if (spec.components?.schemas) {
+    for (const [schemaName, schema] of Object.entries(spec.components.schemas)) {
+      // If schema doesn't have a type and doesn't have $ref, it might be example data
+      if (typeof schema === 'object' && schema !== null && !schema.type && !schema.$ref && !schema.allOf && !schema.oneOf && !schema.anyOf) {
+        // Check if it looks like example data (has data/status/message properties directly as values)
+        const keys = Object.keys(schema);
+        const looksLikeExample = keys.some(k => {
+          const v = schema[k];
+          // If properties have direct values (arrays, strings, booleans) instead of schema definitions
+          return Array.isArray(v) || typeof v === 'string' || typeof v === 'boolean' || typeof v === 'number' ||
+                 (typeof v === 'object' && v !== null && !v.type && !v.$ref && !v.properties);
+        });
+
+        if (looksLikeExample) {
+          // Convert this to a proper schema with the data as example
+          spec.components.schemas[schemaName] = {
+            type: 'object',
+            example: schema
+          };
+        }
+      }
+    }
+  }
+  return spec;
+}
+
 // Fix schema objects with empty required arrays and other invalid schema issues
 function fixSchemaIssues(spec) {
-  function fixSchema(schema) {
+  // Track if we're inside a 'properties' object to detect property name collision with 'required' keyword
+  function fixSchema(schema, parentKey = null) {
     if (typeof schema !== 'object' || schema === null) return schema;
 
     if (Array.isArray(schema)) {
-      return schema.map(fixSchema);
+      return schema.map(item => fixSchema(item, parentKey));
     }
 
     const result = {};
@@ -725,6 +794,45 @@ function fixSchemaIssues(spec) {
       if (key === 'required' && Array.isArray(value) && value.length === 0) {
         continue; // Skip this property
       }
+
+      // Fix collision: property named 'required' inside 'properties' conflicts with OpenAPI 'required' keyword
+      // If 'required' is an object with 'type' key (it's a property definition), rename to 'isRequired'
+      if (key === 'required' && typeof value === 'object' && value !== null && !Array.isArray(value) && value.type) {
+        console.log(`    ⚠️  Renaming property 'required' to 'isRequired' (keyword collision fix)`);
+        result['isRequired'] = fixSchema(value, key);
+        continue;
+      }
+
+      // Fix collision: property named 'type' inside 'properties' conflicts with OpenAPI 'type' keyword
+      // If 'type' is an object with its own 'type' key (it's a nested property schema), rename to 'inputType'
+      // This happens in Flow components where 'type' describes the input type (string, number, etc.)
+      // ONLY rename when parentKey is 'properties' - this ensures we're in a property definition context
+      if (key === 'type' && parentKey === 'properties' && typeof value === 'object' && value !== null && !Array.isArray(value) && value.type) {
+        console.log(`    ⚠️  Renaming property 'type' to 'inputType' (keyword collision fix)`);
+        // Create a proper schema for inputType - it describes input types like 'string', 'number', 'date', etc.
+        const inputTypeSchema = {
+          type: 'string',
+          description: value.description || 'The input type of the component (e.g., string, number, date, etc.)'
+        };
+        result['inputType'] = inputTypeSchema;
+        continue;
+      }
+
+      // Also fix 'required' in example data where it's used as a property name with boolean value
+      // This happens when parentKey is 'example' and 'required' is used with a boolean value
+      if (key === 'required' && typeof value === 'boolean' && (parentKey === 'example' || parentKey === 'items' || parentKey === 'components')) {
+        result['isRequired'] = value;
+        continue;
+      }
+
+      // Also fix 'type' in example data when it's inside a component object (has 'component' key)
+      // This prevents confusion between OpenAPI 'type' keyword and component input type data
+      if (key === 'type' && typeof value === 'string' && schema.component) {
+        result['inputType'] = value;
+        continue;
+      }
+
+
       // Fix nullable that's not boolean
       if (key === 'nullable' && typeof value !== 'boolean') {
         result[key] = value === 'true' || value === true;
@@ -737,14 +845,66 @@ function fixSchemaIssues(spec) {
           continue; // Remove invalid format
         }
       }
-      result[key] = fixSchema(value);
+      result[key] = fixSchema(value, key);
     }
+
+    // Fix misplaced properties: if this is an object schema (has type: object and properties),
+    // move any sibling property definitions that look like schema properties into properties
+    // This fixes issues where 'enabled' is a sibling to 'properties' instead of inside it
+    if (result.type === 'object' && result.properties) {
+      const validSchemaKeys = ['type', 'properties', 'required', 'additionalProperties', 'description',
+        'title', 'example', 'examples', 'allOf', 'anyOf', 'oneOf', '$ref', 'items', 'enum',
+        'format', 'nullable', 'readOnly', 'writeOnly', 'deprecated', 'xml', 'externalDocs',
+        'discriminator', 'default', 'minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum',
+        'minLength', 'maxLength', 'pattern', 'minItems', 'maxItems', 'uniqueItems', 'minProperties',
+        'maxProperties', 'not', 'if', 'then', 'else', 'const', 'contentMediaType', 'contentEncoding'];
+
+      for (const [key, val] of Object.entries(result)) {
+        // If this key is not a valid OpenAPI schema keyword and looks like a property definition
+        if (!validSchemaKeys.includes(key) && typeof val === 'object' && val !== null && !Array.isArray(val) && val.type) {
+          console.log(`    ⚠️  Moving misplaced property '${key}' into 'properties' (was a sibling)`);
+          result.properties[key] = val;
+          delete result[key];
+        }
+      }
+    }
+
+    // Fix bare "type: object" schemas that have no properties/additionalProperties
+    // Mintlify requires object schemas to have properties, additionalProperties, or be a $ref
+    if (result.type === 'object' && !result.properties && !result.additionalProperties && !result.$ref && !result.allOf && !result.oneOf && !result.anyOf) {
+      result.additionalProperties = true;
+    }
+
     return result;
+  }
+
+  // Fix top-level schemas that have example/title but no type (Mintlify requires type or $ref)
+  function fixTopLevelSchema(schema, schemaName) {
+    if (typeof schema !== 'object' || schema === null) return schema;
+
+    // If schema has example or title but no type and no $ref, add type: object
+    if ((schema.example || schema.title) && !schema.type && !schema.$ref && !schema.allOf && !schema.oneOf && !schema.anyOf) {
+      console.log(`    ⚠️  Adding missing 'type: object' to schema: ${schemaName}`);
+      schema.type = 'object';
+    }
+
+    // Fix schemas that have 'required' array but no 'properties'
+    // This is invalid because 'required' should list property names that must be present
+    // but without 'properties', there's nothing to require
+    if (schema.required && Array.isArray(schema.required) && schema.required.length > 0 && !schema.properties && !schema.allOf && !schema.oneOf && !schema.anyOf && !schema.$ref) {
+      console.log(`    ⚠️  Removing 'required' from schema without 'properties': ${schemaName}`);
+      delete schema.required;
+    }
+
+    return schema;
   }
 
   // Fix schemas in components
   if (spec.components?.schemas) {
     for (const schemaName of Object.keys(spec.components.schemas)) {
+      // First fix top-level schema (add missing type if needed)
+      spec.components.schemas[schemaName] = fixTopLevelSchema(spec.components.schemas[schemaName], schemaName);
+      // Then apply nested schema fixes
       spec.components.schemas[schemaName] = fixSchema(spec.components.schemas[schemaName]);
     }
   }
@@ -763,6 +923,23 @@ function applyMintlifyFixes(spec) {
 
   // Fix broken $ref links first (Laravel-style refs)
   fixBrokenRefs(spec);
+
+  // Fix x-components refs -> components (non-standard extension)
+  const fixXComponentRefs = (obj) => {
+    if (typeof obj !== 'object' || obj === null) return;
+    if (Array.isArray(obj)) {
+      obj.forEach(fixXComponentRefs);
+      return;
+    }
+    for (const [key, value] of Object.entries(obj)) {
+      if (key === '$ref' && typeof value === 'string' && value.includes('/x-components/')) {
+        obj[key] = value.replace('/x-components/', '/components/');
+      } else if (typeof value === 'object') {
+        fixXComponentRefs(value);
+      }
+    }
+  };
+  fixXComponentRefs(spec);
 
   // Fix misplaced security in responses
   spec = fixMisplacedSecurity(spec);
@@ -799,8 +976,32 @@ function applyMintlifyFixes(spec) {
   // Fix malformed properties that have string values instead of schema objects
   spec = fixMalformedProperties(spec);
 
+  // Fix schemas that are just example data (missing type property)
+  spec = fixExampleSchemas(spec);
+
   // Fix schema issues (empty required arrays, invalid formats, etc.)
   spec = fixSchemaIssues(spec);
+
+  // Remove invalid schemas that have header-like properties but no proper schema structure
+  // These are malformed schemas that look like response header definitions
+  if (spec.components && spec.components.schemas) {
+    const invalidSchemas = [];
+    for (const [name, schema] of Object.entries(spec.components.schemas)) {
+      // Check if schema has no 'type' and no '$ref' and all properties start with 'X-'
+      // This indicates a malformed response header definition
+      if (schema && typeof schema === 'object' && !schema.type && !schema.$ref && !schema.allOf && !schema.oneOf && !schema.anyOf) {
+        const keys = Object.keys(schema);
+        const hasOnlyHeaderLikeKeys = keys.length > 0 && keys.every(k => k.startsWith('X-') || k.startsWith('x-'));
+        if (hasOnlyHeaderLikeKeys) {
+          invalidSchemas.push(name);
+        }
+      }
+    }
+    for (const name of invalidSchemas) {
+      console.log(`    ⚠️  Removing invalid header-like schema: ${name}`);
+      delete spec.components.schemas[name];
+    }
+  }
 
   // Convert HTML to Markdown in all descriptions
   spec = convertDescriptionsToMarkdown(spec);
@@ -992,6 +1193,59 @@ function buildInternal() {
   return result;
 }
 
+// Split OpenAPI spec by tag groups (for separate navigation sections in Mintlify)
+function splitByTagGroups(spec, tagGroups) {
+  const results = {};
+
+  for (const [groupName, tags] of Object.entries(tagGroups)) {
+    const tagSet = new Set(tags);
+
+    // Create a new spec for this group
+    const groupSpec = {
+      openapi: spec.openapi,
+      info: {
+        ...spec.info,
+        title: `MileApp API - ${groupName}`
+      },
+      servers: spec.servers,
+      security: spec.security,
+      components: JSON.parse(JSON.stringify(spec.components || {})),
+      paths: {}
+    };
+
+    // Filter paths by tags
+    for (const [pathKey, pathItem] of Object.entries(spec.paths || {})) {
+      const filteredPath = {};
+      let hasMethod = false;
+
+      for (const [method, operation] of Object.entries(pathItem)) {
+        if (['get', 'post', 'put', 'patch', 'delete', 'options', 'head'].includes(method)) {
+          const opTags = operation.tags || [];
+          if (opTags.some(t => tagSet.has(t))) {
+            filteredPath[method] = operation;
+            hasMethod = true;
+          }
+        } else {
+          filteredPath[method] = operation;
+        }
+      }
+
+      if (hasMethod) {
+        groupSpec.paths[pathKey] = filteredPath;
+      }
+    }
+
+    // Filter tags array
+    if (spec.tags) {
+      groupSpec.tags = spec.tags.filter(t => tagSet.has(t.name));
+    }
+
+    results[groupName] = groupSpec;
+  }
+
+  return results;
+}
+
 async function main() {
   console.log('='.repeat(50));
   console.log('MileApp OpenAPI Build');
@@ -999,14 +1253,45 @@ async function main() {
 
   const target = process.argv[2] || 'all';
 
+  // Define tag groups to match Laravel menu structure
+  const tagGroups = {
+    'Task': ['Task', 'Location History', 'Task Schedule'],
+    'Routing': ['Vehicle', 'Routing'],
+    'Flow': ['Flow', 'Automation'],
+    'Data': ['Data Source', 'Data Type'],
+    'Setting': ['User', 'Role', 'App Integration', 'Hub', 'Team', 'Plugin'],
+    'ImportExport': ['Data Import', 'Export Task', 'Export Config'],
+    'File': ['File']
+    // Note: Activity is internal-only (not in public Laravel API docs)
+  };
+
+  // Ensure output directories exist
+  if (!fs.existsSync(OUTPUT_PUBLIC)) {
+    fs.mkdirSync(OUTPUT_PUBLIC, { recursive: true });
+  }
+  if (!fs.existsSync(OUTPUT_INTERNAL)) {
+    fs.mkdirSync(OUTPUT_INTERNAL, { recursive: true });
+  }
+
   if (target === 'all' || target === 'public') {
     const swagger2Spec = buildPublic();
     console.log(`  Paths (Swagger 2.0): ${Object.keys(swagger2Spec.paths || {}).length}`);
 
     console.log('\n🔄 Converting to OpenAPI 3.0...');
     const openapi3Spec = await convertToOpenAPI3(swagger2Spec);
-    saveJson(path.join(OUTPUT_DIR, 'openapi-public.json'), openapi3Spec);
+
+    // Save full spec to openapi/public/
+    saveJson(path.join(OUTPUT_PUBLIC, 'openapi-full.json'), openapi3Spec);
     console.log(`  Paths (OpenAPI 3.0): ${Object.keys(openapi3Spec.paths || {}).length}`);
+
+    // Split by tag groups for Mintlify navigation
+    console.log('\n📂 Splitting by tag groups...');
+    const splitSpecs = splitByTagGroups(openapi3Spec, tagGroups);
+    for (const [groupName, groupSpec] of Object.entries(splitSpecs)) {
+      const fileName = `openapi-${groupName.toLowerCase()}.json`;
+      saveJson(path.join(OUTPUT_PUBLIC, fileName), groupSpec);
+      console.log(`  ${groupName}: ${Object.keys(groupSpec.paths || {}).length} paths`);
+    }
   }
 
   if (target === 'all' || target === 'internal') {
@@ -1015,7 +1300,7 @@ async function main() {
 
     console.log('\n🔄 Converting to OpenAPI 3.0...');
     const openapi3Spec = await convertToOpenAPI3(swagger2Spec);
-    saveJson(path.join(OUTPUT_DIR, 'openapi-internal.json'), openapi3Spec);
+    saveJson(path.join(OUTPUT_INTERNAL, 'openapi-full.json'), openapi3Spec);
     console.log(`  Paths (OpenAPI 3.0): ${Object.keys(openapi3Spec.paths || {}).length}`);
   }
 

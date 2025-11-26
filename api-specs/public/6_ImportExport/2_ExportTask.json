@@ -1,0 +1,1014 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Export Task"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/tasks/export": {
+      "post": {
+        "summary": "Export tasks",
+        "tags": [
+          "Export Task"
+        ],
+        "operationId": "ExportTasks",
+        "description": "Export results allow users to acquire task data by applying specific filters. This endpoint supports two processing modes: **direct export** (returns file immediately) and **background export** (queued processing with notification via export-log).<br><br>**Export Limits:**<br>- XLSX format: Up to 1,000,000 tasks<br>- JSON format: Up to 1,000,000 tasks (separated per 10,000 tasks and merged into one zip file)<br><br>**Processing Modes:**<br>- **Direct Export** (`background=false`): File returned immediately in response. Best for small datasets (< 10,000 records)<br>- **Background Export** (`background=true`): Export queued for processing. Monitor status via <a href='#tag/Export-Task/operation/GetExportLog'>GET /tasks/export-log</a>. Best for large datasets<br><br>**Important Notes:**<br>- Use `exportConfigId` to apply predefined export templates with custom fields and flows<br>- Export files are stored on S3 with 30-day retention<br>- Background exports send completion notification to user's email",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "Request body containing export parameters. Use filters to narrow down the dataset and `fields` parameter to select specific columns.",
+            "schema": {
+              "$ref": "#/definitions/postExportTask"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - Export completed or queued",
+            "schema": {
+              "type": "object",
+              "title": "ExportTaskResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "total_data_be": {
+                  "description": "Total number of tasks successfully exported.",
+                  "type": "integer"
+                },
+                "last_id": {
+                  "description": "ID of the last task that was successfully exported.",
+                  "type": "string"
+                },
+                "last_field": {
+                  "description": "Name of the last field that was successfully exported.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Export file information. Structure varies based on processing mode (direct vs background).",
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "description": "Unix timestamp when export was created",
+                      "type": "integer"
+                    },
+                    "organizationId": {
+                      "description": "Organization ID that owns the export",
+                      "type": "string"
+                    },
+                    "reportType": {
+                      "description": "Type of export report",
+                      "type": "string",
+                      "enum": [
+                        "task"
+                      ]
+                    },
+                    "link": {
+                      "description": "Direct download URL for the exported file (S3 presigned URL)",
+                      "type": "string"
+                    },
+                    "status": {
+                      "description": "Export processing status",
+                      "type": "string",
+                      "enum": [
+                        "Done",
+                        "Processing",
+                        "Failed"
+                      ]
+                    }
+                  }
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "total_data_be": 47,
+                "last_id": "61e5477611c1b26cef05d37c",
+                "last_field": "status",
+                "data": {
+                  "time": 1644595005,
+                  "organizationId": "61c2fbaaf27b374e8913fe72",
+                  "reportType": "task",
+                  "link": "https://staticdev.mile.app/production-mile/20220211/task_61c2fbaaf27b374e8913fe72_1644595005.xlsx",
+                  "status": "Done"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "Direct Export (background=false)": {
+                  "value": {
+                    "status": true,
+                    "message": "Success",
+                    "total_data_be": 150,
+                    "last_id": "61e5477611c1b26cef05d37c",
+                    "last_field": "status",
+                    "data": {
+                      "time": 1644595005,
+                      "organizationId": "61c2fbaaf27b374e8913fe72",
+                      "reportType": "task",
+                      "link": "https://staticdev.mile.app/production-mile/20220211/task_61c2fbaaf27b374e8913fe72_1644595005.xlsx",
+                      "status": "Done"
+                    }
+                  }
+                },
+                "Background Export (background=true)": {
+                  "value": {
+                    "status": true,
+                    "message": "Export queued for background processing. Check status at GET /tasks/export-log",
+                    "total_data_be": 0,
+                    "data": {
+                      "time": 1644595005,
+                      "organizationId": "61c2fbaaf27b374e8913fe72",
+                      "reportType": "task",
+                      "status": "Processing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters or validation error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "The download field is required."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing authentication token",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - User lacks permission to export tasks",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "You do not have permission to export tasks"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error - Internal server error during export",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal server error"
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "file": {
+                      "type": "string"
+                    },
+                    "line_of_code": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST \"https://apiweb.mile.app/api/v3/tasks/export\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"download\": \"xlsx\",\n    \"fields\": \"startTime,endTime,hubId,createdBy,flow,status\",\n    \"status\": \"DONE\",\n    \"flowId\": \"63d8c9b0dbd5ef20a627dd86\",\n    \"hubId\": \"621dd813eb3ebf16b94d6969\",\n    \"page\": 1,\n    \"limit\": 100,\n    \"sortBy\": \"createdTime\",\n    \"sortOrder\": \"desc\",\n    \"background\": false\n  }'"
+          },
+          {
+            "lang": "cURL - Background Export",
+            "source": "curl -X POST \"https://apiweb.mile.app/api/v3/tasks/export\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"download\": \"xlsx\",\n    \"flowId\": \"63d8c9b0dbd5ef20a627dd86\",\n    \"background\": true,\n    \"exportConfigId\": \"634e98498ce07d29474a7e29\"\n  }'"
+          },
+          {
+            "lang": "JavaScript - Axios",
+            "source": "const axios = require('axios');\n\nconst exportTasks = async () => {\n  try {\n    const response = await axios.post(\n      'https://apiweb.mile.app/api/v3/tasks/export',\n      {\n        download: 'xlsx',\n        fields: 'startTime,endTime,hubId,createdBy,flow,status',\n        status: 'DONE',\n        flowId: '63d8c9b0dbd5ef20a627dd86',\n        hubId: '621dd813eb3ebf16b94d6969',\n        page: 1,\n        limit: 100,\n        sortBy: 'createdTime',\n        sortOrder: 'desc',\n        background: false\n      },\n      {\n        headers: {\n          'Authorization': 'Bearer YOUR_ACCESS_TOKEN',\n          'Content-Type': 'application/json'\n        }\n      }\n    );\n    \n    console.log('Export completed:', response.data);\n    console.log('Download link:', response.data.data.link);\n  } catch (error) {\n    console.error('Export failed:', error.response?.data || error.message);\n  }\n};\n\nexportTasks();"
+          }
+        ]
+      }
+    },
+    "/tasks/export-log": {
+      "get": {
+        "summary": "Get export log history",
+        "tags": [
+          "Export Task"
+        ],
+        "operationId": "GetExportLog",
+        "description": "Retrieve the history of export operations for the authenticated user's organization. This endpoint returns a paginated list of all export activities including tasks, data sources, vehicles, drivers, and other exportable entities.<br><br>**Key Features:**<br>- Returns exports from the last 30 days only (older exports are automatically purged)<br>- Filters by user email by default (shows only current user's exports)<br>- Supports filtering by export status, data type, and data name<br>- Powered by ElasticSearch for fast querying<br><br>**Export Status Values:**<br>- `Processing`: Export is being generated in the background<br>- `Done`: Export completed successfully, file is ready for download<br>- `Failed`: Export failed due to an error<br><br>**Data Types:**<br>- `task`: Task exports<br>- `data`: Data source exports<br>- `vehicle`: Vehicle exports<br>- `driver`: Driver exports<br>- `route`: Route exports<br><br>**Important Notes:**<br>- Export files are stored for 30 days, after which they are automatically deleted<br>- Download links are S3 presigned URLs with expiration time<br>- Use this endpoint to monitor background exports initiated via `background=true` parameter",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Field name to sort the results by. Sorts the export log entries based on the specified field.<br>**Example:** `requestAt`, `status`, `dataType`, `dataName`<br>**Default:** `requestAt`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Sort order for the results. Use `asc` for ascending or `desc` for descending order.<br>**Example:** `desc`<br>**Default:** `desc`"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Maximum number of export log entries to return per page. Controls pagination size.<br>**Example:** `20`<br>**Default:** `10`<br>**Min:** `1`, **Max:** `100`"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number for pagination. Use in combination with `limit` to navigate through results.<br>**Example:** `1`<br>**Default:** `1`<br>**Min:** `1`"
+          },
+          {
+            "name": "dataName",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter export logs by the name of the exported data. Useful for finding exports of specific entities.<br>**Example:** `Task Export - January 2024`, `Driver List`"
+          },
+          {
+            "name": "dataType",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "task",
+              "data",
+              "vehicle",
+              "driver",
+              "route"
+            ],
+            "description": "Filter export logs by type of data that was exported. Helps narrow down results to specific export categories.<br>**Example:** `task`, `data`, `vehicle`"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Processing",
+              "Done",
+              "Failed"
+            ],
+            "description": "Filter export logs by processing status. Use to find exports that are still processing, completed, or failed.<br>**Example:** `Done`, `Processing`, `Failed`"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter export logs by user email who initiated the export. If not provided, defaults to the authenticated user's email.<br>**Example:** `john.doe@mile.app`<br>**Default:** Current user's email"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - Export log retrieved",
+            "schema": {
+              "type": "object",
+              "title": "ExportLogResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "total": {
+                  "description": "Total number of export log entries matching the filters (across all pages).",
+                  "type": "integer"
+                },
+                "data": {
+                  "description": "Array of export log entries from ElasticSearch.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_index": {
+                        "description": "ElasticSearch index name",
+                        "type": "string"
+                      },
+                      "_type": {
+                        "description": "ElasticSearch document type",
+                        "type": "string"
+                      },
+                      "_id": {
+                        "description": "Unique identifier for the export log entry",
+                        "type": "string"
+                      },
+                      "_score": {
+                        "description": "ElasticSearch relevance score",
+                        "type": "number"
+                      },
+                      "_source": {
+                        "description": "Actual export log data",
+                        "type": "object",
+                        "properties": {
+                          "organizationId": {
+                            "description": "Organization ID that owns this export",
+                            "type": "string"
+                          },
+                          "dataType": {
+                            "description": "Type of data that was exported (task, data, vehicle, etc.)",
+                            "type": "string"
+                          },
+                          "dataName": {
+                            "description": "Name or description of the export",
+                            "type": "string"
+                          },
+                          "status": {
+                            "description": "Current status of the export (Processing, Done, Failed)",
+                            "type": "string"
+                          },
+                          "requestAt": {
+                            "description": "Timestamp when export was requested (ISO 8601 format)",
+                            "type": "string"
+                          },
+                          "completedAt": {
+                            "description": "Timestamp when export was completed (ISO 8601 format, null if still processing)",
+                            "type": "string"
+                          },
+                          "email": {
+                            "description": "Email of user who initiated the export",
+                            "type": "string"
+                          },
+                          "fileUrl": {
+                            "description": "S3 download URL for the exported file (presigned URL with expiration)",
+                            "type": "string"
+                          },
+                          "fileType": {
+                            "description": "Format of the exported file (xlsx, json, zip)",
+                            "type": "string"
+                          },
+                          "totalRecords": {
+                            "description": "Total number of records exported",
+                            "type": "integer"
+                          },
+                          "errorMessage": {
+                            "description": "Error message if export failed (null if successful)",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "params": {
+                  "description": "ElasticSearch query parameters used for this request (for debugging purposes).",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "total": 25,
+                "data": [
+                  {
+                    "_index": "export",
+                    "_type": "_doc",
+                    "_id": "exp_61e5477611c1b26cef05d37c",
+                    "_score": 1.0,
+                    "_source": {
+                      "organizationId": "61c2fbaaf27b374e8913fe72",
+                      "dataType": "task",
+                      "dataName": "Task Export - January 2024",
+                      "status": "Done",
+                      "requestAt": "2024-01-15T10:30:00+00:00",
+                      "completedAt": "2024-01-15T10:32:15+00:00",
+                      "email": "john.doe@mile.app",
+                      "fileUrl": "https://staticdev.mile.app/production-mile/20240115/task_61c2fbaaf27b374e8913fe72_1705315800.xlsx",
+                      "fileType": "xlsx",
+                      "totalRecords": 1247,
+                      "errorMessage": null
+                    }
+                  },
+                  {
+                    "_index": "export",
+                    "_type": "_doc",
+                    "_id": "exp_61e5477611c1b26cef05d38d",
+                    "_score": 1.0,
+                    "_source": {
+                      "organizationId": "61c2fbaaf27b374e8913fe72",
+                      "dataType": "data",
+                      "dataName": "Customer Data Export",
+                      "status": "Processing",
+                      "requestAt": "2024-01-15T11:00:00+00:00",
+                      "completedAt": null,
+                      "email": "john.doe@mile.app",
+                      "fileUrl": null,
+                      "fileType": "xlsx",
+                      "totalRecords": 0,
+                      "errorMessage": null
+                    }
+                  },
+                  {
+                    "_index": "export",
+                    "_type": "_doc",
+                    "_id": "exp_61e5477611c1b26cef05d39e",
+                    "_score": 1.0,
+                    "_source": {
+                      "organizationId": "61c2fbaaf27b374e8913fe72",
+                      "dataType": "vehicle",
+                      "dataName": "Fleet Report - December 2023",
+                      "status": "Failed",
+                      "requestAt": "2024-01-14T09:00:00+00:00",
+                      "completedAt": "2024-01-14T09:05:30+00:00",
+                      "email": "john.doe@mile.app",
+                      "fileUrl": null,
+                      "fileType": "xlsx",
+                      "totalRecords": 0,
+                      "errorMessage": "Query timeout: Dataset too large"
+                    }
+                  }
+                ],
+                "params": {
+                  "from": 0,
+                  "size": 10,
+                  "query": {
+                    "bool": {
+                      "must": [
+                        {
+                          "term": {
+                            "organizationId.keyword": "61c2fbaaf27b374e8913fe72"
+                          }
+                        },
+                        {
+                          "range": {
+                            "requestAt": {
+                              "lte": "2024-01-15T12:00:00+00:00",
+                              "gte": "2023-12-16T12:00:00+00:00"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "sort": [
+                    {
+                      "requestAt": {
+                        "order": "desc"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid query parameters",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid limit parameter. Must be between 1 and 100."
+                },
+                "data": {
+                  "type": "array",
+                  "example": []
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing authentication token",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - User lacks permission to view export logs",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "You do not have permission to view export logs"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error - ElasticSearch or internal error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "ElasticSearch connection failed"
+                },
+                "data": {
+                  "type": "array",
+                  "example": []
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "file": {
+                      "type": "string"
+                    },
+                    "line_of_code": {
+                      "type": "integer"
+                    },
+                    "code": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X GET \"https://apiweb.mile.app/api/v3/tasks/export-log?page=1&limit=10&sortBy=requestAt&sortOrder=desc\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+          },
+          {
+            "lang": "cURL - Filter by Status",
+            "source": "curl -X GET \"https://apiweb.mile.app/api/v3/tasks/export-log?status=Done&dataType=task&limit=20\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+          },
+          {
+            "lang": "JavaScript - Axios",
+            "source": "const axios = require('axios');\n\nconst getExportLog = async () => {\n  try {\n    const response = await axios.get(\n      'https://apiweb.mile.app/api/v3/tasks/export-log',\n      {\n        params: {\n          page: 1,\n          limit: 10,\n          sortBy: 'requestAt',\n          sortOrder: 'desc',\n          status: 'Done',\n          dataType: 'task'\n        },\n        headers: {\n          'Authorization': 'Bearer YOUR_ACCESS_TOKEN'\n        }\n      }\n    );\n    \n    console.log('Total exports:', response.data.total);\n    response.data.data.forEach(log => {\n      const source = log._source;\n      console.log(`Export: ${source.dataName}`);\n      console.log(`Status: ${source.status}`);\n      console.log(`Download: ${source.fileUrl}`);\n      console.log('---');\n    });\n  } catch (error) {\n    console.error('Failed to fetch export log:', error.response?.data || error.message);\n  }\n};\n\ngetExportLog();"
+          }
+        ]
+      }
+    },
+    "/data/export": {
+      "post": {
+        "summary": "Export data source",
+        "tags": [
+          "Export Task"
+        ],
+        "operationId": "ExportDataSource",
+        "description": "Export data source records by applying specific filters. This endpoint supports exporting various data types defined in your organization with customizable field selection.<br><br>**Export Modes:**<br>- **Direct Export** (`background=false`): Returns file immediately. Best for datasets < 10,000 records<br>- **Background Export** (`background=true`): Queued for processing. Monitor via <a href='#tag/Export-Task/operation/GetExportLog'>GET /tasks/export-log</a>. Best for large datasets<br><br>**Supported Formats:**<br>- `xlsx`: Excel format (recommended for most use cases)<br>- `json`: JSON format (for programmatic processing)<br><br>**Important Notes:**<br>- Use `fields` parameter to select specific columns for export<br>- Filter by `dataTypeId` to export specific data type records<br>- Maximum 1,000,000 records per export<br>- Export files are stored for 30 days",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "download",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "json",
+              "xlsx"
+            ],
+            "description": "File type that user want to download. There are 2 types of `download`:<br>**enum**: `json`,`xlsx`<br>**Example:** `xlsx`"
+          },
+          {
+            "name": "background",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "If the user sets the background parameter to `true`, the export process will utilize background processing, and the results will be available at <a href='#tag/Export-Task/operation/GetExportLog'>GET /tasks/export-log API</a>. If the user sets the background parameter to `false`, the export process will run directly, and the results will be immediately available in the response.<br>**Example:** `true`.<br>**Default:** `false`"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.<br>**Example:** `dataId,name,address`"
+          },
+          {
+            "name": "hubId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The identifier for the hub that generated by system. Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `63c63ab1b6972d3150348172`"
+          },
+          {
+            "name": "dataTypeId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The identifier for the dataType that generated by system. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of dataType IDs.<br>**Example:** `6422816ef6710f053056d812`"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Pagination of data result list.<br>**Example:** `2`.<br>**Default:** `1`"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Limit of data result list.<br>**Example:** `10`.<br>**Default:** `30`"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on data source objects.<br>**Example:** `name`, `address`, `hubId`, etc.<br>**Default:** `createdTime`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "sortOrder is to decide ascending or descending order<br>**Example:** `asc` or `desc`.<br>**Default:** `desc`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - Export completed or queued",
+            "schema": {
+              "type": "object",
+              "title": "ExportDataSourceResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "total_data_be": {
+                  "description": "Total number of data source records successfully exported.",
+                  "type": "integer"
+                },
+                "last_id": {
+                  "description": "ID of the last data source record that was successfully exported.",
+                  "type": "string"
+                },
+                "last_field": {
+                  "description": "Name of the last field that was successfully exported.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Export file information.",
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "description": "Unix timestamp when export was created",
+                      "type": "integer"
+                    },
+                    "organizationId": {
+                      "description": "Organization ID that owns the export",
+                      "type": "string"
+                    },
+                    "reportType": {
+                      "description": "Type of export report",
+                      "type": "string",
+                      "enum": [
+                        "data"
+                      ]
+                    },
+                    "link": {
+                      "description": "Direct download URL for the exported file",
+                      "type": "string"
+                    },
+                    "status": {
+                      "description": "Export processing status",
+                      "type": "string",
+                      "enum": [
+                        "Done",
+                        "Processing",
+                        "Failed"
+                      ]
+                    }
+                  }
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "total_data_be": 10,
+                "last_id": "642282a259c3f74157368012",
+                "last_field": "address",
+                "data": {
+                  "time": 1681194657,
+                  "organizationId": "63d397ca8cb4d07e9d581c82",
+                  "reportType": "data",
+                  "link": "https://staticdev.mile.app/dev-mile/20230411/data_63d397ca8cb4d07e9d581c82_1681194657.xlsx",
+                  "status": "Done"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters or validation error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "The download parameter is required."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing authentication token",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - User lacks permission to export data",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "You do not have permission to export data"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error - Internal server error during export",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal server error"
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "file": {
+                      "type": "string"
+                    },
+                    "line_of_code": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST \"https://apiweb.mile.app/api/v3/data/export?download=xlsx&dataTypeId=6422816ef6710f053056d812&fields=dataId,name,address&limit=100\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+          },
+          {
+            "lang": "cURL - Background Export",
+            "source": "curl -X POST \"https://apiweb.mile.app/api/v3/data/export?download=xlsx&dataTypeId=6422816ef6710f053056d812&background=true\" \\\n  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+          },
+          {
+            "lang": "JavaScript - Axios",
+            "source": "const axios = require('axios');\n\nconst exportDataSource = async () => {\n  try {\n    const response = await axios.post(\n      'https://apiweb.mile.app/api/v3/data/export',\n      null,\n      {\n        params: {\n          download: 'xlsx',\n          dataTypeId: '6422816ef6710f053056d812',\n          fields: 'dataId,name,address',\n          hubId: '63c63ab1b6972d3150348172',\n          limit: 100,\n          sortBy: 'createdTime',\n          sortOrder: 'desc'\n        },\n        headers: {\n          'Authorization': 'Bearer YOUR_ACCESS_TOKEN'\n        }\n      }\n    );\n    \n    console.log('Export completed:', response.data);\n    console.log('Download link:', response.data.data.link);\n  } catch (error) {\n    console.error('Export failed:', error.response?.data || error.message);\n  }\n};\n\nexportDataSource();"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "postExportTask": {
+      "title": "postExportTask",
+      "type": "object",
+      "description": "Request body schema for exporting tasks. Use filters to narrow down the dataset and customize the export output.",
+      "example": {
+        "download": "xlsx",
+        "fields": "startTime,endTime,hubId,createdBy,flow,status",
+        "doneBy": "Leandro",
+        "assignee": "leandro@mile.app",
+        "status": "DONE",
+        "flowId": "63d8c9b0dbd5ef20a627dd86",
+        "hubId": "621dd813eb3ebf16b94d6969",
+        "page": 1,
+        "limit": 20,
+        "sortBy": "createdTime",
+        "sortOrder": "desc",
+        "background": false,
+        "exportConfigId": "634e98498ce07d29474a7e29"
+      },
+      "properties": {
+        "download": {
+          "type": "string",
+          "enum": [
+            "json",
+            "xlsx"
+          ],
+          "description": "File type that user want to download. There are 2 types of `download`:<br>**enum**: `json`,`xlsx`<br>**Example:** `xlsx`"
+        },
+        "fields": {
+          "type": "string",
+          "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.<br>**Example:** `startTime,endTime,hubId,createdBy,flow,status`"
+        },
+        "doneBy": {
+          "type": "string",
+          "description": "Name of user that completing the task.<br>**Example:** `Leandro`"
+        },
+        "assignee": {
+          "type": "string",
+          "description": "User email for a given task.<br>**Example**: `leandro@mile.app`"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "UNASSIGNED",
+            "ONGOING",
+            "DONE"
+          ],
+          "description": "Status of task according to task's data condition. There are 3 types of `status`:<br>**enum**: `UNASSIGNED`,`ONGOING`,`DONE`<br>**Example:** `UNASSIGNED`"
+        },
+        "flowId": {
+          "type": "string",
+          "description": "The identifier for the flow that generated by system. Use <a href='#tag/Flow/operation/getflow'>GET /flows API</a> to get the list of flow id.<br>Comma (,) delimiter for filter multiple flow.<br>**Example:** `63d8c9b0dbd5ef20a627dd86,73d8c9b0dbd5ef20a627dd87`"
+        },
+        "hubId": {
+          "type": "string",
+          "description": "The identifier for the hub that generated by system. Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `621dd813eb3ebf16b94d6969`"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Pagination of tasks result list.<br>**Example:** `2`.<br>**Default:** `1`"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Limit of tasks result list.<br>**Example:** `10`.<br>**Default:** `30`"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on task objects.<br>**Example:** `flow`, `assignee`, `status`, `hubId`, etc.<br>**Default:** `createdTime`"
+        },
+        "sortOrder": {
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "description": "sortOrder is to decide ascending or descending order<br>**Example:** `asc` or `desc`.<br>**Default:** `desc`"
+        },
+        "background": {
+          "type": "boolean",
+          "description": "If the user sets the background parameter to `true`, the export process will utilize background processing, and the results will be available at <a href='#tag/Export-Task/operation/GetExportLog'>GET /tasks/export-log API</a>. If the user sets the background parameter to `false`, the export process will run directly, and the results will be immediately available in the response.<br>**Example:** `true`.<br>**Default:** `false`"
+        },
+        "exportConfigId": {
+          "type": "string",
+          "description": "Unique identifier for the export config for allow user to export data using their own configuration. Use <a href='#tag/Export-Config/operation/getExportConfigs'>GET /export-configs</a> endpoint to get the list of Export Config IDs.<br>**Example:** `634e98498ce07d29474a7e29`"
+        }
+      },
+      "required": [
+        "download"
+      ]
+    }
+  }
+}

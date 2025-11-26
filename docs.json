@@ -316,11 +316,62 @@
           {
             "group": "Task",
             "openapi": {
-              "source": "openapi-public.json",
-              "directory": "api-reference"
+              "source": "openapi/public/openapi-task.json",
+              "directory": "api-reference/task"
             },
             "pages": [
               "api-reference/task/overview"
+            ]
+          },
+          {
+            "group": "Routing",
+            "openapi": {
+              "source": "openapi/public/openapi-routing.json",
+              "directory": "api-reference/routing"
+            }
+          },
+          {
+            "group": "Flow",
+            "openapi": {
+              "source": "openapi/public/openapi-flow.json",
+              "directory": "api-reference/flow"
+            }
+          },
+          {
+            "group": "Data",
+            "openapi": {
+              "source": "openapi/public/openapi-data.json",
+              "directory": "api-reference/data"
+            }
+          },
+          {
+            "group": "Setting",
+            "openapi": {
+              "source": "openapi/public/openapi-setting.json",
+              "directory": "api-reference/setting"
+            },
+            "pages": [
+              "api-reference/setting/overview"
+            ]
+          },
+          {
+            "group": "Import/Export",
+            "openapi": {
+              "source": "openapi/public/openapi-importexport.json",
+              "directory": "api-reference/importexport"
+            },
+            "pages": [
+              "api-reference/importexport/overview"
+            ]
+          },
+          {
+            "group": "File",
+            "openapi": {
+              "source": "openapi/public/openapi-file.json",
+              "directory": "api-reference/file"
+            },
+            "pages": [
+              "api-reference/file/overview"
             ]
           }
         ]
@@ -338,7 +389,7 @@
           {
             "group": "Internal Task",
             "openapi": {
-              "source": "openapi-internal.json",
+              "source": "openapi/internal/openapi-full.json",
               "directory": "api-reference-internal"
             }
           }

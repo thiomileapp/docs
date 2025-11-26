@@ -1,0 +1,524 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Hub"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/hubs": {
+      "get": {
+        "summary": "Read hub",
+        "tags": [
+          "Hub"
+        ],
+        "operationId": "getHubs",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/pageInQuery"
+          },
+          {
+            "$ref": "#/parameters/limitInQuery"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The unique name of organization's hub **Example:** `Jakarta warehouse`"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Query param search. This field will search vehicles according to similar value of name **Example:** `Jakarta`"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on hub objects.<br>**Example:** `name`, `address`, etc. **Default:** `name`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortOrder is to decide ascending or descending order **Example:** `asc` or `desc`. **Default:** `asc`"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.<br>**Example:** `name,address,lat,lng`"
+          },
+          {
+            "name": "byUser",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Flag to filter hub data based on user hub access. **Example:** `true` or `false`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "List object of hubs.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "_id": "63c7705c8608d52094785374",
+                    "name": "Neo Soho",
+                    "address": "Jakarta Barat 11470, Indonesia",
+                    "lat": -6.17434,
+                    "lng": 106.79028,
+                    "organizationId": "63c76fdb88697c70e35866e2",
+                    "updatedTime": "2023-01-18T04:06:52.773000Z",
+                    "createdTime": "2023-01-18T04:06:52.773000Z",
+                    "deleteAccess": true
+                  },
+                  {
+                    "_id": "64181125ab38c90b2b753c92",
+                    "name": "Monas",
+                    "address": "Jalan Silang Merdeka, Jakarta Pusat 10110, Indonesia",
+                    "lat": -6.17537,
+                    "lng": 106.82854,
+                    "organizationId": "63c76fdb88697c70e35866e2",
+                    "updatedTime": "2023-03-20T07:54:13.899000Z",
+                    "createdTime": "2023-03-20T07:54:13.899000Z",
+                    "deleteAccess": true
+                  }
+                ],
+                "status": true
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/hub/{hubId}/": {
+      "get": {
+        "summary": "Read hub by ID",
+        "tags": [
+          "Hub"
+        ],
+        "operationId": "getHubId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hubId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the hub that generated by system.<br>**Example**: `63c7705c8608d52094785374`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object hub.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "data": {
+                  "_id": "63c7705c8608d52094785374",
+                  "name": "Neo Soho",
+                  "address": "Jakarta Barat 11470, Indonesia",
+                  "lat": -6.17434,
+                  "lng": 106.79028,
+                  "organizationId": "63c76fdb88697c70e35866e2",
+                  "updatedTime": "2023-01-18T04:06:52.773000Z",
+                  "createdTime": "2023-01-18T04:06:52.773000Z",
+                  "deleteAccess": true
+                },
+                "status": true
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/hub": {
+      "post": {
+        "summary": "Create hub",
+        "tags": [
+          "Hub"
+        ],
+        "operationId": "Hub",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HubCreateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail object of created hub.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "data": {
+                  "name": "Dukuh Atas",
+                  "address": "12, Jalan Setia Budi VI, Jakarta Selatan 12910, Indonesia",
+                  "lat": -6.205870636762187,
+                  "lng": 106.82562818235002,
+                  "organizationId": "63c76fdb88697c70e35866e2",
+                  "updatedTime": "2023-03-31T01:17:49.158000Z",
+                  "createdTime": "2023-03-31T01:17:49.158000Z",
+                  "_id": "642634bde1428d414838c882",
+                  "deleteAccess": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/hub/{hubId}": {
+      "put": {
+        "summary": "Update hub",
+        "tags": [
+          "Hub"
+        ],
+        "operationId": "updateHub",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hubId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the hub that generated by system.<br>**Example**: `642634bde1428d414838c882`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HubUpdateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "string"
+                },
+                "property": {
+                  "description": "Detail of updated hub.",
+                  "type": "object"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": true,
+                "property": {
+                  "_id": "642634bde1428d414838c882",
+                  "name": "Dukuh Atas",
+                  "address": "12, Jalan Setia Budi VI, Dukuh Atas, Jakarta Selatan 12910, Indonesia",
+                  "lat": -6.205870636762187,
+                  "lng": 106.82562818235002,
+                  "organizationId": "63c76fdb88697c70e35866e2",
+                  "updatedTime": "2023-03-31T01:31:48.809000Z",
+                  "createdTime": "2023-03-31T01:17:49.158000Z",
+                  "deleteAccess": true
+                },
+                "message": "Success"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete hub",
+        "tags": [
+          "Hub"
+        ],
+        "operationId": "Deletehub",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hubId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the hub that generated by system.<br>**Example**: `642634bde1428d414838c882`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "description": "Status of response."
+                }
+              },
+              "example": {
+                "status": true
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "data not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "HubCreateRequest": {
+      "title": "HubCreateRequest",
+      "example": {
+        "name": "Dukuh Atas",
+        "address": "12, Jalan Setia Budi VI, Jakarta Selatan 12910, Indonesia",
+        "lat": "-6.205870636762187",
+        "lng": "106.82562818235002"
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of hub. User can define hub name with hub's location, or something else.<br>**Example**: `Hub transit Jakarta`"
+        },
+        "address": {
+          "type": "string",
+          "description": "Location of the hub. **Example:** `'Neo Soho, Jakarta Barat'`"
+        },
+        "lat": {
+          "type": "number",
+          "format": "double",
+          "description": "Coordinate latitude of hub. **Example:** `'-6.230815251666679'`"
+        },
+        "lng": {
+          "type": "number",
+          "format": "double",
+          "description": "Coordinate longitude of hub. **Example:** `'106.75684387903198'`"
+        }
+      },
+      "required": [
+        "name",
+        "address",
+        "lat",
+        "lng"
+      ]
+    },
+    "HubUpdateRequest": {
+      "title": "HubUpdateRequest",
+      "example": {
+        "name": "Dukuh Atas",
+        "address": "12, Jalan Setia Budi VI, Dukuh Atas, Jakarta Selatan 12910, Indonesia",
+        "lat": "-6.205870636762187",
+        "lng": "106.82562818235002"
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of hub. User can define hub name with hub's location, or something else.<br>**Example**: `Hub transit Jakarta`"
+        },
+        "address": {
+          "type": "string",
+          "description": "Location of the hub. **Example:** `'Neo Soho, Jakarta Barat'`"
+        },
+        "lat": {
+          "type": "number",
+          "format": "double",
+          "description": "Coordinate latitude of visit. **Example:** `'-6.230815251666679'`"
+        },
+        "lng": {
+          "type": "number",
+          "format": "double",
+          "description": "Coordinate longitude of visit. **Example:** `'106.75684387903198'`"
+        }
+      },
+      "required": [
+        "name",
+        "address",
+        "lat",
+        "lng"
+      ]
+    }
+  }
+}

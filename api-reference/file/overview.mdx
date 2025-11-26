@@ -1,0 +1,64 @@
+---
+title: 'File Overview'
+description: 'View and retrieve files stored in MileApp'
+---
+
+## Overview
+
+The File API provides an endpoint for viewing files that have been uploaded and stored in MileApp's storage system. Files are typically uploaded as part of task execution (photos, signatures, documents) and can be retrieved using system-generated URLs.
+
+## API Endpoint
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/file/view` | GET | View/download a file by URL |
+
+<CardGroup cols={1}>
+  <Card title="View File" icon="image" href="/api-reference/file/get-fileview">
+    Retrieve files using system-generated URLs
+  </Card>
+</CardGroup>
+
+## How It Works
+
+Files in MileApp are stored on cloud storage and accessed via system-generated URLs. When tasks contain photo, signature, or document components, the uploaded files are stored and a URL is generated.
+
+### File URL Format
+
+```
+https://apistorage.mile.app/{environment}/{orgId}/{year}/{month}/{day}/{timestamp}.{ext}
+```
+
+**Example:**
+```
+https://apistorage.mile.app/sandbox/6299add8/2024/03/20/1710920997.jpg
+```
+
+## Supported File Types
+
+The File API returns files with appropriate content types:
+
+| Type | Content-Type | Extensions |
+|------|--------------|------------|
+| Image | `image/png`, `image/jpg`, `image/jpeg` | `.png`, `.jpg`, `.jpeg` |
+
+## Usage
+
+### Retrieving a File
+
+```bash
+GET /file/view?url=https://apistorage.mile.app/sandbox/6299add8/2024/03/20/1710920997.jpg
+```
+
+The API will return the file content directly with the appropriate content type header.
+
+## Common Use Cases
+
+1. **Displaying Task Photos** - Retrieve photos captured during task execution
+2. **Viewing Signatures** - Display customer signatures collected in the field
+3. **Document Access** - Access documents attached to tasks
+
+## Related Resources
+
+- [Task](/api-reference/task/overview) - Task management including file attachments
+- [Flow](/api-reference/flow/overview) - Configure photo and signature components

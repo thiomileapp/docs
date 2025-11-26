@@ -1,0 +1,938 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Plugin API"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Bearer Token. Use format: `Bearer {your_access_token}`"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json",
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/plugin": {
+      "post": {
+        "summary": "Create add-on/plugin",
+        "description": "Creates a new add-on/plugin for your organization with JavaScript resource file and optional SVG icon. The plugin extends functionality within the Mile V3 platform for your organization.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "createPlugin",
+        "deprecated": false,
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100,
+            "description": "Name of the add-on/plugin (3-100 characters, must be unique within your organization)"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Description of the add-on functionality (10-500 characters)"
+          },
+          {
+            "name": "resourceFile",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "JavaScript file (.js) containing the add-on code (max 5MB). Must contain valid JavaScript syntax."
+          },
+          {
+            "name": "icon",
+            "in": "formData",
+            "required": false,
+            "type": "file",
+            "description": "SVG icon file (.svg) for the add-on (max 500KB, optional)"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Plugin created successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginCreateResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation failed or invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict - Plugin name already exists in organization",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "413": {
+            "description": "Payload Too Large - File size exceeds maximum limit",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type - Invalid file type (only .js and .svg allowed)",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - JavaScript file contains syntax errors",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/plugin/{id}": {
+      "put": {
+        "summary": "Update add-on/plugin",
+        "description": "Updates an existing add-on's name and description. Only plugins belonging to your organization can be updated.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "updatePlugin",
+        "deprecated": false,
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{24}$",
+            "description": "Plugin ID (MongoDB ObjectId). Must belong to your organization."
+          },
+          {
+            "name": "_method",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "PUT"
+            ],
+            "description": "HTTP method override - must be 'PUT'"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100,
+            "description": "Updated name of the add-on (3-100 characters, must be unique within your organization)"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Updated description of the add-on functionality (10-500 characters)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugin updated successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginUpdateResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation failed or invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Plugin belongs to different organization",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found - Plugin not found or not accessible",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict - Plugin name already exists in organization",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Get add-on details",
+        "description": "Retrieves detailed information about a specific add-on/plugin. Only plugins belonging to your organization or system plugins are accessible.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "getPlugin",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{24}$",
+            "description": "Plugin ID (MongoDB ObjectId)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugin details retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginDetailsResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Plugin not accessible to your organization",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found - Plugin not found or not accessible",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete add-on/plugin",
+        "description": "Permanently removes an add-on from your organization. Only plugins belonging to your organization can be deleted. This action cannot be undone.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "deletePlugin",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{24}$",
+            "description": "Plugin ID (MongoDB ObjectId). Must belong to your organization."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugin deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginDeleteResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Plugin belongs to different organization or is a system plugin",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found - Plugin not found or not accessible",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/plugins": {
+      "get": {
+        "summary": "List add-ons/plugins",
+        "description": "Retrieves a paginated list of add-ons accessible to your organization, including both organization-specific plugins and global system plugins. Supports search, filtering, and sorting with Laravel pagination.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "listPlugins",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "maxLength": 255,
+            "description": "Search query to filter plugins by name or description"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "name",
+              "createdTime",
+              "updatedTime",
+              "usageCount"
+            ],
+            "default": "createdTime",
+            "description": "Field to sort by"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "default": "desc",
+            "description": "Sort order (ascending or descending)"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 1,
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 10,
+            "description": "Number of items per page (maximum 100)"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "draft"
+            ],
+            "description": "Filter by plugin status"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugins list retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginListResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid query parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "x-components": {
+    "schemas": {
+      "Plugin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique plugin identifier (MongoDB ObjectId). **Example**: `68b440c9dad4c5d45707f6d2`"
+          },
+          "name": {
+            "type": "string",
+            "description": "Plugin display name (3-100 characters). **Example**: `Custom Dashboard Widget`"
+          },
+          "description": {
+            "type": "string",
+            "description": "Plugin functional description (10-500 characters). **Example**: `A custom widget for displaying real-time analytics data`"
+          },
+          "resourceFile": {
+            "type": "string",
+            "description": "Original filename of the JavaScript resource. **Example**: `1756656087_Custom-Dashboard-Widget.js`"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true,
+            "description": "Full URL to the plugin icon (if available). **Example**: `https://cdn.mile.app/plugins/icons/1756656087_dashboard-widget.svg`"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier. 'system' for global plugins, organization ID for custom plugins. **Example**: `686cc0ff083ca8093204f002` or `system`"
+          },
+          "resourceUrl": {
+            "type": "string",
+            "description": "Full URL where the JavaScript resource is hosted. **Example**: `https://cdn.mile.app/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js`"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email address of the user who created the plugin. **Example**: `user@mile.app`"
+          },
+          "updatedBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "Email address of the user who last updated the plugin. May be null if never updated. **Example**: `user@mile.app`"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the plugin was created. **Format**: `YYYY-MM-DDTHH:mm:ss.ffffffZ`. **Example**: `2025-08-31T10:30:00.000000Z`"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the plugin was last updated. **Format**: `YYYY-MM-DDTHH:mm:ss.ffffffZ`. **Example**: `2025-08-31T10:35:00.000000Z`"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "Organization display name. 'Global' for system plugins, actual organization name for custom plugins. **Example**: `MileApp` or `Global`"
+          },
+          "isUsed": {
+            "type": "boolean",
+            "description": "Indicates if the plugin is currently active/installed in your organization. **Example**: `false`"
+          },
+          "customModuleId": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of associated custom module or null if standalone. **Example**: `null` or `62846484ed5be87b6f4358f3`"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "resourceFile",
+          "organizationId",
+          "resourceUrl",
+          "createdBy",
+          "createdTime",
+          "updatedTime",
+          "organizationName",
+          "isUsed"
+        ],
+        "example": {
+          "id": "68b440c9dad4c5d45707f6d2",
+          "name": "Custom Dashboard Widget",
+          "description": "A custom widget for displaying real-time analytics data",
+          "resourceFile": "1756656087_Custom-Dashboard-Widget.js",
+          "icon": "https://cdn.mile.app/plugins/icons/1756656087_dashboard-widget.svg",
+          "organizationId": "686cc0ff083ca8093204f002",
+          "resourceUrl": "https://cdn.mile.app/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js",
+          "createdBy": "user@mile.app",
+          "updatedBy": "user@mile.app",
+          "createdTime": "2025-08-31T10:30:00.000000Z",
+          "updatedTime": "2025-08-31T10:35:00.000000Z",
+          "organizationName": "MileApp",
+          "isUsed": false,
+          "customModuleId": null
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PluginObject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Plugin unique identifier",
+          "example": "68b440c9dad4c5d45707f6d2"
+        },
+        "name": {
+          "type": "string",
+          "description": "Plugin display name",
+          "example": "Custom Dashboard Widget"
+        },
+        "description": {
+          "type": "string",
+          "description": "Plugin description",
+          "example": "A custom widget for displaying real-time analytics data"
+        },
+        "resourceFile": {
+          "type": "string",
+          "description": "JavaScript resource filename",
+          "example": "1756656087_Custom-Dashboard-Widget.js"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Full URL to plugin icon (if available)",
+          "example": "https://cdn.mile.app/plugins/icons/1756656087_dashboard-widget.svg"
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Organization ID ('system' for global plugins)",
+          "example": "686cc0ff083ca8093204f002"
+        },
+        "resourceUrl": {
+          "type": "string",
+          "description": "Full URL to JavaScript resource",
+          "example": "https://cdn.mile.app/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Email of user who created the plugin",
+          "example": "user@mile.app"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Email of user who last updated the plugin",
+          "example": "user@mile.app"
+        },
+        "updatedTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp (ISO 8601)",
+          "example": "2025-08-31T10:35:00.000000Z"
+        },
+        "createdTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp (ISO 8601)",
+          "example": "2025-08-31T10:30:00.000000Z"
+        },
+        "organizationName": {
+          "type": "string",
+          "description": "Organization display name ('Global' for system plugins)",
+          "example": "MileApp"
+        },
+        "isUsed": {
+          "type": "boolean",
+          "description": "Whether plugin is currently active/installed",
+          "example": false
+        },
+        "customModuleId": {
+          "type": "string",
+          "description": "Associated custom module ID (if linked)",
+          "example": null
+        }
+      }
+    },
+    "PluginCreateResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Operation success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message",
+          "example": "Plugin created successfully"
+        },
+        "data": {
+          "$ref": "#/x-components/schemas/Plugin"
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ]
+    },
+    "PluginUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Operation success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message",
+          "example": "Plugin updated successfully"
+        },
+        "data": {
+          "$ref": "#/x-components/schemas/Plugin"
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ]
+    },
+    "PluginDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Operation success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message",
+          "example": "Success."
+        },
+        "data": {
+          "$ref": "#/x-components/schemas/Plugin"
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ]
+    },
+    "PluginDeleteResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Operation success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message",
+          "example": "Plugin deleted successfully"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "deletedPluginId": {
+              "type": "string",
+              "description": "ID of deleted plugin",
+              "example": "68aeb4b3dca6bbc8310b0eb2"
+            },
+            "deletedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Deletion timestamp",
+              "example": "2025-08-31T10:40:00.000000Z"
+            }
+          },
+          "required": [
+            "deletedPluginId",
+            "deletedAt"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ]
+    },
+    "PluginListResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Operation success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message",
+          "example": "Success."
+        },
+        "data": {
+          "type": "object",
+          "description": "Laravel pagination response with plugin data",
+          "properties": {
+            "current_page": {
+              "type": "integer",
+              "description": "Current page number",
+              "example": 1,
+              "minimum": 1
+            },
+            "data": {
+              "type": "array",
+              "description": "Array of plugin objects for current page",
+              "items": {
+                "$ref": "#/x-components/schemas/Plugin"
+              }
+            },
+            "first_page_url": {
+              "type": "string",
+              "description": "URL for first page",
+              "example": "https://api.mile.app/api/v3/plugins?page=1"
+            },
+            "from": {
+              "type": "integer",
+              "description": "First item number on current page",
+              "example": 1,
+              "minimum": 0
+            },
+            "last_page": {
+              "type": "integer",
+              "description": "Total number of pages",
+              "example": 1,
+              "minimum": 1
+            },
+            "last_page_url": {
+              "type": "string",
+              "description": "URL for last page",
+              "example": "https://api.mile.app/api/v3/plugins?page=1"
+            },
+            "links": {
+              "type": "array",
+              "description": "Pagination navigation links",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "Link URL (null for disabled links)"
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Link display label"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "Whether link represents current page"
+                  }
+                }
+              }
+            },
+            "next_page_url": {
+              "type": "string",
+              "description": "URL for next page (null if last page)",
+              "example": null
+            },
+            "path": {
+              "type": "string",
+              "description": "Base API endpoint path",
+              "example": "https://api.mile.app/api/v3/plugins"
+            },
+            "per_page": {
+              "type": "integer",
+              "description": "Number of items per page",
+              "example": 10,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "prev_page_url": {
+              "type": "string",
+              "description": "URL for previous page (null if first page)",
+              "example": null
+            },
+            "to": {
+              "type": "integer",
+              "description": "Last item number on current page",
+              "example": 2,
+              "minimum": 0
+            },
+            "total": {
+              "type": "integer",
+              "description": "Total number of plugins across all pages",
+              "example": 2,
+              "minimum": 0
+            }
+          },
+          "required": [
+            "current_page",
+            "data",
+            "first_page_url",
+            "from",
+            "last_page",
+            "last_page_url",
+            "links",
+            "next_page_url",
+            "path",
+            "per_page",
+            "prev_page_url",
+            "to",
+            "total"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ]
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Operation status (always false for errors)",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable error message",
+          "example": "Validation failed"
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Machine-readable error code",
+              "example": "VALIDATION_ERROR"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detailed error information for debugging",
+              "example": "Name field is required and must be between 3-100 characters"
+            },
+            "field": {
+              "type": "string",
+              "description": "Field name for validation errors (if applicable)",
+              "example": "name"
+            }
+          },
+          "required": [
+            "code",
+            "details"
+          ]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Error occurrence timestamp (ISO 8601)",
+          "example": "2025-08-31T10:45:00.000000Z"
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "error",
+        "timestamp"
+      ]
+    }
+  }
+}

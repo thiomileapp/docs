@@ -1,0 +1,1674 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Data Type"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/data-types": {
+      "get": {
+        "summary": "Read data type",
+        "tags": [
+          "Data Type"
+        ],
+        "operationId": "getDataType",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/pageInQuery"
+          },
+          {
+            "$ref": "#/parameters/limitInQuery"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.<br>**Example:** `name,fields,organizationId`"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter by provider type. Comma-separated values for multiple providers.<br>**Example:** `internal,external-api`<br>**Default:** `internal` (temporary for backward compatibility)<br>**Available values:** `internal`, `external-api`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkReadResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data_types": {
+                  "description": "List of object data type.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data_types": {
+                  "current_page": 1,
+                  "data": [
+                    {
+                      "name": "OutletDetail",
+                      "fields": [
+                        {
+                          "id": "dataId",
+                          "title": "Data ID",
+                          "type": "text",
+                          "optionData": [],
+                          "required": true,
+                          "primaryKey": true
+                        },
+                        {
+                          "id": "outletName",
+                          "title": "Outlet Name",
+                          "type": "text",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletHours",
+                          "title": "Outlet Hours",
+                          "default": 12,
+                          "type": "number",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletType",
+                          "title": "Outlet Type",
+                          "type": "option",
+                          "optionData": [
+                            "minimarket",
+                            "supermarket",
+                            "vending machine",
+                            "warung"
+                          ],
+                          "required": true
+                        },
+                        {
+                          "id": "outletOpen",
+                          "title": "Outlet Open",
+                          "default": "09:00",
+                          "type": "time",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletClosed",
+                          "title": "Outlet Closed",
+                          "default": "17:00",
+                          "type": "time",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletContractExpired",
+                          "title": "Outlet Contract Expired",
+                          "type": "date",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletOpenInWeekend",
+                          "title": "Outlet Open In Weekend",
+                          "type": "boolean",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletGeolocation",
+                          "title": "Outlet Geolocation",
+                          "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+                          "type": "geolocation",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletPhoneNumber",
+                          "title": "Outlet Phone Number",
+                          "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+                          "type": "phoneNumber",
+                          "optionData": [],
+                          "required": true
+                        },
+                        {
+                          "id": "outletCloseOrder",
+                          "title": "Outlet Close Order",
+                          "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+                          "type": "dateTime",
+                          "optionData": [],
+                          "required": true
+                        }
+                      ]
+                    }
+                  ],
+                  "first_page_url": "https://apiweb.mile.app/v3/data-types?page=1",
+                  "from": 1,
+                  "last_page": 1,
+                  "last_page_url": "https://apiweb.mile.app/v3/data-types?page=1",
+                  "links": [
+                    {
+                      "url": null,
+                      "label": "&laquo; Previous",
+                      "active": false
+                    },
+                    {
+                      "url": "https://apiweb.mile.app/v3/data-types?page=1",
+                      "label": "1",
+                      "active": true
+                    },
+                    {
+                      "url": null,
+                      "label": "Next &raquo;",
+                      "active": false
+                    }
+                  ],
+                  "next_page_url": null,
+                  "path": "https://apiweb.mile.app/v3/data-types",
+                  "per_page": 20,
+                  "prev_page_url": null,
+                  "to": 15,
+                  "total": 15
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data-type/{dataTypeId}/": {
+      "get": {
+        "summary": "Read data type by ID",
+        "tags": [
+          "Data Type"
+        ],
+        "operationId": "getDataTypeById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of data type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkReadIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data_type": {
+                  "description": "Detail of object data type.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data_type": {
+                  "_id": "640a45dd089dc95a0a09ef14",
+                  "name": "OutletDetail",
+                  "fields": [
+                    {
+                      "id": "dataId",
+                      "title": "Data ID",
+                      "type": "primaryKey",
+                      "default": "true",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletName",
+                      "title": "Outlet Name",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletHours",
+                      "title": "Outlet Hours",
+                      "default": 12,
+                      "type": "number",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletType",
+                      "title": "Outlet Type",
+                      "type": "option",
+                      "optionData": [
+                        "minimarket",
+                        "supermarket",
+                        "vending machine",
+                        "warung"
+                      ],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpen",
+                      "title": "Outlet Open",
+                      "default": "09:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletClosed",
+                      "title": "Outlet Closed",
+                      "default": "17:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletContractExpired",
+                      "title": "Outlet Contract Expired",
+                      "type": "date",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpenInWeekend",
+                      "title": "Outlet Open In Weekend",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCoordinate",
+                      "title": "Outlet Coordinate",
+                      "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+                      "type": "geolocation",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletPhoneNumber",
+                      "title": "Outlet Phone Number",
+                      "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+                      "type": "phoneNumber",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCloseOrder",
+                      "title": "Outlet Close Order",
+                      "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+                      "type": "dateTime",
+                      "optionData": [],
+                      "required": true
+                    }
+                  ],
+                  "createdBy": "john.doe@mile.app",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "updatedTime": "2023-03-09 20:47:24",
+                  "createdTime": "2023-03-09 20:47:24",
+                  "provider": "internal",
+                  "providerConfig": null
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data-type": {
+      "post": {
+        "summary": "Create data type",
+        "tags": [
+          "Data Type"
+        ],
+        "operationId": "CreateDataType",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/postRequestDataType"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "headers": {},
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkCreateResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data_type": {
+                  "description": "Detail of object data type.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data_type": {
+                  "_id": "640a45dd089dc95a0a09ef14",
+                  "name": "OutletDetail",
+                  "fields": [
+                    {
+                      "id": "dataId",
+                      "title": "Data ID",
+                      "type": "primaryKey",
+                      "default": "true",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletName",
+                      "title": "Outlet Name",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletHours",
+                      "title": "Outlet Hours",
+                      "default": 12,
+                      "type": "number",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletType",
+                      "title": "Outlet Type",
+                      "type": "option",
+                      "optionData": [
+                        "minimarket",
+                        "supermarket",
+                        "vending machine",
+                        "warung"
+                      ],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpen",
+                      "title": "Outlet Open",
+                      "default": "09:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletClosed",
+                      "title": "Outlet Closed",
+                      "default": "17:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletContractExpired",
+                      "title": "Outlet Contract Expired",
+                      "type": "date",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpenInWeekend",
+                      "title": "Outlet Open In Weekend",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCoordinate",
+                      "title": "Outlet Coordinate",
+                      "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+                      "type": "geolocation",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletPhoneNumber",
+                      "title": "Outlet Phone Number",
+                      "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+                      "type": "phoneNumber",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCloseOrder",
+                      "title": "Outlet Close Order",
+                      "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+                      "type": "dateTime",
+                      "optionData": [],
+                      "required": true
+                    }
+                  ],
+                  "createdBy": "john.doe@mile.app",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "updatedTime": "2023-03-09 20:47:24",
+                  "createdTime": "2023-03-09 20:47:24",
+                  "provider": "internal",
+                  "providerConfig": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data-type/{dataTypeId}": {
+      "put": {
+        "summary": "Update data type by ID",
+        "tags": [
+          "Data Type"
+        ],
+        "operationId": "putDataTypeById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the data that generated by system.<br>**Example**: `640a45dd089dc95a0a09ef14`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/putRequestDataType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkPutResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data_type": {
+                  "description": "Detail of object data type.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data_type": {
+                  "_id": "640a45dd089dc95a0a09ef14",
+                  "name": "OutletDetail",
+                  "fields": [
+                    {
+                      "id": "dataId",
+                      "title": "Data ID",
+                      "type": "primaryKey",
+                      "default": "true",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletName",
+                      "title": "Outlet Name",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletHours",
+                      "title": "Outlet Hours",
+                      "default": 12,
+                      "type": "number",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletType",
+                      "title": "Outlet Type",
+                      "type": "option",
+                      "optionData": [
+                        "minimarket",
+                        "supermarket",
+                        "vending machine",
+                        "warung"
+                      ],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpen",
+                      "title": "Outlet Open",
+                      "default": "09:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletClosed",
+                      "title": "Outlet Closed",
+                      "default": "17:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletContractExpired",
+                      "title": "Outlet Contract Expired",
+                      "type": "date",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpenInWeekend",
+                      "title": "Outlet Open In Weekend",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCoordinate",
+                      "title": "Outlet Coordinate",
+                      "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+                      "type": "geolocation",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletPhoneNumber",
+                      "title": "Outlet Phone Number",
+                      "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+                      "type": "phoneNumber",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCloseOrder",
+                      "title": "Outlet Close Order",
+                      "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+                      "type": "dateTime",
+                      "optionData": [],
+                      "required": true
+                    }
+                  ],
+                  "createdBy": "john.doe@mile.app",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "updatedTime": "2023-03-09 20:47:24",
+                  "createdTime": "2023-03-09 20:47:24",
+                  "provider": "internal",
+                  "providerConfig": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update partially data type by ID",
+        "tags": [
+          "Data Type"
+        ],
+        "operationId": "patchDataTypeById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the data that generated by system.<br>**Example**: `640a45dd089dc95a0a09ef14`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/patchRequestDataType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkPatchResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data_type": {
+                  "description": "Detail of object data type.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data_type": {
+                  "_id": "640a45dd089dc95a0a09ef14",
+                  "name": "OutletDetail",
+                  "fields": [
+                    {
+                      "id": "dataId",
+                      "title": "Data ID",
+                      "type": "primaryKey",
+                      "default": "true",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletName",
+                      "title": "Outlet Name",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletHours",
+                      "title": "Outlet Hours",
+                      "default": 12,
+                      "type": "number",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletType",
+                      "title": "Outlet Type",
+                      "type": "option",
+                      "optionData": [
+                        "minimarket",
+                        "supermarket",
+                        "vending machine",
+                        "warung"
+                      ],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpen",
+                      "title": "Outlet Open",
+                      "default": "09:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletClosed",
+                      "title": "Outlet Closed",
+                      "default": "17:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletContractExpired",
+                      "title": "Outlet Contract Expired",
+                      "type": "date",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpenInWeekend",
+                      "title": "Outlet Open In Weekend",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCoordinate",
+                      "title": "Outlet Coordinate",
+                      "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+                      "type": "geolocation",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletPhoneNumber",
+                      "title": "Outlet Phone Number",
+                      "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+                      "type": "phoneNumber",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCloseOrder",
+                      "title": "Outlet Close Order",
+                      "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+                      "type": "dateTime",
+                      "optionData": [],
+                      "required": true
+                    }
+                  ],
+                  "createdBy": "john.doe@mile.app",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "updatedTime": "2023-03-09 20:47:24",
+                  "createdTime": "2023-03-09 20:47:24",
+                  "provider": "internal",
+                  "providerConfig": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete data type by ID",
+        "tags": [
+          "Data Type"
+        ],
+        "operationId": "deleteDataTypeById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the data type that generated by system.<br>**Example**: `640a45dd089dc95a0a09ef14`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkDeleteResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "data_type": {
+                  "description": "Detail of object data type.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "data_type": {
+                  "_id": "640a45dd089dc95a0a09ef14",
+                  "name": "OutletDetail",
+                  "fields": [
+                    {
+                      "id": "dataId",
+                      "title": "Data ID",
+                      "type": "primaryKey",
+                      "default": "true",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletName",
+                      "title": "Outlet Name",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletHours",
+                      "title": "Outlet Hours",
+                      "default": 12,
+                      "type": "number",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletType",
+                      "title": "Outlet Type",
+                      "type": "option",
+                      "optionData": [
+                        "minimarket",
+                        "supermarket",
+                        "vending machine",
+                        "warung"
+                      ],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpen",
+                      "title": "Outlet Open",
+                      "default": "09:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletClosed",
+                      "title": "Outlet Closed",
+                      "default": "17:00",
+                      "type": "time",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletContractExpired",
+                      "title": "Outlet Contract Expired",
+                      "type": "date",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletOpenInWeekend",
+                      "title": "Outlet Open In Weekend",
+                      "type": "text",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCoordinate",
+                      "title": "Outlet Coordinate",
+                      "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+                      "type": "geolocation",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletPhoneNumber",
+                      "title": "Outlet Phone Number",
+                      "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+                      "type": "phoneNumber",
+                      "optionData": [],
+                      "required": true
+                    },
+                    {
+                      "id": "outletCloseOrder",
+                      "title": "Outlet Close Order",
+                      "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+                      "type": "dateTime",
+                      "optionData": [],
+                      "required": true
+                    }
+                  ],
+                  "createdBy": "john.doe@mile.app",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "updatedTime": "2023-03-09 20:47:24",
+                  "createdTime": "2023-03-09 20:47:24",
+                  "provider": "internal",
+                  "providerConfig": null
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "postRequestDataType": {
+      "title": "postRequestDataType",
+      "example": {
+        "name": "OutletDetail",
+        "fields": [
+          {
+            "id": "dataId",
+            "title": "Data ID",
+            "type": "text",
+            "optionData": [],
+            "required": true,
+            "primaryKey": true
+          },
+          {
+            "id": "outletName",
+            "title": "Outlet Name",
+            "type": "text",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletHours",
+            "title": "Outlet Hours",
+            "default": 12,
+            "type": "number",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletType",
+            "title": "Outlet Type",
+            "type": "option",
+            "optionData": [
+              "minimarket",
+              "supermarket",
+              "vending machine",
+              "warung"
+            ],
+            "required": true
+          },
+          {
+            "id": "outletOpen",
+            "title": "Outlet Open",
+            "default": "09:00:00 AM",
+            "type": "text",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletClosed",
+            "title": "Outlet Closed",
+            "default": "09:00:00 PM",
+            "type": "text",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletContractExpired",
+            "title": "Outlet Contract Expired",
+            "type": "date",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletOpenInWeekend",
+            "title": "Outlet Open In Weekend",
+            "type": "boolean",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletGeolocation",
+            "title": "Outlet Geolocation",
+            "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+            "type": "geolocation",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletPhoneNumber",
+            "title": "Outlet Phone Number",
+            "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+            "type": "phoneNumber",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletCloseOrder",
+            "title": "Outlet Close Order",
+            "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+            "type": "dateTime",
+            "optionData": [],
+            "required": true
+          }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of data type.<br>**Example**: `OutletDetail`"
+        },
+        "fields": {
+          "type": "array",
+          "description": "List of fields to data type .<br>**Example**: <br> `{` <br> `'id': 'dataId',` <br> `'title': 'Data ID',` <br> `'type': 'text',` <br> `'optionData': [],` <br> `'required': true,` <br> `'primaryKey': true` <br> `}`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID of Field.<br>**Example**: `outletName`"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of field.<br>**Example**: `Outlet Name`"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of field.<br>**Example**: `Outlet Description`"
+              },
+              "type": {
+                "type": "string",
+                "description": "Type (data type) of field.<br>**Example**: `text`<br>**Option Value**: `text`, `number`, `option`, `date`, `geolocation`, `primaryKey`, `phoneNumber`, `dateTime`, `time`"
+              },
+              "default": {
+                "type": "string",
+                "description": "Default value of field.<br>**Example**: `09:00:00 AM`"
+              },
+              "optionData": {
+                "type": "array",
+                "description": "Option Data of field. Field only exist, if *type* is **option** <br>**Example**: `['minimarket','supermarket','vending machine','warung']`",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "required": {
+                "type": "boolean",
+                "description": " Flag that mark field as required or not.<br>**Example**: `true`"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "type",
+              "required"
+            ]
+          }
+        },
+        "limitUser": {
+          "type": "boolean",
+          "description": "Setting to limit data source usage by users.<br>**Default**: `false`"
+        },
+        "commonData": {
+          "type": "boolean",
+          "description": "Settings to define the data source to be unique by hub or shared across all hubs. This setting is not changeable after creation.<br>**Default**: `false`"
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "internal",
+            "external-api"
+          ],
+          "default": "internal",
+          "description": "The data source provider type.<br>**Default**: `internal`<br>**Available values**: `internal`, `external-api` (external GET API)"
+        },
+        "providerConfig": {
+          "type": "object",
+          "nullable": true,
+          "description": "Provider-specific configuration. Required when `provider` is `external-api`, should be null for `internal` provider.",
+          "oneOf": [
+            {
+              "type": "null",
+              "description": "For internal provider"
+            },
+            {
+              "type": "object",
+              "description": "For external-api provider",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The external API endpoint URL. Must be a valid [GET] URL format.<br>**Example**: `https://api.external-system.com/v1/products`<br>**Validation**: Must be a valid [GET] URL with http:// or https:// protocol"
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Authentication key for the external API.<br>**Example**: `Bearer sk_live_1234567890`"
+                }
+              },
+              "required": [
+                "url"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "fields"
+      ]
+    },
+    "putRequestDataType": {
+      "title": "putRequestDataType",
+      "example": {
+        "name": "OutletDetail",
+        "fields": [
+          {
+            "id": "dataId",
+            "title": "Data ID",
+            "type": "text",
+            "optionData": [],
+            "required": true,
+            "primaryKey": true
+          },
+          {
+            "id": "outletName",
+            "title": "Outlet Name",
+            "type": "text",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletHours",
+            "title": "Outlet Hours",
+            "default": 12,
+            "type": "number",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletType",
+            "title": "Outlet Type",
+            "type": "option",
+            "optionData": [
+              "minimarket",
+              "supermarket",
+              "vending machine",
+              "warung"
+            ],
+            "required": true
+          },
+          {
+            "id": "outletOpen",
+            "title": "Outlet Open",
+            "default": "09:00",
+            "type": "time",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletClosed",
+            "title": "Outlet Closed",
+            "default": "17:00",
+            "type": "time",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletContractExpired",
+            "title": "Outlet Contract Expired",
+            "type": "date",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletOpenInWeekend",
+            "title": "Outlet Open In Weekend",
+            "type": "boolean",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletGeolocation",
+            "title": "Outlet Geolocation",
+            "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+            "type": "geolocation",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletPhoneNumber",
+            "title": "Outlet Phone Number",
+            "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+            "type": "phoneNumber",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletCloseOrder",
+            "title": "Outlet Close Order",
+            "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+            "type": "dateTime",
+            "optionData": [],
+            "required": true
+          }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of data type.<br>**Example**: `OutletDetail`"
+        },
+        "fields": {
+          "type": "array",
+          "description": "List of fields to data type .<br>**Example**: <br> `{` <br> `'id': 'dataId',` <br> `'title': 'Data ID',` <br> `'type': 'text',` <br> `'optionData': [],` <br> `'required': true,` <br> `'primaryKey': true` <br> `}`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID of Field.<br>**Example**: `outletName`"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of field.<br>**Example**: `Outlet Name`"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of field.<br>**Example**: `Outlet Description`"
+              },
+              "type": {
+                "type": "string",
+                "description": "Type (data type) of field.<br>**Example**: `text`<br>**Option Value**: `text`, `number`, `option`, `date`, `geolocation`, `primaryKey`, `phoneNumber`, `dateTime`, `time`"
+              },
+              "default": {
+                "type": "string",
+                "description": "Default value of field.<br>**Example**: `09:00:00 AM`"
+              },
+              "optionData": {
+                "type": "array",
+                "description": "Option Data of field. Field only exist, if *type* is **option** <br>**Example**: `['minimarket','supermarket','vending machine','warung']`",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "required": {
+                "type": "boolean",
+                "description": " Flag that mark field as required or not.<br>**Example**: `true`"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "type",
+              "required"
+            ]
+          }
+        },
+        "deleteFields": {
+          "type": "array of string",
+          "description": "This parameter is list of fields to data type id for delete the field on collection of data source.<br>**Example**: <br> `[` <br> `'outletPhoneNumber',` <br> `'outletCloseOrder'` <br> `]`"
+        },
+        "limitUser": {
+          "type": "boolean",
+          "description": "Setting to limit data source usage by users.<br>**Default**: `false`"
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "internal",
+            "external-api"
+          ],
+          "description": "The data source provider type. Cannot be changed after creation."
+        },
+        "providerConfig": {
+          "type": "object",
+          "nullable": true,
+          "description": "Provider-specific configuration. Can only be modified if the data type was created with `provider` set to `external-api`. The `provider` field itself cannot be changed after creation.",
+          "oneOf": [
+            {
+              "type": "null",
+              "description": "For internal provider"
+            },
+            {
+              "type": "object",
+              "description": "For external-api provider",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The external API endpoint URL. Must be a valid [GET] URL format.<br>**Example**: `https://api.external-system.com/v1/products`<br>**Validation**: Must be a valid [GET] URL with http:// or https:// protocol"
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Authentication key for the external API. When updating, if not provided, the existing key will be preserved.<br>**Example**: `Bearer sk_live_1234567890`"
+                }
+              },
+              "required": [
+                "url"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "fields"
+      ]
+    },
+    "patchRequestDataType": {
+      "title": "patchRequestDataType",
+      "example": {
+        "name": "OutletDetail",
+        "fields": [
+          {
+            "id": "dataId",
+            "title": "Data ID",
+            "type": "text",
+            "optionData": [],
+            "required": true,
+            "primaryKey": true
+          },
+          {
+            "id": "outletName",
+            "title": "Outlet Name",
+            "type": "text",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletHours",
+            "title": "Outlet Hours",
+            "default": 12,
+            "type": "number",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletType",
+            "title": "Outlet Type",
+            "type": "option",
+            "optionData": [
+              "minimarket",
+              "supermarket",
+              "vending machine",
+              "warung"
+            ],
+            "required": true
+          },
+          {
+            "id": "outletOpen",
+            "title": "Outlet Open",
+            "default": "09:00",
+            "type": "time",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletClosed",
+            "title": "Outlet Closed",
+            "default": "17:00",
+            "type": "time",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletContractExpired",
+            "title": "Outlet Contract Expired",
+            "type": "date",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletOpenInWeekend",
+            "title": "Outlet Open In Weekend",
+            "type": "boolean",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletGeolocation",
+            "title": "Outlet Geolocation",
+            "description": "Contoh inputan  \"-6.171702325136309,106.81775093078615\"",
+            "type": "geolocation",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletPhoneNumber",
+            "title": "Outlet Phone Number",
+            "description": "Example format  \"+628 456 7890 or +62 123 456 789 or 0123456789\"",
+            "type": "phoneNumber",
+            "optionData": [],
+            "required": true
+          },
+          {
+            "id": "outletCloseOrder",
+            "title": "Outlet Close Order",
+            "description": "Example format  \"2024-11-01 15:30:45 or 2024-11-01T15:30:45.123+02:00 or 2024-11-01T15:30:45+02:00\"",
+            "type": "dateTime",
+            "optionData": [],
+            "required": true
+          }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of data type.<br>**Example**: `OutletDetail`"
+        },
+        "fields": {
+          "type": "array",
+          "description": "List of fields to data type .<br>**Example**: <br> `{` <br> `'id': 'dataId',` <br> `'title': 'Data ID',` <br> `'type': 'text',` <br> `'optionData': [],` <br> `'required': true,` <br> `'primaryKey': true` <br> `}`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID of Field.<br>**Example**: `outletName`"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of field.<br>**Example**: `Outlet Name`"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of field.<br>**Example**: `Outlet Description`"
+              },
+              "type": {
+                "type": "string",
+                "description": "Type (data type) of field.<br>**Example**: `text`<br>**Option Value**: `text`, `number`, `option`, `date`, `geolocation`, `primaryKey`, `phoneNumber`, `dateTime`, `time`"
+              },
+              "default": {
+                "type": "string",
+                "description": "Default value of field.<br>**Example**: `09:00:00 AM`"
+              },
+              "optionData": {
+                "type": "array",
+                "description": "Option Data of field. Field only exist, if *type* is **option** <br>**Example**: `['minimarket','supermarket','vending machine','warung']`",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "required": {
+                "type": "boolean",
+                "description": " Flag that mark field as required or not.<br>**Example**: `true`"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "type",
+              "required"
+            ]
+          }
+        },
+        "deleteFields": {
+          "type": "array of string",
+          "description": "This parameter is list of fields to data type id for delete the field on collection of data source.<br>**Example**: <br> `[` <br> `'outletPhoneNumber',` <br> `'outletCloseOrder'` <br> `]`"
+        },
+        "limitUser": {
+          "type": "boolean",
+          "description": "Setting to limit data source usage by users.<br>**Default**: `false`"
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "internal",
+            "external-api"
+          ],
+          "description": "The data source provider type. Cannot be changed after creation in PATCH operations."
+        },
+        "providerConfig": {
+          "type": "object",
+          "nullable": true,
+          "description": "Provider-specific configuration. Can only be modified if the data type was created with `provider` set to `external-api`.",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The external API endpoint URL. Must be a valid [GET] URL format.<br>**Example**: `https://api.external-system.com/v1/products`"
+            },
+            "key": {
+              "type": "string",
+              "description": "Authentication key for the external API. When updating, if not provided, the existing key will be preserved.<br>**Example**: `Bearer sk_live_1234567890`"
+            }
+          }
+        }
+      },
+      "required": [
+        "name",
+        "fields"
+      ]
+    }
+  }
+}

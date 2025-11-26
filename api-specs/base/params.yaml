@@ -1,0 +1,117 @@
+# start description
+descriptions:
+  hubId: Fundamental entity within an organization, serving as the central point for managing various operational components. Use Use <a href='#tag/Hub/operation/getHubs' target='_blank'>**GET /hubs**</a> endpoint to get the list of Hub IDs.<br>**Example:** `634e98498ce07d29474a7e29`
+  limit: Specifies the maximum number of items to retrieve in a single request. **Example:** `10`
+  page: The page number of results to retrieve. **Example:** `2`
+
+  statusResponse: Shows if the request was successful.
+  messageResponse: A short message explaining what went wrong.
+# end of description
+
+# start hub
+hubIdInPath:
+  name: hubId
+  in: path
+  required: true
+  schema:
+    type: string
+  description:
+    $ref : '#/parameters/descriptions/hubId'
+
+hubIdInQuery:
+  name: hubId
+  in: query
+  schema:
+    type: string
+  description: 
+    $ref : '#/parameters/descriptions/hubId'
+# End Hub
+
+#start limit
+limitInQuery:
+  name: limit
+  in: query
+  type: integer
+  schema:
+    default: 20
+    minimum: 1
+    maximum: 1000
+  description: 
+    $ref : '#/parameters/descriptions/limit'
+#end limit
+
+#start page
+pageInQuery:
+  name: page
+  in: query
+  type: integer
+  schema:
+    default: 1
+  description: 
+    $ref : '#/parameters/descriptions/page'
+#end page
+
+
+# data Type
+string: string
+integer : integer
+#end of data type
+
+
+#reponse
+responses:
+
+  badRequest:
+    description: Bad request
+    schema:
+      type: object
+      title: Bad request
+      properties: 
+        status:
+          description: 
+            $ref: '#/parameters/descriptions/statusResponse'
+          type: boolean
+        message:
+          description:
+            $ref: '#/parameters/descriptions/messageResponse'
+          type: string
+      example:
+        status: false
+        message: '#/parameters/descriptions/messageResponse'
+  
+  notFound:
+    description: Not found
+    schema:
+      type: object
+      title: Not found
+      properties: 
+        status:
+          description: 
+            $ref: '#/parameters/descriptions/statusResponse'
+          type: boolean
+        message:
+          description: 
+            $ref: '#/parameters/descriptions/messageResponse'
+          type: string
+      example:
+        status: false
+        message: Data not found
+
+  serverError:
+    description: Server error
+    schema:
+      type: object
+      title: Server error
+      properties: 
+        status:
+          description: 
+            $ref: '#/parameters/descriptions/statusResponse'
+          type: boolean
+        message:
+          description: 
+            $ref: '#/parameters/descriptions/messageResponse'
+          type: string
+      example:
+        status: false
+        message: Internal server error, please contact support@mile.app.
+#end of response
