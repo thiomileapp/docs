@@ -406,7 +406,10 @@
           {
             "group": "Getting Started",
             "pages": [
-              "api-reference-internal/introduction"
+              "api-reference-internal/introduction",
+              "api-reference-internal/authentication",
+              "api-reference-internal/data-formats",
+              "api-reference-internal/status-codes"
             ]
           },
           {
