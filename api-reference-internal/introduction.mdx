@@ -1,30 +1,67 @@
 ---
-title: "Internal API Introduction"
-description: "MileApp Internal API Documentation - For internal use only"
+title: 'Introduction'
+description: 'Welcome to MileApp Internal API Documentation'
 noindex: true
 ---
 
-# MileApp Internal API
+## Introduction
 
-This is the internal API documentation for MileApp. These endpoints are for internal use only and are not part of the public API.
+The MileApp Internal API uses RESTful API standards, which are widely recognized in the industry for simplicity and effectiveness in designing networked applications. Our API has predictable resource-oriented URLs, accepts JSON request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-## Authentication
+<Warning>
+This is the **Internal API** documentation. These endpoints are for internal use only, are not part of the public API, and may change without notice.
+</Warning>
 
-All internal API endpoints require authentication using a Bearer token.
+## Overview
 
-```bash
-curl -X GET "https://apiweb.mile.app/api/v3/endpoint" \
-  -H "Authorization: Bearer YOUR_TOKEN"
-```
+MileApp APIs are plain JSON over HTTP and use the following HTTP verbs:
+
+| Method | Purpose |
+|--------|---------|
+| **GET** | The GET method is employed for straightforward information retrieval concerning your account, resources, or environment. This read-only operation ensures that the requested information is returned in the form of a JSON object. Any request made using the GET method is purely informational and does not bring about changes to the queried objects. |
+| **POST** | When the goal is to create a new object, the POST method is specified in the request. This method includes all the attributes necessary for the creation of a new object. Initiating a POST request to the target endpoint triggers the process of creating a new resource. |
+| **PUT** | For updating information pertaining to a resource in your account, the PUT method is available. Similar to the DELETE method, PUT is idempotent. It facilitates the setting of the target state using provided values, irrespective of the current state of those values. |
+| **PATCH** | Certain resources support partial modifications, and for these cases, the PATCH method comes into play. In contrast to PUT, which typically demands a complete representation of a resource, a PATCH request is a set of instructions detailing how to modify a resource, focusing only on specific attributes that require updating. |
+| **DELETE** | When the objective is to permanently remove a resource from your account and environment, the DELETE method is utilized. This method is characterized by its idempotent nature, meaning that whether the specified object is found or not, the end result remains the same. |
 
 ## Base URL
+
+All API requests should be made to:
 
 ```
 https://apiweb.mile.app/api/v3
 ```
+
+## Rate Limit
+
+This limit is applied on an organization-wide basis irrespective of factors such as the number of agents or IP addresses used to make the calls. If a tenant exceeds these limits, they will receive a `429` error (too many requests).
+
+| Limit | Time Window |
+|-------|-------------|
+| 100 requests | 1 second |
+
+<Warning>
+If you encounter a 429 error, wait 60 seconds before retrying the API request.
+</Warning>
+
+The purpose of a rate limit is to maintain a good user experience for all API users. Without a rate limit, API endpoints can flood the server with requests that overwhelm the system and negatively impact all users.
 
 ## Important Notes
 
 - These endpoints are for internal use only
 - API behavior may change without notice
 - Not covered by public API SLAs
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api-reference-internal/authentication">
+    Learn how to authenticate your API requests
+  </Card>
+  <Card title="Data Formats" icon="code" href="/api-reference-internal/data-formats">
+    Understand the data types used in our API
+  </Card>
+  <Card title="Status Codes" icon="circle-exclamation" href="/api-reference-internal/status-codes">
+    HTTP status codes and error handling
+  </Card>
+</CardGroup>

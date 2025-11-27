@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "MileApp API - Flow",
+    "title": "MileApp API - Reference",
     "version": "3.0.0",
-    "description": "MileApp Internal API Documentation"
+    "description": "MileApp Internal API Documentation - Reference"
   },
   "servers": [
     {
@@ -28515,3204 +28515,99 @@
     }
   },
   "paths": {
-    "/internal/automation-repush": {
-      "post": {
-        "summary": "Repush Automation",
+    "/currency": {
+      "get": {
+        "summary": "Get all currencies",
+        "description": "Retrieve list of all active currencies. This endpoint supports optional ISO code filtering to get specific currencies. Currency data is publicly accessible and does not require authentication.",
         "tags": [
-          "Automation"
+          "Currency"
         ],
-        "operationId": "repushAutomation",
+        "operationId": "getCurrencies",
         "deprecated": false,
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BodyManualRepush"
-              }
+        "parameters": [
+          {
+            "name": "iso",
+            "in": "query",
+            "required": false,
+            "description": "Filter currencies by ISO 4217 code(s). Supports single or multiple comma-separated values.\n**Single:** `USD`\n**Multiple:** `USD,IDR,JPY`",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
                   "properties": {
                     "status": {
-                      "description": "Status of response.",
+                      "description": "Status of response",
                       "type": "boolean"
                     },
-                    "message": {
-                      "description": "Message of response.",
-                      "type": "string"
-                    },
                     "data": {
-                      "description": "Object data events, if there's and id inside event mean automation actions triggered.",
-                      "type": "object",
-                      "additionalProperties": true
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "code": 200,
-                    "message": "Success.",
-                    "data": {
-                      "onDataSourceCreated": [
-                        "64f525b763a7987c6705d972"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flows": {
-      "get": {
-        "summary": "Read flows",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "getflow",
-        "deprecated": false,
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/pageInQuery"
-          },
-          {
-            "$ref": "#/components/parameters/limitInQuery"
-          },
-          {
-            "name": "sort_by",
-            "in": "query",
-            "required": false,
-            "description": "sort_by is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on flow objects.\n**Example:** `name`, `orderIndex`, `createdTime`, etc.\n**Default:** `orderIndex`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sort_order",
-            "in": "query",
-            "required": false,
-            "description": "sort_order is to decide ascending or descending order\n**Example:** `asc` or `desc`.\n**Default:** `desc`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.\n**Example:** `name,pages,configuration`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "permission",
-            "in": "query",
-            "description": "Parameter used to display flows based on permissions.\n**Example:** `true` or `false`.",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow/{flowId}": {
-      "get": {
-        "summary": "Read flow by ID",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "getflowbyid",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "flowId",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for the flow that generated by system.\n**Example**: `6352736c628401059b37a1d1`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListFlowbyid"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Data not found",
-                      "failedCode": "flow-033"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow-fields": {
-      "get": {
-        "summary": "Read flow fields",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "flowFields",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "fieldType",
-            "in": "query",
-            "description": "filter only component with `type` as input will be returned. \n**Example:** `routeAs`, `basicStructurData`, `structurData`, `image`, `listItemData`, `reservedKey`, `all`.\n**Default:** `all`",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListFields"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow-components": {
-      "get": {
-        "summary": "Read flow components",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "flowComponents",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "fieldType",
-            "in": "query",
-            "description": "filter only component with `type` as input will be returned. \n**Example:** `routeAs`, `structurData`, `singleValue`, `image`, `listItemData`, `reservedKey`, `all`.\n**Default:** `all`",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "flowId",
-            "in": "query",
-            "description": "FlowId is for selecting the specific flow that you can choose from flow Id's by multiples to show in the response using a string with a comma delimiter.\n**Example:** `Pickup,Delivery`. \n**Example:** `1`.\n**Default:** `null`",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Fields is for selecting the specific fields that you can choose from component Id's by multiples to show in the response using a string with a comma delimiter.\n**Example:** `startTime,endTime,hubId,createdBy,flow,status`.\n**Default:** `null`",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "isMerge",
-            "in": "query",
-            "description": "filter to show component with `flattern` format if the value is `1`. \n**Example:** `1`.\n**Default:** `null`",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListComponents"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow/{flowName}/fields": {
-      "get": {
-        "summary": "Read flow component by flow name",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "getflowfieldbyname",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "flowName",
-            "in": "path",
-            "required": true,
-            "description": "Name of the flow.\n**Example**: `Delivery`, `Field Sales`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListFlowFields"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow/{flowName}/task": {
-      "get": {
-        "summary": "Generate example",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "getCreateTaskPayload",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "flowName",
-            "in": "path",
-            "required": true,
-            "description": "The unique name of organization's flow.\nUse [Flow /flows API](#tag/Flow) to get the list of flow names.\n**Example:** `Pickup`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/createTaskExampleResp"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Data not found",
-                      "failedCode": "flow-033"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow-logs": {
-      "get": {
-        "summary": "Read flow histories",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "getflowlogs",
-        "deprecated": false,
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/pageInQuery"
-          },
-          {
-            "$ref": "#/components/parameters/limitInQuery"
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "required": false,
-            "description": "sortOrder is to decide ascending or descending order\n**Example:** `asc` or `desc`.\n**Default:** `desc`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "action",
-            "in": "query",
-            "required": false,
-            "description": "Action done according to flows's manipulation trigger. There are 3 types of `action`:\n**enum**: `create`,`put`,`reorder`\n**Example:** `put`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "flowId",
-            "in": "query",
-            "required": false,
-            "description": "The identifier for the flow that generated by system. Use [Flow /flows API](#tag/Flow/operation/getflow) to get the list of flow id.\nComma (,) delimiter for filter multiple flow.\n**Example:** `63d8c9b0dbd5ef20a627dd86`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getLogsResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow": {
-      "post": {
-        "summary": "Create flow",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "postflow",
-        "deprecated": false,
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postRequestFlow"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postResponseFlow"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow-ai": {
-      "post": {
-        "summary": "Generate Flow with AI",
-        "description": "Generates and validates a flow json structure using AI based on a natural language prompt. The AI analyzes the prompt and automatically creates pages, components, and configurations. The generated flow structure is validated but NOT saved to the database. Returns the validated structure that can be used with the create flow endpoint.",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "postFlowAI",
-        "deprecated": false,
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postRequestFlowAI"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postResponseFlowAISuccess"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postResponseFlowAIError"
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "The name field is required.",
-                      "failedCode": "flow-001",
-                      "errors": [
-                        "The name field is required."
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flows/check-version": {
-      "post": {
-        "summary": "Read flow versions",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "FlowcheckVersion",
-        "deprecated": false,
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postRequestFlowVersion"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListFieldsFlowVersion"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow-reorder": {
-      "put": {
-        "summary": "Re-order flow",
-        "tags": [
-          "Flow"
-        ],
-        "deprecated": false,
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/putFlowReorderRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/putFlowReorderResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow/{flow_id}": {
-      "put": {
-        "summary": "Update flow by ID",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "putflow",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "flowId",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for the flow that generated by system.\n**Example**: `6352736c628401059b37a1d1`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/putRequestFlow"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/putResponseFlow"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "flow-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Data not found",
-                      "failedCode": "flow-033"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete flow by ID",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "deleteflowbyid",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "flowId",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for the flow that generated by system.\n**Example**: `6352736c628401059b37a1d1`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deleteResponseFlow"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Data not found",
-                      "failedCode": "flow-033"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/flow/{flowId}/restore/{flowLogId}": {
-      "put": {
-        "summary": "Restore flow by flow log ID",
-        "tags": [
-          "Flow"
-        ],
-        "operationId": "restoreFlow",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "flowId",
-            "in": "path",
-            "required": true,
-            "description": "The unique identifier of organization's flow.\nUse [Flow /flows API](#tag/Flow) to get the list of flow ID's.\n**Example:** `6352736c628401059b37a1d1`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "flowLogId",
-            "in": "path",
-            "required": true,
-            "description": "The unique name of organization's flow.\nUse [Flow Log Histories API](#tag/Flow/operation/getflowlogs) to get the list of flow log ID's.\n**Example:** `9f52736c628401059b37as34`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/restoreFlowExampleResp"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Data not found",
-                      "failedCode": "flow-033"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "flow-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automations": {
-      "get": {
-        "summary": "Read automation",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "automation",
-        "deprecated": false,
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/pageInQuery"
-          },
-          {
-            "$ref": "#/components/parameters/limitInQuery"
-          },
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "description": "Query param search. This field will search automation according to similar value of name, automation type or flow\n**Example:** `Automation Tigaraksa, createTask, Delivery`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortBy",
-            "in": "query",
-            "required": false,
-            "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on automation objects.\n**Example:** `name`, `flow`, `automationType`, `createdTime`, etc.\n**Default:** `createdTime`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "required": false,
-            "description": "sortOrder is to decide ascending or descending order\n**Example:** `asc` or `desc`.\n**Default:** `desc`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "required": false,
-            "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.\n**Example:** `name,automationType,flow`.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "event",
-            "in": "query",
-            "required": false,
-            "description": "Act as a trigger that start an automation.\n**Example:** `onTaskCreated`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "automationType",
-            "in": "query",
-            "required": false,
-            "description": "Automation's type. The action of automation.\n**Example:** `webhook`.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "dataType",
-            "in": "query",
-            "required": false,
-            "description": "Automation's data type.\n**Example:** `task`.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "flow",
-            "in": "query",
-            "required": false,
-            "description": "FlowName to select specific task for event to happens. Use [GET /flows API](#tag/Flow) to get the list of Flow.\n**Example:** `Pickup`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "NetworkReadResponse",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "data": {
-                      "description": "List of object automation.",
-                      "type": "object",
-                      "additionalProperties": true
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "message": "Success",
-                    "data": {
-                      "current_page": 1,
-                      "data": [
-                        {
-                          "name": "Auto webhook automation",
-                          "event": "onTaskFinished",
-                          "automationType": "webhook",
-                          "dataType": "task",
-                          "automationDetails": {
-                            "url": "https://apiweb.mile.app/webhook",
-                            "headers": {
-                              "x-api-key": "1234e98498ce07d29474a7ev2",
-                              "org": "general"
-                            }
-                          },
-                          "rules": {
-                            "flow": "Pickup",
-                            "flowId": "667b712f63020e5f182f0cb2"
-                          },
-                          "organizationId": "621dd813eb3ebf16b94dbde3",
-                          "isActive": true,
-                          "updatedTime": "2022-07-13T03:16:40+00:00",
-                          "createdTime": "2022-07-13T03:16:40+00:00",
-                          "_id": "62ce3918d3f3e1681a3a54b5"
-                        }
-                      ],
-                      "first_page_url": "http://apiweb.mile.app/api/v3/automations?q=automation%201&page=1",
-                      "from": 1,
-                      "last_page": 1,
-                      "last_page_url": "http://apiweb.mile.app/api/v3/automations?q=automation%201&page=1",
-                      "links": [
-                        {
-                          "url": null,
-                          "label": "&laquo; Previous",
-                          "active": false
-                        },
-                        {
-                          "url": "http://apiweb.mile.app/api/v3/automations?q=automation%201&page=1",
-                          "label": "1",
-                          "active": true
-                        },
-                        {
-                          "url": null,
-                          "label": "Next &raquo;",
-                          "active": false
-                        }
-                      ],
-                      "next_page_url": null,
-                      "path": "http://apiweb.mile.app/api/v3/automations",
-                      "per_page": 10,
-                      "prev_page_url": null,
-                      "to": 1,
-                      "total": 1
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automation-log": {
-      "get": {
-        "summary": "Read log automation",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "getAutomationLog",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "description": "Limit of automation logs list.\n**Example:** `20`.\n**Default:** `10`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Pagination of automation logs list.\n**Example:** `2`.\n**Default:** `1`",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "sortBy",
-            "in": "query",
-            "required": false,
-            "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on automation objects.\n**Default:** `@timestamp`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "required": false,
-            "description": "sortOrder is to decide ascending or descending order\n**Example:** `asc` or `desc`.\n**Default:** `desc`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "startDate",
-            "in": "query",
-            "required": false,
-            "description": "startDate & endDate is used to select range of time of automation log.\n**Example:** `2022-08-10`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "required": false,
-            "description": "startDate & endDate is used to select range of time of automation log.\n**Example:** `2022-08-10`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "taskId",
-            "in": "query",
-            "required": false,
-            "description": "The identifier for Task that generated by system. Use [GET /tasks API](#tag/Task) to get the list of Task IDs.\n**Example:** `621dd813xy3ebf16b94d6969`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "automationId",
-            "in": "query",
-            "required": false,
-            "description": "The identifier for Automation that generated by system. Use [GET /automations API](#tag/Automation) to get the list of Automation IDs.\n**Example:** `621dd813xy3ebf16b87d6969`",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "isSuccess",
-            "in": "query",
-            "required": false,
-            "description": "for selecting automation log of success or failed, acceptable value:true,false. leave it empty if you want to get all data.\n**Example:** `true`",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "NetworkLogResponse",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "total": {
-                      "type": "integer",
-                      "description": "Total data of automation logs."
-                    },
-                    "data": {
-                      "description": "List of automation logs object.",
+                      "description": "Array of currency objects",
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "additionalProperties": true
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Currency unique identifier (MongoDB ObjectId)"
+                          },
+                          "countryCode": {
+                            "type": "string",
+                            "description": "ISO 3166-1 alpha-3 country code (e.g., IDN, USA, JPN)"
+                          },
+                          "symbol": {
+                            "type": "string",
+                            "description": "Currency symbol (e.g., $, Rp, ¥)"
+                          },
+                          "iso": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code (e.g., USD, IDR, JPY)"
+                          },
+                          "locale": {
+                            "type": "string",
+                            "description": "BCP 47 locale code for number formatting (e.g., id-ID, en-US, ja-JP)"
+                          },
+                          "isActive": {
+                            "type": "boolean",
+                            "description": "Currency active status"
+                          }
+                        }
                       }
-                    },
-                    "params": {
-                      "type": "object",
-                      "description": "Params of automation logs.",
-                      "additionalProperties": true
                     }
                   },
                   "example": {
                     "status": true,
-                    "message": "elasticData",
-                    "total": 1,
                     "data": [
                       {
-                        "_index": "log-automationdev-2022.08.10",
-                        "_type": "_doc",
-                        "_id": "-DethoIBewA7zVXNTstW",
-                        "_score": null,
-                        "_source": {
-                          "finishRequestTime": "2022-08-10 07:34:31",
-                          "automationEvent": "onTaskCreated",
-                          "attempt": "0",
-                          "automationId": "62f25ada1c0cd810800157c2",
-                          "timestamp": "2022-08-10 07:34:31",
-                          "name": "automation log",
-                          "response": "{\"status\":true,\"code\":201,\"message\":\"Task has been created\",\"task\":{\"createdFrom\":\"Automation\",\"flow\":\"Test Flow Import Visit\",\"startTime\":\"2022-08-09T13:02:48+00:00\",\"endTime\":\"2022-08-10T13:02:48+00:00\",\"hubId\":\"622976f50b8db203ef31d312\",\"input4\":\"08:00\",\"input9\":0,\"input3\":\"123,234\",\"input2\":\"malang\",\"input5\":\"17:00\",\"input6\":0,\"input8\":0,\"input1\":\"dendi\",\"select1\":null,\"title\":\"dendi\",\"content\":\"malang\",\"geoLock\":[{\"geoLocation\":\"123,234\",\"radius\":null}],\"useGeoLock\":false,\"geoLockTrigger\":null,\"flowId\":\"625678f90fc8ba02bb5eb432\",\"organizationId\":\"621dd813eb3ebf16b94dbde3\",\"status\":\"UNASSIGNED\",\"hub\":{\"_id\":\"622976f50b8db203ef31d312\",\"name\":\"JAKARTA\",\"lat\":-6.174739001608504,\"lng\":106.79002412883601},\"orderIndex\":166011687171396,\"createdBy\":null,\"updatedTime\":\"2022-08-10T07:34:31+00:00\",\"createdTime\":\"2022-08-10T07:34:31+00:00\",\"_id\":\"62f35f8710bf27537c61d1c2\"}}",
-                          "automationUrl": "/api/v3/task",
-                          "automationDetails": "{\"taskData\":{\"input9\":null,\"input8\":null,\"select1\":null,\"input6\":null,\"input5\":null,\"input4\":null,\"input3\":\"123,234\",\"input2\":\"malang\",\"input1\":\"$refFlow.title\"},\"flow\":\"Test Flow Import Visit\"}",
-                          "severity": "NOTICE",
-                          "statusCode": "201",
-                          "startRequestTime": "2022-08-10 07:34:31.6996",
-                          "delayTime": "1660114849.699626",
-                          "automationName": "automation log",
-                          "@timestamp": "2022-08-10T07:34:34.873Z",
-                          "request": "{\"createdFrom\":\"Automation\",\"flow\":\"Test Flow Import Visit\",\"startTime\":\"2022-08-09T13:02:48.000000Z\",\"endTime\":\"2022-08-10T13:02:48.000000Z\",\"hubId\":\"622976f50b8db203ef31d312\",\"input4\":null,\"input9\":null,\"input3\":\"123,234\",\"input2\":\"malang\",\"input5\":null,\"input6\":null,\"input8\":null,\"input1\":\"dendi\",\"select1\":null}",
-                          "dispatchAt": "2022-08-10 07:34:31",
-                          "dataType": "task",
-                          "env": "dev",
-                          "organizationId": "621dd813eb3ebf16b94dbde3",
-                          "isSuccess": "true",
-                          "@version": "1",
-                          "referenceId": "62f25af61c0cd810800157c3",
-                          "responseTime": "0.04303693771362305",
-                          "automationType": "createTask"
-                        },
-                        "sort": [
-                          1660116874873
-                        ]
+                        "_id": "676a1234567890abcdef1234",
+                        "countryCode": "IDN",
+                        "symbol": "Rp",
+                        "iso": "IDR",
+                        "locale": "id-ID",
+                        "isActive": true
+                      },
+                      {
+                        "_id": "676a1234567890abcdef1235",
+                        "countryCode": "USA",
+                        "symbol": "$",
+                        "iso": "USD",
+                        "locale": "en-US",
+                        "isActive": true
+                      },
+                      {
+                        "_id": "676a1234567890abcdef1236",
+                        "countryCode": "JPN",
+                        "symbol": "¥",
+                        "iso": "JPY",
+                        "locale": "ja-JP",
+                        "isActive": true
                       }
-                    ],
-                    "params": {
-                      "from": 0,
-                      "size": 10,
-                      "query": {
-                        "bool": {
-                          "must": [
-                            {
-                              "term": {
-                                "organizationId.keyword": "621dd813eb3ebf16b94dbde3"
-                              }
-                            },
-                            {
-                              "term": {
-                                "automationId.keyword": "62f25ada1c0cd810800157c2"
-                              }
-                            }
-                          ]
-                        }
-                      },
-                      "sort": [
-                        {
-                          "@timestamp": {
-                            "order": "desc"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automation/{automationId}": {
-      "get": {
-        "summary": "Read automation by ID",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "automation/id1",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "automation_id",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for automation that generated by system.\n**Example**: `62ce3918d3f3e1681a3a54b5`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "NetworkReadIDResponse",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "data": {
-                      "description": "Detail of object automation.",
-                      "type": "object",
-                      "additionalProperties": true
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "message": "Success",
-                    "data": {
-                      "name": "Auto webhook automation",
-                      "event": "onTaskFinished",
-                      "automationType": "webhook",
-                      "dataType": "task",
-                      "automationDetails": {
-                        "url": "https://apiweb.mile.app/webhook",
-                        "headers": {
-                          "x-api-key": "1234e98498ce07d29474a7ev2",
-                          "org": "general"
-                        }
-                      },
-                      "rules": {
-                        "flow": "Pickup",
-                        "flowId": "667b712f63020e5f182f0cb2"
-                      },
-                      "organizationId": "621dd813eb3ebf16b94dbde3",
-                      "isActive": true,
-                      "updatedTime": "2022-07-13T03:16:40+00:00",
-                      "createdTime": "2022-07-13T03:16:40+00:00",
-                      "_id": "62ce3918d3f3e1681a3a54b5"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automation": {
-      "post": {
-        "summary": "Create automation",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "CreateAutomationTypeCreateTask",
-        "deprecated": false,
-        "requestBody": {
-          "$ref": "#/components/requestBodies/BaseBodyAutomation"
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "data": {
-                      "description": "Detail of object automation.",
-                      "type": "object",
-                      "additionalProperties": true
-                    }
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": true,
-                      "message": "Success",
-                      "data": {
-                        "name": "Auto create task automation",
-                        "event": "onTaskFinished",
-                        "automationType": "createTask",
-                        "dataType": "task",
-                        "automationDetails": {
-                          "flow": "Delivery",
-                          "flowId": "667b75b29edc36517c609ac2",
-                          "taskData": {
-                            "customerName": "vasco",
-                            "address": "Jakarta",
-                            "description": "$refFlow.name"
-                          }
-                        },
-                        "rules": {
-                          "flow": "Pickup",
-                          "flowId": "667b712f63020e5f182f0cb2",
-                          "fields": {
-                            "name": "roger",
-                            "address": "kemayoran"
-                          }
-                        },
-                        "organizationId": "621dd813eb3ebf16b94dbde3",
-                        "isActive": true,
-                        "updatedTime": "2022-07-13T03:16:40+00:00",
-                        "createdTime": "2022-07-13T03:16:40+00:00",
-                        "_id": "62ce3918d3f3e1681a3a54b1"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automation-retries": {
-      "post": {
-        "summary": "Retry bulk automation",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "automationRetries",
-        "deprecated": false,
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/bulk-retries"
-              }
-            }
-          }
-        },
-        "description": "This endpoint is only used with tokens from internal accounts, for example, accounts using @mile.app or @paket.id",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "data": {
-                      "description": "List of success syncronize id.",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": true
-                      }
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "message": "Success.",
-                    "data": {
-                      "total": 2,
-                      "success": 2,
-                      "failed": 0,
-                      "details": {
-                        "wCixuZABO6Fu1BKEElvp": "Success.",
-                        "EyyyuZABO6Fu1BKE6hZB": "Success."
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automation/{automation_id}": {
-      "put": {
-        "summary": "Update automation by ID",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "UpdateAutomation/id",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "automation_id",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for automation that generated by system.\n**Example**: `62ce3918d3f3e1681a3a54b5`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/BaseBodyAutomation"
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "NetworkCreateResponse",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "data": {
-                      "description": "Detail of object automation.",
-                      "type": "object",
-                      "additionalProperties": true
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "message": "Success",
-                    "data": {
-                      "name": "Auto webhook automation",
-                      "event": "onTaskFinished",
-                      "automationType": "webhook",
-                      "dataType": "task",
-                      "automationDetails": {
-                        "url": "https://apiweb.mile.app/webhook",
-                        "headers": {
-                          "x-api-key": "1234e98498ce07d29474a7ev2",
-                          "org": "global"
-                        }
-                      },
-                      "rules": {
-                        "flow": "Pickup",
-                        "flowId": "667b712f63020e5f182f0cb2"
-                      },
-                      "organizationId": "621dd813eb3ebf16b94dbde3",
-                      "isActive": true,
-                      "updatedTime": "2022-07-13T03:16:40+00:00",
-                      "createdTime": "2022-07-13T03:16:40+00:00",
-                      "_id": "62ce3918d3f3e1681a3a54b5"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update partially automation by ID",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "UpdatePartialAutomation/id",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "automation_id",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for automation that generated by system.\n**Example**: `62ce3918d3f3e1681a3a54b5`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PATCHAutomationRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "NetworkPatchResponse",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "data": {
-                      "description": "Detail of object automation.",
-                      "type": "object",
-                      "additionalProperties": true
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "message": "Success",
-                    "data": {
-                      "name": "Auto webhook automation",
-                      "event": "onTaskFinished",
-                      "automationType": "webhook",
-                      "dataType": "task",
-                      "automationDetails": {
-                        "url": "https://apiweb.mile.app/webhook",
-                        "headers": {
-                          "x-api-key": "1234e98498ce07d29474a7ev2",
-                          "org": "global"
-                        }
-                      },
-                      "rules": {
-                        "flow": "Pickup",
-                        "flowId": "667b712f63020e5f182f0cb2"
-                      },
-                      "organizationId": "621dd813eb3ebf16b94dbde3",
-                      "isActive": false,
-                      "updatedTime": "2022-07-13T03:16:40+00:00",
-                      "createdTime": "2022-07-13T03:16:40+00:00",
-                      "_id": "62ce3918d3f3e1681a3a54b5"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automation-retry/{log_id}": {
-      "patch": {
-        "summary": "Retry automation by ID",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "patchAutomationRetry",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "log_id",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for automation log that generated by system.\n**Example**: `62f35f8710bf27537c61d1c2`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "NetworkRetryResponse",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "message": "automation retry has been executed"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Bad request - invalid parameters provided."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-001"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Data not found"
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "#/parameters/descriptions/messageResponse",
-                      "failedCode": "auto-033"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/automation/{automation_id}/": {
-      "delete": {
-        "summary": "Delete automation by ID",
-        "tags": [
-          "Automation"
-        ],
-        "operationId": "Deleteautomation/id",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "automation_id",
-            "in": "path",
-            "required": true,
-            "description": "Unique identifier for automation that generated by system.\n**Example**: `62ce3918d3f3e1681a3a54b5`",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "NetworkDeleteResponse",
-                  "properties": {
-                    "status": {
-                      "description": "Status of response.",
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "description": "Message of API response.",
-                      "type": "string"
-                    },
-                    "_id": {
-                      "description": "ID of deleted automation.",
-                      "type": "string"
-                    }
-                  },
-                  "example": {
-                    "status": true,
-                    "message": "Automation successfully deleted.",
-                    "_id": "62ce3918d3f3e1681a3a54b5"
+                    ]
                   }
                 }
               }
@@ -31723,143 +28618,34 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "title": "NetworkDeleteResponse",
                   "properties": {
                     "status": {
-                      "description": "Status of response.",
+                      "description": "Response status indicator",
                       "type": "boolean"
                     },
                     "message": {
-                      "description": "Message of API response.",
+                      "description": "Error message",
                       "type": "string"
-                    }
-                  },
-                  "example": {
-                    "status": false,
-                    "message": "data not found"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "description": "Shows if the request was successful."
                     },
-                    "message": {
-                      "type": "string",
-                      "description": "A short message explaining what went wrong."
+                    "data": {
+                      "description": "Empty array when no data found",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
                     }
                   },
                   "example": {
                     "status": false,
-                    "message": "Internal server error, please contact support@mile.app."
-                  }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": false,
-                      "message": "Internal server error",
-                      "failedCode": "auto-045"
-                    }
+                    "message": "Data not found.",
+                    "data": []
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/internal/workflows": {
-      "get": {
-        "summary": "Get All Workflows",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Retrieves a paginated list of workflows for the organization. Results are ordered by createdTime descending (newest first).",
-        "operationId": "GetWorkflowsInternal",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Page number for pagination",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "description": "Number of items per page (max 2000 if limit=-1)",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Workflows retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "x-mint": {
           "metadata": {
             "noindex": true
@@ -31867,12 +28653,12 @@
         }
       },
       "post": {
-        "summary": "Create Workflow",
+        "summary": "Create new currency",
+        "description": "Create a new currency entry. Requires organization edit permission.",
         "tags": [
-          "Workflow"
+          "Currency"
         ],
-        "description": "Create a new workflow template with defined steps and field mappings.\n\n**Process:**\n1. Validates workflow name uniqueness within organization\n2. Validates each step's flowId exists and is unique within workflow\n3. Validates assigneeId exists if provided (optional)\n4. Auto-populates flowName and fieldSchema from Flow documents\n5. Auto-generates step order from array index\n6. Validates field mappings for steps after first step (index > 0)\n7. Sets default customStatuses if not provided (Unassigned, Ongoing, Done)\n\n**Important Notes:**\n- Workflow name must be unique within organization (2-100 characters)\n- Maximum 10 steps allowed per workflow\n- No duplicate flowIds allowed within same workflow\n- Field mappings only allowed for steps after first step (index > 0)\n- Backend auto-populates: order, flowName, fieldSchema, createdTime, updatedTime, createdBy, updatedBy",
-        "operationId": "CreateWorkflow",
+        "operationId": "createCurrency",
         "deprecated": false,
         "requestBody": {
           "content": {
@@ -31880,342 +28666,132 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "name",
-                  "steps"
+                  "countryCode",
+                  "symbol",
+                  "iso",
+                  "locale"
                 ],
                 "properties": {
-                  "name": {
+                  "countryCode": {
                     "type": "string",
-                    "minLength": 2,
-                    "maxLength": 100,
-                    "description": "Workflow name (must be unique within organization).\n**Example:** `Testing untuk Payload`"
+                    "description": "ISO 3166-1 alpha-3 country code (exactly 3 characters, must be unique)",
+                    "example": "SGP"
                   },
-                  "steps": {
-                    "type": "array",
-                    "minItems": 1,
-                    "maxItems": 10,
-                    "description": "Array of workflow steps. No duplicate flowIds allowed.\n**Note:** Frontend may send `order` and `flowName`, but backend auto-generates these fields.",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "flowId"
-                      ],
-                      "properties": {
-                        "flowId": {
-                          "type": "string",
-                          "description": "Flow ID (must exist and be unique within workflow).\n**Example:** `68f745b22fd43e839c0cfa92`"
-                        },
-                        "assigneeId": {
-                          "type": "string",
-                          "description": "Optional default assignee user ID (must exist if provided). Empty string treated as null.\n**Example:** `677213ce1d84c3e40f06f088` or `\"\"`"
-                        },
-                        "statusMapping": {
-                          "type": "string",
-                          "description": "Custom status name from customStatuses array.\n**Example:** `Done`, `Pickup`, `Delivered`"
-                        },
-                        "fieldMappings": {
-                          "type": "array",
-                          "description": "Field mappings from previous steps (only for step index > 0).\nFirst step should have empty array.",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "targetField": {
-                                "type": "string",
-                                "description": "Target field ID in current step.\n**Example:** `requesterName`"
-                              },
-                              "sourceType": {
-                                "type": "string",
-                                "enum": [
-                                  "manual",
-                                  "step",
-                                  "direct"
-                                ],
-                                "description": "Type of mapping source.\n**Example:** `manual`"
-                              },
-                              "sourceStepId": {
-                                "description": "Source step ID (null for manual type).\n**Example:** `null`",
-                                "nullable": true,
-                                "type": "string"
-                              },
-                              "sourceField": {
-                                "type": "string",
-                                "description": "Source field ID or static value.\n**Example:** `Test 1` (manual value)"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                  "symbol": {
+                    "type": "string",
+                    "description": "Currency symbol",
+                    "example": "$"
                   },
-                  "customStatuses": {
-                    "type": "array",
-                    "description": "Custom status definitions. If empty, defaults to: Unassigned, Ongoing, Done.",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "name"
-                      ],
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 50,
-                          "description": "Status name.\n**Example:** `Pickup`, `Delivered`"
-                        },
-                        "isDefault": {
-                          "type": "boolean",
-                          "description": "Whether this is a default system status.\n**Example:** `true` (for Unassigned, Ongoing, Done), `false` (custom)"
-                        }
-                      }
-                    }
+                  "iso": {
+                    "type": "string",
+                    "description": "ISO 4217 currency code (exactly 3 characters, must be uppercase)",
+                    "example": "SGD"
+                  },
+                  "locale": {
+                    "type": "string",
+                    "description": "BCP 47 locale code",
+                    "example": "en-SG"
+                  },
+                  "isActive": {
+                    "type": "boolean",
+                    "description": "Currency active status",
+                    "default": true
                   }
-                },
-                "example": {
-                  "name": "Testing untuk Payload",
-                  "steps": [
-                    {
-                      "order": 1,
-                      "flowId": "68f745b22fd43e839c0cfa92",
-                      "flowName": "Delivery A",
-                      "assigneeId": "677213ce1d84c3e40f06f088",
-                      "statusMapping": "Done",
-                      "fieldMappings": []
-                    },
-                    {
-                      "order": 2,
-                      "flowId": "68f1eaa8b0c75de883077522",
-                      "flowName": "Finish",
-                      "assigneeId": "",
-                      "statusMapping": "Pickup",
-                      "fieldMappings": [
-                        {
-                          "targetField": "requesterName",
-                          "sourceType": "manual",
-                          "sourceStepId": null,
-                          "sourceField": "Test 1"
-                        },
-                        {
-                          "targetField": "item",
-                          "sourceType": "manual",
-                          "sourceStepId": null,
-                          "sourceField": "dwadawd"
-                        }
-                      ]
-                    },
-                    {
-                      "order": 3,
-                      "flowId": "68b67402cbed0bf35c055b62",
-                      "flowName": "Picking",
-                      "assigneeId": "677213ce1d84c3e40f06f088",
-                      "statusMapping": "Delivered",
-                      "fieldMappings": [
-                        {
-                          "targetField": "customerName",
-                          "sourceType": "manual",
-                          "sourceStepId": null,
-                          "sourceField": "Test 1"
-                        }
-                      ]
-                    }
-                  ],
-                  "customStatuses": [
-                    {
-                      "name": "Unassigned",
-                      "isDefault": true
-                    },
-                    {
-                      "name": "Ongoing",
-                      "isDefault": true
-                    },
-                    {
-                      "name": "Done",
-                      "isDefault": true
-                    },
-                    {
-                      "name": "Pickup",
-                      "isDefault": false
-                    },
-                    {
-                      "name": "Delivered",
-                      "isDefault": false
-                    }
-                  ]
                 }
               }
             }
           },
-          "description": "Workflow creation payload",
+          "description": "Currency object to be created",
           "required": true
         },
         "responses": {
           "201": {
-            "description": "Workflow created successfully",
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
                   "properties": {
                     "status": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "code": {
-                      "type": "integer",
-                      "example": 201
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Workflow created successfully"
+                      "description": "Response status indicator",
+                      "type": "boolean"
                     },
                     "data": {
+                      "description": "Created currency object",
                       "type": "object",
-                      "description": "Workflow object with auto-populated fields (order, flowName, fieldSchema)",
                       "properties": {
                         "_id": {
-                          "type": "string",
-                          "example": "634e98098ce07d29474a7e22"
+                          "description": "Currency unique identifier",
+                          "type": "string"
                         },
-                        "name": {
-                          "type": "string",
-                          "example": "Testing untuk Payload"
+                        "countryCode": {
+                          "description": "ISO 3166-1 alpha-3 country code",
+                          "type": "string"
                         },
-                        "organizationId": {
-                          "type": "string",
-                          "example": "634e98098ce07d29474a7e20"
+                        "symbol": {
+                          "description": "Currency symbol",
+                          "type": "string"
                         },
-                        "steps": {
-                          "type": "array",
-                          "description": "Steps with auto-populated order, flowName, and fieldSchema from Flow documents",
-                          "items": {
-                            "type": "object",
-                            "additionalProperties": true
-                          },
-                          "example": [
-                            {
-                              "order": 0,
-                              "flowId": "68f745b22fd43e839c0cfa92",
-                              "flowName": "Delivery A",
-                              "assigneeId": "677213ce1d84c3e40f06f088",
-                              "statusMapping": "Done",
-                              "fieldMappings": [],
-                              "fieldSchema": []
-                            }
-                          ]
+                        "iso": {
+                          "description": "ISO 4217 currency code",
+                          "type": "string"
                         },
-                        "customStatuses": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "additionalProperties": true
-                          },
-                          "example": [
-                            {
-                              "name": "Unassigned",
-                              "isDefault": true
-                            },
-                            {
-                              "name": "Ongoing",
-                              "isDefault": true
-                            },
-                            {
-                              "name": "Done",
-                              "isDefault": true
-                            },
-                            {
-                              "name": "Pickup",
-                              "isDefault": false
-                            },
-                            {
-                              "name": "Delivered",
-                              "isDefault": false
-                            }
-                          ]
+                        "locale": {
+                          "description": "BCP 47 locale code",
+                          "type": "string"
                         },
-                        "createdBy": {
-                          "type": "string",
-                          "example": "admin@example.com"
-                        },
-                        "updatedBy": {
-                          "type": "string",
-                          "example": "admin@example.com"
-                        },
-                        "createdTime": {
-                          "type": "string",
-                          "example": "2023-01-01T07:30:00+07:00"
-                        },
-                        "updatedTime": {
-                          "type": "string",
-                          "example": "2023-01-01T07:30:00+07:00"
+                        "isActive": {
+                          "description": "Currency active status",
+                          "type": "boolean"
                         }
                       }
+                    },
+                    "message": {
+                      "description": "Success message",
+                      "type": "string"
                     }
+                  },
+                  "example": {
+                    "status": true,
+                    "data": {
+                      "_id": "676a1234567890abcdef1237",
+                      "countryCode": "SGP",
+                      "symbol": "$",
+                      "iso": "SGD",
+                      "locale": "en-SG",
+                      "isActive": true
+                    },
+                    "message": "Data created successfully."
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request - validation failed or duplicate name",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "code": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Workflow name already exists"
-                    },
-                    "failedCode": {
-                      "type": "string",
-                      "example": "WORKF_DUPLICATE_NAME"
-                    },
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "Step 1: Flow ID not found",
-                        "Step 2: Invalid assignee ID"
-                      ]
-                    }
-                  }
+                  "$ref": "#/components/schemas/BadRequestError"
                 }
               }
             }
           },
-          "500": {
-            "description": "Internal server error",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "code": {
-                      "type": "integer",
-                      "example": 500
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Workflow creation failed"
-                    },
-                    "failedCode": {
-                      "type": "string",
-                      "example": "WORKF_SERVER_ERROR"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
@@ -32233,138 +28809,21 @@
         }
       }
     },
-    "/internal/workflows/search": {
+    "/currency/{id}": {
       "get": {
-        "summary": "Search Workflows",
+        "summary": "Get currency by ID",
+        "description": "Retrieve a specific currency by its MongoDB ObjectId. Requires authentication.",
         "tags": [
-          "Workflow"
+          "Currency"
         ],
-        "description": "Search workflows using MongoDB text search with advanced filters.\n\n**Search Features:**\n- MongoDB text search on workflow name (query parameter: q)\n- Filter by creator email (createdBy)\n- Filter by step count range (stepsCountMin, stepsCountMax)\n- Pagination support (page, limit)\n- Automatic organizationId filtering\n\n**Performance Notes:**\n- Uses MongoDB text index on name field\n- Returns search metadata including query and filters\n- Indicates data source: mongodb_text_search",
-        "operationId": "SearchWorkflows",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "description": "Search query for workflow name (MongoDB text search)",
-            "schema": {
-              "type": "string",
-              "maxLength": 255
-            }
-          },
-          {
-            "name": "createdBy",
-            "in": "query",
-            "required": false,
-            "description": "Filter by creator email",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stepsCountMin",
-            "in": "query",
-            "required": false,
-            "description": "Minimum number of steps",
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "stepsCountMax",
-            "in": "query",
-            "required": false,
-            "description": "Maximum number of steps",
-            "schema": {
-              "type": "integer",
-              "maximum": 10
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Page number",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "description": "Items per page",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Search results retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowSearchResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/workflow/{id}": {
-      "get": {
-        "summary": "Get Workflow by ID",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Retrieve single workflow template by ID with complete step configuration.\n\n**Security:**\n- Automatically filtered by organizationId (IDOR protection)\n- Only returns workflows belonging to authenticated user's organization\n\n**Performance:**\n- Direct _id lookup (primary key)\n- Complete workflow object with all steps, fieldSchema, and customStatuses included",
-        "operationId": "GetWorkflowById",
+        "operationId": "getCurrency",
         "deprecated": false,
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Workflow identifier",
+            "description": "Currency MongoDB ObjectId",
             "schema": {
               "type": "string"
             }
@@ -32372,31 +28831,90 @@
         ],
         "responses": {
           "200": {
-            "description": "Workflow retrieved successfully",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WorkflowDetailResponse"
+                  "properties": {
+                    "status": {
+                      "description": "Response status indicator",
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "description": "Currency object",
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "Currency unique identifier",
+                          "type": "string"
+                        },
+                        "countryCode": {
+                          "description": "ISO 3166-1 alpha-3 country code",
+                          "type": "string"
+                        },
+                        "symbol": {
+                          "description": "Currency symbol",
+                          "type": "string"
+                        },
+                        "iso": {
+                          "description": "ISO 4217 currency code",
+                          "type": "string"
+                        },
+                        "locale": {
+                          "description": "BCP 47 locale code",
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "description": "Currency active status",
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "status": true,
+                    "data": {
+                      "_id": "676a1234567890abcdef1234",
+                      "countryCode": "IDN",
+                      "symbol": "Rp",
+                      "iso": "IDR",
+                      "locale": "id-ID",
+                      "isActive": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
                 }
               }
             }
           },
           "404": {
-            "description": "Workflow not found",
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "properties": {
+                    "status": {
+                      "description": "Response status indicator",
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "description": "Error message",
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "status": false,
+                    "message": "Data not found."
+                  }
                 }
               }
             }
@@ -32414,19 +28932,19 @@
         }
       },
       "put": {
-        "summary": "Update Workflow",
+        "summary": "Update currency",
+        "description": "Update an existing currency. Requires organization edit permission.",
         "tags": [
-          "Workflow"
+          "Currency"
         ],
-        "description": "Update an existing workflow template configuration.\n\n**Process:**\n1. Validates workflow exists and belongs to organization\n2. Validates workflow name uniqueness if name is being changed\n3. Validates steps configuration if steps are being updated (same as create)\n4. Auto-populates flowName and fieldSchema for updated steps\n5. Updates updatedBy and updatedTime automatically\n\n**Important Notes:**\n- All fields are optional (partial update supported)\n- Name must be unique within organization if changed\n- Steps validation follows same rules as create (max 10, no duplicate flowIds)\n- Backend auto-populates: order, flowName, fieldSchema, updatedBy, updatedTime",
-        "operationId": "UpdateWorkflow",
+        "operationId": "updateCurrency",
         "deprecated": false,
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Workflow identifier",
+            "description": "Currency MongoDB ObjectId",
             "schema": {
               "type": "string"
             }
@@ -32436,49 +28954,121 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateWorkflowRequest"
+                "type": "object",
+                "properties": {
+                  "countryCode": {
+                    "type": "string",
+                    "description": "ISO 3166-1 alpha-3 country code (exactly 3 characters)"
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "description": "Currency symbol"
+                  },
+                  "iso": {
+                    "type": "string",
+                    "description": "ISO 4217 currency code (exactly 3 characters, must be uppercase)"
+                  },
+                  "locale": {
+                    "type": "string",
+                    "description": "BCP 47 locale code"
+                  },
+                  "isActive": {
+                    "type": "boolean",
+                    "description": "Currency active status"
+                  }
+                }
               }
             }
           },
+          "description": "Currency fields to update",
           "required": true
         },
         "responses": {
           "200": {
-            "description": "Workflow updated successfully",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WorkflowResponse"
+                  "properties": {
+                    "status": {
+                      "description": "Response status indicator",
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "description": "Updated currency object",
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "message": {
+                      "description": "Success message",
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "status": true,
+                    "data": {
+                      "_id": "676a1234567890abcdef1234",
+                      "countryCode": "IDN",
+                      "symbol": "Rp",
+                      "iso": "IDR",
+                      "locale": "id-ID",
+                      "isActive": true
+                    },
+                    "message": "Data updated successfully."
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request - validation failed or duplicate name",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
           },
           "404": {
-            "description": "Workflow not found",
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "properties": {
+                    "status": {
+                      "description": "Response status indicator",
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "description": "Error message",
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "status": false,
+                    "message": "Data not found."
+                  }
                 }
               }
             }
@@ -32496,259 +29086,87 @@
         }
       },
       "delete": {
-        "summary": "Delete Workflow",
+        "summary": "Delete currency (soft delete)",
+        "description": "Soft delete a currency by setting isActive to false. Requires organization edit permission.",
         "tags": [
-          "Workflow"
+          "Currency"
         ],
-        "description": "Permanently delete a workflow template (hard delete).\n\n**Process:**\n1. Validates workflow exists and belongs to organization (IDOR protection)\n2. Performs forceDelete (permanent deletion, no soft delete)\n3. Clears workflow cache after successful deletion\n\n**Important Notes:**\n- Cannot be undone (hard delete, not soft delete)\n- Force and confirmed parameters available but currently not enforced\n- Consider checking workflow usage in activities before deletion\n- Deleting workflow does NOT delete existing activities created from this template",
-        "operationId": "DeleteWorkflow",
+        "operationId": "deleteCurrency",
         "deprecated": false,
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Workflow identifier",
+            "description": "Currency MongoDB ObjectId",
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "force",
-            "in": "query",
-            "required": false,
-            "description": "Force delete even if in use (requires confirmed=true)",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "confirmed",
-            "in": "query",
-            "required": false,
-            "description": "Confirmation for force delete",
-            "schema": {
-              "type": "boolean",
-              "default": false
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Workflow deleted successfully",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeleteWorkflowResponse"
+                  "properties": {
+                    "status": {
+                      "description": "Response status indicator",
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "description": "Success message",
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "status": true,
+                    "message": "Data deleted successfully."
+                  }
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request - confirmation required or validation failed",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/UnauthorizedError"
                 }
               }
             }
           },
-          "404": {
-            "description": "Workflow not found",
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/workflow/{id}/steps/{stepOrder}/field-mapping-data": {
-      "get": {
-        "summary": "Get Field Mapping Data",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Retrieve available fields from current and previous steps for field mapping configuration.\n\n**Use Case:**\n- Used by frontend when configuring field mappings for a workflow step\n- Provides list of available source fields from previous steps\n- Shows current step's target fields\n- Returns existing mappings if any\n\n**Response Data:**\n- currentStep: Current step info with flowId, flowName, and available fields (fieldSchema)\n- previousSteps: Array of previous steps with their available fields\n- existingMappings: Current field mappings if already configured\n\n**Important Notes:**\n- stepOrder is 0-based index (first step = 0, second step = 1, etc.)\n- Only steps before current step are returned in previousSteps\n- First step (stepOrder=0) will have empty previousSteps array",
-        "operationId": "GetFieldMappingData",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "Workflow identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stepOrder",
-            "in": "path",
-            "required": true,
-            "description": "Step order index (0-based)",
-            "schema": {
-              "type": "integer",
-              "minimum": 0
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Field mapping data retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FieldMappingDataResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - invalid stepOrder",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
           },
           "404": {
-            "description": "Workflow or step not found",
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/workflow/{id}/steps/{stepOrder}/validate-field-mappings": {
-      "post": {
-        "summary": "Validate Field Mappings",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Validate field mappings configuration for a specific workflow step before saving.\n\n**Validation Rules:**\n- Target field must exist in current step's fieldSchema\n- Source field must exist in source step's fieldSchema (for sourceType='step')\n- Source step must be before current step (sourceStepIndex < currentStepIndex)\n- Required fields must have valid mappings\n- Field type compatibility check between source and target\n\n**Use Case:**\n- Frontend validates mappings before saving workflow\n- Prevents invalid field mapping configuration\n- Provides detailed error messages for debugging\n\n**Response Data:**\n- valid: Boolean indicating if validation passed\n- errors: Array of validation error messages\n- warnings: Array of non-critical warnings",
-        "operationId": "ValidateFieldMappings",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "Workflow identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stepOrder",
-            "in": "path",
-            "required": true,
-            "description": "Step order index (0-based)",
-            "schema": {
-              "type": "integer",
-              "minimum": 0
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ValidateFieldMappingsRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Validation completed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Workflow or step not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "properties": {
+                    "status": {
+                      "description": "Response status indicator",
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "description": "Error message",
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "status": false,
+                    "message": "Data not found."
+                  }
                 }
               }
             }

@@ -406,7 +406,10 @@
           {
             "group": "Getting Started",
             "pages": [
-              "api-reference-internal/introduction"
+              "api-reference-internal/introduction",
+              "api-reference-internal/authentication",
+              "api-reference-internal/data-formats",
+              "api-reference-internal/status-codes"
             ]
           },
           {
@@ -445,6 +448,13 @@
             }
           },
           {
+            "group": "File",
+            "openapi": {
+              "source": "openapi/internal/openapi-file.json",
+              "directory": "api-reference-internal/file"
+            }
+          },
+          {
             "group": "Billing",
             "openapi": {
               "source": "openapi/internal/openapi-billing.json",
@@ -452,38 +462,31 @@
             }
           },
           {
-            "group": "Activity",
+            "group": "Dashboard",
             "openapi": {
               "source": "openapi/internal/openapi-activity.json",
               "directory": "api-reference-internal/activity"
             }
           },
           {
-            "group": "Auth",
+            "group": "Authentication",
             "openapi": {
               "source": "openapi/internal/openapi-auth.json",
               "directory": "api-reference-internal/auth"
             }
           },
           {
-            "group": "Tools",
+            "group": "Reference",
+            "openapi": {
+              "source": "openapi/internal/openapi-reference.json",
+              "directory": "api-reference-internal/reference"
+            }
+          },
+          {
+            "group": "Internal Tools",
             "openapi": {
               "source": "openapi/internal/openapi-tools.json",
               "directory": "api-reference-internal/tools"
-            }
-          },
-          {
-            "group": "Workflow",
-            "openapi": {
-              "source": "openapi/internal/openapi-workflow.json",
-              "directory": "api-reference-internal/workflow"
-            }
-          },
-          {
-            "group": "File",
-            "openapi": {
-              "source": "openapi/internal/openapi-file.json",
-              "directory": "api-reference-internal/file"
             }
           },
           {
