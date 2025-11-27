@@ -180,6 +180,73 @@ const TAG_CONFIG = {
     openapiFile: 'openapi/public/openapi-file.json',
     endpointPrefix: '/api-reference/file/file/',
     skip: true // Already exists as module overview
+  },
+
+  // ==========================================
+  // INTERNAL API (noindex: true for all)
+  // ==========================================
+
+  // Internal Task module
+  'Task (Internal)': {
+    module: 'task',
+    outputDir: 'api-reference-internal/task',
+    outputFile: 'overview.mdx',
+    openapiFile: 'openapi/internal/openapi-task.json',
+    endpointPrefix: '/api-reference-internal/task/task/',
+    objectLink: '/api-reference-internal/objects/task-object',
+    noindex: true
+  },
+
+  // Internal Routing module
+  'Routing (Internal)': {
+    module: 'routing',
+    outputDir: 'api-reference-internal/routing',
+    outputFile: 'overview.mdx',
+    openapiFile: 'openapi/internal/openapi-routing.json',
+    endpointPrefix: '/api-reference-internal/routing/',
+    objectLink: '/api-reference-internal/objects/vehicle-object',
+    noindex: true
+  },
+
+  // Internal Flow module
+  'Flow (Internal)': {
+    module: 'flow',
+    outputDir: 'api-reference-internal/flow',
+    outputFile: 'overview.mdx',
+    openapiFile: 'openapi/internal/openapi-flow.json',
+    endpointPrefix: '/api-reference-internal/flow/flow/',
+    objectLink: '/api-reference-internal/objects/flow-object',
+    noindex: true
+  },
+
+  // Internal Data module
+  'Data (Internal)': {
+    module: 'data',
+    outputDir: 'api-reference-internal/data',
+    outputFile: 'overview.mdx',
+    openapiFile: 'openapi/internal/openapi-data.json',
+    endpointPrefix: '/api-reference-internal/data/',
+    noindex: true
+  },
+
+  // Internal Setting module
+  'Setting (Internal)': {
+    module: 'setting',
+    outputDir: 'api-reference-internal/setting',
+    outputFile: 'overview.mdx',
+    openapiFile: 'openapi/internal/openapi-setting.json',
+    endpointPrefix: '/api-reference-internal/setting/',
+    noindex: true
+  },
+
+  // Internal File module
+  'File (Internal)': {
+    module: 'file',
+    outputDir: 'api-reference-internal/file',
+    outputFile: 'overview.mdx',
+    openapiFile: 'openapi/internal/openapi-file.json',
+    endpointPrefix: '/api-reference-internal/file/file/',
+    noindex: true
   }
 };
 
@@ -296,9 +363,12 @@ function generateOverviewMDX(tagName, config, description, endpoints) {
     relatedResources += `- [${tagName} Object](${config.objectLink}) - ${tagName} data structure\n`;
   }
 
+  // Add noindex for internal API pages
+  const noindexLine = config.noindex ? '\nnoindex: true' : '';
+
   const mdx = `---
 title: '${tagName} Overview'
-description: '${shortDesc}'
+description: '${shortDesc}'${noindexLine}
 ---
 
 ## What is ${tagName}?
