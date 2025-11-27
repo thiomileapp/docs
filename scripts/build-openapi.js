@@ -924,6 +924,31 @@ function fixSchemaIssues(spec) {
   return spec;
 }
 
+// Add noindex metadata to all operations (for internal API - should not be indexed by search engines)
+function addNoindexMetadata(spec) {
+  if (!spec.paths) return spec;
+
+  const methods = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'];
+
+  for (const pathKey of Object.keys(spec.paths)) {
+    const pathItem = spec.paths[pathKey];
+    for (const method of methods) {
+      if (pathItem[method]) {
+        const operation = pathItem[method];
+        if (!operation['x-mint']) {
+          operation['x-mint'] = {};
+        }
+        if (!operation['x-mint'].metadata) {
+          operation['x-mint'].metadata = {};
+        }
+        operation['x-mint'].metadata.noindex = true;
+      }
+    }
+  }
+
+  return spec;
+}
+
 // Main function to apply all Mintlify compatibility fixes
 function applyMintlifyFixes(spec) {
   console.log('  🔧 Applying Mintlify compatibility fixes...');
@@ -1306,7 +1331,12 @@ async function main() {
     console.log(`  Paths (Swagger 2.0): ${Object.keys(swagger2Spec.paths || {}).length}`);
 
     console.log('\n🔄 Converting to OpenAPI 3.0...');
-    const openapi3Spec = await convertToOpenAPI3(swagger2Spec);
+    let openapi3Spec = await convertToOpenAPI3(swagger2Spec);
+
+    // Add noindex metadata to internal API pages (should not be indexed by search engines)
+    console.log('  🚫 Adding noindex metadata to internal API...');
+    openapi3Spec = addNoindexMetadata(openapi3Spec);
+
     saveJson(path.join(OUTPUT_INTERNAL, 'openapi-full.json'), openapi3Spec);
     console.log(`  Paths (OpenAPI 3.0): ${Object.keys(openapi3Spec.paths || {}).length}`);
   }

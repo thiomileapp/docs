@@ -415,6 +415,27 @@
               "source": "openapi/internal/openapi-full.json",
               "directory": "api-reference-internal"
             }
+          },
+          {
+            "group": "Objects",
+            "pages": [
+              "api-reference-internal/objects/task-object",
+              "api-reference-internal/objects/vehicle-object",
+              "api-reference-internal/objects/user-object",
+              "api-reference-internal/objects/role-object",
+              "api-reference-internal/objects/hub-object",
+              "api-reference-internal/objects/team-object",
+              "api-reference-internal/objects/flow-object",
+              "api-reference-internal/objects/organization-object",
+              "api-reference-internal/objects/invoice-object",
+              "api-reference-internal/objects/license-object",
+              "api-reference-internal/objects/subscription-object",
+              "api-reference-internal/objects/location-history-object",
+              "api-reference-internal/objects/task-schedule-object",
+              "api-reference-internal/objects/version-object",
+              "api-reference-internal/objects/workflow-object",
+              "api-reference-internal/objects/custom-module-object"
+            ]
           }
         ]
       }
