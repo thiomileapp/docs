@@ -1,0 +1,41 @@
+---
+title: "Failure Monitoring and Notification Process"
+description: "How MileApp monitors webhook failures and notifies administrators"
+---
+
+Our system continuously monitors the integration's performance by tracking the success and failure rates of operations. If a significant number of failures occur, this could indicate a problem with the integration.
+
+## Failure Threshold
+
+| Metric | Threshold |
+|--------|-----------|
+| **Start counter** | Operation calculation starts from the first time a failure occurs |
+| **Threshold Level** | Notification triggered if failure rate exceeds 80% with more than 5 failures, OR more than 50 total failures within 1 hour |
+| **Failure Rate Calculation** | Percentage of failed operations out of total operations attempted within the monitored period |
+
+## Notification Process
+
+As soon as the system identifies that the failure rate has exceeded the threshold, it will automatically send an email notification to all owner emails.
+
+The notification includes:
+- The webhook endpoint that is failing
+- The number of failures detected
+- The time period of the failures
+- Recommended actions to resolve the issue
+
+## Troubleshooting Common Issues
+
+### High Failure Rate
+- Check if your endpoint is accessible from the internet
+- Verify your SSL certificate is valid
+- Ensure your server can handle the incoming traffic
+
+### Timeout Errors
+- Optimize your webhook handler to respond faster
+- Move heavy processing to background jobs
+- Consider scaling your infrastructure
+
+### HTTP 5xx Errors
+- Check your server logs for application errors
+- Verify database connections are healthy
+- Review recent code deployments

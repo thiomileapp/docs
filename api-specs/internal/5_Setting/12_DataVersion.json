@@ -1,0 +1,65 @@
+{
+    "paths": {
+        "/data-version": {
+            "get": {
+                "summary": "Endpoint to get latest data version",
+                "tags": [
+                    "Data Version"
+                ],
+                "operationId": "getData Version",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "description": "String with format combination of module name and hub id. <br> There are list of module name : `routingResults`, `dataSource`, and `tasks` <br>**Example**: `dataSource_63e0842e1d09947148301a92`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Latest version of data.",
+                                    "type": "integer"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "data": "1689059460"
+                                
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "Data not found. Please check the ID/reference number and try again.",
+                                "data": [],
+                                "failedCode": "dver-033"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        }
+    }
+}

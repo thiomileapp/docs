@@ -1,0 +1,132 @@
+---
+title: "Trip Events"
+description: "Webhook payloads for trip start and finish events"
+---
+
+Trip webhooks are triggered when field workers start or finish their trips using the MileApp mobile application. The webhook payload contains trip details including location data, duration, and distance traveled.
+
+## Event Types
+
+| Event | Trigger |
+|-------|---------|
+| **onStartTrip** | Field worker starts a trip |
+| **onFinishTrip** | Field worker finishes a trip |
+
+## On Start Trip
+
+Triggered when a field worker initiates a trip from the mobile app.
+
+```json
+{
+  "_id": "66791b2bf001a712b77b3622_jhondoe1@paket.id_20240919070000s",
+  "createdBy": "jhondoe2@paket.id",
+  "updatedBy": null,
+  "email": "jhondoe1@paket.id",
+  "organizationId": "66791b2bf001a712b77b3622",
+  "taskId": "",
+  "time": 1726734839948,
+  "startTime": "2024-09-19 00:00:00",
+  "createdTime": "2024-09-19 00:00:00",
+  "updatedTime": "2024-09-19 08:33:59",
+  "lat": -7.3411964,
+  "lon": 112.7573265,
+  "distance": 0.01821796355451168,
+  "distanceToDest": null,
+  "speed": 1,
+  "duration": 1,
+  "notes": null,
+  "eventName": "otw",
+  "isLatest": true,
+  "finish": null
+}
+```
+
+## On Finish Trip
+
+Triggered when a field worker completes their trip.
+
+```json
+{
+  "_id": "66791b2bf001a712b77b3622_jhondoe1@paket.id_20240919070000s",
+  "createdBy": "jhondoe2@paket.id",
+  "updatedBy": "jhondoe2@paket.id",
+  "email": "jhondoe1@paket.id",
+  "organizationId": "66791b2bf001a712b77b3622",
+  "taskId": "",
+  "time": 1726734839948,
+  "startTime": "2024-09-19 00:00:00",
+  "createdTime": "2024-09-19 00:00:00",
+  "updatedTime": "2024-09-19 08:34:57",
+  "lat": -7.3411964,
+  "lon": 112.7573265,
+  "distance": 0.01821796355451168,
+  "distanceToDest": null,
+  "speed": 1,
+  "duration": 1,
+  "notes": null,
+  "eventName": "otw",
+  "isLatest": false,
+  "finish": {
+    "finishTime": "2024-09-19 01:00:00",
+    "lat": -7.3411964,
+    "lon": 112.7573265,
+    "totalDistance": 0,
+    "totalDuration": 3,
+    "notes": null,
+    "isRecalculate": 1
+  }
+}
+```
+
+## Payload Fields
+
+### Base Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | string | Unique identifier for the trip |
+| `email` | string | Email address of the field worker |
+| `organizationId` | string | Organization ID associated with the trip |
+| `taskId` | string | Associated task ID (if applicable) |
+| `createdBy` | string | Email of the person who created/initiated the trip |
+| `updatedBy` | string | Email of the person who last updated the trip |
+| `createdTime` | string | Trip creation timestamp |
+| `updatedTime` | string | Last update timestamp |
+| `startTime` | string | Trip start time |
+| `time` | integer | Unix timestamp |
+| `eventName` | string | Event type (e.g., `otw` for "on the way") |
+| `isLatest` | boolean | Whether this is the latest trip log entry |
+
+### Location Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `lat` | float | Current latitude |
+| `lon` | float | Current longitude |
+| `distance` | float | Distance traveled |
+| `distanceToDest` | float | Distance to destination (if available) |
+| `speed` | integer | Current speed |
+| `duration` | integer | Trip duration |
+| `notes` | string | Additional notes |
+
+### Finish Object (onFinishTrip only)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `finishTime` | string | Trip completion timestamp |
+| `lat` | float | Finish location latitude |
+| `lon` | float | Finish location longitude |
+| `totalDistance` | integer | Total distance traveled |
+| `totalDuration` | integer | Total trip duration |
+| `notes` | string | Completion notes |
+| `isRecalculate` | boolean | Whether trip data was recalculated |
+
+## Response
+
+Your endpoint must return an HTTP 200 status code to acknowledge receipt:
+
+```json
+{
+  "status": "received"
+}
+```

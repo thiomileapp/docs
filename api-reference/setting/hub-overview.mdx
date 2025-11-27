@@ -1,0 +1,41 @@
+---
+title: 'Hub'
+description: 'In our system, a Hub is a fundamental entity within an organization, serving as the central point fo...'
+---
+
+## What is Hub?
+
+In our system, a Hub is a fundamental entity within an organization, serving as the central point for managing various operational components. It acts as the parent structure for a wide range of resources and functionalities, including tasks, visits, users, vehicles, routing results, routing configurations, and data sources.
+
+**To see the details of hub object, please follow [this link](/api-reference/objects/hub-object)**
+
+## Conceptual Understanding of Hubs
+
+- **User Perspective:** For users, a Hub represents their headquarters or primary working area. It is where they carry out their daily activities and manage their tasks effectively. Each user interacts with the Hub to access resources and perform operations specific to their roles.
+
+- **Task Perspective:** From the perspective of task management, the Hub signifies the working area for tasks. It is the location where tasks are initiated, monitored, and completed. The Hub facilitates organization and efficiency in task execution.
+
+- **Routing Perspective:** In the context of routing and logistics, a Hub serves as a critical location for vehicles. It is where vehicles begin their routes, return after completing their journeys, and may make strategic stops along the way. The routing module relies on the Hub to optimize vehicle assignments and manage routes effectively.
+
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Read hub" icon="list" href="/api-reference/setting/hub/read-hub">
+    GET /hubs
+  </Card>
+  <Card title="Read hub by ID" icon="list" href="/api-reference/setting/hub/read-hub-by-id">
+    GET /hub/{hubId}/
+  </Card>
+  <Card title="Create hub" icon="plus" href="/api-reference/setting/hub/create-hub">
+    POST /hub
+  </Card>
+  <Card title="Update hub" icon="pen" href="/api-reference/setting/hub/update-hub">
+    PUT /hub/{hubId}
+  </Card>
+</CardGroup>
+
+## Related Resources
+
+- [Hub Object](/api-reference/objects/hub-object) - Hub data structure
+

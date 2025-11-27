@@ -1,0 +1,2480 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Routing",
+    "description": "Route optimization refers to the process of finding the most effective routes for vehicles to travel from one visit to another. \n\n    The optimization process will generate a result that could update the respective task data when dispatched.\n\n    With the ability to handle complex constraints and variables such as capacity, time windows, and vehicle availability, the API can be customized to meet the specific needs of any business or organization.\n"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/route-optimization": {
+      "post": {
+        "summary": "Routing",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "route-optimize",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "\n\n            Route optimization is the process of optimizing visits, vehicles, and configurations so as to produce the best route and scheduling.\n\n            \n\n            | Field | Type | Format | Description | Required |\n\n            |---|---|---|---|---|\n\n            | hub | <a href='#introduction-format'>string</a> | *24 characters hexadecimal*<br>Or<br>*String with geolocation format.* | Unique identifier for the vehicle, please use GET <a href='#Setting_Hub'>HUB API</a> <br>to get the list of Hub IDs.<br>**Example:** `'6352736c628401059b37a2e2'`<br>Or<br>Coordinate of Hub. <br>**Example:** `'-6.230815251666679,106.75684387903198'` | Required |\n\n            | routing | <a href='#introduction-format'>object</a> |  | Routing object that consist of `configuration`, `visits`, and `vehicles`. | Required |\n\n            | routing.configuration | <a href='#introduction-format'>object</a> |  | Configuration setting for route optimization. | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name | <a href='#introduction-format'>string</a> | | Name of configuration,<br>can be set as anything, it is used as reference in result. <br>**Example**: `Configuration Default` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;capacityConstraint | <a href='#introduction-format'>array of strings</a> | | A list of dynamic capacity types according to user needs. <br>**Example**: `['weight','volume']`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multitrip | <a href='#introduction-format'>boolean</a> | | When multitrip is activated in the middle of the trip,<br>the vehicle can return to the hub <br>to reload capacity if the capacity on the vehicle is almost empty.<br>**default:** `false` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;returnToHub | <a href='#introduction-format'>boolean</a> | | When returnToHub is activated,<br>the vehicle will calculate the estimated travel time <br>to return to the hub as the last trip.<br> **default:** `false` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;useAllVehicle | <a href='#introduction-format'>boolean</a> | | When useAllVehicle is activated,<br>it will force all active vehicles to be used. <br>**default:** `false`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clustering | <a href='#introduction-format'>boolean</a> | | When clustering is activated,<br>it will reduce the overlap area of vehicle's trip. <br>**default:** `false`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;autoSpeed | <a href='#introduction-format'>boolean</a> | | When autoSpeed is activated,<br>it will determine the vehicle speed automatically based on traffic level.<br>If not, each vehicle will need to be setup for its speed. <br>**default:** `false`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defaultSpeed | <a href='#introduction-format'>integer</a> | Minimum: `5` | Default value of average speed of the vehicle.<br>Speed cannot be less than 5 km/h.<br>If it is not filled,<br> the default value for speed is 25 km/h. <br>**Example:** `15`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defaultVisitTime | <a href='#introduction-format'>integer</a> | Minimum: `0` | Idle time after arriving at the destination.<br>Such as time to hand over goods, waiting for customers,<br>time lag for parking vehicles, etc based on the business.<br>It will be used if any visit doesnt have Visit Time setup in it. <br>**Example:** `10`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;autoSplit | <a href='#introduction-format'>string</a> | Enumeration:<br>`none`,`equal`,`maximize` | When autoSplit is activated,<br>automatically split the visit that have a capacity greater than maximum capacity <br> of the vehicle into two or more visits. <br>**Default:** `none`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multidayOption | <a href='#introduction-format'>string</a> | Enumeration:<br>`last visit`,`from hub` | Configure the starting location of a vehicle for each new day in multiday routes. Choose between two modes: Start over `from hub` where the vehicle begins each new day from the designated hub regardless of its last location, or Continue from the `last visit` where the vehicle starts the new day from the location of the previous days final stop. <br>**Default:** `last visit`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;useOddEven | <a href='#introduction-format'>boolean</a> |  | Enable odd-even license plate restrictions during route optimization. When activated, vehicles will only be routed during time periods that match their odd/even classification. <br>**Default:** `false`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oddEvenTime | <a href='#introduction-format'>array of objects</a> | Array of objects with format:<br>`[{`<br>`'startTime': value,`<br>`'endTime': value`<br>`}]` | Array of time windows during which odd-even restrictions are enforced. Each object contains startTime and endTime defining the restricted periods. Only applicable when useOddEven is true. <br>**Example:** `[{'startTime': '07:00', 'endTime': '10:00'}, {'startTime': '17:00', 'endTime': '20:00'}]`| Optional |\n\n            | routing.visits | <a href='#introduction-format'>array of objects</a> | | List of visits used for routing. | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.id | <a href='#introduction-format'>string</a> |  | Unique identifier for each visit.<br>visitId's format might indicate the type of visit.<br>Visit id with a prefix of `taskId-` indicates the visit might be related to a task.<br>Users can set visitId with this prefix on the payload of routing to tell the system<br>that visitId is related to a task.<br>Visit id with a prefix of `hub-` indicates the visits might be related to a hub.<br>These kinds of visits are generated by the system<br>when the routing process is finished.<br>Normally this kind of visit only appears on the first visit of the vehicle's trip,<br>but if **configuration.returnToHub = true**,<br>this type of visit will appear on the last visit of the vehicle's trip.<br>**configuration.multitrip** value also might determine<br>how much the generated visit will be produced.<br>When **configuration.multitrip = true**,<br>a visit might appear more often than usual<br>because it allows a vehicle to go back to the hub to reload.<br>This kind of visit has a visit id with the prefix of `reload-hub-`<br>**Example:**<br>`'taskId-6311cc36db29775ad01694e6'`,<br>`'hub-630ed6a4c2688c3ade723063'`,<br>`'reload-hub-630ed6a4c2688c3ade723063'` | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.name | <a href='#introduction-format'>string</a> |  | The visit's name,<br>means a visit that can be given a name<br>with destination name, customer name, or something else.  <br>**Example:** `'Visit 1'`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.address | <a href='#introduction-format'>string</a> | | Location of the visit. <br>**Example:** `'Neo Soho, Jakarta Barat'` | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.coordinate | <a href='#introduction-format'>string</a> | *String with geolocation format.* | Coordinate of visit, used in engine calculations<br>to find distance and travel time between visits. <br>**Example:** `'-6.230815251666679,106.75684387903198'`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.capacity | <a href='#introduction-format'>object</a> | *Capacity with dynamic constraint.*<br>`{`<br>&nbsp;&nbsp;&nbsp;`constraint1: value,`<br>&nbsp;&nbsp;&nbsp;`constraint2: value`<br>`}` | Capacity is used for route optimization purposes,<br>is dynamic based on user needs.<br>Each constraints have maximum value equal to `9999999999`<br>**Example:** `{'width': 100, 'volume': 150}`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.timeWindow | <a href='#introduction-format'>object</a> | Object with format:<br>`{`<br>`'startTime': value,`<br>`'endTime': value`<br>`}` | Opening and closing hours as time span<br>for the destination to be visited.<br>Containing startTime and endTime. <br>**Note:** This field is not considered when `timeWindows` is provided. <br>If this is not filled then the destination can be visited anytime.  <br>**Example:** `{'startTime': '08:00', 'endTime': '17:00'}`| Optional |\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.timeWindows | <a href='#introduction-format'>array of objects</a> | Array of objects with format:<br>`[{`<br>`'startTime': value,`<br>`'endTime': value`<br>`}]` | Array of time windows for the destination to be visited.<br>Each object contains startTime and endTime. <br>When this field is provided, the `timeWindow` field will be ignored. <br>If this is not filled then the destination can be visited anytime.  <br>**Example:** `[{'startTime': '08:00', 'endTime': '12:00'}, {'startTime': '14:00', 'endTime': '17:00'}]`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startTime | <a href='#introduction-format'>time</a> | `H:i:s`<br>Less than .endTime | Opening time of the visit.<br>**Example:** `08:00:00` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endTime | <a href='#introduction-format'>time</a> | `H:i:s`<br>Greater than .startTime | Closing time of the visit.<br>**Example:** `16:00:00` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.visitTime | <a href='#introduction-format'>integer</a> | | Idle time after arriving at the destination.<br>Such as time to hand over goods, waiting for customers, <br>time lag for parking vehicles, etc based on the business. <br>**Example:** `10`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.tags | <a href='#introduction-format'>array of strings</a> | | Tags of the visit,<br>visit that have tags will be assigned to <br>a vehicle with the same tags.<br>**Example:** `['Even', 'East']` | Optional |\n\n            | routing.vehicles | <a href='#introduction-format'>array of objects</a> | | List of vehicle data used for routing | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.id | <a href='#introduction-format'>string</a> | *24 characters of hexadecimal* | Unique identifier for the vehicle<br>that generated by system.<br>**Example**: `6352736c628401059b37a2e2`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.name | <a href='#introduction-format'>string</a> | *Max 30 characters* | The vehicle's name.<br>It means a vehicle that can be given a name<br>with a number plate, <br>vehicle brand or something else.<br>**Example**: `B001ACB`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.speed | <a href='#introduction-format'>integer</a> | Minimum: `5` | Default value of average speed of the vehicle.<br>Speed cannot be less than 5 km/h.<br>If it is not filled,<br> the default value for speed is 25 km/h. <br>**Example:** `15`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.fixedCost | <a href='#introduction-format'>integer</a> | Minimum: `0`<br>Maximum: `100` | This value act as priority order of the vehicles to be used<br>when we procceed routing, <br>the less number of `fixedCost`, the more chance of the vehicle will be used / routed<br>**Example:** `0`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.assignee | <a href='#introduction-format'>string</a> | *String with Email Format* | Worker's email that assigned to the vehicle.<br>One vehicle can only be assigned by one worker.<br>**Example**: `miguel@mile.app`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.hubId | <a href='#introduction-format'>string</a> | *24 characters hexadecimal*<br>Or<br>*String with geolocation format.* | Unique identifier for the vehicle where from hub, please use GET <a href='#'>Vehicles API</a> <br>to get the list of Hub IDs.<br>**Example:** `'6352736c628401059b37a2e2'` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.capacity | <a href='#introduction-format'>object</a> | Object with format:<br>`{`<br>`constraint-1:{min,max},`<br>`constraint-n:{min,max}`<br>`}` | Capacity is used for route optimization purposes,<br>is dynamic based on user needs.<br>Have a minimum and maximum value<br>as the limit for the shelter<br>that can be accommodated by the vehicle.<br>**Example**:<br>`{`<br>`'weight':{'min':10,'max':1000},`<br>`'volume':{'min':10,'max':1000}`<br>`}` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{constraint-n}.min | <a href='#introduction-format'>integer</a> | Maximum: `9999999999` | minimum value of capacity constraint.<br>**Example:** `10` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{constraint-n}.max | <a href='#introduction-format'>integer</a> | Maximum: `9999999999` | maximum value of capacity constraint.<br>**Example:** `1000` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.tags | <a href='#introduction-format'>array of strings</a> | | The tag is used for route optimization purposes.<br>Visits that have tags will be assigned to vehicles<br>that have the same tags.<br>**Example**: `['Even','East']` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.oddEven | <a href='#introduction-format'>string</a> | Enumeration:<br>`odd`,`even` | Odd-even license plate restriction category for this vehicle. Used to enforce odd-even traffic restrictions during specified time windows. Accepted values are 'odd' for odd-numbered plates or 'even' for even-numbered plates.<br>**Example**: `even` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.workingTime | <a href='#introduction-format'>object</a> | Object with format:<br>`{`<br>`'startTime': value,`<br>`'endTime': value`<br>`}` | Working hours on vehicles containing:<br>**startTime**, **endTime**, and **multiday**.<br>If this is not filled,<br>then the value will be taken from the configuration<br>for routing purposes.<br>**Example**:<br>`{`<br>`'startTime':'08:00',`<br>`'endTime':'17:00'`<br>`}` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startTime | <a href='#introduction-format'>time</a> | `H:i`<br>Less than .endTime | Time of departure of the vehicle from the hub.<br>**Example:** `08:00` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endTime | <a href='#introduction-format'>time</a> | `H:i`<br>Greater than .startTime | Maximum time limit for the vehicle to operate.<br>**Example:** `17:00` | Optional |\n\n            ",
+            "schema": {
+              "$ref": "#/definitions/route-optimize-request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n  **Success** \n\n\n            For the detail of route optimization results, Read <a href='#Route_Result'>GET /resuls API</a>\n\n\n            | Field | Type | Description |\n\n            |---|---|---|\n\n            | routing | <a href='#introduction-format'>array of objects</a> | List of vehicles that success on route optimization |\n\n            | dropped | <a href='#introduction-format'>array of objects</a> | Collection of trips/visits that can't be optimized for some reason (failed to be routed) |\n\n            | countryCode | <a href='#introduction-format'>string</a> | Country code in alpha 3 (ISO-3166).<br>**Example**: `IDN` |\n\n            | resultCode | <a href='#introduction-format'>integer</a> | Result Code by miliseconds timestamp generated by system. <br>**Example**: `1675646313938` |\n\n            | result | <a href='#introduction-format'>object</a> | Response of saving this result to database |\n\n            | result.status | <a href='#introduction-format'>boolean</a> | Status of response |\n\n            | result.model | <a href='#introduction-format'>object</a> | Detail of saved object result |\n\n            ",
+            "examples": {
+              "application/json": {
+                "routing": [
+                  {
+                    "vehicleId": "6352736c628401059b37a2e2",
+                    "vehicleName": "B001ACB",
+                    "assignee": "miguel@mile.app",
+                    "workingTime": {
+                      "startTime": "08:00:00",
+                      "endTime": "17:00:00"
+                    },
+                    "vehicleTags": [
+                      "Even", "East"
+                    ],
+                    "trips": [
+                      {
+                        "visitId": "hub-6352736c628401059b37a2e2",
+                        "coordinate": "-6.17527,106.82581",
+                        "weight": 0,
+                        "volume": 0,
+                        "isHub": true,
+                        "travelTime": 0,
+                        "visitTime": 0,
+                        "waitingTime": 0,
+                        "eta": "08:00:00",
+                        "etd": "08:00:00",
+                        "distance": 0,
+                        "order": 0
+                      },
+                      {
+                        "visitId": "task-6311cc36db29775ad01694e6",
+                        "visitName": "Visit 1",
+                        "address": "Neo Soho, Jakarta Barat",
+                        "coordinate": "-6.230815251666679,106.75684387903198",
+                        "tags": [
+                          "Even",
+                          "East"
+                        ],
+                        "isHub": false,
+                        "weight": 100,
+                        "volume": 150,
+                        "travelTime": 34,
+                        "visitTime": 12,
+                        "waitingTime": 0,
+                        "eta": "08:34:00",
+                        "etd": "08:46:00",
+                        "distance": 22666,
+                        "order": 1
+                      }
+                    ],
+                    "totalWeight": 0,
+                    "vehicleMaxWeight": 300,
+                    "vehicleMinWeight": 0,
+                    "weightPercentage": "0%",
+                    "totalVolume": 0,
+                    "vehicleMaxVolume": 1000,
+                    "vehicleMinVolume": 0,
+                    "volumePercentage": "0%",
+                    "fixedCost": 0,
+                    "totalNodes": 2,
+                    "totalVisits": 1,
+                    "speed": 30,
+                    "totalTravelTime": 34,
+                    "totalDistance": 22666
+                  }
+                ],
+                "dropped": [
+                  {
+                    "id": "63970a49cc6ae973f90929e2",
+                    "name": "Visit 2",
+                    "address": "Gambir Jakarta",
+                    "coordinate": "-6.17148,106.82649",
+                    "timeWindow": {
+                      "startTime": "08:00:00",
+                      "endTime": "16:00:00"
+                    },
+                    "timeWindows": [
+                      {
+                        "startTime": "08:00:00",
+                        "endTime": "12:00:00"
+                      },
+                      {
+                        "startTime": "14:00:00",
+                        "endTime": "16:00:00"
+                      }
+                    ],
+                    "visitTime": 10,
+                    "capacity": {
+                      "weight": 2500,
+                      "volume": 6000
+                    },
+                    "tags": [
+                      "Even",
+                      "East"
+                    ],
+                    "weight": 2500,
+                    "volume": 6000,
+                    "isHub": false,
+                    "reason": "Dropped due to constraint"
+                  }
+                ],
+                "summary": {
+                  "routedVisits": 1,
+                  "droppedVisits": 1,
+                  "totalVisits": 2,
+                  "usedVehicles": 1,
+                  "unusedVehicles": 0,
+                  "totalVehicles": 1,
+                  "totalDistance": 22666,
+                  "totalTravelTime": 34,
+                  "totalVisitTime": 12,
+                  "totalWaitingTime": 0,
+                  "totalSpentTime": 22712,
+                  "minFinishTime": "08:46:00",
+                  "maxFinishTime": "08:46:00",
+                  "avgFinishTime": "08:46:00",
+                  "avgSpeed": 30,
+                  "capacityConstraint": [
+                      {
+                          "name": "weight",
+                          "optimized": 100,
+                          "available": 300,
+                          "percentage": 33.3
+                      },
+                      {
+                          "name": "volume",
+                          "optimized": 150,
+                          "available": 1000,
+                          "percentage": 15
+                      }
+                  ]
+                },
+                "countryCode": "IDN",
+                "resultCode": "1674464313501",
+                "result": {
+                  "status": true,
+                  "model": {
+                    "name": "Result 01-24-2023 02:54:09",
+                    "result": {
+                      "routing": [
+                        {
+                          "vehicleId": "6352736c628401059b37a2e2",
+                          "vehicleName": "B001ACB",
+                          "assignee": "miguel@mile.app",
+                          "workingTime": {
+                            "startTime": "08:00:00",
+                            "endTime": "17:00:00"
+                          },
+                          "vehicleTags": [
+                            "Even", "East"
+                          ],
+                          "trips": [
+                            {
+                              "visitId": "hub-6352736c628401059b37a2e2",
+                              "coordinate": "-6.17527,106.82581",
+                              "weight": 0,
+                              "volume": 0,
+                              "isHub": true,
+                              "travelTime": 0,
+                              "visitTime": 0,
+                              "waitingTime": 0,
+                              "eta": "08:00:00",
+                              "etd": "08:00:00",
+                              "distance": 0,
+                              "order": 0
+                            },
+                            {
+                              "visitId": "task-6311cc36db29775ad01694e6",
+                              "visitName": "Visit 1",
+                              "address": "Neo Soho, Jakarta Barat",
+                              "coordinate": "-6.230815251666679,106.75684387903198",
+                              "tags": [
+                                "Even",
+                                "East"
+                              ],
+                              "isHub": false,
+                              "weight": 100,
+                              "volume": 150,
+                              "travelTime": 34,
+                              "visitTime": 12,
+                              "waitingTime": 0,
+                              "eta": "08:34:00",
+                              "etd": "08:46:00",
+                              "distance": 22666,
+                              "order": 1
+                            }
+                          ],
+                          "totalWeight": 0,
+                          "vehicleMaxWeight": 300,
+                          "vehicleMinWeight": 0,
+                          "weightPercentage": "0%",
+                          "totalVolume": 0,
+                          "vehicleMaxVolume": 1000,
+                          "vehicleMinVolume": 0,
+                          "volumePercentage": "0%",
+                          "fixedCost": 0,
+                          "totalNodes": 2,
+                          "totalVisits": 1,
+                          "speed": 30,
+                          "totalTravelTime": 34,
+                          "totalDistance": 22666
+                        }
+                      ],
+                      "dropped": [
+                        {
+                          "id": "63970a49cc6ae973f90929e2",
+                          "name": "Visit 2",
+                          "address": "Gambir Jakarta",
+                          "coordinate": "-6.17148,106.82649",
+                          "timeWindow": {
+                            "startTime": "08:00:00",
+                            "endTime": "16:00:00"
+                          },
+                          "visitTime": 10,
+                          "capacity": {
+                            "weight": 2500,
+                            "volume": 6000
+                          },
+                          "tags": [
+                            "Even",
+                            "East"
+                          ],
+                          "weight": 2500,
+                          "volume": 6000,
+                          "isHub": false,
+                          "reason": "Dropped due to constraint"
+                        }
+                      ],
+                      "summary": {
+                        "routedVisits": 1,
+                        "droppedVisits": 1,
+                        "totalVisits": 2,
+                        "usedVehicles": 1,
+                        "unusedVehicles": 0,
+                        "totalVehicles": 1,
+                        "totalDistance": 22666,
+                        "totalTravelTime": 34,
+                        "totalVisitTime": 12,
+                        "totalWaitingTime": 0,
+                        "totalSpentTime": 22712,
+                        "minFinishTime": "08:46:00",
+                        "maxFinishTime": "08:46:00",
+                        "avgFinishTime": "08:46:00",
+                        "avgSpeed": 30,
+                        "capacityConstraint": [
+                            {
+                                "name": "weight",
+                                "optimized": 100,
+                                "available": 300,
+                                "percentage": 33.3
+                            },
+                            {
+                                "name": "volume",
+                                "optimized": 150,
+                                "available": 1000,
+                                "percentage": 15
+                            }
+                        ]
+                      },
+                      "countryCode": "IDN",
+                      "resultCode": "1674464313501"
+                    },
+                    "hubId": "6352736c628401059b37a2e2",
+                    "hubCoordinate": "-6.17148,106.82649",
+                    "configurationId": null,
+                    "configuration": {
+                      "name": "Configuration Default",
+                      "defaultSpeed": 10,
+                      "defaultVisitTime": 10,
+                      "autoSplit": "none",
+                      "multitrip": false,
+                      "clustering": false,
+                      "returnToHub": false,
+                      "useAllVehicle": false,
+                      "autoSpeed": false,
+                      "capacityConstraint": [
+                          "weight",
+                          "width",
+                          "volume"
+                      ]
+                    },
+                    "createdTime": "2023-01-24T07:54:09+00:00",
+                    "resultTotal": {
+                      "routing": 1,
+                      "dropped": 1,
+                      "total": 2
+                    },
+                    "organizationId": "635f6a998e47b604ed5f5e02",
+                    "isDeleted": false,
+                    "createdBy": "635f6a9a8e47b604ed5f5e08",
+                    "updatedTime": "2023-01-24T07:54:09+00:00",
+                    "_id": "63cf8ea11209ff54de2c15d2",
+                    "user": {
+                      "name": "Vasco Da Gama"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "message",
+                "failedCode": "route-001"
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/routing": {
+      "post": {
+        "summary": "Routing (New)",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "routing",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "\n\n            Routing is the process of optimizing visits, vehicles, and configurations so as to produce the best route and scheduling.\n\n            This endpoint is v2 of /route-optimization. and there's a few changes at this endpoint : \n\n            1. New parameter 'background', to set the routing process directly or in the background.  \n\n            2. Remove the parameter of routing and move the parameters inside it (such as vehicles, visits, and configuration) to the first level.  \n\n            3. Change the parameter name of 'hub' to 'hubId' and set it as the required parameter.  \n\n            4. New parameter of hubCoordinate and set it as an optional parameter.  \n\n            5. The new format of the response contains status, message, and data.  \n\n            6. New field on routing result, such as status (ongoing, done, failed) and message (the reason if failed)\n\n            \n\n            | Field | Type | Format | Description | Required |\n\n            |---|---|---|---|---|\n\n            | background | <a href='#introduction-format'>boolean</a> | | background is activated,<br>the routing will be processed directly via API<br>when not activated, routing will be processed in background process.<br> **Default:** `false` | Optional |\n\n            | hubId | <a href='#introduction-format'>string</a> | *24 characters hexadecimal* | Unique identifier for the vehicle, please use GET <a href='#Setting_Hub'>HUB API</a> <br>to get the list of Hub IDs.<br>**Example:** `'6352736c628401059b37a2e2'` | Required |\n\n            | hubCoordinate | <a href='#introduction-format'>string</a> | *String with geolocation format.* | Coordinate of Hub. <br>**Example:** `'-6.230815251666679,106.75684387903198'` | Optional |\n\n            | configuration | <a href='#introduction-format'>object</a> |  | Configuration setting for route optimization. | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name | <a href='#introduction-format'>string</a> | | Name of configuration,<br>can be set as anything, it is used as reference in result. <br>**Example**: `Configuration Default` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;capacityConstraint | <a href='#introduction-format'>array of strings</a> | | A list of dynamic capacity types according to user needs. <br>**Example**: `['weight','volume']`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multitrip | <a href='#introduction-format'>boolean</a> | | When multitrip is activated in the middle of the trip,<br>the vehicle can return to the hub <br>to reload capacity if the capacity on the vehicle is almost empty.<br>**Default:** `false` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;returnToHub | <a href='#introduction-format'>boolean</a> | | When returnToHub is activated,<br>the vehicle will calculate the estimated travel time <br>to return to the hub as the last trip.<br> **Default:** `false` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;useAllVehicle | <a href='#introduction-format'>boolean</a> | | When useAllVehicle is activated,<br>it will force all active vehicles to be used. <br>**Default:** `false`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clustering | <a href='#introduction-format'>boolean</a> | | Clustering optimizes your routes by efficiently grouping visits into clusters. There are three distinct types of clustering available: `none`, `normal`, `balanced`. Choose `normal` if you want the system to decide how to group visits based on their locations. The system will analyze the proximity of each visit and form clusters accordingly. Choose `balanced` if you want a fair distribution of visits among clusters before grouping them based on location. With `balanced` clustering, the system ensures that visits are evenly distributed across clusters, making sure each vehicle has a similar workload. Choose `none` if you will not use clustering. <br>**Default:** `none`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;autoSpeed | <a href='#introduction-format'>boolean</a> | | When autoSpeed is activated,<br>it will determine the vehicle speed automatically based on traffic level.<br>If not, each vehicle will need to be setup for its speed. <br>**Default:** `false`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defaultSpeed | <a href='#introduction-format'>integer</a> | Minimum: `5` | Default value of average speed of the vehicle.<br>Speed cannot be less than 5 km/h.<br>If it is not filled,<br> the default value for speed is 25 km/h. <br>**Example:** `15`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defaultVisitTime | <a href='#introduction-format'>integer</a> | Minimum: `0` | Idle time after arriving at the destination.<br>Such as time to hand over goods, waiting for customers,<br>time lag for parking vehicles, etc based on the business.<br>It will be used if any visit doesnt have Visit Time setup in it. <br>**Example:** `10`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;autoSplit | <a href='#introduction-format'>string</a> | Enumeration:<br>`none`,`equal`,`maximize` | When autoSplit is activated,<br>automatically split the visit that have a capacity greater than maximum capacity <br> of the vehicle into two or more visits. <br>**Default:** `none`| Optional |\n\n            | visits | <a href='#introduction-format'>array of objects</a> | | List of visits used for routing. | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.id | <a href='#introduction-format'>string</a> | *24 characters hexadecimal* | Unique identifier for each visit.<br>visitId's format might indicate the type of visit.<br>Visit id with a prefix of `taskId-` indicates the visit might be related to a task.<br>Users can set visitId with this prefix on the payload of routing to tell the system<br>that visitId is related to a task.<br>Visit id with a prefix of `hub-` indicates the visits might be related to a hub.<br>These kinds of visits are generated by the system<br>when the routing process is finished.<br>Normally this kind of visit only appears on the first visit of the vehicle's trip,<br>but if **configuration.returnToHub = true**,<br>this type of visit will appear on the last visit of the vehicle's trip.<br>**configuration.multitrip** value also might determine<br>how much the generated visit will be produced.<br>When **configuration.multitrip = true**,<br>a visit might appear more often than usual<br>because it allows a vehicle to go back to the hub to reload.<br>This kind of visit has a visit id with the prefix of `reload-hub-`<br>**Example:**<br>`'taskId-6311cc36db29775ad01694e6'`,<br>`'hub-630ed6a4c2688c3ade723063'`,<br>`'reload-hub-630ed6a4c2688c3ade723063'` | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.name | <a href='#introduction-format'>string</a> |  | The visit's name,<br>means a visit that can be given a name<br>with destination name, customer name, or something else.  <br>**Example:** `'Visit 1'`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.address | <a href='#introduction-format'>string</a> | | Location of the visit. <br>**Example:** `'Neo Soho, Jakarta Barat'` | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.coordinate | <a href='#introduction-format'>string</a> | *String with geolocation format.* | Coordinate of visit, used in engine calculations<br>to find distance and travel time between visits. <br>**Example:** `'-6.230815251666679,106.75684387903198'`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.capacity | <a href='#introduction-format'>object</a> | *Capacity with dynamic constraint.*<br>`{`<br>&nbsp;&nbsp;&nbsp;`constraint1: value,`<br>&nbsp;&nbsp;&nbsp;`constraint2: value`<br>`}` | Capacity is used for route optimization purposes,<br>is dynamic based on user needs.<br>Each constraints have maximum value equal to `9999999999`<br>**Example:** `{'width': 100, 'volume': 150}`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.timeWindow | <a href='#introduction-format'>object</a> | Object with format:<br>`{`<br>`'startTime': value,`<br>`'endTime': value`<br>`}` | Opening and closing hours as time span<br>for the destination to be visited.<br>Containing startTime and endTime. <br>**Note:** This field is not considered when `timeWindows` is provided. <br>If this is not filled then the destination can be visited anytime.  <br>**Example:** `{'startTime': '08:00', 'endTime': '17:00'}`| Optional |\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.timeWindows | <a href='#introduction-format'>array of objects</a> | Array of objects with format:<br>`[{`<br>`'startTime': value,`<br>`'endTime': value`<br>`}]` | Array of time windows for the destination to be visited.<br>Each object contains startTime and endTime. <br>When this field is provided, the `timeWindow` field will be ignored. <br>If this is not filled then the destination can be visited anytime.  <br>**Example:** `[{'startTime': '08:00', 'endTime': '12:00'}, {'startTime': '14:00', 'endTime': '17:00'}]`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startTime | <a href='#introduction-format'>time</a> | `H:i:s`<br>Less than .endTime | Opening time of the visit.<br>**Example:** `08:00:00` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endTime | <a href='#introduction-format'>time</a> | `H:i:s`<br>Greater than .startTime | Closing time of the visit.<br>**Example:** `16:00:00` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.visitTime | <a href='#introduction-format'>integer</a> | | Idle time after arriving at the destination.<br>Such as time to hand over goods, waiting for customers, <br>time lag for parking vehicles, etc based on the business. <br>**Example:** `10`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.tags | <a href='#introduction-format'>array of strings</a> | | Tags of the visit,<br>visit that have tags will be assigned to <br>a vehicle with the same tags.<br>**Example:** `['Even', 'East']` | Optional |\n\n            | vehicles | <a href='#introduction-format'>array of objects</a> | | List of vehicle data used for routing | Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.id | <a href='#introduction-format'>string</a> | *24 characters of hexadecimal* | Unique identifier for the vehicle<br>that generated by system.<br>**Example**: `6352736c628401059b37a2e2`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.name | <a href='#introduction-format'>string</a> | *Max 30 characters* | The vehicle's name.<br>It means a vehicle that can be given a name<br>with a number plate, <br>vehicle brand or something else.<br>**Example**: `B001ACB`| Required |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.speed | <a href='#introduction-format'>integer</a> | Minimum: `5` | Default value of average speed of the vehicle.<br>Speed cannot be less than 5 km/h.<br>If it is not filled,<br> the default value for speed is 25 km/h. <br>**Example:** `15`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.fixedCost | <a href='#introduction-format'>integer</a> | Minimum: `0`<br>Maximum: `100` | This value act as priority order of the vehicles to be used<br>when we procceed routing, <br>the less number of `fixedCost`, the more chance of the vehicle will be used / routed<br>**Example:** `0`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.assignee | <a href='#introduction-format'>string</a> | *String with Email Format* | Worker's email that assigned to the vehicle.<br>One vehicle can only be assigned by one worker.<br>**Example**: `miguel@mile.app`| Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.capacity | <a href='#introduction-format'>object</a> | Object with format:<br>`{`<br>`constraint-1:{min,max},`<br>`constraint-n:{min,max}`<br>`}` | Capacity is used for route optimization purposes,<br>is dynamic based on user needs.<br>Have a minimum and maximum value<br>as the limit for the shelter<br>that can be accommodated by the vehicle.<br>**Example**:<br>`{`<br>`'weight':{'min':10,'max':1000},`<br>`'volume':{'min':10,'max':1000}`<br>`}` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{constraint-n}.min | <a href='#introduction-format'>integer</a> | Maximum: `9999999999` | minimum value of capacity constraint.<br>**Example:** `10` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{constraint-n}.max | <a href='#introduction-format'>integer</a> | Maximum: `9999999999` | maximum value of capacity constraint.<br>**Example:** `1000` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.tags | <a href='#introduction-format'>array of strings</a> | | The tag is used for route optimization purposes.<br>Visits that have tags will be assigned to vehicles<br>that have the same tags.<br>**Example**: `['Even','East']` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.oddEven | <a href='#introduction-format'>string</a> | Enumeration:<br>`odd`,`even` | Odd-even license plate restriction category for this vehicle. Used to enforce odd-even traffic restrictions during specified time windows. Accepted values are 'odd' for odd-numbered plates or 'even' for even-numbered plates.<br>**Example**: `even` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.workingTime | <a href='#introduction-format'>object</a> | Object with format:<br>`{`<br>`'startTime': value,`<br>`'endTime': value`<br>`}` | Working hours on vehicles containing:<br>**startTime**, **endTime**, and **multiday**.<br>If this is not filled,<br>then the value will be taken from the configuration<br>for routing purposes.<br>**Example**:<br>`{`<br>`'startTime':'08:00',`<br>`'endTime':'17:00'`<br>`}` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startTime | <a href='#introduction-format'>time</a> | `H:i`<br>Less than .endTime | Time of departure of the vehicle from the hub.<br>**Example:** `08:00` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endTime | <a href='#introduction-format'>time</a> | `H:i`<br>Greater than .startTime | Maximum time limit for the vehicle to operate.<br>**Example:** `17:00` | Optional |\n\n            | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*.hubId | <a href='#introduction-format'>string</a> | *24 characters hexadecimal*<br>Or<br>*String with geolocation format.* | Unique identifier for the vehicle where from hub, please use GET <a href='#'>Vehicles API</a> <br>to get the list of Hub IDs.<br>**Example:** `'6352736c628401059b37a2e2'` | Optional |\n\n            ",
+            "schema": {
+              "$ref": "#/definitions/routing-request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n  **Success** \n\n\n            For the detail of route optimization results, Read <a href='#Routing_Result'>GET /resuls API</a>\n\n\n            | Field | Type | Description |\n\n            |---|---|---|\n\n            | status | <a href='#introduction-format'>boolean</a> | Status of response |\n\n            | data | <a href='#introduction-format'>object</a> | Detail of object result |\n\n            ",
+            "examples": {
+              "application/json": {
+                "status": true,
+                "data": {
+                  "name": "Result 01-24-2023 02:54:09",
+                  "status": "done",
+                  "result": {
+                    "routing": [
+                      {
+                        "vehicleId": "6352736c628401059b37a2e2",
+                        "vehicleName": "B001ACB",
+                        "assignee": "miguel@mile.app",
+                        "workingTime": {
+                          "startTime": "08:00:00",
+                          "endTime": "17:00:00"
+                        },
+                        "vehicleTags": [
+                          "Even", "East"
+                        ],
+                        "trips": [
+                          {
+                            "visitId": "hub-6352736c628401059b37a2e2",
+                            "coordinate": "-6.17527,106.82581",
+                            "weight": 0,
+                            "volume": 0,
+                            "isHub": true,
+                            "travelTime": 0,
+                            "visitTime": 0,
+                            "waitingTime": 0,
+                            "eta": "08:00:00",
+                            "etd": "08:00:00",
+                            "distance": 0,
+                            "order": 0
+                          },
+                          {
+                            "visitId": "task-6311cc36db29775ad01694e6",
+                            "visitName": "Visit 1",
+                            "address": "Neo Soho, Jakarta Barat",
+                            "coordinate": "-6.230815251666679,106.75684387903198",
+                            "tags": [
+                              "Even",
+                              "East"
+                            ],
+                            "isHub": false,
+                            "weight": 100,
+                            "volume": 150,
+                            "travelTime": 34,
+                            "visitTime": 12,
+                            "waitingTime": 0,
+                            "eta": "08:34:00",
+                            "etd": "08:46:00",
+                            "distance": 22666,
+                            "order": 1
+                          }
+                        ],
+                        "totalWeight": 0,
+                        "vehicleMaxWeight": 300,
+                        "vehicleMinWeight": 0,
+                        "weightPercentage": "0%",
+                        "totalVolume": 0,
+                        "vehicleMaxVolume": 1000,
+                        "vehicleMinVolume": 0,
+                        "volumePercentage": "0%",
+                        "fixedCost": 0,
+                        "totalNodes": 2,
+                        "totalVisits": 1,
+                        "speed": 30,
+                        "totalTravelTime": 34,
+                        "totalDistance": 22666
+                      }
+                    ],
+                    "dropped": [
+                      {
+                        "id": "63970a49cc6ae973f90929e2",
+                        "name": "Visit 2",
+                        "address": "Gambir Jakarta",
+                        "coordinate": "-6.17148,106.82649",
+                        "timeWindow": {
+                          "startTime": "08:00:00",
+                          "endTime": "16:00:00"
+                        },
+                        "visitTime": 10,
+                        "capacity": {
+                          "weight": 2500,
+                          "volume": 6000
+                        },
+                        "tags": [
+                          "Even",
+                          "East"
+                        ],
+                        "weight": 2500,
+                        "volume": 6000,
+                        "isHub": false,
+                        "reason": "Dropped due to constraint"
+                      }
+                    ],
+                    "summary": {
+                      "routedVisits": 1,
+                      "droppedVisits": 1,
+                      "totalVisits": 2,
+                      "usedVehicles": 1,
+                      "unusedVehicles": 0,
+                      "totalVehicles": 1,
+                      "totalDistance": 22666,
+                      "totalTravelTime": 34,
+                      "totalVisitTime": 12,
+                      "totalWaitingTime": 0,
+                      "totalSpentTime": 22712,
+                      "minFinishTime": "08:46:00",
+                      "maxFinishTime": "08:46:00",
+                      "avgFinishTime": "08:46:00",
+                      "avgSpeed": 30,
+                      "capacityConstraint": [
+                          {
+                              "name": "weight",
+                              "optimized": 100,
+                              "available": 300,
+                              "percentage": 33.3
+                          },
+                          {
+                              "name": "volume",
+                              "optimized": 150,
+                              "available": 1000,
+                              "percentage": 15
+                          }
+                      ]
+                    },
+                    "countryCode": "IDN",
+                    "resultCode": "1674464313501"
+                  },
+                  "hubId": "6352736c628401059b37a2e2",
+                  "hubCoordinate": "-6.17148,106.82649",
+                  "configurationId": null,
+                  "configuration": {
+                    "name": "Configuration Default",
+                    "defaultSpeed": 10,
+                    "defaultVisitTime": 10,
+                    "autoSplit": "none",
+                    "multitrip": false,
+                    "clustering": false,
+                    "returnToHub": false,
+                    "useAllVehicle": false,
+                    "autoSpeed": false,
+                    "capacityConstraint": [
+                        "weight",
+                        "width",
+                        "volume"
+                    ]
+                  },
+                  "createdTime": "2023-01-24T07:54:09+00:00",
+                  "resultTotal": {
+                    "routing": 1,
+                    "dropped": 1,
+                    "total": 2
+                  },
+                  "organizationId": "635f6a998e47b604ed5f5e02",
+                  "isDeleted": false,
+                  "createdBy": "635f6a9a8e47b604ed5f5e08",
+                  "updatedTime": "2023-01-24T07:54:09+00:00",
+                  "_id": "63cf8ea11209ff54de2c15d2",
+                  "user": {
+                    "name": "Vasco Da Gama"
+                  }
+                }
+
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "message",
+                "failedCode": "route-001"
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/routing/{result_id}": {
+      "post": {
+        "summary": "Re-Routing",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "result/id1",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the routing result that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n  **Below is detail each field for Response API of retry failed routing** \n\n\n            | Field | Type | Description |\n\n            |---|---|---|\n\n            | status | <a href='#introduction-format'>boolean</a> | Status of response |\n\n            | message | <a href='#introduction-format'>string</a> | Response message | \n\n            ",
+            "examples": {
+              "application/json": {
+                "message": "Routing is already start to proceed.",
+                "status": true
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          },
+          "400": {
+              "description": "Bad Request",
+              "examples": {
+                  "application/json": {
+                      "status": false,
+                      "message": "message",
+                      "failedCode": "route-001"
+                  }
+              }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [ ]
+          }
+        ]
+      }
+    },
+    "/route-calculate": {
+      "post": {
+        "summary": "Re-Calculate",
+        "tags": [
+          "Routing"
+        ],
+        "operationId": "route-calculate",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "\n\n            Route calculate is a process of recalculating visit, vehicle, and configuration optimization based on data changes made by the user.\n\n            \n| Field | Description | Required |\n\n            |---|---|---|\n\n            | workingTime | Working time of vehicle.<br>Containing startTime and endTime. <br>If this is not filled then the destination can be visited anytime. <br>**Example:** `{'startTime': '08:00', 'endTime': '17:00'}` | Required |\n\n            | workingTime.startTime | Time of departure of the vehicle from the hub.<br>**Example:** `08:00` | Required |\n\n            | workingTime.endTime | Maximum working time of vehicle to operate.<br>**Example:** `17:00` | Required |\n\n            | speed | Default value of average speed of the vehicle.<br>Speed cannot be less than 5 km/h.<br>If it is not filled, the default value for speed is 25 km/h. <br>**Example:** `25` | Required |\n\n            | trips | List of routed visits each vehicle | Required |\n\n            | trips.&Star;.visitId | Unique identifier for the visit.<br>**Example:** `'taskId-63994ad7850fa3259f291bf2'` | Required |\n\n            | trips.&Star;.coordinate | Coordinate of visit, used in engine calculations<br>to find distance and travel time between visits. <br>**Example:** `'-6.230815251666679,106.75684387903198'` | Required |\n\n            | trips.&Star;.visitName | The visit's name,<br>means a visit that can be given a name<br>with destination name, customer name, or something else.  <br>**Example:** `'Visit 1'` | Optional |\n\n            | trips.&Star;.visitAddress | Location of the visit. <br>**Example:** `'Neo Soho, Jakarta Barat'` | Optional |\n\n            | trips.&Star;.tags | Tags of the visit,<br>visit that have tags will be assigned to <br>a vehicle with the same tags.<br>**Example:** `['West', 'Odd']` | Optional |\n\n            | trips.&Star;.timeWindow | Opening and closing hours as time span<br>for the destination to be visited.<br>Containing startTime and endTime. <br>If this is not filled then the destination can be visited anytime. <br>**Example:** `{'startTime': '08:00', 'endTime': '17:00'}` | Optional |\n\n            | trips.&Star;.timeWindow.startTime | Opening time of the visit.<br>**Example:** `08:00` | Optional |\n\n            | trips.&Star;.timeWindow.endTime | Closing time of the visit.<br>**Example:** `17:00` | Optional |\n\n            | trips.&Star;.travelTime | Estimated travel time from previous trip to current trip *(minutes)*. <br>**Example:** `35` | Optional |\n\n            | trips.&Star;.visitTime | Idle time after arriving at the destination.<br>Such as time to hand over goods, waiting for customers, <br>time lag for parking vehicles, etc based on the business. <br>**Example:** `17`| Optional |\n\n            | trips.&Star;.waitingTime | Waiting time at the visit. <br>**Example:** `10` | Optional |\n\n            | trips.&Star;.eta | Estimated time arrival at the current trip. <br>**Example:** `09:34:00` | Optional |\n\n            | trips.&Star;.etd | Estimated time departure at the current trip. <br>**Example:** `09:34:00` | Optional |\n\n            | trips.&Star;.distance | Distance from previous trip to current trip *(meters)*. <br>**Example:** `22666` | Optional |\n\n            | trips.&Star;.order | Order of visit that handled by each vehicle trips, *smallest order will be served first*. <br>**Example:** `1` | Optional |\n\n            | trips.&Star;.tripOrder | Only exist when `multitrip` is activated, and the vehicle handled multiple trip.<br>`TripOrder` exist to differentiate list of visits on vehicle `trips` per vehicle's starting point,<br>Or vehicle's reload from Hub. <br>**Example:** `1` | Optional |\n\n            ",
+            "schema": {
+              "$ref": "#/definitions/route-calculate-request"
+            }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n  **Success** \n\n\n            | Field | Type | Description |\n\n            |---|---|---|\n\n            | workingTime | <a href='#introduction-format'>object</a> | Working hours on vehicles containing: **startTime**, **endTime**.<br>If this is not filled, then the value will be taken from the configuration for routing purposes.<br>**Example**: `{'startTime': '08:00', 'endTime': '17:00'}` |\n\n            | speed | <a href='#introduction-format'>integer</a> | Default value of average speed of the vehicle.<br>Speed cannot be less than 5 km/h.<br>If it is not filled, the default value for speed is 25 km/h. <br>**Example:** `25`|\n\n            | countryCode | <a href='#introduction-format'>string</a> | Country code.<br>**Example**: `IDN` |\n\n            | trips | <a href='#introduction-format'>array of objects</a> | List of routed visits by vehicle |\n\n            ",
+            "examples": {
+              "application/json": {
+                "workingTime": {
+                    "startTime": "08:00",
+                    "endTime": "17:00"
+                },
+                "speed": 25,
+                "countryCode": "IDN",
+                "trips": [
+                  {
+                      "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                      "coordinate": "-6.17148,106.82649",
+                      "isHub": true,
+                      "weight": 0,
+                      "travelTime": 0,
+                      "visitTime": 0,
+                      "waitingTime": 0,
+                      "eta": "8:00:00",
+                      "etd": "8:00:00",
+                      "distance": 0,
+                      "order": 0
+                  },
+                  {
+                      "visitId": "taskId-63994ad7850fa3259f291bf2",
+                      "address": "Neo Soho, Jakarta Barat",
+                      "coordinate": "-6.230815251666679,106.75684387903198",
+                      "timeWindow": {
+                          "startTime": "08:00",
+                          "endTime": "17:00"
+                      },
+                      "tags": ["West", "Odd"],
+                      "isHub": false,
+                      "visitName": "Visit 1",
+                      "visitTime": 17,
+                      "weight": 0,
+                      "waitingTime": 10,
+                      "travelTime": 35,
+                      "distance": 22666,
+                      "eta": "09:34:00",
+                      "etd": "09:34:00",
+                      "order": 1
+                  },
+                  {
+                      "visitId": "taskId-63970a49cc6ae973f90929e2",
+                      "address": "Monas Jakarta",
+                      "coordinate": "-6.17148,106.82649",
+                      "timeWindow": {
+                          "startTime": "08:00",
+                          "endTime": "17:00"
+                      },
+                      "visitTime": 20,
+                      "tags": ["West", "Odd"],
+                      "isHub": false,
+                      "visitName": "Visit 2",
+                      "weight": 20.12345,
+                      "waitingTime": 0,
+                      "travelTime": null,
+                      "distance": null,
+                      "order": 2
+                  },
+                  {
+                      "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                      "coordinate": "-6.17148,106.82649",
+                      "isHub": true,
+                      "weight": 0,
+                      "travelTime": 3,
+                      "visitTime": 0,
+                      "waitingTime": 0,
+                      "eta": "9:41:12",
+                      "etd": "9:41:12",
+                      "distance": 974,
+                      "order": 3
+                  }
+                ]
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "message",
+                "failedCode": "route-001"
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "route-calculate-request": {
+      "title": "route-calculate-request",
+      "example": {
+        "workingTime": {
+            "startTime": "08:00",
+            "endTime": "17:00"
+        },
+        "speed": 25,
+        "trips": [
+            {
+                "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                "coordinate": "-6.17148,106.82649",
+                "isHub": true,
+                "weight": 0,
+                "travelTime": 0,
+                "visitTime": 0,
+                "waitingTime": 0,
+                "eta": "8:00:00",
+                "etd": "8:00:00",
+                "distance": 0,
+                "order": 0
+            },
+            {
+              "visitId": "taskId-63994ad7850fa3259f291bf2",
+                "address": "Neo Soho, Jakarta Barat",
+                "coordinate": "-6.230815251666679,106.75684387903198",
+                "timeWindow": {
+                    "startTime": "08:00",
+                    "endTime": "17:00"
+                },
+                "tags": ["West", "Odd"],
+                "isHub": false,
+                "visitName": "Visit 1",
+                "visitTime": 17,
+                "weight": 0,
+                "waitingTime": 10,
+                "travelTime": 35,
+                "distance": 22666,
+                "eta": "09:34:00",
+                "etd": "09:34:00",
+                "order": 1
+            },
+            {
+                "address": "Monas Jakarta",
+                "coordinate": "-6.17148,106.82649",
+                "timeWindow": {
+                    "startTime": "08:00",
+                    "endTime": "17:00"
+                },
+                "visitTime": 20,
+                "tags": ["West", "Odd"],
+                "isHub": false,
+                "visitId": "taskId-63970a49cc6ae973f90929e2",
+                "visitName": "Visit 2",
+                "weight": 20.12345,
+                "waitingTime": 0,
+                "travelTime": null,
+                "distance": null
+            },
+            {
+                "visitId": "hub-635f6ad98e47b604ed5f5e09",
+                "coordinate": "-6.17148,106.82649",
+                "isHub": true,
+                "weight": 0,
+                "travelTime": 3,
+                "visitTime": 0,
+                "waitingTime": 0,
+                "eta": "9:41:12",
+                "etd": "9:41:12",
+                "distance": 974,
+                "order": 3
+            }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow1"
+        },
+        "speed": {
+          "type": "int32"
+        },
+        "trips": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "timeWindow",
+        "speed",
+        "trips"
+      ]
+    },
+    "route-optimize-request": {
+      "title": "route-optimize-request",
+      "example": {
+        "hub": "6352736c628401059b37a2e2",
+        "resultCode": "1671683016026",
+        "routing": {
+            "visits": [
+                {
+                    "id": "6311cc36db29775ad01694e6",
+                    "name": "Visit 1",
+                    "address": "Neo Soho, Jakarta Barat",
+                    "coordinate": "-6.230815251666679,106.75684387903198",
+                    "timeWindow": {
+                        "startTime": "08:00:00",
+                        "endTime": "16:00:00"
+                    },
+                    "visitTime": 10,
+                    "capacity": {
+                        "weight": 100,
+                        "volume": 150
+                    },
+                    "tags": [
+                      "Even", "East"
+                    ]
+                },
+                {
+                    "id": "63970a49cc6ae973f90929e2",
+                    "name": "Visit 2",
+                    "address": "Gambir Jakarta",
+                    "coordinate": "-6.17148,106.82649",
+                    "timeWindow": {
+                        "startTime": "08:00:00",
+                        "endTime": "16:00:00"
+                    },
+                    "visitTime": 10,
+                    "capacity": {
+                        "weight": 2500,
+                        "volume": 6000
+                    },
+                    "tags": [
+                      "Even", "East"
+                    ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": "6352736c628401059b37a2e2",
+                    "name": "B001ACB",
+                    "assignee": "miguel@mile.app",
+                    "capacity": {
+                        "weight": {
+                            "max": 300,
+                            "min": 0
+                        },
+                        "volume": {
+                            "max": 1000,
+                            "min": 0
+                        }
+                    },
+                    "tags": [
+                        "Even", "East"
+                    ],
+                    "oddEven": "even",
+                    "speed": 15,
+                    "fixedCost": 0,
+                    "workingTime": {
+                        "startTime": "08:00",
+                        "endTime": "17:00"
+                    }
+                }
+            ],
+            "configuration": {
+                "name": "Configuration Default",
+                "defaultSpeed": 10,
+                "defaultVisitTime": 10,
+                "autoSplit": "none",
+                "multitrip": false,
+                "clustering": false,
+                "returnToHub": false,
+                "useAllVehicle": false,
+                "autoSpeed": false,
+                "capacityConstraint": [
+                    "weight",
+                    "width",
+                    "volume"
+                ],
+                "useOddEven": true,
+                "oddEvenTime": [
+                    {
+                        "startTime": "07:00",
+                        "endTime": "10:00"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "20:00"
+                    }
+                ]
+            }
+        }
+      },
+      "type": "object",
+      "properties": {
+        "routing": {
+          "$ref": "#/definitions/Routing"
+        },
+        "hub": {
+          "type": "string"
+        },
+        "resultCode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "routing",
+        "hub",
+        "resultCode"
+      ]
+    },
+    "routing-request": {
+      "title": "routing-request",
+      "example": {
+        "background": true,
+        "hubId": "6352736c628401059b37a2e2",
+        "hubCoordinate": "-6.17148,106.82649",
+        "resultCode": "1671683016026",
+        "visits": [
+            {
+                "id": "6311cc36db29775ad01694e6",
+                "name": "Visit 1",
+                "address": "Neo Soho, Jakarta Barat",
+                "coordinate": "-6.230815251666679,106.75684387903198",
+                "timeWindow": {
+                    "startTime": "08:00:00",
+                    "endTime": "16:00:00"
+                },
+                "visitTime": 10,
+                "capacity": {
+                    "weight": 100,
+                    "volume": 150
+                },
+                "tags": [
+                  "Even", "East"
+                ]
+            },
+            {
+                "id": "63970a49cc6ae973f90929e2",
+                "name": "Visit 2",
+                "address": "Gambir Jakarta",
+                "coordinate": "-6.17148,106.82649",
+                "timeWindow": {
+                    "startTime": "08:00:00",
+                    "endTime": "16:00:00"
+                },
+                "visitTime": 10,
+                "capacity": {
+                    "weight": 2500,
+                    "volume": 6000
+                },
+                "tags": [
+                  "Even", "East"
+                ]
+            }
+        ],
+        "vehicles": [
+            {
+                "id": "6352736c628401059b37a2e2",
+                "name": "B001ACB",
+                "assignee": "miguel@mile.app",
+                "capacity": {
+                    "weight": {
+                        "max": 300,
+                        "min": 0
+                    },
+                    "volume": {
+                        "max": 1000,
+                        "min": 0
+                    }
+                },
+                "tags": [
+                    "Even", "East"
+                ],
+                "speed": 15,
+                "fixedCost": 0,
+                "workingTime": {
+                    "startTime": "08:00",
+                    "endTime": "17:00"
+                },
+                "hubId": "6352736c628401059b37a2e2"
+            }
+        ],
+        "configuration": {
+            "name": "Configuration Default",
+            "defaultSpeed": 10,
+            "defaultVisitTime": 10,
+            "autoSplit": "none",
+            "multitrip": false,
+            "clustering": false,
+            "returnToHub": false,
+            "useAllVehicle": false,
+            "autoSpeed": false,
+            "capacityConstraint": [
+                "weight",
+                "width",
+                "volume"
+            ],
+            "crossDockingType": "none",
+            "subHubs": [
+              "6352736c628401059b37a2e2",
+              "6352736c628401059b37a2e3"
+            ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "background": {
+          "type": "boolean"
+        },
+        "hubId": {
+          "type": "string"
+        },
+        "resultCode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "vehicles",
+        "visits",
+        "configuration",
+        "hubId"
+      ]
+    },
+    "route-optimize": {
+      "title": "route-optimize",
+      "type": "object",
+      "properties": {
+        "routing": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Routing1"
+          }
+        },
+        "dropped": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "routing",
+        "dropped"
+      ]
+    },
+    "route-optimizefailed1": {
+      "title": "route-optimizefailed1",
+      "example": {
+        "status": false,
+        "message": "The routing field is required.",
+        "failedCode": "route-001"
+      },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "message"
+      ]
+    },
+    "route-optimizeSuccess_custom": {
+      "title": "route-optimizefailed1",
+      "example": {
+        "routing": [
+          {
+            "vehicleId": "1644980957752",
+            "vehicleName": "B 1267 AS",
+            "assignee": "miguel@mile.app",
+            "workingTime": {
+              "startTime": "10:00:00",
+              "endTime": "17:00:00"
+            },
+            "vehicleTags": [
+              "Car"
+            ],
+            "trips": [],
+            "totalWeight": 0,
+            "vehicleMaxWeight": 50,
+            "vehicleMinWeight": 0,
+            "weightPercentage": "0%",
+            "totalVolume": 0,
+            "vehicleMaxVolume": 100,
+            "vehicleMinVolume": 0,
+            "volumePercentage": "0%",
+            "speed": 20,
+            "fixedCost": 20,
+            "totalTravelTime": 0,
+            "totalDistance": 0,
+            "isOddEven": true,
+            "oddEven": "even"
+          },
+          {
+            "vehicleId": "1644980957783",
+            "vehicleName": "B 567 SA",
+            "assignee": "allan@mile.app",
+            "workingTime": {
+              "startTime": "08:00:00",
+              "endTime": "17:00:00"
+            },
+            "vehicleTags": [
+              "Motor"
+            ],
+            "trips": [
+              {
+                "visitId": "615555b1cbb5f71189cad9a9",
+                "coordinate": "-6.17527,106.82581",
+                "weight": 0,
+                "travelTime": 0,
+                "visitTime": 0,
+                "waitingTime": 0,
+                "eta": "09:00:00",
+                "etd": "09:00:00",
+                "distance": 0,
+                "order": 0
+              },
+              {
+                "visitId": 1638196742453,
+                "visitName": "Test 4",
+                "address": "KAMPUNG UTAN  RT03 RW 07 SETU BEKASI",
+                "coordinate": "-6.3033957,106.9790495",
+                "tags": [],
+                "weight": 30,
+                "travelTime": 34,
+                "visitTime": 12,
+                "waitingTime": 0,
+                "eta": "09:34:00",
+                "etd": "09:46:00",
+                "distance": 22666,
+                "order": 1,
+                "allowOddEven": true
+              }
+            ],
+            "totalWeight": 0,
+            "vehicleMaxWeight": 30,
+            "vehicleMinWeight": 0,
+            "weightPercentage": "0%",
+            "speed": 30,
+            "fixedCost": 15,
+            "totalTravelTime": 0,
+            "totalDistance": 0,
+            "isOddEven": true,
+            "oddEven": "even"
+          }
+        ],
+        "dropped": [
+          {
+            "id": "1644980893332",
+            "name": "Gedung Office PaketID",
+            "address": "Raya Ngadi Mojo",
+            "coordinate": "-7.9584231,111.9287453",
+            "timeWindow": {
+              "startTime": "10:00:00",
+              "endTime": "17:00:00"
+            },
+            "visitTime": 10,
+            "capacity": {
+              "weight": 10
+            },
+            "tags": [
+              "Car"
+            ],
+            "isHub": false,
+            "reason": "Dropped due to constraint"
+          }
+        ],
+        "countryCode": "IDN",
+        "resultCode": "1674464313501",
+        "result": {
+          "status": true,
+          "model": {
+            "name": "Result 01-24-2023 02:54:09",
+            "result": {
+              "routing": [
+                {
+                  "vehicleId": "1644980957752",
+                  "vehicleName": "B 1267 AS",
+                  "assignee": "worker1@domain.com",
+                  "workingTime": {
+                    "startTime": "10:00:00",
+                    "endTime": "17:00:00"
+                  },
+                  "vehicleTags": [
+                    "Car"
+                  ],
+                  "trips": [],
+                  "totalWeight": 0,
+                  "vehicleMaxWeight": 50,
+                  "vehicleMinWeight": 0,
+                  "weightPercentage": "0%",
+                  "speed": 20,
+                  "fixedCost": 20,
+                  "totalTravelTime": 0,
+                  "totalDistance": 0,
+                  "isOddEven": true,
+                  "oddEven": "even"
+                },
+                {
+                  "vehicleId": "1644980957783",
+                  "vehicleName": "B 567 SA",
+                  "assignee": "worker2@domain.com",
+                  "workingTime": {
+                    "startTime": "08:00:00",
+                    "endTime": "17:00:00"
+                  },
+                  "vehicleTags": [
+                    "Motor"
+                  ],
+                  "trips": [
+                    {
+                      "visitId": "615555b1cbb5f71189cad9a9",
+                      "coordinate": "-6.17527,106.82581",
+                      "weight": 0,
+                      "travelTime": 0,
+                      "visitTime": 0,
+                      "waitingTime": 0,
+                      "eta": "09:00:00",
+                      "etd": "09:00:00",
+                      "distance": 0,
+                      "order": 0
+                    },
+                    {
+                      "visitId": 1638196742453,
+                      "visitName": "Test 4",
+                      "address": "KAMPUNG UTAN  RT03 RW 07 SETU BEKASI",
+                      "coordinate": "-6.3033957,106.9790495",
+                      "tags": [],
+                      "weight": 30,
+                      "travelTime": 34,
+                      "visitTime": 12,
+                      "waitingTime": 0,
+                      "eta": "09:34:00",
+                      "etd": "09:46:00",
+                      "distance": 22666,
+                      "order": 1,
+                      "allowOddEven": true
+                    }
+                  ],
+                  "totalWeight": 0,
+                  "vehicleMaxWeight": 30,
+                  "vehicleMinWeight": 0,
+                  "weightPercentage": "0%",
+                  "speed": 30,
+                  "fixedCost": 15,
+                  "totalTravelTime": 0,
+                  "totalDistance": 0,
+                  "isOddEven": true,
+                  "oddEven": "even"
+                }
+              ],
+              "dropped": [
+                {
+                  "id": "1644980893332",
+                  "name": "Gedung Office PaketID",
+                  "address": "Raya Ngadi Mojo",
+                  "coordinate": "-7.9584231,111.9287453",
+                  "timeWindow": {
+                    "startTime": "10:00:00",
+                    "endTime": "17:00:00"
+                  },
+                  "visitTime": 10,
+                  "capacity": {
+                    "weight": 10
+                  },
+                  "tags": [
+                    "Car"
+                  ],
+                  "isHub": false,
+                  "reason": "Dropped due to constraint"
+                }
+              ],
+              "countryCode": "IDN",
+              "resultCode": "1674464313501"
+            },
+            "hubId": "635f6ad98e47b604ed5f5e09",
+            "hubCoordinate": "-6.17148,106.82649",
+            "configurationId": null,
+            "configuration": {
+              "defaultSpeed": 10,
+              "defaultVisitTime": 10,
+              "autoSplit": "none",
+              "multitrip": false,
+              "clustering": false,
+              "returnToHub": false,
+              "useAllVehicle": false,
+              "autoSpeed": false,
+              "capacityConstraint": [
+                "weight"
+              ],
+              "tripsPerVehicle": -1
+            },
+            "createdTime": "2023-01-24T07:54:09+00:00",
+            "resultTotal": {
+              "routing": 2,
+              "dropped": 1,
+              "total": 3
+            },
+            "organizationId": "635f6a998e47b604ed5f5e02",
+            "isDeleted": false,
+            "createdBy": "635f6a9a8e47b604ed5f5e08",
+            "updatedTime": "2023-01-24T07:54:09+00:00",
+            "_id": "63cf8ea11209ff54de2c15d2",
+            "user": {
+              "name": "Vasco Diaz"
+            }
+          }
+        }
+      },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "message"
+      ]
+    },
+    "Routing": {
+      "title": "Routing",
+      "example": {
+        "hub": "-6.24594138,106.77537119",
+        "resultCode": 1671683016026,
+        "vehicle": [
+            {
+              "assignee": "email@domain.com",
+              "capacity": {
+                "weight": {
+                    "min": 0,
+                    "max": 100
+                },
+                "volume": {
+                    "min": 0,
+                    "max": 100
+                }
+              },
+              "id": 1642753336533,
+              "name": "Test 1",
+              "speed": 5,
+              "tags": [
+                "Car",
+                "Motor"
+              ],
+              "workingTime": {
+                "startTime": "08:00:00",
+                "endTime": "17:00:00"
+              }
+            },
+            {
+              "assignee": "erik@mile.app",
+              "capacity": {
+                "weight": {
+                    "min": 0,
+                    "max": 100
+                },
+                "volume": {
+                    "min": 0,
+                    "max": 100
+                }
+              },
+              "id": 1642753336586,
+              "name": "Test 4",
+              "speed": 35,
+              "tags": [
+                "Car",
+                "Motor"
+              ],
+              "workingTime": {
+                "startTime": "08:00:00",
+                "endTime": "17:00:00"
+              }
+            }
+        ],
+        "visit": [
+            {
+              "address": "Raya Kras 276",
+              "coordinate": "-7.9515644,111.9609073",
+              "tags": [],
+              "timeWindow": {
+                "startTime": "08:00:00",
+                "endTime": "17:00:00"
+              },
+              "visitTime": 0,
+              "id": 1642753319366,
+              "name": "SJ-Test 2",
+              "capacity": {
+                "weight": 10,
+                "volume": 10
+              }
+            },
+            {
+              "address": "Raya Ngadi Mojo",
+              "coordinate": "-7.9584231,111.92Motor87",
+              "tags": [],
+              "timeWindow": {
+                "startTime": "08:00:00",
+                "endTime": "17:00:00"
+              },
+              "visitTime": 0,
+              "id": 1642753319359,
+              "name": "SJ-Test 1",
+              "capacity": {
+                "weight": 10,
+                "volume": 10
+              }
+            },
+            {
+              "address": "Depan Balai Desa Wonocoyo",
+              "coordinate": "-8.1029143,111.7223863",
+              "tags": [],
+              "timeWindow": {
+                "startTime": "08:00:00",
+                "endTime": "17:00:00"
+              },
+              "visitTime": 0,
+              "id": 1642753319373,
+              "name": "SJ-Test 3",
+              "capacity": {
+                "weight": 10,
+                "volume": 10
+              }
+            },
+            {
+              "address": "Dusun Sukorejo Karang Soko",
+              "coordinate": "-8.0893865,111.715311",
+              "tags": [],
+              "timeWindow": {
+                "startTime": "08:00:00",
+                "endTime": "17:00:00"
+              },
+              "visitTime": 0,
+              "id": 1642753319382,
+              "name": "SJ-Test 4",
+              "capacity": {
+                "weight": 10,
+                "volume": 10
+              }
+            },
+            {
+              "address": "Raya Karang Wonocoyo Trenggalek",
+              "coordinate": "-8.2488209,111.4454852",
+              "tags": [],
+              "timeWindow": {
+                "startTime": "08:00:00",
+                "endTime": "17:00:00"
+              },
+              "visitTime": 0,
+              "id": 1642753319389,
+              "name": "SJ-Test 5",
+              "capacity": {
+                "weight": 10,
+                "volume": 10
+              }
+            }
+        ],
+        "configuration": {
+          "multitrip": false,
+          "returnToHub": false,
+          "useAllVehicle": false,
+          "clustering": false,
+          "autoSpeed": false,
+          "defaultSpeed": 10,
+          "defaultVisitTime": 15,
+          "autoSplit": "none",
+          "capacityConstraint": [
+            "weight",
+            "volume"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "hub": {
+          "type": "string"
+        },
+        "resultCode": {
+          "type": "integer"
+        },
+        "vehicle": {
+          "$ref": "#/definitions/Vehicle"
+        },
+        "visit": {
+          "$ref": "#/definitions/Visit"
+        },
+        "configuration": {
+          "$ref": "#/definitions/Configuration"
+        }
+      },
+      "required": [
+        "hub",
+        "vehicle",
+        "visit",
+        "configuration"
+      ]
+    },
+    "Trip3": {
+      "title": "Trip3",
+      "example": {
+        "visitId": "hub-61c010cc13a47b4dc7152262",
+        "coordinate": "-7.943985,111.964685",
+        "weight": 0,
+        "volume": 0,
+        "travelTime": 0,
+        "visitTime": 0,
+        "waitingTime": 120,
+        "eta": "06:00:00",
+        "etd": "08:00:00",
+        "distance": 0,
+        "order": 0
+      },
+      "type": "object",
+      "properties": {
+        "visitId": {},
+        "coordinate": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "volume": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "travelTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "visitTime": {},
+        "waitingTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "eta": {
+          "type": "string"
+        },
+        "etd": {
+          "type": "string"
+        },
+        "distance": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "order": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "visitName": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "string"
+        },
+        "selectedVehicle": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow1"
+        },
+        "capacity": {
+          "$ref": "#/definitions/Capacity"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "vehicleList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "visitId",
+        "coordinate",
+        "visitTime"
+      ]
+    },
+    "TimeWindow1": {
+      "title": "TimeWindow1",
+      "example": {
+        "startTime": "06:00:00",
+        "endTime": "21:00:00"
+      },
+      "type": "object",
+      "properties": {
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "startTime",
+        "endTime"
+      ]
+    },
+    "Trip4": {
+      "title": "Trip4",
+      "example": {
+        "visitId": "hub-61c010cc13a47b4dc7152262",
+        "coordinate": "-7.943985,111.964685",
+        "weight": 0,
+        "volume": 0,
+        "travelTime": 0,
+        "visitTime": 0,
+        "waitingTime": 120,
+        "eta": "06:00:00",
+        "etd": "08:00:00",
+        "distance": 0,
+        "order": 0
+      },
+      "type": "object",
+      "properties": {
+        "visitId": {},
+        "coordinate": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "volume": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "travelTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "visitTime": {},
+        "waitingTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "eta": {
+          "type": "string"
+        },
+        "etd": {
+          "type": "string"
+        },
+        "distance": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "order": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "visitName": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "string"
+        },
+        "selectedVehicle": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow1"
+        },
+        "capacity": {
+          "$ref": "#/definitions/Capacity"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "vehicleList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "visitId",
+        "coordinate",
+        "travelTime",
+        "visitTime",
+        "eta",
+        "etd",
+        "distance",
+        "order"
+      ]
+    },
+    "Capacity": {
+      "title": "Capacity",
+      "example": {
+        "weight": 100,
+        "volume": 100
+      },
+      "type": "object",
+      "properties": {
+        "weight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "volume": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "weight",
+        "volume"
+      ]
+    },
+    "default_header": {},
+    "Routing1": {
+      "title": "Routing1",
+      "example": {
+        "vehicleId": 1642753336533,
+        "vehicleName": "Test 1",
+        "assignee": "email@domain.com",
+        "timeWindow": {
+          "startTime": "08:00:00",
+          "endTime": "17:00:00"
+        },
+        "vehicleTags": [
+          "Car",
+          "Motor"
+        ],
+        "trips": [{
+          "visitId": "615555b1cbb5f71189cad9a9",
+          "coordinate": "-6.17527,106.82581",
+          "weight": 0,
+          "volume": 0,
+          "tes": 0,
+          "travelTime": 0,
+          "visitTime": 0,
+          "waitingTime": 240,
+          "eta": "09:00:00",
+          "etd": "13:00:00",
+          "distance": 0,
+          "order": 0
+        },
+          {
+            "visitId": 1638196742460,
+            "visitName": "Test 10",
+            "address": "JL RAYA PEDURENANN BANTAR GEBANG BKS",
+            "coordinate": "-6.302856,106.9791842",
+            "tags": [],
+            "weight": 23,
+            "volume": 10,
+            "tes": 0,
+            "travelTime": 34,
+            "visitTime": 18,
+            "waitingTime": 0,
+            "eta": "13:34:00",
+            "etd": "13:52:00",
+            "distance": 22666,
+            "order": 1
+          }],
+        "totalWeight": 0,
+        "vehicleMaxWeight": 100,
+        "weightPercentage": "0%",
+        "totalVolume": 0,
+        "vehicleMaxVolume": 100,
+        "volumePercentage": "0%",
+        "speed": 5,
+        "totalTravelTime": 0,
+        "totalDistance": 0
+      },
+      "type": "object",
+      "properties": {
+        "vehicleId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "vehicleName": {
+          "type": "string"
+        },
+        "assignee": {
+          "type": "string"
+        },
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow1"
+        },
+        "vehicleTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trips": {
+          "example": [
+            {
+              "visitId": "hub-61c010cc13a47b4dc7152262",
+              "coordinate": "-7.943985,111.964685",
+              "weight": 0,
+              "volume": 0,
+              "travelTime": 0,
+              "visitTime": 0,
+              "waitingTime": 120,
+              "eta": "6:00:00",
+              "etd": "7:59:03",
+              "distance": 0,
+              "order": 0
+            }
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Trip"
+          }
+        },
+        "totalWeight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "vehicleMaxWeight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "weightPercentage": {
+          "type": "string"
+        },
+        "totalVolume": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "vehicleMaxVolume": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "volumePercentage": {
+          "type": "string"
+        },
+        "speed": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalTravelTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalDistance": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "vehicleId",
+        "vehicleName",
+        "assignee",
+        "timeWindow",
+        "vehicleTags",
+        "trips",
+        "totalWeight",
+        "vehicleMaxWeight",
+        "weightPercentage",
+        "totalVolume",
+        "vehicleMaxVolume",
+        "volumePercentage",
+        "speed",
+        "totalTravelTime",
+        "totalDistance"
+      ]
+    },
+    "Visit": {
+      "title": "Visit",
+      "example": [
+        {
+          "address": "Raya Kras 276",
+          "coordinate": "-7.9515644,111.9609073",
+          "tags": [],
+          "timeWindow": {
+            "startTime": "08:00:00",
+            "endTime": "17:00:00"
+          },
+          "visitTime": 0,
+          "id": 1642753319366,
+          "name": "SJ-Test 2",
+          "capacity": {
+            "weight": 10,
+            "volume": 10
+          }
+        },
+        {
+          "address": "Raya Ngadi Mojo",
+          "coordinate": "-7.9584231,111.9287",
+          "tags": [],
+          "timeWindow": {
+            "startTime": "08:00:00",
+            "endTime": "17:00:00"
+          },
+          "visitTime": 0,
+          "id": 1642753319359,
+          "name": "SJ-Test 1",
+          "capacity": {
+            "weight": 10,
+            "volume": 10
+          }
+        }
+      ],
+      "type": "array"
+    },
+    "Item1": {
+      "title": "Item1",
+      "example": {
+        "address": "Raya Kras 276",
+        "coordinate": "-7.9515644,111.9609073",
+        "tags": [],
+        "timeWindow": {
+          "startTime": "08:00:00",
+          "endTime": "17:00:00"
+        },
+        "visitTime": 0,
+        "id": 1642753319366,
+        "name": "SJ-Test 2",
+        "capacity": {
+          "weight": 10,
+          "volume": 10
+        }
+      },
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "coordinate": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "string"
+        },
+        "selectedVehicle": {
+          "type": "string"
+        },
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow1"
+        },
+        "visitTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "capacity": {
+          "$ref": "#/definitions/Capacity1"
+        }
+      },
+      "required": [
+        "address",
+        "coordinate",
+        "tags",
+        "selectedVehicle",
+        "timeWindow",
+        "visitTime",
+        "id",
+        "name",
+        "capacity"
+      ]
+    },
+    "Capacity1": {
+      "title": "Capacity1",
+      "example": {
+        "weight": 10,
+        "volume": 10
+      },
+      "type": "object",
+      "properties": {
+        "selectedVehicle": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "volume": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "selectedVehicle",
+        "weight",
+        "volume"
+      ]
+    },
+    "Configuration": {
+      "title": "Configuration",
+      "example": {
+        "multitrip": false,
+        "returnToHub": false,
+        "useAllVehicle": false,
+        "clustering": false,
+        "autoSpeed": false,
+        "defaultSpeed": 10,
+        "defaultVisitTime": 15,
+        "autoSplit": "none",
+        "capacityConstraint": [
+          "weight",
+          "volume"
+        ],
+        "useOddEven": true,
+        "oddEvenTime": [
+          {
+            "startTime": "07:00",
+            "endTime": "10:00"
+          },
+          {
+            "startTime": "17:00",
+            "endTime": "20:00"
+          }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "multitrip": {
+          "type": "boolean"
+        },
+        "returnToHub": {
+          "type": "boolean"
+        },
+        "useAllVehicle": {
+          "type": "boolean"
+        },
+        "clustering": {
+          "type": "boolean"
+        },
+        "autoSpeed": {
+          "type": "boolean"
+        },
+        "defaultSpeed": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "defaultVisitTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "capacityConstraint": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "useOddEven": {
+          "type": "boolean"
+        },
+        "oddEvenTime": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "startTime": {
+                "type": "string"
+              },
+              "endTime": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "defaultVisitTime",
+        "defaultSpeed",
+        "multitrip",
+        "returnToHub",
+        "autoSpeed",
+        "useAllVehicle",
+        "clustering",
+        "capacityConstraint"
+      ]
+    },
+    "Vehicle": {
+      "title": "Vehicle",
+      "example": [
+        {
+          "assignee": "email@domain.com",
+          "capacity": {
+            "weight": 100,
+            "volume": 100
+          },
+          "id": 1642753336533,
+          "name": "Test 1",
+          "speed": 5,
+          "tags": [
+            "Car",
+            "Motor"
+          ],
+          "oddEven": "even",
+          "workingTime": {
+            "startTime": "08:00:00",
+            "endTime": "17:00:00"
+          }
+        },
+        {
+          "assignee": "heri@mile.app",
+          "capacity": {
+            "weight": 100,
+            "volume": 100
+          },
+          "id": 1642753336551,
+          "name": "Test 2",
+          "speed": 60,
+          "tags": [
+            "123",
+            "234",
+            "567"
+          ],
+          "workingTime": {
+            "startTime": "08:00:00",
+            "endTime": "17:00:00"
+          }
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow1"
+        }
+      },
+      "required": [
+        "items",
+        "timeWindow"
+      ]
+    },
+    "Trip": {
+      "title": "Trip",
+      "type": "object",
+      "properties": {
+        "visitId": {},
+        "coordinate": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "volume": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "travelTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "visitTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "waitingTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "eta": {
+          "type": "string"
+        },
+        "etd": {
+          "type": "string"
+        },
+        "distance": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "order": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "visitName": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "string"
+        },
+        "selectedVehicle": {
+          "type": "string"
+        },
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow1"
+        },
+        "allowOddEven": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Item": {
+      "title": "Item",
+      "example": {
+        "assignee": "email@domain.com",
+        "capacity": {
+          "weight": 100,
+          "volume": 100
+        },
+        "id": 1642753336533,
+        "name": "Test 1",
+        "speed": 5,
+        "tags": [
+          "Car",
+          "Motor"
+        ],
+        "oddEven": "even",
+        "timeWindow": {
+          "startTime": "08:00:00",
+          "endTime": "17:00:00"
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee": {
+          "type": "string"
+        },
+        "capacity": {
+          "$ref": "#/definitions/Capacity"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "speed": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "oddEven": {
+          "type": "string",
+          "enum": ["odd", "even"]
+        },
+        "timeWindow": {
+          "$ref": "#/definitions/TimeWindow"
+        }
+      },
+      "required": [
+        "assignee",
+        "capacity",
+        "id",
+        "name",
+        "speed",
+        "tags",
+        "timeWindow"
+      ]
+    },
+    "TripTime": {
+      "title": "TripTime",
+      "example": {
+        "startTime": "06:00:00",
+        "endTime": "21:00:00"
+      },
+      "type": "object",
+      "properties": {
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "startTime",
+        "endTime"
+      ]
+    },
+    "Property": {
+      "title": "Property",
+      "example": {
+        "_id": "61e3b280e29a83730b7e0c42",
+        "name": "bagusajakop",
+        "email": "bagusaja4@mailinator.com",
+        "hub_id": [
+          "61d90d78f0ae4c113b638302"
+        ],
+        "organizationId": "61c2fbaaf27b374e8913fe72",
+        "status": "active",
+        "is_deleted": false,
+        "isFieldUser": 1,
+        "role_id": "61c2fbaaf27b374e8913fe73",
+        "activation_code": "Iu6LcEIh60TzLujJZ78E",
+        "updated_at": "1970-01-25T20:31:23.647000Z",
+        "created_at": "1970-01-25T20:31:23.647000Z"
+      },
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "hub_id": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "organizationId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "is_deleted": {
+          "type": "boolean"
+        },
+        "isFieldUser": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "role_id": {
+          "type": "string"
+        },
+        "activation_code": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "name",
+        "email",
+        "hub_id",
+        "organizationId",
+        "status",
+        "is_deleted",
+        "isFieldUser",
+        "role_id",
+        "activation_code",
+        "updated_at",
+        "created_at"
+      ]
+    },
+    "TimeWindow": {
+      "title": "TimeWindow",
+      "example": {
+        "startTime": "08:00:00",
+        "endTime": "17:00:00"
+      },
+      "type": "object",
+      "properties": {
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

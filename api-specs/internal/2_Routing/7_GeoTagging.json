@@ -1,0 +1,366 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "MileApp API",
+    "description": "API documentation for MileApp geotagging",
+    "version": "1.0.0"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/geotagging": {
+      "get": {
+        "tags": [
+          "Geotagging"
+        ],
+        "summary": "Read",
+        "parameters": [
+          {
+            "name": "hubId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the hub to retrieve geotagging data for"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/GeotaggingResponse"
+            }
+          },
+            "404": {
+              "description": "Not Found",
+              "schema": {
+                "$ref": "#/parameters/responses/notFound/schema"
+              },
+              "examples": {
+                  "application/json": {
+                      "status": false,
+                      "message": "Data not found",
+                      "failedCode": "geo-033"
+                  }
+              }
+            }
+        }
+      },
+      "post": {
+        "tags": [
+          "Geotagging"
+        ],
+        "summary": "Create",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GeotaggingRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/GeotaggingPostResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Missing required field.",
+                    "failedCode": "geo-001"
+                }
+            }
+          }
+        }
+      }
+    },
+    "/geotagging/{id}": {
+      "patch": {
+        "tags": [
+          "Geotagging"
+        ],
+        "summary": "Update geotagging partially by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the geotagging entry to update"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GeotaggingPatchRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/GeotaggingPatchResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "geo-033"
+                }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Geotagging"
+        ],
+        "summary": "Delete geotagging by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the geotagging entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/GeotaggingDeleteResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "geo-033"
+                }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GeotaggingResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Success."
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GeotaggingData"
+          }
+        }
+      }
+    },
+    "GeotaggingPostResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Data has been created successfully."
+        },
+        "data": {
+          "$ref": "#/definitions/GeotaggingData"
+        }
+      }
+    },
+    "GeotaggingPatchResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Data has been updated successfully."
+        },
+        "data": {
+          "$ref": "#/definitions/GeotaggingData"
+        }
+      }
+    },
+    "GeotaggingDeleteResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Data has been deleted successfully."
+        }
+      }
+    },
+    "GeotaggingData": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "6669cd28e8653231425609c2"
+        },
+        "name": {
+          "type": "string",
+          "example": "BDO Timur"
+        },
+        "geoTaggingCoordinate": {
+          "$ref": "#/definitions/GeoTaggingCoordinate"
+        },
+        "color": {
+          "type": "string",
+          "example": "#2072AF"
+        },
+        "isActive": {
+          "type": "boolean",
+          "example": false
+        },
+        "hubId": {
+          "type": "string",
+          "example": "65c1f68ea735b522d370ea22"
+        },
+        "organizationId": {
+          "type": "string",
+          "example": "65c1f4eeca7c4816d94587b2"
+        },
+        "updatedTime": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2024-06-13T08:11:44.489000Z"
+        },
+        "createdTime": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2024-06-12T16:30:32.669000Z"
+        }
+      }
+    },
+    "GeoTaggingCoordinate": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "Polygon"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "example": [
+            [
+              [107.644054, -6.908568],
+              [107.643412, -6.935429],
+              [107.640421, -6.955934],
+              [107.63827, -6.964606],
+              [107.679043, -6.967363],
+              [107.698584, -6.968854],
+              [107.713713, -6.962559],
+              [107.72137, -6.957847],
+              [107.726642, -6.954746],
+              [107.752302, -6.941524],
+              [107.728178, -6.936652],
+              [107.716732, -6.93528],
+              [107.710969, -6.92726],
+              [107.709207, -6.922046],
+              [107.70646, -6.917776],
+              [107.698094, -6.913527],
+              [107.687981, -6.909356],
+              [107.682266, -6.905932],
+              [107.666428, -6.903935],
+              [107.656583, -6.902375],
+              [107.644054, -6.908568],
+              [107.644054, -6.908568]
+            ]
+          ]
+        }
+      }
+    },
+    "GeotaggingRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "BDOTENGAH",
+          "description": "Unique name for the geotagging entry"
+        },
+        "hubId": {
+          "type": "string",
+          "example": "662eecdcdcbf8b1d2411a8a6"
+        },
+        "geoTaggingCoordinate": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "-6.964835661717273, 107.75513805249295"
+          }
+        },
+        "color": {
+          "type": "string",
+          "example": "#FFF"
+        },
+        "isActive": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "GeotaggingPatchRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "BDOTENGAH",
+          "description": "Unique name for the geotagging entry"
+        }
+      }
+    }
+  }
+}

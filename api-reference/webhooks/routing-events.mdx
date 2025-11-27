@@ -1,0 +1,307 @@
+---
+title: "Routing Events"
+description: "Webhook payloads for route optimization events"
+---
+
+Routing webhooks are triggered when route optimization processes complete or when optimized routes are dispatched to workers. The webhook payload contains comprehensive routing results including vehicle assignments, trip details, and optimization summaries.
+
+<Note>
+In this example, there are 2 capacity constraints: **weight** and **volume**. Your actual payload will include the capacity constraints configured in your routing settings.
+</Note>
+
+## Event Types
+
+| Event | Trigger |
+|-------|---------|
+| **onRoutingFinish** | Route optimization process completes |
+| **onRoutingDispatched** | Optimized routes are dispatched to workers |
+
+## On Routing Finish
+
+Triggered when the route optimization algorithm completes processing.
+
+```json
+{
+  "result": {
+    "routing": [
+      {
+        "vehicleId": "64ae56d327688e090c04eff4",
+        "vehicleName": "BP 4877 TFV",
+        "assignee": "macanoyen@mailnesia.com",
+        "totalDistance": 62024,
+        "totalVisits": 3,
+        "totalTrips": 1,
+        "totalTravelTime": 152,
+        "finishTime": "10:42:41",
+        "totalWeight": 0,
+        "totalVolume": 0,
+        "weightPercentage": "0%",
+        "volumePercentage": "0%",
+        "vehicleMaxWeight": 100,
+        "vehicleMinWeight": 0,
+        "vehicleMaxVolume": 100,
+        "vehicleMinVolume": 0,
+        "speed": 25,
+        "fixedCost": 0,
+        "totalNodes": 5,
+        "workingTime": {
+          "startTime": "07:00",
+          "endTime": "17:00"
+        },
+        "trips": [
+          {
+            "isHub": true,
+            "visitId": "hub-640fc11832c0de76065d8922",
+            "coordinate": "-6.17549,106.79073",
+            "order": 0,
+            "eta": "7:00:00",
+            "etd": "7:41:50",
+            "waitingTime": 42,
+            "visitTime": 0,
+            "travelTime": 0,
+            "distance": 0,
+            "weight": 0,
+            "volume": 0
+          },
+          {
+            "isHub": false,
+            "visitId": "taskId-64ae56a8ffffa27dbb0ea0e2",
+            "visitName": "Test 1000",
+            "address": "Matra Jaya 2 Jl. Waru No.26 RT 7/7 Rawamangun",
+            "coordinate": "-6.16390262,106.74082965",
+            "order": 1,
+            "eta": "8:00:00",
+            "etd": "8:10:00",
+            "timeWindow": {
+              "startTime": "08:00",
+              "endTime": "17:00"
+            },
+            "timeWindows": [
+              {"startTime": "08:00", "endTime": "12:00"},
+              {"startTime": "14:00", "endTime": "17:00"}
+            ],
+            "waitingTime": 0,
+            "visitTime": 10,
+            "travelTime": 19,
+            "distance": 7571,
+            "weight": 0,
+            "volume": 0,
+            "tags": null
+          }
+        ],
+        "vehicleTags": ["64ae56d327688e090c04eff4"]
+      }
+    ],
+    "dropped": [
+      {
+        "id": "taskId-64ae635cd7c7984fda307d92",
+        "name": "Testing 123",
+        "address": "jakarta",
+        "coordinate": "-6.224634691640824,106.67960171349401",
+        "isHub": false,
+        "tags": null,
+        "capacity": {
+          "weight": 0,
+          "volume": null
+        },
+        "timeWindow": {
+          "startTime": null,
+          "endTime": null
+        },
+        "visitTime": null,
+        "reason": "Dropped due to constraint"
+      }
+    ]
+  },
+  "resultCode": "Route-20230801-001",
+  "_id": "64b0f67e880af90e380ff8c7",
+  "name": "Routing 07-14 02:17",
+  "status": "done",
+  "organizationId": "640fc0f0c53fdd421d7a8d32",
+  "hubId": "640fc11832c0de76065d8922",
+  "hubCoordinate": "-6.17549,106.79073",
+  "countryCode": "IDN",
+  "createdBy": "640fc0f0c53fdd421d7a8d38",
+  "createdFrom": "WEB",
+  "createdTime": "2023-07-14T07:17:18+00:00",
+  "updatedTime": "2023-07-14T07:17:19+00:00",
+  "finishTime": "2023-07-14T07:25:18+00:00",
+  "user": {
+    "name": "John doe"
+  },
+  "configuration": {
+    "name": "Default",
+    "multitrip": true,
+    "useAllVehicle": true,
+    "returnToBase": true,
+    "clustering": false,
+    "autoSpeed": false,
+    "defaultSpeed": 25,
+    "defaultVisitTime": 12,
+    "capacityConstraint": ["weight", "volume"]
+  },
+  "summary": {
+    "totalDistance": 123822,
+    "totalVisits": 5,
+    "routedVisits": 5,
+    "droppedVisits": 0,
+    "totalVehicles": 2,
+    "usedVehicles": 2,
+    "unusedVehicles": 0,
+    "totalTravelTime": 301,
+    "totalVisitTime": 52,
+    "totalWaitingTime": 42,
+    "totalSpentTime": 395,
+    "avgSpeed": 25,
+    "minFinishTime": "9:48:19",
+    "maxFinishTime": "10:42:41",
+    "avgFinishTime": "10:15:30",
+    "capacityConstraint": [
+      {"name": "weight", "available": 200, "optimized": 0, "percentage": 0},
+      {"name": "volume", "available": 200, "optimized": 0, "percentage": 0}
+    ]
+  }
+}
+```
+
+## On Routing Dispatched
+
+Triggered when optimized routes are dispatched to field workers. Contains the same routing result with additional dispatch status fields.
+
+```json
+{
+  "dispatchStatus": "done",
+  "dispatchMessage": "2/2",
+  "message": "",
+  "result": {
+    "routing": [...],
+    "dropped": [...]
+  },
+  "resultCode": "Route-20230801-001",
+  "_id": "64b0f67e880af90e380ff8c7",
+  ...
+}
+```
+
+### Dispatch-Specific Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `dispatchStatus` | string | Status of the dispatch operation |
+| `dispatchMessage` | string | Success/total count (e.g., "2/2") |
+| `message` | string | Error message if dispatch failed |
+
+## Payload Fields
+
+### Root Level
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | string | Unique identifier of the routing result |
+| `resultCode` | string | Alternative identifier (e.g., `Route-20230801-001`) |
+| `name` | string | Name of the route optimization |
+| `status` | string | Optimization status |
+| `organizationId` | string | Organization ID |
+| `hubId` | string | Hub ID |
+| `hubCoordinate` | string | Hub coordinates (lat,lng) |
+| `countryCode` | string | Country code (e.g., `IDN`) |
+| `createdBy` | string | User ID who created the routing |
+| `createdFrom` | string | Source: `WEB` or `API` |
+| `createdTime` | string | Creation timestamp (ISO 8601) |
+| `updatedTime` | string | Last update timestamp (ISO 8601) |
+| `finishTime` | string | Optimization completion timestamp |
+
+### Routing Array
+
+Each item in `result.routing` represents a vehicle's optimized route:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `vehicleId` | string | Vehicle unique identifier |
+| `vehicleName` | string | Vehicle name/plate number |
+| `assignee` | string | Assigned worker email |
+| `totalDistance` | number | Total distance in meters |
+| `totalVisits` | number | Number of visits |
+| `totalTrips` | number | Number of trips |
+| `totalTravelTime` | number | Total travel time in minutes |
+| `finishTime` | string | Expected finish time |
+| `totalWeight` | number | Total weight used |
+| `totalVolume` | number | Total volume used |
+| `weightPercentage` | string | Weight capacity utilization |
+| `volumePercentage` | string | Volume capacity utilization |
+| `trips` | array | Ordered list of stops |
+
+### Trip Object
+
+Each trip represents a stop in the route:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `isHub` | boolean | Whether this is a hub (start/end point) |
+| `visitId` | string | Visit/task identifier |
+| `visitName` | string | Visit name |
+| `address` | string | Visit address |
+| `coordinate` | string | Coordinates (lat,lng) |
+| `order` | number | Stop sequence number |
+| `eta` | string | Estimated time of arrival |
+| `etd` | string | Estimated time of departure |
+| `waitingTime` | number | Wait time in minutes |
+| `visitTime` | number | Service time in minutes |
+| `travelTime` | number | Travel time from previous stop |
+| `distance` | number | Distance from previous stop |
+| `timeWindow` | object | Single time window constraint |
+| `timeWindows` | array | Multiple time window constraints |
+
+### Dropped Array
+
+Visits that couldn't be routed:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Visit identifier |
+| `name` | string | Visit name |
+| `address` | string | Visit address |
+| `coordinate` | string | Coordinates |
+| `reason` | string | Reason for dropping |
+
+### Summary Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `totalDistance` | number | Total distance across all routes |
+| `totalVisits` | number | Total visits across all routes |
+| `routedVisits` | number | Successfully routed visits |
+| `droppedVisits` | number | Dropped visits count |
+| `totalVehicles` | number | Total vehicles available |
+| `usedVehicles` | number | Vehicles used |
+| `unusedVehicles` | number | Vehicles not used |
+| `totalTravelTime` | number | Total travel time in minutes |
+| `totalVisitTime` | number | Total service time |
+| `totalWaitingTime` | number | Total waiting time |
+| `minFinishTime` | string | Earliest route finish time |
+| `maxFinishTime` | string | Latest route finish time |
+| `avgFinishTime` | string | Average route finish time |
+
+### Configuration Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Configuration name |
+| `multitrip` | boolean | Allow multiple trips per vehicle |
+| `useAllVehicle` | boolean | Use all available vehicles |
+| `returnToBase` | boolean | Vehicles return to hub |
+| `clustering` | boolean | Enable clustering |
+| `autoSpeed` | boolean | Automatic speed calculation |
+| `defaultSpeed` | number | Default vehicle speed |
+| `defaultVisitTime` | number | Default visit duration |
+| `capacityConstraint` | array | Active capacity constraints |
+
+## Response
+
+Your endpoint must return an HTTP 200 status code to acknowledge receipt:
+
+```json
+{
+  "status": "received"
+}
+```

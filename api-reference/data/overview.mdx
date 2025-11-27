@@ -1,0 +1,56 @@
+---
+title: 'Data'
+description: 'Master data management for field operations'
+---
+
+## What is Data Source?
+
+The Data source could help you simplify the process of filling in task information based on existing data at MileApp. This data could consist of information such as name, number, date, coordinate, and multiple options. The Data typically represents entities such as customers, products, employees, suppliers, or any other critical data elements that are used across the application.
+
+## Key Components
+
+<CardGroup cols={2}>
+  <Card title="Data Source" icon="database" href="/api-reference/data/data-source-overview">
+    Manage master data records
+  </Card>
+  <Card title="Data Type" icon="table" href="/api-reference/data/data-type-overview">
+    Define data structure schemas
+  </Card>
+</CardGroup>
+
+### Data Source
+
+Data sources store the actual records that can be used across your organization:
+
+- Customer information (names, addresses, contacts)
+- Product catalogs (SKUs, prices, descriptions)
+- Location data (coordinates, addresses)
+- Any custom business data
+
+**To see the details of data source object, please follow [this link](/api-reference/objects/data-source-object)**
+
+### Data Type
+
+Data types define the structure and schema for your data sources:
+
+- Field definitions (text, number, date, coordinate, etc.)
+- Primary key configuration
+- Required field settings
+- Validation rules
+
+**To see the details of data type object, please follow [this link](/api-reference/objects/data-type-object)**
+
+## Usage in MileApp
+
+Data sources are used in multiple contexts:
+
+1. **Task Creation** - Auto-fill task fields from data source records
+2. **Flow Components** - Link data sources to input fields
+3. **Automation** - Trigger actions based on data source events
+
+## Related Resources
+
+- [Flow](/api-reference/flow/overview) - Connect data sources to flow components
+- [Task](/api-reference/task/overview) - Use data sources in task creation
+- [Data Source Object](/api-reference/objects/data-source-object) - Data source structure
+- [Data Type Object](/api-reference/objects/data-type-object) - Data type structure

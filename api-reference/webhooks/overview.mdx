@@ -1,0 +1,88 @@
+---
+title: "Webhooks"
+description: "Real-time event notifications from MileApp"
+---
+
+A webhook is a mechanism in web development and APIs that allows real-time communication between applications or services. It enables one application to send data to another application whenever a specific event or trigger occurs. Webhooks are commonly used to automate and integrate systems, enabling seamless data exchange and event-driven workflows.
+
+To set up webhooks in MileApp, follow [this documentation](/pages/automation/automation-event/on-routing-finished).
+
+## How does it work
+
+When your application endpoint is enabled on MileApp to receive events, MileApp will push real-time notifications to it. These notifications contain the type of event, the epoch timestamp of when it occurred, and any relevant data for that event. On your side you can then use that to integrate MileApp with existing or new software.
+
+## Delivery Attempts and Retries
+
+When viewing information about a specific event through the [Automation](https://web.mile.app/flow/automation) tab, there will be information about how many times MileApp attempted to send an event to the endpoint. This shows the latest response from client endpoint, a list of all attempted webhooks, and the respective HTTP status codes MileApp received. There is also a retry button for manually retrying webhooks.
+
+<div align="center">
+  <img src="/images/retry_webhook.png" alt="Retry Webhook" width="600" />
+</div>
+
+Our webhook is designed to ensure reliable delivery by automatically retrying under certain conditions:
+
+### Retry Conditions
+
+The webhook request will **retry up to 3 times** if any of the following conditions occur:
+
+- The server returns an **HTTP status that is not 200** (indicating failure)
+- The server takes longer than **30 seconds** to respond (timeout)
+
+### Retry Timing
+
+If the first attempt fails, the webhook will automatically retry **every 2 minutes**.
+
+| Attempt | Timing |
+|---------|--------|
+| First failure | Retry after 2 minutes |
+| Second failure | Retry again after 2 minutes |
+| Third failure | Final retry after another 2 minutes |
+
+After **3 failed attempts**, the retry process will stop.
+
+The purpose of this approach is to ensure the reliability and responsiveness of our webhook. By automatically retrying, we can increase the likelihood of successfully delivering messages or taking other actions by the webhook. It also helps in addressing potential issues that may arise, such as slow network connections or disruptions on the server side.
+
+## Quick Response Requirement
+
+<Warning>
+Your application must return an HTTP 200 status code within 30 seconds to confirm successful receipt and avoid timeouts and retries.
+</Warning>
+
+When your application receives a webhook from our service:
+
+1. **Return HTTP 200 quickly** - Do not include complex business logic in the initial processing
+2. **Offload heavy processing** - If the webhook triggers any long-running or computationally intensive tasks, offload these to a background process or a separate system
+3. **Keep handlers efficient** - This ensures that your webhook handler remains efficient and promptly returns the required HTTP 200 response
+
+## Failure Monitoring and Notification Process
+
+Our system continuously monitors the integration's performance by tracking the success and failure rates of operations. If a significant number of failures occur, this could indicate a problem with the integration.
+
+### Failure Threshold
+
+| Metric | Threshold |
+|--------|-----------|
+| **Start counter** | Operation calculation starts from the first time a failure occurs |
+| **Threshold Level** | Notification triggered if failure rate exceeds 80% with more than 5 failures, OR more than 50 total failures within 1 hour |
+| **Failure Rate Calculation** | Percentage of failed operations out of total operations attempted within the monitored period |
+
+As soon as the system identifies that the failure rate has exceeded the threshold, it will automatically send an email notification to all owner emails.
+
+## Available Webhook Events
+
+MileApp supports the following webhook event types:
+
+<CardGroup cols={2}>
+  <Card title="Task Events" icon="list-check" href="/api-reference/webhooks/task-events">
+    Triggered on task create, assign, and finish events
+  </Card>
+  <Card title="Data Source Events" icon="database" href="/api-reference/webhooks/data-source-events">
+    Triggered when data source records are created
+  </Card>
+  <Card title="Routing Events" icon="route" href="/api-reference/webhooks/routing-events">
+    Triggered on routing optimization events
+  </Card>
+  <Card title="Trip Events" icon="car" href="/api-reference/webhooks/trip-events">
+    Triggered on trip start and end events
+  </Card>
+</CardGroup>

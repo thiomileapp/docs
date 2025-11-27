@@ -1,0 +1,25 @@
+---
+title: 'Export Task'
+description: 'The Export Task module provides functionality to export task data and data source records to various...'
+---
+
+## What is Export Task?
+
+The Export Task module provides functionality to export task data and data source records to various formats (XLSX, JSON). It supports both direct export for small datasets and background processing for large exports. Users can customize exports using export configurations, filter data by multiple criteria, and monitor export operations through export logs. Export files are stored securely with 30-day retention period.
+
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Get export log history" icon="list" href="/api-reference/importexport/export-task/get-export-log-history">
+    GET /tasks/export-log
+  </Card>
+  <Card title="Export tasks" icon="plus" href="/api-reference/importexport/export-task/export-tasks">
+    POST /tasks/export
+  </Card>
+  <Card title="Export data source" icon="plus" href="/api-reference/importexport/export-task/export-data-source">
+    POST /data/export
+  </Card>
+</CardGroup>
+
+

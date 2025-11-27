@@ -1,0 +1,1204 @@
+{
+    "x-webhooks": {
+        "on-routing": {
+            "post": {
+                "summary": "Routing events",
+                "description" : "In this example there are 2 capacity constraint **weight, and volume**",
+                "operationId": "on-routing",
+                "tags": [
+                    "Webhook"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/BasewebhookRoutingPayload"
+                            }
+                        }
+                    },
+                    "x-examples": {
+                        "application/json": {
+                            "onRoutingFinish": {
+                                "summary": "Payload on routing finish",
+                                "value": {
+                                    "result": {
+                                        "routing": [
+                                            {
+                                                "volumePercentage": "0%",
+                                                "totalDistance": 62024,
+                                                "totalVolume": 0,
+                                                "vehicleMaxWeight": 100,
+                                                "fixedCost": 0,
+                                                "workingTime": {
+                                                    "endTime": "17:00",
+                                                    "startTime": "07:00"
+                                                },
+                                                "vehicleMaxVolume": 100,
+                                                "speed": 25,
+                                                "vehicleId": "64ae56d327688e090c04eff4",
+                                                "totalNodes": 5,
+                                                "finishTime": "10:42:41",
+                                                "vehicleName": "BP 4877 TFV",
+                                                "totalVisits": 3,
+                                                "totalTrips": 1,
+                                                "vehicleMinVolume": 0,
+                                                "totalWeight": 0,
+                                                "trips": [
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 42,
+                                                        "eta": "7:00:00",
+                                                        "volume": 0,
+                                                        "order": 0,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "7:41:50",
+                                                        "visitTime": 0,
+                                                        "travelTime": 0,
+                                                        "distance": 0
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0e2",
+                                                        "visitName": "Test 1000",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "8:00:00",
+                                                        "address": "Matra Jaya 2 Jl. Waru No.26 RT 7/7 Rawamangun, Pulo Gadung, Jaktim 13220) (An Bapak Erick)",
+                                                        "volume": 0,
+                                                        "order": 1,
+                                                        "coordinate": "-6.16390262,106.74082965",
+                                                        "etd": "8:10:00",
+                                                        "visitTime": 10,
+                                                        "travelTime": 19,
+                                                        "distance": 7571
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64afb4dc971dc3617f603332",
+                                                        "visitName": "Testing 123",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": null,
+                                                            "startTime": null
+                                                        },
+                                                        "eta": "8:46:27",
+                                                        "address": "jakarta",
+                                                        "volume": 0,
+                                                        "order": 2,
+                                                        "coordinate": "-6.224634691640824,106.67960171349401",
+                                                        "etd": "8:58:27",
+                                                        "visitTime": 12,
+                                                        "travelTime": 37,
+                                                        "distance": 15190
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0dc",
+                                                        "visitName": "Test 997",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "9:26:34",
+                                                        "address": "Jln cipinang kebembem rt 04 rw 13 no 15",
+                                                        "volume": 0,
+                                                        "order": 3,
+                                                        "coordinate": "-6.2784302,106.64862115",
+                                                        "etd": "9:36:34",
+                                                        "visitTime": 10,
+                                                        "travelTime": 29,
+                                                        "distance": 11717
+                                                    },
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 0,
+                                                        "eta": "10:42:41",
+                                                        "volume": 0,
+                                                        "order": 4,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "10:42:41",
+                                                        "visitTime": 0,
+                                                        "travelTime": 67,
+                                                        "distance": 27546
+                                                    }
+                                                ],
+                                                "vehicleMinWeight": 0,
+                                                "assignee": "macanoyen@mailnesia.com",
+                                                "weightPercentage": "0%",
+                                                "totalTravelTime": 152,
+                                                "vehicleTags": [
+                                                    "64ae56d327688e090c04eff4"
+                                                ]
+                                            },
+                                            {
+                                                "volumePercentage": "0%",
+                                                "totalDistance": 61798,
+                                                "totalVolume": 0,
+                                                "vehicleMaxWeight": 100,
+                                                "fixedCost": 0,
+                                                "workingTime": {
+                                                    "endTime": "17:00",
+                                                    "startTime": "07:00"
+                                                },
+                                                "vehicleMaxVolume": 100,
+                                                "speed": 25,
+                                                "vehicleId": "64ae56d327688e090c04eff3",
+                                                "totalNodes": 4,
+                                                "finishTime": "9:48:19",
+                                                "vehicleName": "K 9744 LAZ",
+                                                "totalVisits": 2,
+                                                "totalTrips": 1,
+                                                "vehicleMinVolume": 0,
+                                                "totalWeight": 0,
+                                                "trips": [
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 0,
+                                                        "eta": "7:00:00",
+                                                        "volume": 0,
+                                                        "order": 0,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "7:00:00",
+                                                        "visitTime": 0,
+                                                        "travelTime": 0,
+                                                        "distance": 0
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0de",
+                                                        "visitName": "Test 998",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "8:02:49",
+                                                        "address": "Kompleks Gading Bukit Indah, Jalan Bukit Gading Raya Blok E No.17, Kelapa Gading Barat, Kelapa Gading",
+                                                        "volume": 0,
+                                                        "order": 1,
+                                                        "coordinate": "-6.33164676,106.84686295",
+                                                        "etd": "8:12:49",
+                                                        "visitTime": 10,
+                                                        "travelTime": 63,
+                                                        "distance": 26172
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0e0",
+                                                        "visitName": "Test 999",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "8:38:23",
+                                                        "address": "Apartemen gading nias tower bogenvile lt.  8 fd",
+                                                        "volume": 0,
+                                                        "order": 2,
+                                                        "coordinate": "-6.3202,106.89724605",
+                                                        "etd": "8:48:23",
+                                                        "visitTime": 10,
+                                                        "travelTime": 26,
+                                                        "distance": 10652
+                                                    },
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 0,
+                                                        "eta": "9:48:19",
+                                                        "volume": 0,
+                                                        "order": 3,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "9:48:19",
+                                                        "visitTime": 0,
+                                                        "travelTime": 60,
+                                                        "distance": 24974
+                                                    }
+                                                ],
+                                                "vehicleMinWeight": 0,
+                                                "assignee": "macanoyen@mailnesia.com",
+                                                "weightPercentage": "0%",
+                                                "totalTravelTime": 149,
+                                                "vehicleTags": [
+                                                    "64ae56d327688e090c04eff3"
+                                                ]
+                                            }
+                                        ],
+                                        "dropped": [
+                                            {
+                                                "isHub": false,
+                                                "tags": null,
+                                                "coordinate": "-6.224634691640824,106.67960171349401",
+                                                "capacity": {
+                                                    "weight": 0,
+                                                    "volume": null
+                                                },
+                                                "timeWindow": {
+                                                    "endTime": null,
+                                                    "startTime": null
+                                                },
+                                                "visitTime": null,
+                                                "id": "taskId-64ae635cd7c7984fda307d92",
+                                                "name": "Testing 123",
+                                                "address": "jakarta",
+                                                "reason": "Dropped due to constraint"
+                                            }
+                                        ]
+                                    },
+                                    "resultCode": "Route-20230801-001",
+                                    "updatedTime": "2023-07-14T07:17:19+00:00",
+                                    "createdBy": "640fc0f0c53fdd421d7a8d38",
+                                    "configuration": {
+                                        "multitrip": true,
+                                        "useAllVehicle": true,
+                                        "defaultVisitTime": 12,
+                                        "autoSpeed": false,
+                                        "defaultSpeed": 25,
+                                        "returnToBase": true,
+                                        "name": "Default",
+                                        "capacityConstraint": [
+                                            "weight",
+                                            "volume"
+                                        ],
+                                        "clustering": false
+                                    },
+                                    "status": "done",
+                                    "createdFrom": "WEB",
+                                    "hubId": "640fc11832c0de76065d8922",
+                                    "organizationId": "640fc0f0c53fdd421d7a8d32",
+                                    "_id": "64b0f67e880af90e380ff8c7",
+                                    "countryCode": "IDN",
+                                    "createdTime": "2023-07-14T07:17:18+00:00",
+                                    "name": "Routing 07-14 02:17",
+                                    "user": {
+                                        "name": "John doe"
+                                    },
+                                    "hubCoordinate": "-6.17549,106.79073",
+                                    "summary": {
+                                        "totalDistance": 123822,
+                                        "droppedVisits": 0,
+                                        "totalVisits": 5,
+                                        "totalVehicles": 2,
+                                        "maxFinishTime": "10:42:41",
+                                        "usedVehicles": 2,
+                                        "totalVisitTime": 52,
+                                        "avgSpeed": 25,
+                                        "totalWaitingTime": 42,
+                                        "minFinishTime": "9:48:19",
+                                        "routedVisits": 5,
+                                        "avgFinishTime": "10:15:30",
+                                        "unusedVehicles": 0,
+                                        "totalTravelTime": 301,
+                                        "capacityConstraint": [
+                                            {
+                                                "available": 200,
+                                                "name": "weight",
+                                                "optimized": 0,
+                                                "percentage": 0
+                                            },
+                                            {
+                                                "available": 200,
+                                                "name": "volume",
+                                                "optimized": 0,
+                                                "percentage": 0
+                                            },
+                                            {
+                                                "available": 0,
+                                                "optimized": 0,
+                                                "percentage": 0
+                                            }
+                                        ],
+                                        "totalSpentTime": 395
+                                    },
+                                    "finishTime": "2023-07-14T07:25:18+00:00"
+                                }
+                            },
+                            "onRoutingDispatced": {
+                                "summary": "Payload on routing dispatched",
+                                "value": {
+                                    "dispatchStatus" : "done",
+                                    "dispatchMessage" : "2/2",
+                                    "message" : "",
+                                    "result": {
+                                        "routing": [
+                                            {
+                                                "volumePercentage": "0%",
+                                                "totalDistance": 62024,
+                                                "totalVolume": 0,
+                                                "vehicleMaxWeight": 100,
+                                                "fixedCost": 0,
+                                                "workingTime": {
+                                                    "endTime": "17:00",
+                                                    "startTime": "07:00"
+                                                },
+                                                "vehicleMaxVolume": 100,
+                                                "speed": 25,
+                                                "vehicleId": "64ae56d327688e090c04eff4",
+                                                "totalNodes": 5,
+                                                "finishTime": "10:42:41",
+                                                "vehicleName": "BP 4877 TFV",
+                                                "totalVisits": 3,
+                                                "totalTrips": 1,
+                                                "vehicleMinVolume": 0,
+                                                "totalWeight": 0,
+                                                "trips": [
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 42,
+                                                        "eta": "7:00:00",
+                                                        "volume": 0,
+                                                        "order": 0,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "7:41:50",
+                                                        "visitTime": 0,
+                                                        "travelTime": 0,
+                                                        "distance": 0
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0e2",
+                                                        "visitName": "Test 1000",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "8:00:00",
+                                                        "address": "Matra Jaya 2 Jl. Waru No.26 RT 7/7 Rawamangun, Pulo Gadung, Jaktim 13220) (An Bapak Erick)",
+                                                        "volume": 0,
+                                                        "order": 1,
+                                                        "coordinate": "-6.16390262,106.74082965",
+                                                        "etd": "8:10:00",
+                                                        "visitTime": 10,
+                                                        "travelTime": 19,
+                                                        "distance": 7571
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64afb4dc971dc3617f603332",
+                                                        "visitName": "Testing 123",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": null,
+                                                            "startTime": null
+                                                        },
+                                                        "eta": "8:46:27",
+                                                        "address": "jakarta",
+                                                        "volume": 0,
+                                                        "order": 2,
+                                                        "coordinate": "-6.224634691640824,106.67960171349401",
+                                                        "etd": "8:58:27",
+                                                        "visitTime": 12,
+                                                        "travelTime": 37,
+                                                        "distance": 15190
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0dc",
+                                                        "visitName": "Test 997",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "9:26:34",
+                                                        "address": "Jln cipinang kebembem rt 04 rw 13 no 15",
+                                                        "volume": 0,
+                                                        "order": 3,
+                                                        "coordinate": "-6.2784302,106.64862115",
+                                                        "etd": "9:36:34",
+                                                        "visitTime": 10,
+                                                        "travelTime": 29,
+                                                        "distance": 11717
+                                                    },
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 0,
+                                                        "eta": "10:42:41",
+                                                        "volume": 0,
+                                                        "order": 4,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "10:42:41",
+                                                        "visitTime": 0,
+                                                        "travelTime": 67,
+                                                        "distance": 27546
+                                                    }
+                                                ],
+                                                "vehicleMinWeight": 0,
+                                                "assignee": "macanoyen@mailnesia.com",
+                                                "weightPercentage": "0%",
+                                                "totalTravelTime": 152,
+                                                "vehicleTags": [
+                                                    "64ae56d327688e090c04eff4"
+                                                ]
+                                            },
+                                            {
+                                                "volumePercentage": "0%",
+                                                "totalDistance": 61798,
+                                                "totalVolume": 0,
+                                                "vehicleMaxWeight": 100,
+                                                "fixedCost": 0,
+                                                "workingTime": {
+                                                    "endTime": "17:00",
+                                                    "startTime": "07:00"
+                                                },
+                                                "vehicleMaxVolume": 100,
+                                                "speed": 25,
+                                                "vehicleId": "64ae56d327688e090c04eff3",
+                                                "totalNodes": 4,
+                                                "finishTime": "9:48:19",
+                                                "vehicleName": "K 9744 LAZ",
+                                                "totalVisits": 2,
+                                                "totalTrips": 1,
+                                                "vehicleMinVolume": 0,
+                                                "totalWeight": 0,
+                                                "trips": [
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 0,
+                                                        "eta": "7:00:00",
+                                                        "volume": 0,
+                                                        "order": 0,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "7:00:00",
+                                                        "visitTime": 0,
+                                                        "travelTime": 0,
+                                                        "distance": 0
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0de",
+                                                        "visitName": "Test 998",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "8:02:49",
+                                                        "address": "Kompleks Gading Bukit Indah, Jalan Bukit Gading Raya Blok E No.17, Kelapa Gading Barat, Kelapa Gading",
+                                                        "volume": 0,
+                                                        "order": 1,
+                                                        "coordinate": "-6.33164676,106.84686295",
+                                                        "etd": "8:12:49",
+                                                        "visitTime": 10,
+                                                        "travelTime": 63,
+                                                        "distance": 26172
+                                                    },
+                                                    {
+                                                        "isHub": false,
+                                                        "tags": null,
+                                                        "weight": 0,
+                                                        "visitId": "taskId-64ae56a8ffffa27dbb0ea0e0",
+                                                        "visitName": "Test 999",
+                                                        "waitingTime": 0,
+                                                        "timeWindow": {
+                                                            "endTime": "17:00",
+                                                            "startTime": "08:00"
+                                                        },
+                                                        "timeWindows": [
+                                                            {
+                                                                "endTime": "12:00",
+                                                                "startTime": "08:00"
+                                                            },
+                                                            {
+                                                                "endTime": "17:00",
+                                                                "startTime": "14:00"
+                                                            }
+                                                        ],
+                                                        "eta": "8:38:23",
+                                                        "address": "Apartemen gading nias tower bogenvile lt.  8 fd",
+                                                        "volume": 0,
+                                                        "order": 2,
+                                                        "coordinate": "-6.3202,106.89724605",
+                                                        "etd": "8:48:23",
+                                                        "visitTime": 10,
+                                                        "travelTime": 26,
+                                                        "distance": 10652
+                                                    },
+                                                    {
+                                                        "isHub": true,
+                                                        "weight": 0,
+                                                        "visitId": "hub-640fc11832c0de76065d8922",
+                                                        "waitingTime": 0,
+                                                        "eta": "9:48:19",
+                                                        "volume": 0,
+                                                        "order": 3,
+                                                        "coordinate": "-6.17549,106.79073",
+                                                        "etd": "9:48:19",
+                                                        "visitTime": 0,
+                                                        "travelTime": 60,
+                                                        "distance": 24974
+                                                    }
+                                                ],
+                                                "vehicleMinWeight": 0,
+                                                "assignee": "macanoyen@mailnesia.com",
+                                                "weightPercentage": "0%",
+                                                "totalTravelTime": 149,
+                                                "vehicleTags": [
+                                                    "64ae56d327688e090c04eff3"
+                                                ]
+                                            }
+                                        ],
+                                        "dropped": [
+                                            {
+                                                "isHub": false,
+                                                "tags": null,
+                                                "coordinate": "-6.224634691640824,106.67960171349401",
+                                                "capacity": {
+                                                    "weight": 0,
+                                                    "volume": null
+                                                },
+                                                "timeWindow": {
+                                                    "endTime": null,
+                                                    "startTime": null
+                                                },
+                                                "visitTime": null,
+                                                "id": "taskId-64ae635cd7c7984fda307d92",
+                                                "name": "Testing 123",
+                                                "address": "jakarta",
+                                                "reason": "Dropped due to constraint"
+                                            }
+                                        ]
+                                    },
+                                    "resultCode": "Route-20230801-001",
+                                    "updatedTime": "2023-07-14T07:17:19+00:00",
+                                    "createdBy": "640fc0f0c53fdd421d7a8d38",
+                                    "configuration": {
+                                        "multitrip": true,
+                                        "useAllVehicle": true,
+                                        "defaultVisitTime": 12,
+                                        "autoSpeed": false,
+                                        "defaultSpeed": 25,
+                                        "returnToBase": true,
+                                        "name": "Default",
+                                        "capacityConstraint": [
+                                            "weight",
+                                            "volume"
+                                        ],
+                                        "clustering": false
+                                    },
+                                    "status": "done",
+                                    "createdFrom": "WEB",
+                                    "hubId": "640fc11832c0de76065d8922",
+                                    "organizationId": "640fc0f0c53fdd421d7a8d32",
+                                    "_id": "64b0f67e880af90e380ff8c7",
+                                    "countryCode": "IDN",
+                                    "createdTime": "2023-07-14T07:17:18+00:00",
+                                    "name": "Routing 07-14 02:17",
+                                    "user": {
+                                        "name": "John doe"
+                                    },
+                                    "hubCoordinate": "-6.17549,106.79073",
+                                    "summary": {
+                                        "totalDistance": 123822,
+                                        "droppedVisits": 0,
+                                        "totalVisits": 5,
+                                        "totalVehicles": 2,
+                                        "maxFinishTime": "10:42:41",
+                                        "usedVehicles": 2,
+                                        "totalVisitTime": 52,
+                                        "avgSpeed": 25,
+                                        "totalWaitingTime": 42,
+                                        "minFinishTime": "9:48:19",
+                                        "routedVisits": 5,
+                                        "avgFinishTime": "10:15:30",
+                                        "unusedVehicles": 0,
+                                        "totalTravelTime": 301,
+                                        "capacityConstraint": [
+                                            {
+                                                "available": 200,
+                                                "name": "weight",
+                                                "optimized": 0,
+                                                "percentage": 0
+                                            },
+                                            {
+                                                "available": 200,
+                                                "name": "volume",
+                                                "optimized": 0,
+                                                "percentage": 0
+                                            },
+                                            {
+                                                "available": 0,
+                                                "optimized": 0,
+                                                "percentage": 0
+                                            }
+                                        ],
+                                        "totalSpentTime": 395
+                                    },
+                                    "finishTime": "2023-07-14T07:25:18+00:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "BasewebhookRoutingPayload": {
+            "x-discriminator": "webhookRoutePayload",
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "array",
+                    "description": "The result key contains success and failed optimized visits list",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "routing": {
+                                "type": "array",
+                                "description": "An array containing details of the routes.",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "volumePercentage": {
+                                            "type": "string",
+                                            "description": "The volume percentage for this route."
+                                        },
+                                        "totalDistance": {
+                                            "type": "numeric",
+                                            "description": "The total distance covered by this route."
+                                        },
+                                        "totalVolume": {
+                                            "type": "numeric",
+                                            "description": "The total volume carried by this route."
+                                        },
+                                        "vehicleMaxWeight": {
+                                            "type": "numeric",
+                                            "description": "The maximum weight capacity of the vehicle."
+                                        },
+                                        "fixedCost": {
+                                            "type": "integer",
+                                            "description": "The cost factor for this route."
+                                        },
+                                        "workingTime": {
+                                            "type": "array",
+                                            "description": "The time window during which this vehicle can work.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "startTime": {
+                                                        "type": "integer",
+                                                        "description": "Minimum working time of vehicle to operate."
+                                                    },
+                                                    "endTime": {
+                                                        "type": "integer",
+                                                        "description": "Maximum working time of vehicle to operate."
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "vehicleMaxVolume": {
+                                            "type": "numeric",
+                                            "description": "The maximum volume capacity of the vehicle."
+                                        },
+                                        "speed": {
+                                            "type": "integer",
+                                            "description": "The speed of the vehicle."
+                                        },
+                                        "vehicleId": {
+                                            "type": "string",
+                                            "description": "The unique identifier for the vehicle."
+                                        },
+                                        "totalNodes": {
+                                            "type": "numeric",
+                                            "description": "The total number of nodes (locations) visited in this route."
+                                        },
+                                        "finishTime": {
+                                            "type": "string",
+                                            "description": "The time when this route finished."
+                                        },
+                                        "vehicleName": {
+                                            "type": "string",
+                                            "description": "The name of the vehicle."
+                                        },
+                                        "totalVisits": {
+                                            "type": "integer",
+                                            "description": "The total number of visits made in this route."
+                                        },
+                                        "totalTrips": {
+                                            "type": "integer",
+                                            "description": "The total number of trips made by the vehicle in this route."
+                                        },
+                                        "vehicleMinVolume": {
+                                            "type": "numeric",
+                                            "description": "The minimum volume capacity of the vehicle."
+                                        },
+                                        "totalWeight": {
+                                            "type": "numeric",
+                                            "description": "The total weight carried by this vehicle in this route."
+                                        },
+                                        "trips": {
+                                            "type": "array",
+                                            "description": "An array containing details of individual trips in this route. Each trip represents a visit or stop during the route.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "isHub": {
+                                                        "type": "boolean",
+                                                        "description": "A boolean value indicating whether the dropped visit was a hub (starting/ending point)."
+                                                    },
+                                                    "weight": {
+                                                        "type": "integer",
+                                                        "description": "The weight value seems to be 0, suggesting that there is no specific weight associated with this visit or hub in this context."
+                                                    },
+                                                    "visitId": {
+                                                        "type": "string",
+                                                        "description": "The visitId is likely a unique identifier for this visit or hub. It can be used to distinguish different visits or locations within the system."
+                                                    },
+                                                    "waitingTime": {
+                                                        "type": "string",
+                                                        "description": "The waitingTime indicates the time, in some unit (e.g., minutes), that one needs to wait at this hub or location before proceeding to the next destination or performing the next action."
+                                                    },
+                                                    "eta": {
+                                                        "type": "string",
+                                                        "description": "ETA stands for Estimated Time of Arrival."
+                                                    },
+                                                    "volume": {
+                                                        "type": "integer",
+                                                        "description": "The volume value seems to be 0, indicating that there is no specific volume associated with this visit or hub in this context. Volume could refer to the quantity of items or goods associated with this location."
+                                                    },
+                                                    "order": {
+                                                        "type": "integer",
+                                                        "description": "The order value also seems to be 0, suggesting that there is no specific order associated with this visit or hub. In the context of logistics or transportation, an order could refer to a sequence number of stops on a delivery route."
+                                                    },
+                                                    "coordinate": {
+                                                        "type": "integer",
+                                                        "description": "This represents the geographic coordinates (latitude and longitude) of the hub or location, placing it at approximately -6.17549 latitude and 106.79073 longitude."
+                                                    },
+                                                    "etd": {
+                                                        "type": "integer",
+                                                        "description": "ETD stands for Estimated Time of Departure. It indicates the estimated time when the visit or vehicle is expected to depart from this hub or location."
+                                                    },
+                                                    "visitTime": {
+                                                        "type": "integer",
+                                                        "description": "The visitTime appears to be set to 0, indicating that there is no specific visit time associated with this hub or visit in this context. Visit time typically refers to the time taken at a particular location for loading, unloading, or other actions."
+                                                    },
+                                                    "travelTime": {
+                                                        "type": "integer",
+                                                        "description": "The travelTime is also set to 0, suggesting that there is no specific travel time associated with this visit or hub. Travel time usually refers to the time taken to travel from one location to another."
+                                                    },
+                                                    "distance": {
+                                                        "type": "integer",
+                                                        "description": "Distance usually refers to the spatial separation between the locations"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "vehicleMinWeight": {
+                                            "type": "numeric",
+                                            "description": "The minimum weight capacity of the vehicle"
+                                        },
+                                        "assignee": {
+                                            "type": "string",
+                                            "description": "The user of the assigned for this route."
+                                        },
+                                        "totalTravelTime": {
+                                            "type": "numeric",
+                                            "description": "The total travel time for this route."
+                                        },
+                                        "vehicleTags": {
+                                            "type": "array",
+                                            "description": "An array containing vehicle tags."
+                                        }
+                                    }
+                                }
+                            },
+                            "dropped": {
+                                "type": "array",
+                                "description": "An array of dropped visit details.",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "isHub": {
+                                            "type": "string",
+                                            "description": "A boolean value indicating whether the dropped visit was a hub (starting/ending point)."
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "description": "Tags associated with the dropped visit."
+                                        },
+                                        "coordinate": {
+                                            "type": "string",
+                                            "description": "The coordinates (latitude and longitude) of the dropped visit."
+                                        },
+                                        "capacity": {
+                                            "type": "array",
+                                            "description": "An object representing the capacity constraints for the dropped visit."
+                                        },
+                                        "timeWindow": {
+                                            "type": "object",
+                                            "description": "The time window during which the visit was scheduled. Note: This field is not considered when timeWindows is provided.",
+                                            "properties": {
+                                                "startTime": {
+                                                    "type": "string",
+                                                    "description": "Opening time of the visit."
+                                                },
+                                                "endTime": {
+                                                    "type": "string",
+                                                    "description": "Closing time of the visit."
+                                                }
+                                            }
+                                        },
+                                        "timeWindows": {
+                                            "type": "array",
+                                            "description": "Array of time windows during which the visit was scheduled. When this field is provided, the timeWindow field will be ignored.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "startTime": {
+                                                        "type": "integer",
+                                                        "description": "Minimum visit available time."
+                                                    },
+                                                    "endTime": {
+                                                        "type": "integer",
+                                                        "description": "Maximum visit available time"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "visitTime": {
+                                            "type": "numeric",
+                                            "description": "The visit time (duration of stay) for this dropped visit."
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "description": "The unique identifier for this visit."
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "The name of the dropped visit."
+                                        },
+                                        "address": {
+                                            "type": "numeric",
+                                            "description": "The address associated with the dropped."
+                                        },
+                                        "reason": {
+                                            "type": "string",
+                                            "description": "The reason for dropping this visit."
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                },
+                "resultCode": {
+                    "type": "string",
+                    "description" : "Unique values for result optimization data as an alternative identifier. **Example:** `Route-20230801-001`"
+                },
+                "updatedTime": {
+                    "description": "A timestamp representing the date and time when this data was last updated.",
+                    "type": "string"
+                },
+                "createdBy": {
+                    "description": "A user ID, representing the user who created this routing.",
+                    "type": "string"
+                },
+                "configuration": {
+                    "type": "array",
+                    "description": "An object containing various configuration settings for the route optimization.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "multitrip": {
+                                "type": "boolean",
+                                "description": "A boolean value set to `true`, mean that it allows for multiple trips."
+                            },
+                            "useAllVehicle": {
+                                "type": "boolean",
+                                "description": "A boolean value set to `true`, mean that all available vehicles are used."
+                            },
+                            "defaultVisitTime": {
+                                "type": "integer",
+                                "description": "An integer representing the default time for each visit"
+                            },
+                            "autoSpeed": {
+                                "type": "boolean",
+                                "description": "A boolean value set to `false`, mean that the vehicle speed is not automatically determined."
+                            },
+                            "defaultSpeed": {
+                                "type": "integer",
+                                "description": "An integer representing the default speed of vehicles."
+                            },
+                            "returnToBase": {
+                                "type": "boolean",
+                                "description": "A boolean value set to `true`, mean that vehicles return to their base after completing visits."
+                            },
+                            "name": {
+                                "type": "boolean",
+                                "description": "A string representing the name of this configuration."
+                            },
+                            "capacityConstraint": {
+                                "type": "array of string",
+                                "description": "An array containing capacity constraint names."
+                            },
+                            "clustering": {
+                                "type": "boolean",
+                                "description": "A boolean value set to false, mean that clustering is not enabled"
+                            }
+                        }
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "description": "A string indicating the status of the route optimization."
+                },
+                "createdFrom": {
+                    "type": "integer",
+                    "description": "A string indicating the source from which the route optimization was created."
+                },
+                "hubId": {
+                    "type": "array",
+                    "description": " A unique identifier representing the hub associated with this route optimization."
+                },
+                "organizationId": {
+                    "type": "string",
+                    "description": "A unique identifier representing the organization ID associated with this route optimization."
+                },
+                "_id": {
+                    "type": "string",
+                    "description": " A unique identifier of this routing result."
+                },
+                "countryCode": {
+                    "type": "string",
+                    "description": "A string representing the country code."
+                },
+                "createdTime": {
+                    "type": "string",
+                    "description": "A timestamp representing the date and time when this route optimization was created."
+                },
+                "name": {
+                    "type": "string",
+                    "description": " A string representing the name of this route optimization."
+                },
+                "user": {
+                    "type": "array",
+                    "description": "An object containing user-related information:"
+                },
+                "hubCoordinate": {
+                    "type": "string",
+                    "description": "A string representing the latitude and longitude of the hub."
+                },
+                "summary": {
+                    "type": "array",
+                    "description": "An object containing summary information for this route optimization:",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "totalDistance": {
+                                "type": "numeric",
+                                "description": "An integer representing the total distance covered in all routes."
+                            },
+                            "droppedVisits": {
+                                "type": "numeric",
+                                "description": "An integer representing the number of dropped visits in all routes."
+                            },
+                            "totalVisits": {
+                                "type": "numeric",
+                                "description": "An integer representing the total number of visits in all routes."
+                            },
+                            "totalVehicles": {
+                                "type": "numeric",
+                                "description": "An integer representing the total number of vehicles used in all routes."
+                            },
+                            "maxFinishTime": {
+                                "type": "string",
+                                "description": "A string representing the maximum finish time among all routes."
+                            },
+                            "usedVehicles": {
+                                "type": "integer",
+                                "description": "An integer representing the number of vehicles used in all routes."
+                            },
+                            "totalVisitTime": {
+                                "type": "integer",
+                                "description": "An integer representing the total time spent on visits in all routes."
+                            },
+                            "avgSpeed": {
+                                "type": "numeric",
+                                "description": "An integer representing the average speed of vehicles in all routes."
+                            },
+                            "totalWaitingTime": {
+                                "type": "numeric",
+                                "description": "An integer representing the total waiting time in all routes."
+                            },
+                            "minFinishTime": {
+                                "type": "string",
+                                "description": "A string representing the minimum finish time among all routes."
+                            },
+                            "routedVisits": {
+                                "type": "numeric",
+                                "description": "An integer representing the number of visits that were routed in all routes."
+                            },
+                            "avgFinishTime": {
+                                "type": "string",
+                                "description": "A string representing the average finish time among all routes."
+                            },
+                            "unusedVehicles": {
+                                "type": "numeric",
+                                "description": "An integer representing the number of unused vehicles in all routes."
+                            },
+                            "totalTravelTime": {
+                                "type": "numeric",
+                                "description": "An integer representing the total travel time in all routes."
+                            },
+                            "capacityConstraint": {
+                                "type": "array",
+                                "description": "An array containing capacity constraint details for weight and volume."
+                            },
+                            "totalSpentTime": {
+                                "type": "numeric",
+                                "description": "An integer representing the total time spent in all routes."
+                            }
+                        }
+                    }
+                },
+                "finishTime": {
+                    "description": "A timestamp representing the date and time when the routing process finish. To measure the distance between processes can be done based on `createdTime` and `finishTime`.",
+                    "type": "string"
+                }
+            }
+        },
+        "onRoutingFinish": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/BasewebhookRoutingPayload"
+                }
+            ]
+        },
+        "onRoutingDispatced": {
+            "allOf": [
+                {
+                    "properties": {
+                        "dispatchStatus": {
+                            "type": "string",
+                            "description": "A string value representing dispatch status."
+                        },
+                        "dispatchMessage": {
+                            "type": "string",
+                            "description": "A string value representing the number of success and total visit dispatched (success/total)."
+                        },
+                        "message": {
+                            "type": "string",
+                            "description": "A string value that will shown information about error message when dispatch failed (these are rare)."
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/BasewebhookRoutingPayload"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,192 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Geocode",
+    "description": ""
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/geocode": {
+      "post": {
+        "summary": "Geocode",
+        "tags": [
+          "Geocode"
+        ],
+        "operationId": "geocode",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "\n\n            Geocode is the process of converting addresses into geographic coordinates.\n\n            \n\n            | Field | Type | Description | Required |\n\n            |---|---|---|---|\n\n            | address | <a href='#introduction-format'>array of strings</a> | List of addresses.<br>**Example:** `['karawang jakarta', 'grogol petamburan', 'surabaya jawa timur']`| Required |\n\n            | hubCoordinate | <a href='#introduction-format'>string</a> | Coordinate of hub.<br>**Example:** `'-6.230815251666679,106.75684387903198'` | Optional |\n\n            | radius | <a href='#introduction-format'>number</a> | The number of radius for address search restrictions (in meters). <br>**Default:**  `50000` (50km)<br>**Example:**  `150000` | Optional |\n\n            | engines | <a href='#introduction-format'>array of strings</a> | Sort list search engine by index.<br>**Example:** `['heremap', 'googlemap']`| Optional |\n\n            ",
+            "schema": {
+              "$ref": "#/definitions/geocodeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "  **Success** \n\n\n            | Field | Type | Description |\n\n            |---|---|---|\n\n            | success | <a href='#introduction-format'>boolean</a> | Status of result |\n\n            | totalSuccess | <a href='#introduction-format'>number</a> | Total success data in result |\n\n            | totalFailed | <a href='#introduction-format'>number</a> | Total failed data in result |\n\n            | message | <a href='#introduction-format'>string</a> | Detail message of response |\n\n            | data | <a href='#introduction-format'>array of objects</a> | List of geocoded address |\n\n            | data.*.address | <a href='#introduction-format'>string</a> | The Address |\n\n            | data.*.coordinate | <a href='#introduction-format'>array of float</a> | The Coordinate of address |\n\n            | data.*.engine | <a href='#introduction-format'>string</a> | Plugins used to geocode |\n\n            ",
+            "examples": {
+              "application/json": {
+                "data": [
+                  {
+                    "address": "karawang jakarta",
+                    "coordinate": [
+                      -6.29911,
+                      107.30199
+                    ],
+                    "engine": "heremap"
+                  },
+                  {
+                    "address": "grogol petamburan",
+                    "coordinate": [
+                      -6.16779,
+                      106.7846
+                    ],
+                    "engine": "heremap"
+                  }
+                ],
+                "success": true,
+                "totalSuccess": 2,
+                "totalFailed": 1,
+                "message": "2 Geocode success, 1 geocode failed"
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/geocodeError400"
+            },
+            "examples": {
+              "application/json": {
+                "status": false,
+                "message": "The address field is required.",
+                "failedCode": "geo-001"
+              }
+            },
+            "headers": {
+              "$ref": "#/definitions/default_header"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "geocodeRequest": {
+      "title": "geocodeRequest",
+      "example": {
+        "hubCoordinate": "-6.2160896,106.8138496",
+        "address": [
+          "karawang jakarta",
+          "grogol petamburan",
+          "surabaya jawa timur"
+        ],
+        "radius": 150000,
+        "engines": ["heremap", "googlemap"]
+      }
+    },
+    "route-optimize": {
+      "title": "route-optimize",
+      "type": "object",
+      "properties": {
+        "routing": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Routing1"
+          }
+        },
+        "dropped": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "routing",
+        "dropped"
+      ]
+    },
+    "geocodeError400": {
+      "title": "geocodeError400",
+      "example": {
+        "status": false,
+        "message": "The routing field is required."
+      },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "message"
+      ]
+    },
+    "geocodeResponse200": {
+      "title": "geocodeResponse200",
+      "example":{
+        "data": [
+          {
+            "address": "karawang jakarta",
+            "coordinate": [
+              -6.29911,
+              107.30199
+            ],
+            "engine": "heremap"
+          },
+          {
+            "address": "grogol petamburan",
+            "coordinate": [
+              -6.16779,
+              106.7846
+            ],
+            "engine": "heremap"
+          },
+          {}
+        ],
+        "success": true,
+        "totalSuccess": 2,
+        "totalFailed": 1,
+        "message": "2 Geocode success, 1 geocode failed"
+      }
+    },
+    "default_header": {}
+  }
+}

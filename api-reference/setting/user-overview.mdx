@@ -1,0 +1,33 @@
+---
+title: 'User'
+description: 'User data includes information contained within a user account, such as details that define a user''s...'
+---
+
+## What is User?
+
+User data includes information contained within a user account, such as details that define a user's hub access and role within the system. Hub access determines the locations or areas of the application a user can access or the specific actions they can perform. User attributes consist of the user ID, name, email, and status.
+
+MileApp provides five predefined user roles, and you can create custom roles based on your organization's needs. The predefined roles are **Owner, Admin, Planner, and Field user**. A user can only hold one role at a time but can be granted access to multiple hubs.
+
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Read user" icon="list" href="/api-reference/setting/user/read-user">
+    GET /users
+  </Card>
+  <Card title="Read mine" icon="list" href="/api-reference/setting/user/read-mine">
+    GET /user
+  </Card>
+  <Card title="Update partially user" icon="pen" href="/api-reference/setting/user/update-partially-user">
+    PATCH /user
+  </Card>
+  <Card title="Read user by email" icon="list" href="/api-reference/setting/user/read-user-by-email">
+    GET /user/email/{email}
+  </Card>
+</CardGroup>
+
+## Related Resources
+
+- [User Object](/api-reference/objects/user-object) - User data structure
+

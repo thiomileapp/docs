@@ -1,0 +1,394 @@
+{
+    "swagger": "2.0",
+    "host": "apiweb.mile.app",
+    "securityDefinitions": {
+        "AccessToken": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/tokens": {
+            "get": {
+                "summary": "Read token",
+                "tags": [
+                    "Token"
+                ],
+                "operationId": "readToken",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "List of personal access token.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "message": "Success.",
+                                "data": [
+                                    {
+                                        "_id": "663998382ca3263a4a68cfa2",
+                                        "revoked": false,
+                                        "expires_at": "2024-12-09T17:00:00.015000Z",
+                                        "name": "Access for apps"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "title": "NetworkCreateResponse",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "Failed to create data",
+                                "failedCode": "auth-001"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/token": {
+            "post": {
+                "summary": "Create token",
+                "tags": [
+                    "Token"
+                ],
+                "operationId": "createToken",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tokenBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "List of personal access token.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "message": "Success.",
+                                "data": {
+                                    "_id": "663998382ca3263a4a68cfa2",
+                                    "name": "EXPIREDaaa",
+                                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.....",
+                                    "expires_at": "2024-12-09T17:00:00.015000Z",
+                                    "expireUnix": 18713047
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "title": "NetworkCreateResponse",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "Failed to create data",
+                                "failedCode": "auth-001"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/token/{id}": {
+            "put": {
+                "summary": "Update token by ID",
+                "tags": [
+                    "Token"
+                ],
+                "operationId": "updateToken",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the token that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+                    },
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                          "$ref": "#/definitions/putToken"
+                        }
+                      }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Details of updated token data.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "message": "Success.",
+                                "data": {
+                                    "_id": "663998382ca3263a4a68cfa2",
+                                    "revoked": false,
+                                    "expires_at": "2024-12-09T17:00:00.015000Z",
+                                    "name": "update token"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "title": "NetworkCreateResponse",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "Failed to login",
+                                "failedCode": "auth-034"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete token by ID",
+                "tags": [
+                    "Token"
+                ],
+                "operationId": "deleteToken",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the token that generated by system.<br>**Example**: `6352736c628401059b37a2e2`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Details of updated token data.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "message": "Success.",
+                                "data": {
+                                    "_id": "663998382ca3263a4a68cfa2",
+                                    "revoked": false,
+                                    "expires_at": "2024-12-09T17:00:00.015000Z",
+                                    "name": "update token"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "title": "NetworkCreateResponse",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "Failed to login",
+                                "failedCode": "auth-034"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "default_header": {},
+        "putToken": {
+            "example": {
+                "name": "Personal access for mobile"
+            },
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of personall access token. It can be defined as what the token use for. **Example:** `Personall access for mobile`"
+              }
+            },
+            "required": [
+                "name"
+            ]
+          },
+        "tokenBody": {
+            "example": {
+                "name": "Personal access for apps",
+                "expires_at": "2024-12-10T00:00:00+07:00"
+            },
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of personall access token. It can be defined as what the token use for. **Example:** `Personall access for mobile`"
+                },
+                "expires_at": {
+                    "type": "string",
+                    "description": "Date timestamp expired token. **Example:** `2024-12-10T00:00:00+07:00`"
+                }
+            },
+            "required": [
+                "name",
+                "expires_at"
+            ]
+        }
+    }
+}

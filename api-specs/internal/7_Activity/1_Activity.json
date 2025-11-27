@@ -1,0 +1,345 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1",
+    "title": "Activity",
+    "description": "\nAn **Activity** represents a workflow execution instance that consists of multiple sequential tasks (steps). Each activity is a master task (taskType='activityMaster') that orchestrates a series of child tasks (taskType='activityChild') based on a predefined workflow.\n\n**Key Concepts:**\n- **Activity Master**: The parent task that contains workflow configuration and references to all child tasks via the `subId` array\n- **Activity Children**: Sequential child tasks that represent each step in the workflow, with each child linked to the master via `parentId`\n- **Workflow**: Defines the steps, flow types, and status mappings for the activity execution\n- **Status Updates**: Automatically handled by ActivityConsumer when child tasks complete (not via API)\n\n**Activity Management Operations:**\n- **CREATE Activity**: `POST /internal/activity` (documented in this collection)\n- **READ Activities**: `GET /internal/tasks?taskType=activityMaster` (see Task API documentation)\n- **READ Activity Children**: `GET /internal/tasks?taskType=activityChild&parentId={activityId}` (see Task API documentation)\n- **UPDATE Activity**: `PATCH /task/{activityId}` (see Task API documentation - supports updating name, status fields)\n- **DELETE Activity**: `DELETE /task/{activityId}` (see Task API documentation - cascade deletes all children)\n\n**Important Notes:**\n- Activity data is stored as Tasks with special `taskType` values\n- Use Task API endpoints for READ, UPDATE, DELETE operations\n- Activity-specific sequence validation applies when updating activityChild status to DONE\n- See Task API PATCH endpoint documentation for activity sequence validation details\n\n**Activity Structure:**\n| Field | Type | Format | Description |\n|---|---|---|---|\n| _id | string | *24 characters of hexadecimal* | Unique identifier for the activity master task.<br>**Example**: `634e98098ce07d29474a7e22`|\n| organizationId | string | *24 characters of hexadecimal* | The identifier for the organization.<br>**Example:** `634e98098ce07d29474a7e22`|\n| taskType | string | `activityMaster` | Fixed value identifying this as an activity master task.|\n| flow | string | `ActivityWorkflow` | Fixed system flow name for activity tasks.|\n| workflowId | string | *24 characters of hexadecimal* | Reference to the Workflow document.<br>**Example:** `634e98098ce07d29474a7e22`|\n| workflow | object | | Embedded workflow data for performance (avoids extra queries).<br>Contains: `_id`, `name`, `steps[]`, `organizationId`.|\n| &nbsp;&nbsp;&nbsp;._id | string | | Workflow ID.|\n| &nbsp;&nbsp;&nbsp;.name | string | | Workflow name.<br>**Example:** `Delivery Workflow`|\n| &nbsp;&nbsp;&nbsp;.organizationId | string | | Organization ID.|\n| subId | array | | Array of child task IDs in sequential order (matches workflow.steps order).<br>**Example:** `[\"634e98098ce07d29474a7e23\", \"634e98098ce07d29474a7e24\"]`<br>**IMPORTANT:** This array is IMMUTABLE and cannot be modified after creation.|\n| title | string | | Activity title (defaults to workflow name).<br>**Example:** `Delivery Workflow`|\n| assignee | array | | Aggregated list of unique assignees from all child tasks.<br>**Example:** `[\"worker1@example.com\", \"worker2@example.com\"]`|\n| status | string | `UNASSIGNED`, `ONGOING`, `DONE` | Activity status. Updated to DONE when all children complete.|\n| subStatus | string | | Dynamic status from workflow step's statusMapping.<br>Updated continuously as children complete.|\n| startTime | datetime | `Y-m-d\\TH:i:sP` | Earliest startTime from all child tasks.<br>**Example:** `2023-01-01T08:00:00+07:00`|\n| endTime | datetime | `Y-m-d\\TH:i:sP` | Latest endTime from all child tasks.<br>**Example:** `2023-01-01T17:00:00+07:00`|\n| hubId | string | | Hub ID where activity is executed.|\n| hub | object | | Embedded hub data (name, lat, lng, address).|\n| createdBy | string | | Email of user who created the activity.|\n| updatedBy | string | | Email of user/system who last updated the activity.|\n| createdTime | datetime | `Y-m-d\\TH:i:sP` | Time at which the activity was created.|\n| updatedTime | datetime | `Y-m-d\\TH:i:sP` | Time at which the activity was last updated.|\n\n**Child Task Structure (tasks array in payload):**\n| Field | Type | Format | Description |\n|---|---|---|---|\n| assignee | string or array | | Worker email(s) assigned to this step.<br>**Example:** `worker@example.com` or `[\"worker1@example.com\"]`|\n| startTime | datetime | `Y-m-d H:i:s` or ISO8601 | Start time for this task step.<br>**Example:** `2023-01-01 08:00:00`|\n| endTime | datetime | `Y-m-d H:i:s` or ISO8601 | End time for this task step.<br>**Example:** `2023-01-01 09:00:00`|\n| *...other fields* | | | All standard task fields supported (title, content, label, etc).<br>See Task API documentation for complete field list.|\n"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/internal/activity": {
+      "post": {
+        "summary": "Create Activity",
+        "description": "Create a new activity with master task and child tasks based on workflow definition.\n\n**Process:**\n1. Validates workflow exists and belongs to organization\n2. Creates master task (taskType='activityMaster') with workflow reference\n3. Creates N child tasks (taskType='activityChild') sequentially based on workflow.steps\n4. Links children to master via parentId and subId array\n5. Aggregates assignees from all child tasks\n6. Calculates master startTime (earliest) and endTime (latest) from children\n\n**Important Notes:**\n- Child tasks are created using TaskRepository with standard task creation flow\n- Each child task gets flow and flowId from corresponding workflow.steps[N]\n- The subId array order matches workflow.steps order (critical for sequence validation)\n- Number of tasks in payload must match workflow.steps.length\n- Activity status/subStatus updates are handled automatically by ActivityConsumer\n- For updating activities after creation, use Task API PATCH endpoint",
+        "tags": [
+          "Activity"
+        ],
+        "operationId": "createActivityInternal",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Activity creation payload",
+            "schema": {
+              "type": "object",
+              "required": ["workflowId", "tasks"],
+              "properties": {
+                "workflowId": {
+                  "type": "string",
+                  "description": "The workflow ID that defines the activity steps. Must exist in workflows collection.<br>**Example:** `634e98098ce07d29474a7e22`"
+                },
+                "hubId": {
+                  "type": "string",
+                  "description": "Optional hub ID where this activity is executed.<br>**Example:** `634e98098ce07d29474a7e11`"
+                },
+                "tasks": {
+                  "type": "array",
+                  "description": "Array of child task objects. Must match the number of steps in the workflow.<br>Array length must equal workflow.steps.length.<br><br>**Note:** Each task object contains dynamic fields based on the workflow step's flow type. Common fields include assignee, startTime, endTime, hubId, and createdFrom, plus flow-specific fields.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "assignee": {
+                        "type": ["string", "array"],
+                        "description": "Worker email(s) assigned to this task step.<br>Can be string or array of strings.<br>**Example:** `[\"worker@example.com\"]` or `[]`"
+                      },
+                      "startTime": {
+                        "type": "string",
+                        "description": "Start time for this task step.<br>**Format:** ISO8601<br>**Example:** `2025-10-31T08:55:00.000+07:00`"
+                      },
+                      "endTime": {
+                        "type": "string",
+                        "description": "End time for this task step.<br>**Format:** ISO8601<br>**Example:** `2025-11-01T08:55:00.000+07:00`"
+                      },
+                      "hubId": {
+                        "type": "string",
+                        "description": "Hub ID for this task (typically same as parent activity hubId).<br>**Example:** `68ff42815ed967adac0f7192`"
+                      },
+                      "createdFrom": {
+                        "type": "string",
+                        "description": "Source of task creation.<br>**Example:** `WEB`"
+                      }
+                    },
+                    "additionalProperties": true,
+                    "description": "Additional dynamic fields depend on the workflow step's flow type (e.g., requesterName, item, customerName-1, customerAddress, customerCoordinate, pickupPointCoordinate, etc.)"
+                  }
+                }
+              },
+              "example": {
+                "workflowId": "68f2198aef526585c30e16d2",
+                "hubId": "68ff42815ed967adac0f7192",
+                "tasks": [
+                  {
+                    "requesterName": "John Doe",
+                    "item": "Package",
+                    "requesterAddress": "Jakarta",
+                    "pickupPointCoordinate": "-6.2088,106.8456",
+                    "assignee": ["driver@example.com"],
+                    "startTime": "2025-10-31T08:55:00.000+07:00",
+                    "endTime": "2025-11-01T08:55:00.000+07:00",
+                    "hubId": "68ff42815ed967adac0f7192",
+                    "createdFrom": "WEB"
+                  },
+                  {
+                    "customerName-1": "Jane Smith",
+                    "customerAddress": "Bogor",
+                    "customerCoordinate": "-6.406060208257112,106.76676750183107",
+                    "assignee": [],
+                    "startTime": "2025-10-31T08:55:00.000+07:00",
+                    "endTime": "2025-11-01T08:55:00.000+07:00",
+                    "hubId": "68ff42815ed967adac0f7192",
+                    "createdFrom": "WEB"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Activity created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 201
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Activity created successfully"
+                },
+                "data": {
+                  "type": "object",
+                  "description": "Master task object (workflow.steps excluded to reduce payload size)",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Activity master task ID",
+                      "example": "634e98098ce07d29474a7e22"
+                    },
+                    "organizationId": {
+                      "type": "string",
+                      "example": "634e98098ce07d29474a7e20"
+                    },
+                    "taskType": {
+                      "type": "string",
+                      "example": "activityMaster"
+                    },
+                    "flow": {
+                      "type": "string",
+                      "example": "ActivityWorkflow"
+                    },
+                    "workflowId": {
+                      "type": "string",
+                      "example": "634e98098ce07d29474a7e22"
+                    },
+                    "workflow": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "634e98098ce07d29474a7e22"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Delivery Workflow"
+                        },
+                        "organizationId": {
+                          "type": "string",
+                          "example": "634e98098ce07d29474a7e20"
+                        }
+                      },
+                      "description": "Note: workflow.steps excluded from response for performance"
+                    },
+                    "subId": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Array of child task IDs in sequential order (IMMUTABLE)",
+                      "example": ["634e98098ce07d29474a7e23", "634e98098ce07d29474a7e24"]
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Delivery Workflow"
+                    },
+                    "assignee": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Aggregated unique assignees from all child tasks",
+                      "example": ["driver@example.com"]
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "ONGOING"
+                    },
+                    "subStatus": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "startTime": {
+                      "type": "string",
+                      "example": "2025-10-31T08:55:00+07:00"
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "example": "2025-11-01T08:55:00+07:00"
+                    },
+                    "hubId": {
+                      "type": "string",
+                      "example": "68ff42815ed967adac0f7192"
+                    },
+                    "hub": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "lat": {
+                          "type": "number"
+                        },
+                        "lng": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "example": "admin@example.com"
+                    },
+                    "updatedBy": {
+                      "type": "string",
+                      "example": "admin@example.com"
+                    },
+                    "createdFrom": {
+                      "type": "string",
+                      "example": "WEB"
+                    },
+                    "createdTime": {
+                      "type": "string",
+                      "example": "2025-10-31T07:30:00+07:00"
+                    },
+                    "updatedTime": {
+                      "type": "string",
+                      "example": "2025-10-31T07:30:00+07:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation failed",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Validation error message",
+                  "example": "The workflowId field is required."
+                },
+                "failedCode": {
+                  "type": "string",
+                  "description": "Error code for the validation failure",
+                  "example": "activ-032"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workflow not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Workflow not found"
+                },
+                "failedCode": {
+                  "type": "string",
+                  "example": "activ-034"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Activity creation failed"
+                },
+                "failedCode": {
+                  "type": "string",
+                  "example": "activ-036"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  }
+}

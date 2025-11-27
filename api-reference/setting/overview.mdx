@@ -1,5 +1,5 @@
 ---
-title: 'Setting Overview'
+title: 'Setting'
 description: 'Manage organization settings including users, roles, hubs, teams, and integrations'
 ---
 
@@ -23,10 +23,10 @@ Manage users within your organization including creating, updating, inviting, an
 | `POST /user/invite` | Invite a new user |
 
 <CardGroup cols={2}>
-  <Card title="List Users" icon="users" href="/api-reference/setting/get-users">
+  <Card title="List Users" icon="users" href="/api-reference/setting/user/read-user">
     Retrieve all users in your organization
   </Card>
-  <Card title="Invite User" icon="user-plus" href="/api-reference/setting/post-userinvite">
+  <Card title="Invite User" icon="user-plus" href="/api-reference/setting/user/read-user-by-email">
     Invite a new user to join your organization
   </Card>
 </CardGroup>
@@ -61,10 +61,10 @@ Hubs represent physical locations or warehouses in your organization. They serve
 | `organizationId` | Parent organization |
 
 <CardGroup cols={2}>
-  <Card title="List Hubs" icon="warehouse" href="/api-reference/setting/get-hubs">
+  <Card title="List Hubs" icon="warehouse" href="/api-reference/setting/hub/read-hub">
     Retrieve all hubs in your organization
   </Card>
-  <Card title="Create Hub" icon="plus" href="/api-reference/setting/post-hub">
+  <Card title="Create Hub" icon="plus" href="/api-reference/setting/hub/create-hub">
     Create a new hub location
   </Card>
 </CardGroup>
@@ -99,30 +99,19 @@ Configure plugins and extensions for your organization.
 ## Common Operations
 
 <CardGroup cols={2}>
-  <Card title="User Management" icon="users" href="/api-reference/setting/get-users">
+  <Card title="User Management" icon="users" href="/api-reference/setting/user/read-user">
     Manage organization users
   </Card>
-  <Card title="Role Management" icon="shield" href="/api-reference/setting/get-roles">
+  <Card title="Role Management" icon="shield" href="/api-reference/setting/role/read-role">
     Configure roles and permissions
   </Card>
-  <Card title="Hub Management" icon="warehouse" href="/api-reference/setting/get-hubs">
+  <Card title="Hub Management" icon="warehouse" href="/api-reference/setting/hub/read-hub">
     Manage hub locations
   </Card>
-  <Card title="Team Management" icon="people-group" href="/api-reference/setting/get-teams">
+  <Card title="Team Management" icon="people-group" href="/api-reference/setting/team/read-team">
     Organize users into teams
   </Card>
 </CardGroup>
-
-## Organization Hierarchy
-
-```mermaid
-graph TD
-    A[Organization] --> B[Hubs]
-    B --> C[Teams]
-    C --> D[Users]
-    A --> E[Roles]
-    E --> D
-```
 
 ## Permissions
 

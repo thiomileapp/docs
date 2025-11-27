@@ -1,0 +1,489 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "Payment Methods",
+        "contact": {},
+        "description": "by hit this endpoint you will updated organizations data and added customerId \n in case for `country` fields in case field country must use country code based on this link reference https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements"
+    },
+    "host": "billing.mile.app",
+    "basePath": "/api",
+    "securityDefinitions": {
+        "AccessToken": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/payment-methods": {
+            "get": {
+                "summary": "Read",
+                "tags": [
+                    "Payment Methods"
+                ],
+                "operationId": "GET/payment-method",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "sort by available field default is `createdTime`"
+                    },
+                    {
+                        "name": "sortOrder",
+                        "in": "query",
+                        "required": false,
+                        "type": "enum",
+                        "description": "sort order asc or desc (asc, desc) default is `asc`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {},
+                        "examples":{
+                            "application/json": {
+                                "status": true,
+                                "data": [
+                                  {
+                                      "_id":"627b66fbe6fa4851946952f8",
+                                      "pmId": "pm_1KyA3qDZD9rsZ5eZiapogMHy",
+                                        "customerId": "cus_LfS6wEHrQZoaiv",
+                                        "organizationId": "6278bd39a6834b1ac010ca43",
+                                      "cardholderName": "John Doe",
+                                      "type":"card",
+                                      "brand":"Visa",
+                                      "country":"US",
+                                      "funding":"credit",
+                                      "last4": "8210",
+                                      "expMonth": 12,
+                                      "expYear": 2025,
+                                      "cvc": 123,
+                                      "isPrimary": false,
+                                      "updatedTime": "2022-04-27T15:13:12.529Z",
+                                        "createdTime": "2022-04-27T15:12:34.104Z",
+                                      "billingAddress": {
+                                          "city": "Jakarta",
+                                          "country": "ID",
+                                          "state": "Jakarta Pusat",
+                                          "postalCode": "41234",
+                                          "address": "Jl Sesame Street 123"
+                                      }
+                                  }
+                                ]
+                            } 
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/payment-method/{id}": {
+          "get": {
+                "summary": "Read by ID",
+                "tags": [
+                    "Payment Methods"
+                ],
+                "operationId": "GET/payment-method/{id}",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {},
+                        "examples":{
+                            "application/json": {
+                                "status": true,
+                                "data": {
+                                    "_id":"627b66fbe6fa4851946952f8",
+                                    "pmId": "pm_1KyA3qDZD9rsZ5eZiapogMHy",
+                                    "customerId": "cus_LfS6wEHrQZoaiv",
+                                    "organizationId": "6278bd39a6834b1ac010ca43",
+                                    "cardholderName": "John Doe",
+                                    "type":"card",
+                                    "brand":"Visa",
+                                    "country":"US",
+                                    "funding":"credit",
+                                    "last4": "8210",
+                                    "expMonth": 12,
+                                    "expYear": 2025,
+                                    "cvc": 123,
+                                    "isPrimary": false,
+                                    "updatedTime": "2022-04-27T15:13:12.529Z",
+                                        "createdTime": "2022-04-27T15:12:34.104Z",
+                                    "billingAddress": {
+                                        "city": "Jakarta",
+                                        "country": "ID",
+                                        "state": "Jakarta Pusat",
+                                        "postalCode": "41234",
+                                        "address": "Jl Sesame Street 123"
+                                    }
+                                }
+                            } 
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+          },
+            "put": {
+                "summary": "Update",
+                "tags": [
+                    "Payment Methods"
+                ],
+                "operationId": "PUT/payment-method",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "description": "**Below is detail each field for Body API Payment Method**\n| Field | Type |  Description | Required |\n| ------ | ------ | ------ | ------ |\n| expYear | number | card expire year | true |\n| expMonth | number | card expire month | true |\n",
+                        "schema": {
+                          "$ref": "#/definitions/POST-payment-method"
+                        }
+                    }
+                ],
+                "responses" : {
+                  "200" :{
+                    "description": "",
+                    "headers": {},
+                    "examples": {
+                      "application/json":{
+                          "status": true,
+                          "data": {
+                                "_id":"627b66fbe6fa4851946952f8",
+                                "pmId": "pm_1KyA3qDZD9rsZ5eZiapogMHy",
+                                "customerId": "cus_LfS6wEHrQZoaiv",
+                                "organizationId": "6278bd39a6834b1ac010ca43",
+                                "cardholderName": "John Doe",
+                                "type":"card",
+                                "brand":"Visa",
+                                "country":"US",
+                                "funding":"credit",
+                                "last4": "8210",
+                                "expMonth": 12,
+                                "expYear": 2025,
+                                "cvc": 123,
+                                "billingAddress": {
+                                    "city": "Jakarta",
+                                    "country": "ID",
+                                    "state": "Jakarta Pusat",
+                                    "postalCode": "41234",
+                                    "address": "Jl Sesame Street 123"
+                                }
+                          }
+                      } 
+                    }
+                  },
+                  "422": {
+                        "description": "Bad Request",
+                        "schema": {
+                        },
+                        "examples": {
+                            "application/json": {
+                                "message": "The expMonth name field is required. (and 1 more errors)",
+                                "errors": {
+                                    "expMonth": [
+                                        "The exp month field is required."
+                                    ],
+                                    "expYear": [
+                                        "The exp year field is required."
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                          "description": "Unauthorized",
+                          "examples": {
+                              "application/json": {
+                                  "status": false,
+                                  "message": "Unauthorized",
+                                  "failedCode": "pymnt-032"
+                              }
+                          }
+                      },
+                    "500": {
+                        "description": "Error",
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "statusCode": 500,
+                                "message": "Failed to update payment method: ",
+                                "failedCode": "pymnt-036"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete",
+                "tags": [
+                    "Payment Methods"
+                ],
+                "operationId": "DELETE/payment-method/{id}",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                ],
+                "responses" : {
+                  "200" :{
+                    "description": "",
+                    "headers": {},
+                    "examples": {
+                      "application/json":{
+                          "status": true,
+                          "data": {
+                                "_id":"627b66fbe6fa4851946952f8",
+                                "pmId": "pm_1KyA3qDZD9rsZ5eZiapogMHy",
+                                "customerId": "cus_LfS6wEHrQZoaiv",
+                                "organizationId": "6278bd39a6834b1ac010ca43",
+                                "cardholderName": "John Doe",
+                                "type":"card",
+                                "brand":"Visa",
+                                "country":"US",
+                                "funding":"credit",
+                                "last4": "8210",
+                                "expMonth": 12,
+                                "expYear": 2025,
+                                "cvc": 123,
+                                "isPrimary": false,
+                                "updatedTime": "2022-04-27T15:13:12.529Z",
+                                        "createdTime": "2022-04-27T15:12:34.104Z",
+                                "billingAddress": {
+                                    "city": "Jakarta",
+                                    "country": "ID",
+                                    "state": "Jakarta Pusat",
+                                    "postalCode": "41234",
+                                    "address": "Jl Sesame Street 123"
+                                }
+                          }
+                      } 
+                    }
+                  },
+                    "400": {
+                        "description": "You must maintain at least one payment method.",
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "You must maintain at least one payment method.",
+                                "failedCode": "pymnt-040"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/payment-method": {
+            "post": {
+                "summary": "Create",
+                "tags": [
+                    "Payment Methods"
+                ],
+                "operationId": "POST/payment-method",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "description": "**Below is detail each field for Body API Payment Method**\n| Field | Type |  Description | Required |\n| ------ | ------ | ------ | ------ |\n| cardholderName | string | card holder name | true |\n| number | number | card number | true |\n| expYear | number | card expire year | true |\n| expMonth | number | card expire month | true |\n| cvc | number | card cvc | true |\n| billingAddress.city | string | billing address city | false |\n| billingAddress.country | string | this value is country code stantard ISO 3166-1 alpha-2 ex: ID, US ,SG  |false|\n| billingAddress.state | string | billing address state |false|\n| billingAddress.postalCode | string | billing address postal code |false|\n| billingAddress.address | string | billing address |false|",
+                        "schema": {
+                          "$ref": "#/definitions/POST-payment-method"
+                        }
+                    }
+                ],
+                "responses" : {
+                  "200" :{
+                    "description": "",
+                    "headers": {},
+                    "examples": {
+                      "application/json":{
+                          "status": true,
+                          "data": {
+                                "_id":"627b66fbe6fa4851946952f8",
+                                "pmId": "pm_1KyA3qDZD9rsZ5eZiapogMHy",
+                                "customerId": "cus_LfS6wEHrQZoaiv",
+                                "organizationId": "6278bd39a6834b1ac010ca43",
+                                "cardholderName": "John Doe",
+                                "type":"card",
+                                "brand":"Visa",
+                                "country":"US",
+                                "funding":"credit",
+                                "last4": "8210",
+                                "expMonth": 12,
+                                "expYear": 2025,
+                                "cvc": 123,
+                                "isPrimary": false,
+                                "updatedTime": "2022-04-27T15:13:12.529Z",
+                                        "createdTime": "2022-04-27T15:12:34.104Z",
+                                "billingAddress": {
+                                    "city": "Jakarta",
+                                    "country": "ID",
+                                    "state": "Jakarta Pusat",
+                                    "postalCode": "41234",
+                                    "address": "Jl Sesame Street 123"
+                                }
+                          }
+                      } 
+                    }
+                  },
+                  "422": {
+                      "description": "Unprocessable Content",
+                      "schema": {
+                      },
+                      "examples": {
+                          "application/json": {
+                                "message": "The cardholder name field is required. (and 4 more errors)",
+                                "errors": {
+                                    "cardholderName": [
+                                        "The cardholder name field is required."
+                                    ],
+                                    "number": [
+                                        "The number field is required."
+                                    ],
+                                    "expMonth": [
+                                        "The exp month field is required."
+                                    ],
+                                    "expYear": [
+                                        "The exp year field is required."
+                                    ],
+                                    "cvc": [
+                                        "The cvc field is required."
+                                    ]
+                                }
+                            }
+                      }
+                  }
+                }
+            }
+        },
+        "/payment-method/{id}/default": {
+            "post": {
+                "summary": "Set Default",
+                "tags": [
+                    "Payment Methods"
+                ],
+                "operationId": "POST/payment-method/{id}/default",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                ],
+                "responses" : {
+                  "200" :{
+                    "description": "",
+                    "headers": {},
+                    "examples": {
+                      "application/json":{
+                          "status": true,
+                          "data": {
+                                "_id":"627b66fbe6fa4851946952f8",
+                                "pmId": "pm_1KyA3qDZD9rsZ5eZiapogMHy",
+                                "customerId": "cus_LfS6wEHrQZoaiv",
+                                "organizationId": "6278bd39a6834b1ac010ca43",
+                                "cardholderName": "John Doe",
+                                "type":"card",
+                                "brand":"Visa",
+                                "country":"US",
+                                "funding":"credit",
+                                "last4": "8210",
+                                "expMonth": 12,
+                                "expYear": 2025,
+                                "cvc": 123,
+                                "isPrimary": true,
+                                "billingAddress": {
+                                    "city": "Jakarta",
+                                    "country": "ID",
+                                    "state": "Jakarta Pusat",
+                                    "postalCode": "41234",
+                                    "address": "Jl Sesame Street 123"
+                                }
+                          }
+                      } 
+                    }
+                  }
+                }
+            }
+        }
+    },
+    "definitions": {
+      "POST-payment-method": {
+          "title": "POST/payment-method",
+          "example": {
+                "_id":"627b66fbe6fa4851946952f8",
+                "pmId": "pm_1KyA3qDZD9rsZ5eZiapogMHy",
+                "customerId": "cus_LfS6wEHrQZoaiv",
+                "organizationId": "6278bd39a6834b1ac010ca43",
+                "cardholderName": "John Doe",
+                "type":"card",
+                "brand":"Visa",
+                "country":"US",
+                "funding":"credit",
+                "last4": "8210",
+                "expMonth": 12,
+                "expYear": 2025,
+                "cvc": 123,
+                "isPrimary": false,
+                "updatedTime": "2022-04-27T15:13:12.529Z",
+                                        "createdTime": "2022-04-27T15:12:34.104Z",
+                "billingAddress": {
+                    "city": "Jakarta",
+                    "country": "ID",
+                    "state": "Jakarta Pusat",
+                    "postalCode": "41234",
+                    "address": "Jl Sesame Street 123"
+                }
+          },
+          "type": "object",
+          "properties": {
+          },
+          "required": [
+          ]
+      }
+    },
+    "security": [],
+    "tags": [
+        {
+            "name": "Payment Methods",
+            "description": ""
+        }
+    ]
+}

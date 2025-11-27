@@ -1,0 +1,491 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MileApp Webhooks",
+    "description": "Webhook events from MileApp",
+    "version": "1.0.0"
+  },
+  "webhooks": {
+    "task-events": {
+      "post": {
+        "summary": "Task events",
+        "operationId": "on-task",
+        "description": "Triggered when tasks are created, assigned, or completed. In this example, the flow called `Delivery` has 2 fields: **invoice** and **deliveryCoordinate**.",
+        "tags": ["Webhook"],
+        "requestBody": {
+          "description": "Task event payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskEvent"
+              },
+              "examples": {
+                "onCreate": {
+                  "summary": "Payload on task create",
+                  "value": {
+                    "invoice": "INV001",
+                    "deliveryCoordinate": "-6.2407825,107.042144",
+                    "hubId": "640fc11832c0de76065d8922",
+                    "flowId": "640fc11932c0de76065d8923",
+                    "hub": {
+                      "lng": 106.79073,
+                      "_id": "640fc11832c0de76065d8922",
+                      "deleteAccess": true,
+                      "name": "Jakarta",
+                      "lat": -6.17549
+                    },
+                    "endTime": "2023-07-19T06:57:00+00:00",
+                    "assignee": [],
+                    "flow": "Delivery",
+                    "status": "UNASSIGNED",
+                    "_id": "64b4e719dc92e91ae936d664",
+                    "organizationId": "640fc0f0c53fdd421d7a8d32",
+                    "startTime": "2023-07-17T06:57:00+00:00",
+                    "createdTime": "2023-07-17T07:00:41+00:00",
+                    "updatedTime": "2023-07-17T07:00:41+00:00",
+                    "createdBy": "Jhon Web",
+                    "createdFrom": "WEB",
+                    "orderIndex": 168957724193012
+                  }
+                },
+                "onAssign": {
+                  "summary": "Payload on task assign",
+                  "value": {
+                    "invoice": "INV001",
+                    "deliveryCoordinate": "-6.2407825,107.042144",
+                    "hubId": "640fc11832c0de76065d8922",
+                    "flowId": "640fc11932c0de76065d8923",
+                    "hub": {
+                      "lng": 106.79073,
+                      "_id": "640fc11832c0de76065d8922",
+                      "deleteAccess": true,
+                      "name": "Jakarta",
+                      "lat": -6.17549
+                    },
+                    "endTime": "2023-07-19T06:57:00+00:00",
+                    "flow": "Delivery",
+                    "status": "ONGOING",
+                    "_id": "64b4e719dc92e91ae936d664",
+                    "organizationId": "640fc0f0c53fdd421d7a8d32",
+                    "startTime": "2023-07-17T06:57:00+00:00",
+                    "createdTime": "2023-07-17T07:00:41+00:00",
+                    "updatedTime": "2023-07-17T07:00:41+00:00",
+                    "createdBy": "Jhon Web",
+                    "createdFrom": "WEB",
+                    "orderIndex": 168957724193012,
+                    "assignedBy": "Sofia Satu",
+                    "assignee": ["sofia+1@paket.id"],
+                    "assignedTo": {
+                      "organization": null,
+                      "name": "Sofia Satu",
+                      "hubId": ["640fc11832c0de76065d8922", "640fde1a0546fe0d450ae152"],
+                      "role": null,
+                      "_id": "640fc0f0c53fdd421d7a8d38",
+                      "email": "sofia+1@paket.id"
+                    },
+                    "assignedTime": "2023-07-17T07:05:00+00:00"
+                  }
+                },
+                "onFinish": {
+                  "summary": "Payload on task finish",
+                  "value": {
+                    "invoice": "INV001",
+                    "deliveryCoordinate": "-6.2407825,107.042144",
+                    "hubId": "640fc11832c0de76065d8922",
+                    "flowId": "640fc11932c0de76065d8923",
+                    "hub": {
+                      "lng": 106.79073,
+                      "_id": "640fc11832c0de76065d8922",
+                      "deleteAccess": true,
+                      "name": "Jakarta",
+                      "lat": -6.17549
+                    },
+                    "endTime": "2023-07-19T06:57:00+00:00",
+                    "flow": "Delivery",
+                    "status": "DONE",
+                    "_id": "64b4e719dc92e91ae936d664",
+                    "organizationId": "640fc0f0c53fdd421d7a8d32",
+                    "startTime": "2023-07-17T06:57:00+00:00",
+                    "createdTime": "2023-07-17T07:00:41+00:00",
+                    "updatedTime": "2023-07-17T07:00:41+00:00",
+                    "createdBy": "Jhon Web",
+                    "createdFrom": "WEB",
+                    "orderIndex": 168957724193012,
+                    "assignedBy": "Sofia Satu",
+                    "assignee": ["sofia+1@paket.id"],
+                    "assignedTo": {
+                      "organization": null,
+                      "name": "Sofia Satu",
+                      "hubId": ["640fc11832c0de76065d8922", "640fde1a0546fe0d450ae152"],
+                      "role": null,
+                      "_id": "640fc0f0c53fdd421d7a8d38",
+                      "email": "sofia+1@paket.id"
+                    },
+                    "assignedTime": "2023-07-17T07:05:00+00:00",
+                    "doneBy": "Jhon worker",
+                    "doneTime": "2023-06-20T18:47:18+00:00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return 200 status to indicate that the data was received successfully"
+          }
+        }
+      }
+    },
+    "data-source-created": {
+      "post": {
+        "summary": "On data source created",
+        "operationId": "data-source",
+        "description": "Triggered when a new data source record is created. In this example, there are 2 fields: **name** and **phone**.",
+        "tags": ["Webhook"],
+        "requestBody": {
+          "description": "Data source event payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceEvent"
+              },
+              "example": {
+                "dataTypeId": "64b40345140e79f485069c5a",
+                "hubId": "640fc11832c0de76065d8922",
+                "name": "Jhon doe",
+                "_id": "64b40372f07e26ccb8059bbb",
+                "organizationId": "640fc0f0c53fdd421d7a8d32",
+                "dataId": "1",
+                "phone": "00112233",
+                "createdTime": "2023-07-16 14:49:22",
+                "updatedTime": "2023-07-16 14:49:22",
+                "createdBy": "jhondoe@mile.app"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return 200 status to indicate that the data was received successfully"
+          }
+        }
+      }
+    },
+    "routing-events": {
+      "post": {
+        "summary": "Routing events",
+        "operationId": "on-routing",
+        "description": "Triggered when route optimization completes or routes are dispatched. In this example, there are 2 capacity constraints: **weight** and **volume**.",
+        "tags": ["Webhook"],
+        "requestBody": {
+          "description": "Routing event payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoutingEvent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return 200 status to indicate that the data was received successfully"
+          }
+        }
+      }
+    },
+    "trip-events": {
+      "post": {
+        "summary": "Trip events",
+        "operationId": "on-trips",
+        "description": "Triggered when field workers start or finish their trips.",
+        "tags": ["Webhook"],
+        "requestBody": {
+          "description": "Trip event payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TripEvent"
+              },
+              "examples": {
+                "onStartTrip": {
+                  "summary": "Payload on start trip",
+                  "value": {
+                    "createdBy": "jhondoe2@paket.id",
+                    "updatedBy": null,
+                    "time": 1726734839948,
+                    "startTime": "2024-09-19 00:00:00",
+                    "distanceToDest": null,
+                    "email": "jhondoe1@paket.id",
+                    "organizationId": "66791b2bf001a712b77b3622",
+                    "taskId": "",
+                    "distance": 0.01821796355451168,
+                    "notes": null,
+                    "finish": null,
+                    "lon": 112.7573265,
+                    "lat": -7.3411964,
+                    "updatedTime": "2024-09-19 08:33:59",
+                    "speed": 1,
+                    "duration": 1,
+                    "createdTime": "2024-09-19 00:00:00",
+                    "eventName": "otw",
+                    "isLatest": true,
+                    "_id": "66791b2bf001a712b77b3622_jhondoe1@paket.id_20240919070000s"
+                  }
+                },
+                "onFinishTrip": {
+                  "summary": "Payload on finish trip",
+                  "value": {
+                    "createdBy": "jhondoe2@paket.id",
+                    "updatedBy": "jhondoe2@paket.id",
+                    "time": 1726734839948,
+                    "startTime": "2024-09-19 00:00:00",
+                    "distanceToDest": null,
+                    "email": "jhondoe1@paket.id",
+                    "organizationId": "66791b2bf001a712b77b3622",
+                    "taskId": "",
+                    "distance": 0.01821796355451168,
+                    "notes": null,
+                    "finish": {
+                      "finishTime": "2024-09-19 01:00:00",
+                      "lat": -7.3411964,
+                      "totalDuration": 3,
+                      "notes": null,
+                      "isRecalculate": 1,
+                      "totalDistance": 0,
+                      "lon": 112.7573265
+                    },
+                    "lon": 112.7573265,
+                    "lat": -7.3411964,
+                    "updatedTime": "2024-09-19 08:34:57",
+                    "speed": 1,
+                    "duration": 1,
+                    "createdTime": "2024-09-19 00:00:00",
+                    "eventName": "otw",
+                    "isLatest": false,
+                    "_id": "66791b2bf001a712b77b3622_jhondoe1@paket.id_20240919070000s"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return 200 status to indicate that the data was received successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TaskEvent": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier of the task"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization ID associated with the task"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Hub ID associated with the task"
+          },
+          "flowId": {
+            "type": "string",
+            "description": "Flow ID associated with the task"
+          },
+          "flow": {
+            "type": "string",
+            "description": "Flow name"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["UNASSIGNED", "ONGOING", "DONE"],
+            "description": "Task status"
+          },
+          "startTime": {
+            "type": "string",
+            "description": "Expected start time (ISO 8601)"
+          },
+          "endTime": {
+            "type": "string",
+            "description": "Expected end time (ISO 8601)"
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Task creation timestamp (ISO 8601)"
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Last update timestamp (ISO 8601)"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Name of the user who created the task"
+          },
+          "createdFrom": {
+            "type": "string",
+            "enum": ["WEB", "API"],
+            "description": "Source of task creation"
+          },
+          "assignedBy": {
+            "type": "string",
+            "description": "Name of the person who assigned the task"
+          },
+          "assignee": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of assignee email addresses"
+          },
+          "assignedTime": {
+            "type": "string",
+            "description": "Assignment timestamp (ISO 8601)"
+          },
+          "doneBy": {
+            "type": "string",
+            "description": "Name of the worker who completed the task"
+          },
+          "doneTime": {
+            "type": "string",
+            "description": "Completion timestamp (ISO 8601)"
+          }
+        }
+      },
+      "DataSourceEvent": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for this data source record"
+          },
+          "dataTypeId": {
+            "type": "string",
+            "description": "Unique identifier of the data type"
+          },
+          "dataId": {
+            "type": "string",
+            "description": "Data entry ID within the data source"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization ID associated with this data"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Hub ID associated with this data"
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Record creation timestamp"
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Last update timestamp"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email address of the user who created the record"
+          }
+        }
+      },
+      "RoutingEvent": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier of the routing result"
+          },
+          "resultCode": {
+            "type": "string",
+            "description": "Alternative identifier (e.g., Route-20230801-001)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the route optimization"
+          },
+          "status": {
+            "type": "string",
+            "description": "Optimization status"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization ID"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Hub ID"
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Creation timestamp (ISO 8601)"
+          },
+          "finishTime": {
+            "type": "string",
+            "description": "Optimization completion timestamp"
+          }
+        }
+      },
+      "TripEvent": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the trip"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the field worker"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization ID associated with the trip"
+          },
+          "taskId": {
+            "type": "string",
+            "description": "Associated task ID (if applicable)"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email of the person who created/initiated the trip"
+          },
+          "startTime": {
+            "type": "string",
+            "description": "Trip start time"
+          },
+          "lat": {
+            "type": "number",
+            "description": "Current latitude"
+          },
+          "lon": {
+            "type": "number",
+            "description": "Current longitude"
+          },
+          "distance": {
+            "type": "number",
+            "description": "Distance traveled"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Trip duration"
+          },
+          "eventName": {
+            "type": "string",
+            "description": "Event type (e.g., otw for on the way)"
+          },
+          "isLatest": {
+            "type": "boolean",
+            "description": "Whether this is the latest trip log entry"
+          }
+        }
+      }
+    }
+  }
+}

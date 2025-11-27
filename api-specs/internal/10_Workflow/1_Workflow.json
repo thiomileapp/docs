@@ -1,0 +1,1312 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1",
+    "title": "Workflow",
+    "description": "\nA **Workflow** is a reusable template that defines a sequence of steps (flows) for creating activities. Each workflow consists of multiple sequential steps, where each step references a specific flow type with field mappings, assignee configuration, and status transitions.\n\n**Key Concepts:**\n- **Workflow Template**: Reusable configuration defining the structure of activities with multiple flow steps\n- **Workflow Steps**: Sequential steps that each reference a flow type, with auto-populated field schemas and optional field mappings\n- **Field Mappings**: Configuration to map data from previous steps to current step fields (manual or step-based)\n- **Custom Statuses**: Organization-specific status definitions used in statusMapping for activity progress tracking\n- **Flow Integration**: Each step references a Flow document, with field schema auto-populated from the flow configuration\n- **Activity Creation**: Workflows are used as templates when creating activities via Activity API\n\n**Workflow Structure:**\n| Field | Type | Format | Description |\n|---|---|---|---|\n| _id | <a href='#introduction-format'>string</a> | *24 characters of hexadecimal* | Unique identifier for the workflow.<br>**Example**: `634e98098ce07d29474a7e22`|\n| name | <a href='#introduction-format'>string</a> | 2-100 characters | Workflow name (unique within organization).<br>**Example:** `Delivery Workflow`|\n| organizationId | <a href='#introduction-format'>string</a> | *24 characters of hexadecimal* | The identifier for the organization.<br>**Example:** `634e98098ce07d29474a7e22`|\n| steps | <a href='#introduction-format'>array</a> | 1-10 steps | Array of workflow steps with flow configuration.<br>Each step includes flowId, flowName, assigneeId, statusMapping, fieldMappings, and auto-populated fieldSchema.|\n| &nbsp;&nbsp;&nbsp;[N].order | <a href='#introduction-format'>integer</a> | 0-based index | Step order in workflow sequence (auto-generated from array index).<br>**Example:** `0`, `1`, `2`|\n| &nbsp;&nbsp;&nbsp;[N].flowId | <a href='#introduction-format'>string</a> | *24 characters of hexadecimal* | Reference to Flow document (must exist and be unique within workflow).<br>**Example:** `68f745b22fd43e839c0cfa92`|\n| &nbsp;&nbsp;&nbsp;[N].flowName | <a href='#introduction-format'>string</a> | | Flow display name (auto-populated from Flow document).<br>**Example:** `Delivery A`|\n| &nbsp;&nbsp;&nbsp;[N].assigneeId | <a href='#introduction-format'>string</a> | *24 characters of hexadecimal* or empty | Default assignee user ID for this step (optional, must exist if provided).<br>**Example:** `677213ce1d84c3e40f06f088`|\n| &nbsp;&nbsp;&nbsp;[N].statusMapping | <a href='#introduction-format'>string</a> | | Custom status name from customStatuses array.<br>Maps to activity subStatus when this step completes.<br>**Example:** `Done`, `Pickup`, `Delivered`|\n| &nbsp;&nbsp;&nbsp;[N].fieldMappings | <a href='#introduction-format'>array</a> | | Field mapping configuration (only for step index > 0).<br>Maps data from previous steps to current step fields.|\n| &nbsp;&nbsp;&nbsp;[N].fieldSchema | <a href='#introduction-format'>array</a> | | Available fields for this step (auto-populated from Flow document).<br>Contains field definitions with id, label, type, validation rules.|\n| customStatuses | <a href='#introduction-format'>array</a> | | Custom status definitions for activity tracking.<br>**Default:** `Unassigned`, `Ongoing`, `Done`|\n| &nbsp;&nbsp;&nbsp;[N].name | <a href='#introduction-format'>string</a> | 1-50 characters | Status name.<br>**Example:** `Pickup`, `Delivered`|\n| &nbsp;&nbsp;&nbsp;[N].isDefault | <a href='#introduction-format'>boolean</a> | | Whether this is a default system status.<br>**Example:** `true` (for Unassigned, Ongoing, Done), `false` (for custom statuses)|\n| createdBy | <a href='#introduction-format'>string</a> | email | Email of user who created the workflow.|\n| updatedBy | <a href='#introduction-format'>string</a> | email | Email of user who last updated the workflow.|\n| createdTime | <a href='#introduction-format'>datetime</a> | `Y-m-d\\TH:i:sP` | Time at which the workflow was created.|\n| updatedTime | <a href='#introduction-format'>datetime</a> | `Y-m-d\\TH:i:sP` | Time at which the workflow was last updated.|\n\n**Field Mapping Structure (fieldMappings array):**\n| Field | Type | Format | Description |\n|---|---|---|---|\n| targetField | <a href='#introduction-format'>string</a> | | Target field ID in current step.<br>**Example:** `requesterName`, `customerAddress`|\n| sourceType | <a href='#introduction-format'>string</a> | `manual`, `step`, `direct` | Type of mapping source.<br>`manual`: Static value, `step`: From previous step field, `direct`: Direct value.|\n| sourceStepId | <a href='#introduction-format'>string</a> or null | *24 characters of hexadecimal* | Source step ID (null for manual type).<br>**Example:** `null` (manual), `68f745b22fd43e839c0cfa92` (step)|\n| sourceField | <a href='#introduction-format'>string</a> | | Source field ID or static value.<br>**Example:** `Test 1` (manual value), `requesterName` (step field)|\n\n**This collection API will show you how to manage Workflow templates for activity creation.**\n"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/internal/workflows": {
+      "get": {
+        "summary": "Get All Workflows",
+        "tags": ["Workflow"],
+        "description": "Retrieves a paginated list of workflows for the organization. Results are ordered by createdTime descending (newest first).",
+        "operationId": "GetWorkflowsInternal",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 10,
+            "description": "Number of items per page (max 2000 if limit=-1)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workflows retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/WorkflowListResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request - validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create Workflow",
+        "tags": ["Workflow"],
+        "description": "Create a new workflow template with defined steps and field mappings.\n\n**Process:**\n1. Validates workflow name uniqueness within organization\n2. Validates each step's flowId exists and is unique within workflow\n3. Validates assigneeId exists if provided (optional)\n4. Auto-populates flowName and fieldSchema from Flow documents\n5. Auto-generates step order from array index\n6. Validates field mappings for steps after first step (index > 0)\n7. Sets default customStatuses if not provided (Unassigned, Ongoing, Done)\n\n**Important Notes:**\n- Workflow name must be unique within organization (2-100 characters)\n- Maximum 10 steps allowed per workflow\n- No duplicate flowIds allowed within same workflow\n- Field mappings only allowed for steps after first step (index > 0)\n- Backend auto-populates: order, flowName, fieldSchema, createdTime, updatedTime, createdBy, updatedBy",
+        "operationId": "CreateWorkflow",
+        "deprecated": false,
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Workflow creation payload",
+            "schema": {
+              "type": "object",
+              "required": ["name", "steps"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 100,
+                  "description": "Workflow name (must be unique within organization).<br>**Example:** `Testing untuk Payload`"
+                },
+                "steps": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 10,
+                  "description": "Array of workflow steps. No duplicate flowIds allowed.<br>**Note:** Frontend may send `order` and `flowName`, but backend auto-generates these fields.",
+                  "items": {
+                    "type": "object",
+                    "required": ["flowId"],
+                    "properties": {
+                      "flowId": {
+                        "type": "string",
+                        "description": "Flow ID (must exist and be unique within workflow).<br>**Example:** `68f745b22fd43e839c0cfa92`"
+                      },
+                      "assigneeId": {
+                        "type": "string",
+                        "description": "Optional default assignee user ID (must exist if provided). Empty string treated as null.<br>**Example:** `677213ce1d84c3e40f06f088` or `\"\"`"
+                      },
+                      "statusMapping": {
+                        "type": "string",
+                        "description": "Custom status name from customStatuses array.<br>**Example:** `Done`, `Pickup`, `Delivered`"
+                      },
+                      "fieldMappings": {
+                        "type": "array",
+                        "description": "Field mappings from previous steps (only for step index > 0).<br>First step should have empty array.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "targetField": {
+                              "type": "string",
+                              "description": "Target field ID in current step.<br>**Example:** `requesterName`"
+                            },
+                            "sourceType": {
+                              "type": "string",
+                              "enum": ["manual", "step", "direct"],
+                              "description": "Type of mapping source.<br>**Example:** `manual`"
+                            },
+                            "sourceStepId": {
+                              "type": ["string", "null"],
+                              "description": "Source step ID (null for manual type).<br>**Example:** `null`"
+                            },
+                            "sourceField": {
+                              "type": "string",
+                              "description": "Source field ID or static value.<br>**Example:** `Test 1` (manual value)"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "customStatuses": {
+                  "type": "array",
+                  "description": "Custom status definitions. If empty, defaults to: Unassigned, Ongoing, Done.",
+                  "items": {
+                    "type": "object",
+                    "required": ["name"],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50,
+                        "description": "Status name.<br>**Example:** `Pickup`, `Delivered`"
+                      },
+                      "isDefault": {
+                        "type": "boolean",
+                        "description": "Whether this is a default system status.<br>**Example:** `true` (for Unassigned, Ongoing, Done), `false` (custom)"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Testing untuk Payload",
+                "steps": [
+                  {
+                    "order": 1,
+                    "flowId": "68f745b22fd43e839c0cfa92",
+                    "flowName": "Delivery A",
+                    "assigneeId": "677213ce1d84c3e40f06f088",
+                    "statusMapping": "Done",
+                    "fieldMappings": []
+                  },
+                  {
+                    "order": 2,
+                    "flowId": "68f1eaa8b0c75de883077522",
+                    "flowName": "Finish",
+                    "assigneeId": "",
+                    "statusMapping": "Pickup",
+                    "fieldMappings": [
+                      {
+                        "targetField": "requesterName",
+                        "sourceType": "manual",
+                        "sourceStepId": null,
+                        "sourceField": "Test 1"
+                      },
+                      {
+                        "targetField": "item",
+                        "sourceType": "manual",
+                        "sourceStepId": null,
+                        "sourceField": "dwadawd"
+                      }
+                    ]
+                  },
+                  {
+                    "order": 3,
+                    "flowId": "68b67402cbed0bf35c055b62",
+                    "flowName": "Picking",
+                    "assigneeId": "677213ce1d84c3e40f06f088",
+                    "statusMapping": "Delivered",
+                    "fieldMappings": [
+                      {
+                        "targetField": "customerName",
+                        "sourceType": "manual",
+                        "sourceStepId": null,
+                        "sourceField": "Test 1"
+                      }
+                    ]
+                  }
+                ],
+                "customStatuses": [
+                  {
+                    "name": "Unassigned",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Ongoing",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Done",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Pickup",
+                    "isDefault": false
+                  },
+                  {
+                    "name": "Delivered",
+                    "isDefault": false
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Workflow created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 201
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Workflow created successfully"
+                },
+                "data": {
+                  "type": "object",
+                  "description": "Workflow object with auto-populated fields (order, flowName, fieldSchema)",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "634e98098ce07d29474a7e22"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Testing untuk Payload"
+                    },
+                    "organizationId": {
+                      "type": "string",
+                      "example": "634e98098ce07d29474a7e20"
+                    },
+                    "steps": {
+                      "type": "array",
+                      "description": "Steps with auto-populated order, flowName, and fieldSchema from Flow documents",
+                      "items": {
+                        "type": "object"
+                      },
+                      "example": [
+                        {
+                          "order": 0,
+                          "flowId": "68f745b22fd43e839c0cfa92",
+                          "flowName": "Delivery A",
+                          "assigneeId": "677213ce1d84c3e40f06f088",
+                          "statusMapping": "Done",
+                          "fieldMappings": [],
+                          "fieldSchema": []
+                        }
+                      ]
+                    },
+                    "customStatuses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      },
+                      "example": [
+                        {
+                          "name": "Unassigned",
+                          "isDefault": true
+                        },
+                        {
+                          "name": "Ongoing",
+                          "isDefault": true
+                        },
+                        {
+                          "name": "Done",
+                          "isDefault": true
+                        },
+                        {
+                          "name": "Pickup",
+                          "isDefault": false
+                        },
+                        {
+                          "name": "Delivered",
+                          "isDefault": false
+                        }
+                      ]
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "example": "admin@example.com"
+                    },
+                    "updatedBy": {
+                      "type": "string",
+                      "example": "admin@example.com"
+                    },
+                    "createdTime": {
+                      "type": "string",
+                      "example": "2023-01-01T07:30:00+07:00"
+                    },
+                    "updatedTime": {
+                      "type": "string",
+                      "example": "2023-01-01T07:30:00+07:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - validation failed or duplicate name",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Workflow name already exists"
+                },
+                "failedCode": {
+                  "type": "string",
+                  "example": "WORKF_DUPLICATE_NAME"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": ["Step 1: Flow ID not found", "Step 2: Invalid assignee ID"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Workflow creation failed"
+                },
+                "failedCode": {
+                  "type": "string",
+                  "example": "WORKF_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/internal/workflows/search": {
+      "get": {
+        "summary": "Search Workflows",
+        "tags": ["Workflow"],
+        "description": "Search workflows using MongoDB text search with advanced filters.\n\n**Search Features:**\n- MongoDB text search on workflow name (query parameter: q)\n- Filter by creator email (createdBy)\n- Filter by step count range (stepsCountMin, stepsCountMax)\n- Pagination support (page, limit)\n- Automatic organizationId filtering\n\n**Performance Notes:**\n- Uses MongoDB text index on name field\n- Returns search metadata including query and filters\n- Indicates data source: mongodb_text_search",
+        "operationId": "SearchWorkflows",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "maxLength": 255,
+            "description": "Search query for workflow name (MongoDB text search)"
+          },
+          {
+            "name": "createdBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter by creator email"
+          },
+          {
+            "name": "stepsCountMin",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "description": "Minimum number of steps"
+          },
+          {
+            "name": "stepsCountMax",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "maximum": 10,
+            "description": "Maximum number of steps"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Page number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 10,
+            "description": "Items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/WorkflowSearchResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request - validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/workflow/{id}": {
+      "get": {
+        "summary": "Get Workflow by ID",
+        "tags": ["Workflow"],
+        "description": "Retrieve single workflow template by ID with complete step configuration.\n\n**Security:**\n- Automatically filtered by organizationId (IDOR protection)\n- Only returns workflows belonging to authenticated user's organization\n\n**Performance:**\n- Direct _id lookup (primary key)\n- Complete workflow object with all steps, fieldSchema, and customStatuses included",
+        "operationId": "GetWorkflowById",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Workflow identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workflow retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/WorkflowDetailResponse"
+            }
+          },
+          "404": {
+            "description": "Workflow not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update Workflow",
+        "tags": ["Workflow"],
+        "description": "Update an existing workflow template configuration.\n\n**Process:**\n1. Validates workflow exists and belongs to organization\n2. Validates workflow name uniqueness if name is being changed\n3. Validates steps configuration if steps are being updated (same as create)\n4. Auto-populates flowName and fieldSchema for updated steps\n5. Updates updatedBy and updatedTime automatically\n\n**Important Notes:**\n- All fields are optional (partial update supported)\n- Name must be unique within organization if changed\n- Steps validation follows same rules as create (max 10, no duplicate flowIds)\n- Backend auto-populates: order, flowName, fieldSchema, updatedBy, updatedTime",
+        "operationId": "UpdateWorkflow",
+        "deprecated": false,
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Workflow identifier"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateWorkflowRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workflow updated successfully",
+            "schema": {
+              "$ref": "#/definitions/WorkflowResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request - validation failed or duplicate name",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Workflow not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Workflow",
+        "tags": ["Workflow"],
+        "description": "Permanently delete a workflow template (hard delete).\n\n**Process:**\n1. Validates workflow exists and belongs to organization (IDOR protection)\n2. Performs forceDelete (permanent deletion, no soft delete)\n3. Clears workflow cache after successful deletion\n\n**Important Notes:**\n- Cannot be undone (hard delete, not soft delete)\n- Force and confirmed parameters available but currently not enforced\n- Consider checking workflow usage in activities before deletion\n- Deleting workflow does NOT delete existing activities created from this template",
+        "operationId": "DeleteWorkflow",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Workflow identifier"
+          },
+          {
+            "name": "force",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "Force delete even if in use (requires confirmed=true)"
+          },
+          {
+            "name": "confirmed",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false,
+            "description": "Confirmation for force delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workflow deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/DeleteWorkflowResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request - confirmation required or validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Workflow not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/workflow/{id}/steps/{stepOrder}/field-mapping-data": {
+      "get": {
+        "summary": "Get Field Mapping Data",
+        "tags": ["Workflow"],
+        "description": "Retrieve available fields from current and previous steps for field mapping configuration.\n\n**Use Case:**\n- Used by frontend when configuring field mappings for a workflow step\n- Provides list of available source fields from previous steps\n- Shows current step's target fields\n- Returns existing mappings if any\n\n**Response Data:**\n- currentStep: Current step info with flowId, flowName, and available fields (fieldSchema)\n- previousSteps: Array of previous steps with their available fields\n- existingMappings: Current field mappings if already configured\n\n**Important Notes:**\n- stepOrder is 0-based index (first step = 0, second step = 1, etc.)\n- Only steps before current step are returned in previousSteps\n- First step (stepOrder=0) will have empty previousSteps array",
+        "operationId": "GetFieldMappingData",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Workflow identifier"
+          },
+          {
+            "name": "stepOrder",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "minimum": 0,
+            "description": "Step order index (0-based)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Field mapping data retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/FieldMappingDataResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid stepOrder",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Workflow or step not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/workflow/{id}/steps/{stepOrder}/validate-field-mappings": {
+      "post": {
+        "summary": "Validate Field Mappings",
+        "tags": ["Workflow"],
+        "description": "Validate field mappings configuration for a specific workflow step before saving.\n\n**Validation Rules:**\n- Target field must exist in current step's fieldSchema\n- Source field must exist in source step's fieldSchema (for sourceType='step')\n- Source step must be before current step (sourceStepIndex < currentStepIndex)\n- Required fields must have valid mappings\n- Field type compatibility check between source and target\n\n**Use Case:**\n- Frontend validates mappings before saving workflow\n- Prevents invalid field mapping configuration\n- Provides detailed error messages for debugging\n\n**Response Data:**\n- valid: Boolean indicating if validation passed\n- errors: Array of validation error messages\n- warnings: Array of non-critical warnings",
+        "operationId": "ValidateFieldMappings",
+        "deprecated": false,
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Workflow identifier"
+          },
+          {
+            "name": "stepOrder",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "minimum": 0,
+            "description": "Step order index (0-based)"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ValidateFieldMappingsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validation completed",
+            "schema": {
+              "$ref": "#/definitions/ValidationResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request - validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Workflow or step not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "WorkflowObject": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Unique workflow identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Workflow name (unique within organization)"
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Organization identifier"
+        },
+        "steps": {
+          "type": "array",
+          "description": "Array of workflow steps with field schemas",
+          "items": {
+            "$ref": "#/definitions/WorkflowStep"
+          }
+        },
+        "customStatuses": {
+          "type": "array",
+          "description": "Custom status definitions",
+          "items": {
+            "$ref": "#/definitions/CustomStatus"
+          }
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Creator email"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Last updater email"
+        },
+        "createdTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedTime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "WorkflowStep": {
+      "type": "object",
+      "required": ["flowId"],
+      "properties": {
+        "flowId": {
+          "type": "string",
+          "description": "Flow identifier for this step (must exist)"
+        },
+        "flowName": {
+          "type": "string",
+          "description": "Flow display name (auto-populated)"
+        },
+        "assigneeId": {
+          "type": "string",
+          "description": "Default assignee user ID (optional, must exist)"
+        },
+        "statusMapping": {
+          "type": "string",
+          "description": "Status mapping configuration (optional)"
+        },
+        "fieldMappings": {
+          "type": "array",
+          "description": "Field mappings from previous steps (only for step 2+)",
+          "items": {
+            "$ref": "#/definitions/FieldMapping"
+          }
+        },
+        "fieldSchema": {
+          "type": "array",
+          "description": "Available fields for this step (auto-populated from flow)",
+          "items": {
+            "type": "object"
+          }
+        },
+        "order": {
+          "type": "integer",
+          "description": "Step order index (0-based, auto-populated)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "FieldMapping": {
+      "type": "object",
+      "properties": {
+        "sourceField": {
+          "type": "string",
+          "description": "Source field in format: $refFlow.fieldId or fieldId"
+        },
+        "sourceStep": {
+          "type": "integer",
+          "description": "Source step index (must be < current step)"
+        },
+        "targetField": {
+          "type": "string",
+          "description": "Target field in current step"
+        },
+        "sourceType": {
+          "type": "string",
+          "enum": ["manual", "step", "direct"],
+          "description": "Source type for mapping"
+        }
+      }
+    },
+    "CustomStatus": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "description": "Custom status name"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this is a default status"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "CreateWorkflowRequest": {
+      "type": "object",
+      "required": ["name", "steps"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Workflow name (must be unique)"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "description": "Workflow steps (no duplicate flowIds allowed)",
+          "items": {
+            "type": "object",
+            "required": ["flowId"],
+            "properties": {
+              "flowId": {
+                "type": "string"
+              },
+              "assigneeId": {
+                "type": "string"
+              },
+              "statusMapping": {
+                "type": "string"
+              },
+              "fieldMappings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/FieldMapping"
+                }
+              }
+            }
+          }
+        },
+        "customStatuses": {
+          "type": "array",
+          "description": "Custom status definitions (defaults provided if empty)",
+          "items": {
+            "$ref": "#/definitions/CustomStatus"
+          }
+        }
+      }
+    },
+    "UpdateWorkflowRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Updated workflow name (must be unique if changed)"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "description": "Updated workflow steps",
+          "items": {
+            "type": "object",
+            "required": ["flowId"],
+            "properties": {
+              "flowId": {
+                "type": "string"
+              },
+              "assigneeId": {
+                "type": "string"
+              },
+              "statusMapping": {
+                "type": "string"
+              },
+              "fieldMappings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/FieldMapping"
+                }
+              }
+            }
+          }
+        },
+        "customStatuses": {
+          "type": "array",
+          "description": "Updated custom status definitions",
+          "items": {
+            "$ref": "#/definitions/CustomStatus"
+          }
+        }
+      }
+    },
+    "WorkflowResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/WorkflowObject"
+        }
+      }
+    },
+    "WorkflowDetailResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/WorkflowObject"
+        }
+      }
+    },
+    "WorkflowListResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WorkflowObject"
+          }
+        },
+        "pagination": {
+          "type": "object",
+          "properties": {
+            "current_page": {
+              "type": "integer"
+            },
+            "per_page": {
+              "type": "integer"
+            },
+            "total": {
+              "type": "integer"
+            },
+            "last_page": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "WorkflowSearchResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WorkflowObject"
+          }
+        },
+        "pagination": {
+          "type": "object",
+          "properties": {
+            "current_page": {
+              "type": "integer"
+            },
+            "per_page": {
+              "type": "integer"
+            },
+            "total": {
+              "type": "integer"
+            },
+            "last_page": {
+              "type": "integer"
+            }
+          }
+        },
+        "search": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string"
+            },
+            "filters": {
+              "type": "object"
+            }
+          }
+        },
+        "source": {
+          "type": "string",
+          "enum": ["mongodb_text_search"],
+          "description": "Search data source"
+        }
+      }
+    },
+    "DeleteWorkflowResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "object",
+          "description": "Workflow usage statistics"
+        }
+      }
+    },
+    "FieldMappingDataResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "currentStep": {
+              "type": "object",
+              "properties": {
+                "stepOrder": {
+                  "type": "integer"
+                },
+                "flowId": {
+                  "type": "string"
+                },
+                "flowName": {
+                  "type": "string"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "previousSteps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "stepOrder": {
+                    "type": "integer"
+                  },
+                  "flowId": {
+                    "type": "string"
+                  },
+                  "flowName": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "existingMappings": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FieldMapping"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ValidateFieldMappingsRequest": {
+      "type": "object",
+      "required": ["fieldMappings"],
+      "properties": {
+        "fieldMappings": {
+          "type": "array",
+          "description": "Field mappings to validate",
+          "items": {
+            "$ref": "#/definitions/FieldMapping"
+          }
+        }
+      }
+    },
+    "ValidationResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean",
+              "description": "Whether validation passed"
+            },
+            "errors": {
+              "type": "array",
+              "description": "Validation error messages",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "description": "Validation warnings",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "default": false
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "failedCode": {
+          "type": "string",
+          "description": "Error code from ErrorCodes constants"
+        },
+        "errors": {
+          "type": "array",
+          "description": "Detailed validation errors",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confirmation_required": {
+          "type": "boolean",
+          "description": "Whether user confirmation is required (for force delete)"
+        }
+      }
+    }
+  }
+}

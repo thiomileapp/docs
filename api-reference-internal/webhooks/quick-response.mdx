@@ -1,0 +1,28 @@
+---
+title: "Quick Response Requirement"
+description: "Response time requirements for webhook endpoints"
+---
+
+<Warning>
+Your application must return an HTTP 200 status code within 30 seconds to confirm successful receipt and avoid timeouts and retries.
+</Warning>
+
+When your application receives a webhook from our service:
+
+1. **Return HTTP 200 quickly** - Do not include complex business logic in the initial processing
+2. **Offload heavy processing** - If the webhook triggers any long-running or computationally intensive tasks, offload these to a background process or a separate system
+3. **Keep handlers efficient** - This ensures that your webhook handler remains efficient and promptly returns the required HTTP 200 response
+
+## Best Practices
+
+### Do
+- Acknowledge receipt immediately with HTTP 200
+- Queue complex processing for background workers
+- Log the webhook payload for debugging
+- Validate the payload structure before processing
+
+### Don't
+- Perform database-heavy operations synchronously
+- Make external API calls before responding
+- Process large files inline
+- Run complex calculations in the request handler

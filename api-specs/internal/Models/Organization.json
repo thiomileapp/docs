@@ -1,0 +1,538 @@
+{
+  "components": {
+    "schemas": {
+      "OrganizationInternal": {
+        "type": "object",
+        "description": "Internal organization object with comprehensive administrative and operational details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the organization (MongoDB ObjectId). **Example**: `61a712ddec0441328052f262`"
+          },
+          "user": {
+            "type": "object",
+            "description": "Primary user information associated with the organization",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Primary user name or organization name. **Example**: `sofia@paket.id`"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Primary user email address. **Example**: `sofia@paket.id`"
+              },
+              "country": {
+                "type": "string",
+                "description": "Country code. **Example**: `IDN`"
+              },
+              "phoneNumber": {
+                "type": "string",
+                "description": "Contact phone number. **Example**: `+62 812345678`"
+              },
+              "numberOfUsers": {
+                "type": "string",
+                "description": "Expected number of users range. **Example**: `1-50`"
+              },
+              "industry": {
+                "type": "string",
+                "description": "Industry type. **Example**: `Distribution`"
+              },
+              "position": {
+                "type": "string",
+                "description": "User position in organization. **Example**: `Owner/Director`"
+              },
+              "companyName": {
+                "type": "string",
+                "description": "Company name. **Example**: `Paketid`"
+              },
+              "testemail": {
+                "type": "string",
+                "description": "Test email address for development/testing. **Example**: `grady@example.com`"
+              },
+              "hub": {
+                "type": "object",
+                "description": "Default hub information",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Hub name"
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "description": "Hub display name"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Hub address"
+                  },
+                  "lat": {
+                    "type": "string",
+                    "description": "Hub latitude"
+                  },
+                  "lng": {
+                    "type": "string",
+                    "description": "Hub longitude"
+                  }
+                }
+              },
+              "flows": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "List of flow IDs associated with organization"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "User information last update timestamp"
+              }
+            }
+          },
+          "billingMode": {
+            "type": "string",
+            "enum": ["LOCAL", "INTL"],
+            "description": "Billing mode for the organization. **Example**: `INTL`"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "active", "suspended", "inactive", "verified"],
+            "description": "Current organization status. **Example**: `verified`"
+          },
+          "productId": {
+            "type": "string",
+            "description": "Product ID for the organization's subscription. **Example**: `prod_free` or `prod_OaZOlUL01AiiNl`"
+          },
+          "productName": {
+            "type": "string",
+            "description": "Name of the subscribed product/plan. **Example**: `Free Plan`"
+          },
+          "licenseCode": {
+            "type": "string",
+            "description": "License code identifier for organization features. **Example**: `task-demo`"
+          },
+          "customerId": {
+            "type": "object",
+            "description": "Payment gateway customer identifiers",
+            "properties": {
+              "idr": {
+                "type": "string",
+                "nullable": true,
+                "description": "Stripe customer ID for IDR currency. **Example**: `cus_QqBFI91fqWd1jJ`"
+              },
+              "usd": {
+                "type": "string",
+                "nullable": true,
+                "description": "Stripe customer ID for USD currency"
+              }
+            }
+          },
+          "curPeriodStartTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Current billing period start time. **Example**: `2025-01-01T00:00:00+00:00`"
+          },
+          "curPeriodEndTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Current billing period end time. **Example**: `2025-02-01T00:00:00+00:00`"
+          },
+          "eligible": {
+            "type": "boolean",
+            "description": "Whether organization is eligible for certain features or benefits. **Example**: `true`"
+          },
+          "useBigData": {
+            "type": "boolean",
+            "description": "Whether organization has access to big data features. **Example**: `true`"
+          },
+          "isDoTask": {
+            "type": "boolean",
+            "description": "Flag indicating if organization can perform tasks. **Example**: `true`"
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Organization-specific configuration settings",
+            "properties": {
+              "filesAccessPermission": {
+                "type": "string",
+                "enum": ["public", "private"],
+                "description": "Default file access permission. **Example**: `private`"
+              },
+              "filesServerProvider": {
+                "type": "string",
+                "description": "File storage provider. **Example**: `milesto`"
+              },
+              "enableDataSource": {
+                "type": "boolean",
+                "description": "Whether data source features are enabled"
+              },
+              "enableCustomModule": {
+                "type": "boolean",
+                "description": "Whether custom modules are enabled"
+              },
+              "enableAutomation": {
+                "type": "boolean",
+                "description": "Whether automation features are enabled"
+              },
+              "enableRouting": {
+                "type": "boolean",
+                "description": "Whether routing features are enabled"
+              }
+            }
+          },
+          "country": {
+            "type": "object",
+            "description": "Country information for the organization",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Country record identifier"
+              },
+              "code": {
+                "type": "string",
+                "description": "ISO country code"
+              },
+              "name": {
+                "type": "string",
+                "description": "Country name"
+              },
+              "phoneCode": {
+                "type": "string",
+                "description": "Country phone prefix"
+              },
+              "alpha2Code": {
+                "type": "string",
+                "description": "ISO 3166-1 alpha-2 country code"
+              },
+              "isActive": {
+                "type": "boolean",
+                "description": "Whether country is active in system"
+              },
+              "enableLanguage": {
+                "type": "boolean",
+                "description": "Whether language support is enabled"
+              },
+              "language": {
+                "type": "string",
+                "description": "Default language code"
+              },
+              "languageName": {
+                "type": "string",
+                "description": "Default language name"
+              }
+            }
+          },
+          "verifiedTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when organization was verified. **Example**: `2021-12-01T06:15:55+00:00`"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the organization was created. **Example**: `2021-12-01T06:14:53.684Z`"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the organization was last updated. **Example**: `2024-09-13T08:29:24.650Z`"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "Soft delete flag for data retention. **Default**: `false`"
+          },
+          "deletedTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when the organization was soft deleted"
+          },
+          "limits": {
+            "type": "object",
+            "description": "Organization usage limits based on subscription",
+            "properties": {
+              "userLimit": {
+                "type": "integer",
+                "description": "Maximum number of users allowed"
+              },
+              "taskLimit": {
+                "type": "integer",
+                "description": "Monthly task limit"
+              },
+              "vehicleLimit": {
+                "type": "integer",
+                "description": "Maximum number of vehicles"
+              },
+              "hubLimit": {
+                "type": "integer",
+                "description": "Maximum number of hubs"
+              },
+              "dataSourceLimit": {
+                "type": "integer",
+                "description": "Maximum number of data sources"
+              },
+              "automationLimit": {
+                "type": "integer",
+                "description": "Maximum number of automations"
+              },
+              "storageLimit": {
+                "type": "integer",
+                "description": "Storage limit in bytes"
+              },
+              "apiCallLimit": {
+                "type": "integer",
+                "description": "Monthly API call limit"
+              }
+            }
+          },
+          "usage": {
+            "type": "object",
+            "description": "Current usage statistics",
+            "properties": {
+              "totalUsers": {
+                "type": "integer",
+                "description": "Current number of active users"
+              },
+              "totalTasks": {
+                "type": "integer",
+                "description": "Tasks created this month"
+              },
+              "totalVehicles": {
+                "type": "integer",
+                "description": "Current number of vehicles"
+              },
+              "totalHubs": {
+                "type": "integer",
+                "description": "Current number of hubs"
+              },
+              "totalDataSources": {
+                "type": "integer",
+                "description": "Current number of data sources"
+              },
+              "totalAutomations": {
+                "type": "integer",
+                "description": "Current number of automations"
+              },
+              "storageUsed": {
+                "type": "integer",
+                "description": "Current storage usage in bytes"
+              },
+              "apiCallsMonth": {
+                "type": "integer",
+                "description": "API calls made this month"
+              }
+            }
+          },
+          "subscription": {
+            "type": "object",
+            "description": "Subscription information from payment gateway",
+            "properties": {
+              "subscriptionId": {
+                "type": "string",
+                "description": "Stripe subscription ID"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["trialing", "active", "past_due", "canceled", "unpaid"],
+                "description": "Subscription status"
+              },
+              "cancelAtPeriodEnd": {
+                "type": "boolean",
+                "description": "Whether subscription will cancel at period end"
+              },
+              "trialEnd": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "description": "Trial period end date"
+              },
+              "canceledAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "description": "Cancellation timestamp"
+              }
+            }
+          },
+          "billing": {
+            "type": "object",
+            "description": "Billing information",
+            "properties": {
+              "paymentMethod": {
+                "type": "string",
+                "description": "Default payment method"
+              },
+              "billingEmail": {
+                "type": "string",
+                "description": "Email for billing notifications"
+              },
+              "taxId": {
+                "type": "string",
+                "description": "Tax identification number"
+              },
+              "billingAddress": {
+                "type": "object",
+                "properties": {
+                  "street": {"type": "string"},
+                  "city": {"type": "string"},
+                  "state": {"type": "string"},
+                  "zipCode": {"type": "string"},
+                  "country": {"type": "string"}
+                }
+              }
+            }
+          },
+          "integrations": {
+            "type": "object",
+            "description": "Third-party integrations",
+            "properties": {
+              "slack": {
+                "type": "object",
+                "properties": {
+                  "enabled": {"type": "boolean"},
+                  "webhookUrl": {"type": "string"}
+                }
+              },
+              "whatsapp": {
+                "type": "object",
+                "properties": {
+                  "enabled": {"type": "boolean"},
+                  "phoneNumber": {"type": "string"}
+                }
+              },
+              "email": {
+                "type": "object",
+                "properties": {
+                  "enabled": {"type": "boolean"},
+                  "smtpConfig": {"type": "object"}
+                }
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata for internal use",
+            "additionalProperties": true
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Oraganization Module business failedCode that indicate specific failure conditions or business rule violations during organization module operations. These codes help identify the failed operation of organization-related and provide standardized failure identification across the system.\n\nPossible values:\n- org-031: Duplicate entry - Organization name already exists\n- org-032: Invalid state/condition - Organization state invalid\n- org-033: Organization not found - Organization does not exist\n- org-034: Verification failed - Organization verification error\n- org-035: Access forbidden - User lacks organization permission\n- org-036: Organization creation failed - Failed to create organization\n- org-037: Organization update failed - Failed to update organization\n- org-038: Organization delete failed - Failed to delete organization\n- org-039: Subscription error - Organization subscription issue\n- org-040: Limit exceeded - Organization usage limit reached\n- org-041: Payment error - Organization billing/payment failure\n- org-042: License error - Organization license validation failed\n- org-043: Integration error - External service integration failure\n- org-044: Compliance error - Regulatory compliance violation\n- org-045: Server error - Internal server failure",
+            "enum": [
+              "org-031",
+              "org-032",
+              "org-033",
+              "org-034",
+              "org-035",
+              "org-036",
+              "org-037",
+              "org-038",
+              "org-039",
+              "org-040",
+              "org-041",
+              "org-042",
+              "org-043",
+              "org-044",
+              "org-045"
+            ]
+          }
+        },
+        "required": [
+          "_id",
+          "user",
+          "status",
+          "eligible",
+          "productId",
+          "createdTime",
+          "updatedTime"
+        ],
+        "example": {
+          "_id": "640fc0f0c53fdd421d7a8d32",
+          "user": {
+            "name": "john.doe@example.com",
+            "email": "john.doe@example.com",
+            "country": "USA",
+            "phoneNumber": "+1 555-0123",
+            "numberOfUsers": "1-10",
+            "industry": "Technology",
+            "position": "CEO",
+            "companyName": "Example Corp",
+            "testemail": "test@example.com",
+            "hub": {
+              "name": "Main Office",
+              "displayName": "Main Office",
+              "address": "123 Business St, Tech City, TC 12345, USA",
+              "lat": "37.7749",
+              "lng": "-122.4194"
+            },
+            "flows": [
+              "64a1b2c3d4e5f67890123456"
+            ],
+            "updatedAt": "2024-01-15T10:30:00.000Z"
+          },
+          "billingMode": "INTL",
+          "status": "verified",
+          "productId": "prod_professional",
+          "productName": "Professional Plan",
+          "licenseCode": "professional-demo",
+          "customerId": {
+            "idr": null,
+            "usd": "cus_ExampleCustomerID123"
+          },
+          "curPeriodStartTime": "2024-01-01T00:00:00.000Z",
+          "curPeriodEndTime": "2024-02-01T00:00:00.000Z",
+          "eligible": true,
+          "useBigData": false,
+          "isDoTask": true,
+          "configuration": {
+            "filesAccessPermission": "private",
+            "filesServerProvider": "milesto",
+            "enableDataSource": true,
+            "enableCustomModule": true,
+            "enableAutomation": true,
+            "enableRouting": true
+          },
+          "country": {
+            "_id": "624fb53c88d36ab78ccdfe0f",
+            "code": "USA",
+            "name": "United States",
+            "phoneCode": "+1",
+            "alpha2Code": "US",
+            "isActive": true,
+            "enableLanguage": true,
+            "language": "en",
+            "languageName": "English"
+          },
+          "verifiedTime": "2024-01-15T10:35:00.000Z",
+          "createdTime": "2024-01-15T10:30:00.000Z",
+          "updatedTime": "2024-01-20T14:25:30.000Z",
+          "isDeleted": false,
+          "deletedTime": null,
+          "limits": {
+            "userLimit": 25,
+            "taskLimit": 5000,
+            "vehicleLimit": 15,
+            "hubLimit": 3,
+            "dataSourceLimit": 50,
+            "automationLimit": 20,
+            "storageLimit": 5368709120,
+            "apiCallLimit": 25000
+          },
+          "usage": {
+            "totalUsers": 8,
+            "totalTasks": 342,
+            "totalVehicles": 5,
+            "totalHubs": 2,
+            "totalDataSources": 12,
+            "totalAutomations": 6,
+            "storageUsed": 1073741824,
+            "apiCallsMonth": 3250
+          }
+        }
+      }
+    }
+  }
+}

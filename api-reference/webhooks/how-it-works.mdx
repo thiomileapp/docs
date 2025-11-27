@@ -1,0 +1,18 @@
+---
+title: "How does it works"
+description: "Understanding webhook communication in MileApp"
+---
+
+When your application endpoint is enabled on MileApp to receive events, MileApp will push real-time notifications to it. These notifications contain the type of event, the epoch timestamp of when it occurred, and any relevant data for that event. On your side you can then use that to integrate MileApp with existing or new software.
+
+## Webhook Flow
+
+1. **Event occurs** - An action happens in MileApp (task created, assigned, completed, etc.)
+2. **Payload generated** - MileApp creates a JSON payload with event details
+3. **HTTP POST sent** - The payload is sent to your configured endpoint URL
+4. **Your server responds** - Your application processes the data and returns HTTP 200
+5. **Confirmation** - MileApp marks the webhook as successfully delivered
+
+## Setting Up Webhooks
+
+To set up webhooks in MileApp, follow [this documentation](/pages/automation/automation-event/on-routing-finished).

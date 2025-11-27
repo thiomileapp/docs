@@ -1,0 +1,363 @@
+{
+  "components": {
+    "schemas": {
+      "TaskScheduleInternal": {
+        "type": "object",
+        "description": "Internal task schedule object with comprehensive operational and administrative details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the task schedule (MongoDB ObjectId). **Example**: `6352736c628401059b37a2e2`"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Unique identifier for the hub where this schedule operates. **Example**: `634e98498ce07d29474a7e29`"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier that owns this task schedule. **Example**: `634e98098ce07d29474a7e22`"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name of the task schedule. **Example**: `Daily Morning Visit`"
+          },
+          "periode": {
+            "type": "string",
+            "enum": ["daily", "weekly", "monthly", "byDate", "custom"],
+            "description": "Schedule period type determining execution pattern. **Example**: `daily`"
+          },
+          "flow": {
+            "type": "string",
+            "description": "Flow name that this schedule executes. **Example**: `Visit`"
+          },
+          "flowId": {
+            "type": "string",
+            "description": "Unique identifier for the flow. **Example**: `67be687c128306111e022022`"
+          },
+          "task": {
+            "type": "object",
+            "description": "Task configuration data specific to the selected flow",
+            "additionalProperties": true
+          },
+          "assignee": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of user email addresses assigned to execute scheduled tasks. **Example**: `['worker@mile.app']`"
+          },
+          "schedules": {
+            "type": "array",
+            "description": "Schedule configuration array defining when tasks should execute",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Execution time(s) in HH:MM format"
+                },
+                "day": {
+                  "type": "string",
+                  "description": "Day of week for weekly schedules"
+                },
+                "date": {
+                  "type": "string",
+                  "description": "Date for monthly or specific date schedules"
+                }
+              }
+            }
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Schedule activation start time. **Example**: `2022-11-02T00:00:00.000000Z`"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Schedule deactivation end time. **Example**: `2022-11-05T23:59:59.999999Z`"
+          },
+          "frequency": {
+            "type": "string",
+            "enum": ["daily", "weekly", "monthly"],
+            "nullable": true,
+            "description": "Frequency unit for custom schedules. **Example**: `daily`"
+          },
+          "interval": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 99,
+            "nullable": true,
+            "description": "Interval multiplier for custom frequencies. **Example**: `2`"
+          },
+          "timeSchedules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Computed time schedule array for display purposes"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "inactive", "paused", "expired"],
+            "description": "Current operational status of the schedule. **Example**: `active`"
+          },
+          "lastExecution": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp of last successful execution. **Example**: `2025-01-15T07:00:00.000000Z`"
+          },
+          "nextExecution": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Calculated next execution time. **Example**: `2025-01-16T07:00:00.000000Z`"
+          },
+          "executionCount": {
+            "type": "integer",
+            "description": "Total number of successful executions. **Example**: `45`"
+          },
+          "failedCount": {
+            "type": "integer",
+            "description": "Total number of failed execution attempts. **Example**: `2`"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email address of the user who created this schedule. **Example**: `admin@mile.app`"
+          },
+          "updatedBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "Email address of the user who last updated this schedule. **Example**: `admin@mile.app`"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the schedule was created. **Example**: `2022-11-01T07:28:23.000000Z`"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the schedule was last updated. **Example**: `2022-11-01T07:28:23.000000Z`"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "Soft delete flag for data retention. **Example**: `false`"
+          },
+          "deletedTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when the schedule was soft deleted. **Example**: `null`"
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "Email address of user who deleted this schedule. **Example**: `null`"
+          },
+          "executionLogs": {
+            "type": "array",
+            "description": "Execution history logs for monitoring and debugging",
+            "items": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["success", "failed", "skipped"]
+                },
+                "taskId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "error": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "duration": {
+                  "type": "integer",
+                  "description": "Execution duration in milliseconds"
+                }
+              }
+            }
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Advanced schedule configuration settings",
+            "properties": {
+              "timezone": {
+                "type": "string",
+                "description": "Timezone for schedule execution"
+              },
+              "retryPolicy": {
+                "type": "object",
+                "properties": {
+                  "maxRetries": {
+                    "type": "integer"
+                  },
+                  "retryDelay": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "notifications": {
+                "type": "object",
+                "properties": {
+                  "onSuccess": {
+                    "type": "boolean"
+                  },
+                  "onFailure": {
+                    "type": "boolean"
+                  },
+                  "recipients": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "metrics": {
+            "type": "object",
+            "description": "Performance and reliability metrics",
+            "properties": {
+              "avgExecutionTime": {
+                "type": "number",
+                "description": "Average execution time in milliseconds"
+              },
+              "successRate": {
+                "type": "number",
+                "description": "Success rate percentage (0-100)"
+              },
+              "lastFailureReason": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Task Schedule Module business failedCode that indicate specific failure conditions or business rule violations during task schedule module operations. These codes help identify the failed operation of task schedule-related and provide standardized failure identification across the system.\n\nPossible values:\n- sched-032: Invalid state/condition - Schedule state invalid\n- sched-033: Schedule not found - Schedule does not exist\n- sched-034: Timezone configuration failure - Invalid timezone setting\n- sched-035: Access forbidden - User lacks schedule permission\n- sched-036: Schedule creation failed - Failed to create schedule\n- sched-037: Schedule update failed - Failed to update schedule\n- sched-038: Schedule delete failed - Failed to delete schedule\n- sched-039: Schedule execution failed - Task execution failure\n- sched-040: Frequency limit exceeded - Too many executions\n- sched-041: Flow configuration failure - Invalid flow setup\n- sched-042: Time conflict failure - Schedule time overlap\n- sched-043: Dependency failure - Missing required dependencies\n- sched-044: Resource unavailable - Required resources not available\n- sched-045: Server failure - Internal server failure",
+            "enum": [
+              "sched-032",
+              "sched-033",
+              "sched-034",
+              "sched-035",
+              "sched-036",
+              "sched-037",
+              "sched-038",
+              "sched-039",
+              "sched-040",
+              "sched-041",
+              "sched-042",
+              "sched-043",
+              "sched-044",
+              "sched-045"
+            ]
+          }
+        },
+        "required": [
+          "_id",
+          "hubId",
+          "organizationId",
+          "name",
+          "periode",
+          "flow",
+          "flowId",
+          "task",
+          "schedules",
+          "startTime",
+          "endTime",
+          "status",
+          "executionCount",
+          "failedCount",
+          "createdBy",
+          "createdTime",
+          "updatedTime",
+          "isDeleted"
+        ],
+        "example": {
+          "_id": "6352736c628401059b37a2e2",
+          "hubId": "634e98498ce07d29474a7e29",
+          "organizationId": "634e98098ce07d29474a7e22",
+          "name": "Daily Morning Visit",
+          "periode": "daily",
+          "flow": "Visit",
+          "flowId": "67be687c128306111e022022",
+          "task": {
+            "receiverName": "Miguel",
+            "address": "gambir jakarta pusat",
+            "coordinates": "-6.31022,107.09073",
+            "weight": "5"
+          },
+          "assignee": [
+            "worker@mile.app"
+          ],
+          "schedules": [
+            {
+              "time": [
+                "07:00"
+              ]
+            }
+          ],
+          "startTime": "2022-11-02T00:00:00.000000Z",
+          "endTime": "2022-11-05T23:59:59.999999Z",
+          "frequency": null,
+          "interval": null,
+          "timeSchedules": [
+            "07:00"
+          ],
+          "status": "active",
+          "lastExecution": "2025-01-15T07:00:00.000000Z",
+          "nextExecution": "2025-01-16T07:00:00.000000Z",
+          "executionCount": 45,
+          "failedCount": 2,
+          "createdBy": "admin@mile.app",
+          "updatedBy": "admin@mile.app",
+          "createdTime": "2022-11-01T07:28:23.000000Z",
+          "updatedTime": "2022-11-01T07:28:23.000000Z",
+          "isDeleted": false,
+          "deletedTime": null,
+          "deletedBy": null,
+          "executionLogs": [
+            {
+              "timestamp": "2025-01-15T07:00:00.000000Z",
+              "status": "success",
+              "taskId": "67892abc123def456789",
+              "error": null,
+              "duration": 2500
+            }
+          ],
+          "configuration": {
+            "timezone": "Asia/Jakarta",
+            "retryPolicy": {
+              "maxRetries": 3,
+              "retryDelay": 300000
+            },
+            "notifications": {
+              "onSuccess": false,
+              "onFailure": true,
+              "recipients": [
+                "admin@mile.app"
+              ]
+            }
+          },
+          "metrics": {
+            "avgExecutionTime": 2300,
+            "successRate": 95.6,
+            "lastFailureReason": null
+          }
+        }
+      }
+    }
+  }
+}

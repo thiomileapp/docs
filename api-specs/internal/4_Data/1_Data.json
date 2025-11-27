@@ -1,0 +1,2396 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Data"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    
+    "/data ": {
+      "get": {
+        "summary": "Read data source",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "getData",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref" : "#/parameters/pageInQuery"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "min":1,
+            "max":2000,
+            "description": "Specifies the maximum number of items to retrieve in a single request. **Example:** `10`. **Default:** `20`"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.<br>**Example:** `dataId,dataTypeId,organizationId`"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on data source objects.<br>**Example:** `dataId`, `dataTypeId`, `hubId`, etc.<br>**Default:** `createdTime`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortOrder is to decide ascending or descending order<br>**Example:** `asc` or `desc`.<br>**Default:** `desc`"
+          },
+          {
+            "$ref": "#/parameters/hubIdInQuery"
+          },
+          {
+            "name": "dataId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Name or unique identifier value associated with data source. You can do a multipe filter `dataId` using separator coma (,)<br>**Example:** `Outlet` or `Outlet,Toko`"
+          },
+          {
+            "name": "dataTypeId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The identifier for Data Type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example:** `63db2fb476bc679c540369c4`"
+          },
+          {
+            "name": "dataTypeName",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Name of data type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of dataType Name.<br>**Example:** `Pegawai`"
+          },
+          {
+            "name": "updatedTime",
+            "in": "query",
+            "required": false,
+            "type": "Datetime",
+            "description": "The time at which the data is updated.<br>**Example:** `2023-07-06T06:41:08`"
+          },
+          {
+            "name": "limitUser",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Parameter to restrict data source based on user. The default value of this parameter is true. If `limitUser` is true, the data source will be limited based on user. and if `limitUser` is false, data source will show all data without any limitation based on user. <br>**Example:** `false`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkReadResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "List of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                    "current_page": 1,
+                    "data": [
+                        {
+                            "_id": "63dc641b1ed1fd63ad0c9013",
+                            "dataId": "Outlet",
+                            "dataTypeId": "63db2fb476bc679c540369c4",
+                            "outletName": "Cabang Jakarta Pusat",
+                            "outletHours": 12,
+                            "outletType": "minimarket",
+                            "outletOpen": "09:00",
+                            "outletClosed": "17:00",
+                            "outletContractExpired": "2023-02-02",
+                            "outletOpenInWeekend": true,
+                            "outletGeolocation": "-6.171702325136309,106.81775093078615",
+                            "outletPhoneNumber": "+62 123 456 789",
+                            "outletCloseOrder": "2023-02-02 17:00:00",
+                            "data_type": {
+                              "_id": "660cd7c159fcd16a3a2e6537",
+                              "name": "outlets"
+                            },
+                            "hubId": "63c63ab1b6972d3150348172",
+                            "organizationId": "63c61d865347e356d05e3052",
+                            "updatedBy": "john.doe@mile.app",
+                            "createdBy": "john.doe@mile.app",
+                            "updatedTime": "2023-02-03 01:32:11",
+                            "createdTime": "2023-02-03 01:32:11"
+                        }
+                    ],
+                    "first_page_url": "https://apiweb.mile.app/v3/data?page=1",
+                    "from": 1,
+                    "last_page": 1,
+                    "last_page_url": "https://apiweb.mile.app/v3/data?page=1",
+                    "links": [
+                        {
+                            "url": null,
+                            "label": "&laquo; Previous",
+                            "active": false
+                        },
+                        {
+                            "url": "https://apiweb.mile.app/v3/data?page=1",
+                            "label": "1",
+                            "active": true
+                        },
+                        {
+                            "url": null,
+                            "label": "Next &raquo;",
+                            "active": false
+                        }
+                    ],
+                    "next_page_url": null,
+                    "path": "https://apiweb.mile.app/v3/data",
+                    "per_page": 20,
+                    "prev_page_url": null,
+                    "to": 15,
+                    "total": 15
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+            
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data/{dataId}" : {
+      "get": {
+        "summary": "Read data source by ID",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "getDataById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the data that generated by system.<br>**Example**: `63dc641b1ed1fd63ad0c9013`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkReadIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "_id": "63dc641b1ed1fd63ad0c9013",
+                  "dataId": "Outlet",
+                  "dataTypeId": "63db2fb476bc679c540369c4",
+                  "outletName": "Cabang Jakarta Pusat",
+                  "outletHours": 12,
+                  "outletType": "minimarket",
+                  "outletOpen": "09:00",
+                  "outletClosed": "17:00",
+                  "outletContractExpired": "2023-02-02",
+                  "outletOpenInWeekend": true,
+                  "outletGeolocation": "-6.171702325136309,106.81775093078615",
+                  "outletPhoneNumber": "+62 123 456 789",
+                  "outletCloseOrder": "2023-02-02 17:00:00",
+                  "data_type": {
+                    "_id": "660cd7c159fcd16a3a2e6537",
+                    "name": "outlets"
+                  },
+                  "hubId": "63c63ab1b6972d3150348172",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "updatedBy": "john.doe@mile.app",
+                  "createdBy": "john.doe@mile.app",
+                  "updatedTime": "2023-02-03 01:32:11",
+                  "createdTime": "2023-02-03 01:32:11"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "data-033"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data/type/{dataTypeName}/{dataId}": {
+      "get": {
+        "summary": "Read data source by dataTypeName and dataId",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "getDataByDataTypeAndDataId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dataTypeName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of dataType Name.<br>**Example:** `Pegawai`"
+          },
+          {
+            "name": "dataId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Primary key data of the data type.<br>Use <a href='#tag/Data-Source/operation/getData'>GET /data API</a> to get the list primary key data of dataType.<br>**Example:** `anas`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkReadDataIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                    "_id": "6433acd3fc7786708b7567ad",
+                    "dataTypeId": "642d165e6a88ff136c692853",
+                    "address": "jakarta",
+                    "golongan": "A",
+                    "dataId": "anas",
+                    "createdBy": "husni+1@paket.id",
+                    "organizationId": "63daff70a483b40ae5586e02",
+                    "updatedTime": "2023-04-10 06:24:21",
+                    "createdTime": "2023-04-10 06:24:21",
+                    "data_type": {
+                        "_id": "642d165e6a88ff136c692853",
+                        "name": "Pagawai"
+                    }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "data-033"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data/hub/{hubId}/type/{dataTypeName}/{data_id}": {
+      "get": {
+        "summary": "Read data source by hubId, dataTypeName, dataId",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "getDataByDataId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/hubIdInPath"
+          },
+          {
+            "name": "dataTypeName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of dataType Name.<br>**Example:** `Pegawai`"
+          },
+          {
+            "name": "dataId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Primary key data of the data type.<br>Use <a href='#tag/Data-Source/operation/getData'>GET /data API</a> to get the list primary key data of dataType.<br>**Example:** `anas`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkReadDataIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                    "_id": "6433acd3fc7786708b7567ad",
+                    "dataTypeId": "642d165e6a88ff136c692853",
+                    "hubId": "63daffabc5a95d7d475eb7a6",
+                    "address": "jakarta",
+                    "golongan": "A",
+                    "dataId": "anas",
+                    "createdBy": "husni+1@paket.id",
+                    "organizationId": "63daff70a483b40ae5586e02",
+                    "updatedTime": "2023-04-10 06:24:21",
+                    "createdTime": "2023-04-10 06:24:21",
+                    "data_type": {
+                        "_id": "642d165e6a88ff136c692853",
+                        "name": "Pagawai"
+                    }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "title": "NetworkReadDataIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": false,
+                "message": "data not found",
+                "failedCode": "data-033"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data": {
+      "post": {
+        "summary": "Create data source",
+        "description" : "When creating a new datasource, the payload includes dynamic keys whose structure is determined by the data type specified by dataTypeId. To understand which fields are required and their respective types, you must first retrieve the schema of the data type from the endpoint <a href='#tag/Data-Type/operation/getDataTypeById'> GET /data-type/{dataTypeId}</a>. The response from this endpoint defines the additional dynamic keys needed in the payload beyond the standard fields such as dataId, dataTypeId, and hubId.\n\n        \nFor example, if the dataTypeId refers to an outlet or store, the /data-type/{dataTypeId} endpoint might return a schema that specifies keys like outletName, outletHours, outletType, etc. These fields and their types (string, integer, boolean, etc.) must be included in the request payload when creating the datasource.",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "CreateData",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/POSTDataRequestCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkCreateResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "dataId": "Outlet",
+                  "dataTypeId": "63db2fb476bc679c540369c4",
+                  "outletName": "Cabang Jakarta Pusat",
+                  "outletHours": 12,
+                  "outletType": "minimarket",
+                  "outletOpen": "09:00",
+                  "outletClosed": "17:00",
+                  "outletContractExpired": "2023-02-02",
+                  "outletOpenInWeekend": true,
+                  "outletGeolocation": "-6.171702325136309,106.81775093078615",
+                  "outletPhoneNumber": "+62 123 456 789",
+                  "outletCloseOrder": "2023-02-02 17:00:00",
+                  "data_type": {
+                    "_id": "63db2fb476bc679c540369c4",
+                    "name": "outlets"
+                  },
+                  "hubId": "63c63ab1b6972d3150348172",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "createdBy": "john.doe@mile.app",
+                  "updatedTime": "2023-02-03 01:32:11",
+                  "createdTime": "2023-02-03 01:32:11"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data/export": {
+      "post": {
+        "summary": "Export data source",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "Export",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "download",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "File type that user want to download. There are 2 types of `download`:<br>**enum**: `json`,`xlsx`<br>**Example:** `xlsx`"
+          },
+          {
+            "name": "background",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "If the user sets the background parameter to `true`, the export process will utilize background processing, and the results will be available at <a href='#tag/Task/operation/GetLogExport' target='_blank'>GET /tasks/export-log API</a>. If the user sets the background parameter to `false`, the export process will run directly, and the results will be immediately available in the response .<br>**Example:** `true`.<br>**Default:** `false`"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.<br>**Example:** `dataId,name,address`"
+          },
+          {
+            "$ref": "#/parameters/hubIdInQuery"
+          },
+          {
+            "name": "dataTypeId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description":"The identifier for the dataType that generated by system. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of dataType IDs.<br>**Example:** `6422816ef6710f053056d812`"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Pagination of tasks result list.<br>**Example:** `2`.<br>**Default:** `1`"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Limit of tasks result list.<br>**Example:** `10`.<br>**Default:** `30`"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on vehicle objects.<br>**Example:** `name`, `address`, `hubId`, etc.<br>**Default:** `createdTime`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "sortOrder is to decide ascending or descending order<br>**Example:** `asc` or `desc`.<br>**Default:** `desc`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkExportResponse",
+              "properties": {
+                "data": {
+                  "description": "Detail of data export.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "link" : {
+                        "description" : "File link of export data source",
+                        "type" : "string"
+                      },
+                      "organizationId" : {
+                        "description" : "Organization Id of export data source",
+                        "type" : "string"
+                      },
+                      "reportType" : {
+                        "description" : "Report type of export data source",
+                        "type" : "string"
+                      },
+                      "status" : {
+                        "description" : "Status of export data source",
+                        "type" : "string"
+                      },
+                      "time" : {
+                        "description" : "Timestamp of export data source",
+                        "type" : "integer"
+                      }
+                    }
+                  }
+                },
+                "last_field": {
+                  "description": "Field of the last data source was successfully exported.",
+                  "type": "string"
+                },
+                "last_id": {
+                  "description": "ID of the last data source was successfully exported.",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "total_data_be": {
+                  "description": "Total data source successfully exported.",
+                  "type": "integer"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "total_data_be": 10,
+                "last_id": "642282a259c3f74157368012",
+                "last_field": "address",
+                "data": {
+                    "time": 1681194657,
+                    "organizationId": "63d397ca8cb4d07e9d581c82",
+                    "reportType": "data",
+                    "link": "https://staticdev.mile.app/dev-mile/20230411/data_63d397ca8cb4d07e9d581c82_1681194657.xlsx",
+                    "status": "Done"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [],
+            "x-api-key": []
+          }
+        ]
+      }
+    },
+    "/data/bulk": {
+      "post": {
+        "summary": "Bulk create data source",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "PostDataBulk",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/postDataBulkRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkCreateBulkResponse",
+              "properties": {
+                "success": {
+                  "description": "Total success created data source.",
+                  "type": "integer"
+                },
+                "failed": {
+                  "description": "Total failed created data source.",
+                  "type": "integer"
+                },
+                "data": {
+                  "description": "Detail of created data source.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status" : {
+                        "description" : "Status of response.",
+                        "type" : "boolean"
+                      },
+                      "_id" : {
+                        "description" : "Data source ID",
+                        "type" : "string"
+                      },
+                      "message" : {
+                        "description" : "Message of create data source",
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "success": 2,
+                "failed": 0,
+                "data": [
+                  {
+                    "status": true,
+                    "message": "Success.",
+                    "_id": "646db91d0d73b6392543fb82"
+                  },
+                  {
+                    "status": true,
+                    "message": "Success.",
+                    "_id": "646db91d0d73b6392543fb83"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [],
+            "x-api-key": []
+          }
+        ]
+      }
+    },
+    "/data/bulk/upsert": {
+      "post": {
+        "summary": "Bulk create or update data source",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "UpsertDataBulk",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/upsertDataBulkRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkUpsertBulkResponse",
+              "properties": {
+                "success": {
+                  "description": "Total success created or update data source.",
+                  "type": "integer"
+                },
+                "failed": {
+                  "description": "Total failed created or update data source.",
+                  "type": "integer"
+                },
+                "data": {
+                  "description": "Detail of created or update data source.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status" : {
+                        "description" : "Status of response.",
+                        "type" : "boolean"
+                      },
+                      "message" : {
+                        "description" : "Message of create or update data source",
+                        "type" : "string"
+                      },
+                      "event" : {
+                        "description" : "The type of action performed on the data source, either `create` or `update`",
+                        "type" : "string"
+                      },
+                      "_id" : {
+                        "description" : "Data source ID",
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "success": 2,
+                "failed": 0,
+                "data": [
+                  {
+                    "status": true,
+                    "message": "Data has been created successfully.",
+                    "event": "create",
+                    "_id": "646db91d0d73b6392543fb82"
+                  },
+                  {
+                    "status": true,
+                    "message": "Data has been updated successfully.",
+                    "event": "update",
+                    "_id": "646db91d0d73b6392543fb83"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [],
+            "x-api-key": []
+          }
+        ]
+      }
+    },
+    "/data/{_id}": {
+      "put": {
+        "summary": "Update data source by ID",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "putDataById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the data that generated by system.<br>**Example**: `63dc641b1ed1fd63ad0c9013`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PUTDataRequestCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkPutResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "_id": "63dc641b1ed1fd63ad0c9013",
+                  "dataId": "Outlet",
+                  "dataTypeId": "63db2fb476bc679c540369c4",
+                  "outletName": "Cabang Jakarta Pusat",
+                  "outletHours": 12,
+                  "outletType": "minimarket",
+                  "outletOpen": "09:00",
+                  "outletClosed": "17:00",
+                  "outletContractExpired": "2023-02-02",
+                  "outletOpenInWeekend": true,
+                  "outletGeolocation": "-6.171702325136309,106.81775093078615",
+                  "outletPhoneNumber": "+62 123 456 789",
+                  "outletCloseOrder": "2023-02-02 17:00:00",
+                  "hubId": "63c63ab1b6972d3150348172",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "createdBy": "john.doe@mile.app",
+                  "updatedTime": "2023-02-03 01:32:11",
+                  "createdTime": "2023-02-03 01:32:11"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "data-033"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    
+    "/data/hub/{hub_id}/type/{dataTypeName}/{dataId}" : {
+      "put": {
+        "summary": "Update data source by hubId, dataTypeName, dataId",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "putDataByDataId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref" : "#/parameters/hubIdInPath"
+          },
+          {
+            "name": "dataTypeName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of dataType Name.<br>**Example:** `Pegawai`"
+          },
+          {
+            "name": "dataId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Primary key data of the data type.<br>Use <a href='#tag/Data-Source/operation/getData'>GET /data API</a> to get the list primary key data of dataType.<br>**Example:** `anas`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DataRequestUpdateByDataId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkPutDataIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                    "_id": "6433acd3fc7786708b7567ad",
+                    "dataTypeId": "642d165e6a88ff136c692853",
+                    "hubId": "63daffabc5a95d7d475eb7a6",
+                    "address": "Jakarta",
+                    "golongan": "A",
+                    "dataId": "anas",
+                    "createdBy": "husni+1@paket.id",
+                    "organizationId": "63daff70a483b40ae5586e02",
+                    "updatedTime": "2023-04-10 06:24:21",
+                    "createdTime": "2023-04-10 06:24:21",
+                    "data_type": {
+                        "_id": "642d165e6a88ff136c692853",
+                        "name": "Pagawai"
+                    }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "data-033"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/data/{data_id}": {
+      "patch": {
+        "summary": "Update partially data source by ID",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "patchDataById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the data that generated by system.<br>**Example**: `63dc641b1ed1fd63ad0c9013`"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PATCHDataRequestCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkPatchResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "_id": "63dc641b1ed1fd63ad0c9013",
+                  "dataId": "Outlet",
+                  "dataTypeId": "63db2fb476bc679c540369c4",
+                  "outletName": "Cabang Jakarta Pusat",
+                  "outletHours": 12,
+                  "outletType": "minimarket",
+                  "outletOpen": "09:00",
+                  "outletClosed": "17:00",
+                  "outletContractExpired": "2023-02-02",
+                  "outletOpenInWeekend": true,
+                  "outletGeolocation": "-6.171702325136309,106.81775093078615",
+                  "outletPhoneNumber": "+62 123 456 789",
+                  "outletCloseOrder": "2023-02-02 17:00:00",
+                  "hubId": "63c63ab1b6972d3150348172",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "createdBy": "john.doe@mile.app",
+                  "updatedTime": "2023-02-03 01:32:11",
+                  "createdTime": "2023-02-03 01:32:11"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "schema": {
+              "$ref": "#/parameters/responses/notFound/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "data-033"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [ ]
+          }
+        ]
+      }
+    },
+    "/data/{data_id}/" : {
+      "delete": {
+        "summary": "Delete data source",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "deleteDataById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the data that generated by system.<br>**Example**: `63dc641b1ed1fd63ad0c9013`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkDeleteResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "data": {
+                  "_id": "63dc641b1ed1fd63ad0c9013",
+                  "dataId": "Outlet",
+                  "dataTypeId": "63db2fb476bc679c540369c4",
+                  "outletName": "Cabang Jakarta Pusat",
+                  "outletHours": 12,
+                  "outletType": "minimarket",
+                  "outletOpen": "09:00",
+                  "outletClosed": "17:00",
+                  "outletContractExpired": "2023-02-02",
+                  "outletOpenInWeekend": true,
+                  "outletGeolocation": "-6.171702325136309,106.81775093078615",
+                  "outletPhoneNumber": "+62 123 456 789",
+                  "outletCloseOrder": "2023-02-02 17:00:00",
+                  "hubId": "63c63ab1b6972d3150348172",
+                  "organizationId": "63c61d865347e356d05e3052",
+                  "createdBy": "john.doe@mile.app",
+                  "updatedTime": "2023-02-03 01:32:11",
+                  "createdTime": "2023-02-03 01:32:11"
+                }
+              }
+            }
+          },
+          "404": {
+              "description": "Not Found",
+              "schema": {
+                "type": "object",
+                "title": "NetworkDeleteResponse",
+                "properties": {
+                  "status": {
+                    "description": "Status of response.",
+                    "type": "boolean"
+                  },
+                  "message": {
+                    "description": "Message of API response.",
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Data not found",
+                    "failedCode": "data-033"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [ ]
+          }
+        ]
+      }
+    },
+    "/data/hub/{hubId}/type/{dataTypeName}/{dataId}": {
+      "delete": {
+        "summary": "Delete data source by hubId, dataTypeName, dataId",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "deleteDataByDataId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hubId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The identifier for the hub that generated by system. Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `63daffabc5a95d7d475eb7a6`"
+          },
+          {
+            "name": "dataTypeName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of dataType Name.<br>**Example:** `Pegawai`"
+          },
+          {
+            "name": "dataId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Primary key data of the data type.<br>Use <a href='#tag/Data-Source/operation/getData'>GET /data API</a> to get the list primary key data of dataType.<br>**Example:** `anas`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkDeleteDataIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object data source.",
+                  "type": "object"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Success",
+                "data": {
+                  "_id": "6433acd3fc7786708b7567ad",
+                  "dataTypeId": "642d165e6a88ff136c692853",
+                  "hubId": "63daffabc5a95d7d475eb7a6",
+                  "address": "Jakarta",
+                  "golongan": "A",
+                  "dataId": "anas",
+                  "createdBy": "husni+1@paket.id",
+                  "organizationId": "63daff70a483b40ae5586e02",
+                  "updatedTime": "2023-04-10 06:24:21",
+                  "createdTime": "2023-04-10 06:24:21",
+                  "data_type": {
+                      "_id": "642d165e6a88ff136c692853",
+                      "name": "Pagawai"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "title": "NetworkDeleteDataIDResponse",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": false,
+                "message": "data not found",
+                "failedCode": "data-033"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [ ]
+          }
+        ]
+      }
+    },
+    "/datas/bulk": {
+      "patch": {
+        "summary": "Bulk patch data source",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "data/patchBulk",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/patchDataBulkRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkPatchBulkResponse",
+              "properties": {
+                "success": {
+                  "description": "Total success updated data source.",
+                  "type": "integer"
+                },
+                "failed": {
+                  "description": "Total failed updated data source.",
+                  "type": "integer"
+                },
+                "data": {
+                  "description": "Detail of updated data source.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status" : {
+                        "description" : "Status of response.",
+                        "type" : "boolean"
+                      },
+                      "_id" : {
+                        "description" : "Data source ID",
+                        "type" : "string"
+                      },
+                      "message" : {
+                        "description" : "Message of delete data source",
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "success": 2,
+                "failed": 0,
+                "data": [
+                  {
+                    "status": true,
+                    "message": "Success.",
+                    "_id": "62067ee1cd77000042006f89"
+                  },
+                  {
+                    "status": true,
+                    "message": "Success.",
+                    "_id": "62067ee3cd77000042006f8b"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [],
+            "x-api-key": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Bulk delete data source",
+        "tags": [
+          "Data Source"
+        ],
+        "operationId": "data/deleteBulk",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/deleteDataBulkRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "title": "NetworkDeleteBulkResponse",
+              "properties": {
+                "success": {
+                  "description": "Total success delete data source.",
+                  "type": "integer"
+                },
+                "failed": {
+                  "description": "Total failed delete data source.",
+                  "type": "integer"
+                },
+                "data": {
+                  "description": "Detail of delete data source.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status" : {
+                        "description" : "Status of response.",
+                        "type" : "boolean"
+                      },
+                      "_id" : {
+                        "description" : "Data source ID",
+                        "type" : "string"
+                      },
+                      "message" : {
+                        "description" : "Message of delete data source",
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "success": 2,
+                "failed": 0,
+                "data": [
+                  {
+                    "status": true,
+                    "message": "Success.",
+                    "_id": "62067ee1cd77000042006f89"
+                  },
+                  {
+                    "status": true,
+                    "message": "Success.",
+                    "_id": "62067ee3cd77000042006f8b"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/parameters/responses/badRequest/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "#/parameters/descriptions/messageResponse",
+                    "failedCode": "data-003"
+                }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/parameters/responses/serverError/schema"
+            },
+            "examples": {
+                "application/json": {
+                    "status": false,
+                    "message": "Internal server error",
+                    "failedCode": "data-045"
+                }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": [],
+            "x-api-key": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "POSTDataRequestCreate": {
+        "title": "POSTDataRequestCreate",
+        "example": {
+          "dataId": "OutletAdi",
+          "dataTypeId": "63f854cff2bd7b342a098962",
+          "hubId": "63c63ab1b6972d3150348172",
+          "outletName": "Cabang Jakarta Pusat",
+          "outletHours": 12,
+          "outletType": "minimarket",
+          "outletOpen": "09:00",
+          "outletClose": "17:00",
+          "outletContractExpired": "2023-02-02",
+          "outletOpenInWeekend": true,
+          "outletGeolocation": "-6.171702325136309,106.81775093078615",
+          "outletPhoneNumber": "+62 123 456 789",
+          "outletCloseOrder": "2023-02-02 17:00:00"
+        },"type": "object",
+        "properties" : {
+          "dataId" : {
+            "type" : "string",
+            "description" : "The identifier of fields from data type.<br>**Example**: `Outlet`"
+          },
+          "dataTypeId" : {
+            "type" : "string",
+            "description" : "The identifier of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example**: `63db2fb476bc679c540369c4`"
+          },
+          "hubId" : {
+            "type" : "string",
+            "description" : {
+              "$ref": "#/parameters/descriptions/hubId"
+            }
+          },
+          "outletName" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet name. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source. <br>**Example**: `Cabang Jakarta Pusat`"
+          },
+          "outletHours" : {
+            "type" : "integer",
+            "description" : "The dynamic field, outlet hours. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `12`"
+          },
+          "outletType" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `minimarket`"
+          },
+          "outletOpen" : {
+            "type" : "time",
+            "description" : "The dynamic field, outlet open. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `09:00`"
+          },
+          "outletClosed" : {
+            "type" : "time",
+            "description" : "The dynamic field, outlet closed. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `17:00`"
+          },
+          "outletContractExpired" : {
+            "type" : "date",
+            "description" : "The dynamic field, outlet contract expired. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `2023-02-02`"
+          },
+          "outletOpenInWeekend" : {
+            "type" : "boolean",
+            "description" : "The dynamic field, outlet open in weekend. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `true`"
+          },
+          "outletGeolocation" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet geolocation. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `-6.171702325136309,106.81775093078615`"
+          }
+        },
+        "required": [
+          "dataId",
+          "dataTypeId",
+          "hubId"
+        ]
+    },
+    "POST/DataRequestCreateBulk": {
+        "title": "POST/DataRequestCreateBulk",
+        "example": {
+          "data": [
+            {
+                "dataId": "OutletAdi",
+                "dataTypeId": "63f854cff2bd7b342a098962",
+                "hubId": "63c63ab1b6972d3150348172",
+                "outletName": "Cabang Jakarta Pusat",
+                "outletHours": 12,
+                "outletType": "minimarket",
+                "outletOpen": "09:00",
+                "outletClose": "17:00",
+                "outletContractExpired": "2023-02-02",
+                "outletOpenInWeekend": true,
+                "outletGeolocation": "-6.171702325136309,106.81775093078615",
+                "outletPhoneNumber": "+62 123 456 789",
+                "outletCloseOrder": "2023-02-02 17:00:00"
+            }
+          ]
+        },
+        "type": "object",
+        "required": [
+          "data"
+        ]
+    },
+    "PUTDataRequestCreate": {
+        "title": "PUTDataRequestCreate",
+        "example": {
+          "dataId": "OutletAdi",
+          "dataTypeId": "63f854cff2bd7b342a098962",
+          "hubId": "63c63ab1b6972d3150348172",
+          "outletName": "Cabang Jakarta Pusat",
+          "outletHours": 12,
+          "outletType": "minimarket",
+          "outletOpen": "09:00",
+          "outletClose": "17:00",
+          "outletContractExpired": "2023-02-02",
+          "outletOpenInWeekend": true,
+          "outletGeolocation": "-6.171702325136309,106.81775093078615",
+          "outletPhoneNumber": "+62 123 456 789",
+          "outletCloseOrder": "2023-02-02 17:00:00"
+        },
+        "type": "object",
+        "properties" : {
+          "dataId" : {
+            "type" : "string",
+            "description" : "The identifier of fields from data type.<br>**Example**: `Outlet`"
+          },
+          "dataTypeId" : {
+            "type" : "string",
+            "description" : "The identifier of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example**: `63db2fb476bc679c540369c4`"
+          },
+          "hubId" : {
+            "type" : "string",
+            "description" : "The identifier for the hub that generated by system. `hubId` is **not required** if the `commonData` configuration for the data type is true.<br>Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `63c63ffbdef63e6f641aac72`"
+          },
+          "outletName" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet name. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source. <br>**Example**: `Cabang Jakarta Pusat`"
+          },
+          "outletHours" : {
+            "type" : "integer",
+            "description" : "The dynamic field, outlet hours. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `12`"
+          },
+          "outletType" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `minimarket`"
+          },
+          "outletOpen" : {
+            "type" : "time",
+            "description" : "The dynamic field, outlet open. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `09:00`"
+          },
+          "outletClosed" : {
+            "type" : "time",
+            "description" : "The dynamic field, outlet closed. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `17:00`"
+          },
+          "outletContractExpired" : {
+            "type" : "date",
+            "description" : "The dynamic field, outlet contract expired. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `2023-02-02`"
+          },
+          "outletOpenInWeekend" : {
+            "type" : "boolean",
+            "description" : "The dynamic field, outlet open in weekend. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `true`"
+          },
+          "outletGeolocation" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet geolocation. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `-6.171702325136309,106.81775093078615`"
+          }
+        },
+        "required": [
+          "dataId",
+          "dataTypeId"
+        ]
+    },
+    "DataRequestUpdateByDataId": {
+        "title": "DataRequestUpdateByDataId",
+        "example": {
+          "dataId": "anas",
+          "dataTypeId": "642d165e6a88ff136c692853",
+          "hubId": "63daffabc5a95d7d475eb7a6",
+          "address": "jakarta",
+          "golongan": "A"
+        },
+        "type": "object",
+        "properties" : {
+          "dataId" : {
+            "type" : "string",
+            "description" : "The identifier of fields from data type.<br>**Example**: `anas`"
+          },
+          "dataTypeId" : {
+            "type" : "string",
+            "description" : "The identifier of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example**: `642d165e6a88ff136c692853`"
+          },
+          "hubId" : {
+            "type" : "string",
+            "description" : {
+              "$ref" : "#/parameters/descriptions/hubId"
+            }
+          },
+          "address" : {
+            "type" : "string",
+            "description" : "The dynamic field, address. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source. <br>**Example**: `jakarta`"
+          },
+          "golongan" : {
+            "type" : "string",
+            "description" : "The dynamic field, golongan. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `A`"
+          }
+        },
+        "required": [
+          "dataId",
+          "dataTypeId",
+          "hubId"
+        ]
+    },
+    "PATCHDataRequestCreate": {
+        "title": "PATCHDataRequestCreate",
+        "example": {
+          "dataId": "OutletAdi",
+          "dataTypeId": "63f854cff2bd7b342a098962",
+          "hubId": "63c63ab1b6972d3150348172",
+          "outletName": "Cabang Jakarta Pusat",
+          "outletHours": 12,
+          "outletType": "minimarket",
+          "outletOpen": "09:00",
+          "outletClose": "17:00",
+          "outletContractExpired": "2023-02-02",
+          "outletOpenInWeekend": true,
+          "outletGeolocation": "-6.171702325136309,106.81775093078615",
+          "outletPhoneNumber": "+62 123 456 789",
+          "outletCloseOrder": "2023-02-02 17:00:00"
+        },
+        "type": "object",
+        "properties" : {
+          "dataId" : {
+            "type" : "string",
+            "description" : "The identifier of fields from data type.<br>**Example**: `Outlet`"
+          },
+          "dataTypeId" : {
+            "type" : "string",
+            "description" : "The identifier of data type.<br>Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example**: `63db2fb476bc679c540369c4`"
+          },
+          "hubId" : {
+            "type" : "string",
+            "description" : "The identifier for the hub that generated by system. `hubId` is **not required** if the `commonData` configuration for the data type is true.<br>Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `63c63ffbdef63e6f641aac72`"
+          },
+          "outletName" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet name. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source. <br>**Example**: `Cabang Jakarta Pusat`"
+          },
+          "outletHours" : {
+            "type" : "integer",
+            "description" : "The dynamic field, outlet hours. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `12`"
+          },
+          "outletType" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `minimarket`"
+          },
+          "outletOpen" : {
+            "type" : "time",
+            "description" : "The dynamic field, outlet open. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `09:00`"
+          },
+          "outletClosed" : {
+            "type" : "time",
+            "description" : "The dynamic field, outlet closed. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `17:00`"
+          },
+          "outletContractExpired" : {
+            "type" : "date",
+            "description" : "The dynamic field, outlet contract expired. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `2023-02-02`"
+          },
+          "outletOpenInWeekend" : {
+            "type" : "boolean",
+            "description" : "The dynamic field, outlet open in weekend. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `true`"
+          },
+          "outletGeolocation" : {
+            "type" : "string",
+            "description" : "The dynamic field, outlet geolocation. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get detail fields of data source.<br>**Example**: `-6.171702325136309,106.81775093078615`"
+          }
+        },
+        "required": [
+          "dataId",
+          "dataTypeId"
+        ]
+    },
+    "postDataBulkRequest": {
+      "title": "postDataBulkRequest",
+      "example": {
+        "data": [
+          {
+            "dataId": "Outlet",
+            "dataTypeId": "63db2fb476bc679c540369c4",
+            "hubId": "63c63ab1b6972d3150348172",
+            "field1": "Jack Ward",
+            "field2": "Gambir Jakarta",
+            "field3": "-6.230815251,106.75684387"
+          },
+          {
+            "dataId": "Cafe",
+            "dataTypeId": "63db2fb476bc679c540369c4",
+            "hubId": "63c63ab1b6972d3150348172",
+            "field1": "Jack Ward",
+            "field2": "Menteng Jakarta",
+            "field3": "-6.1951689,106.8278573"
+          }
+        ]
+      },
+      "type": "object",
+      "properties" : {
+        "data" : {
+          "type" : "array",
+          "description" : "The maximum data for creating multiple data source is 2000 data.",
+          "items" : {
+            "type" : "object",
+            "properties" :{
+              "dataId" : {
+                "type" : "string",
+                "description" : "The identifier of fields from data type.<br>**Example**: `Outlet`"
+              },
+              "dataTypeId" : {
+                "type" : "string",
+                "description" : "The identifier of data type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example**: `63db2fb476bc679c540369c4`"
+              },
+              "hubId" : {
+                "type" : "string",
+                "description" : {
+                  "$ref": "#/parameters/descriptions/hubId"
+                }
+              },
+              "field1" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `Jack Ward`"
+              },
+              "field2" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `Gambir Jakarta`"
+              },
+              "field3" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `-6.230815251,106.75684387`"
+              }
+            },
+            "required" : ["dataId","hubId","dataTypeId"]
+          }
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "upsertDataBulkRequest": {
+      "title": "upsertDataBulkRequest",
+      "example": {
+        "data": [
+            {
+                "dataId": "N001",
+                "dataTypeId": "64e5d8a107e9e4337a5ba3d2",
+                "hubId": "65322ff9cc356d4bd67fcc22",
+                "field1": "Jack Ward",
+                "field2": "Gambir Jakarta",
+                "field3": "-6.230815251,106.75684387",
+                "limitUser": null
+            },
+            {
+                "dataId": "N002",
+                "dataTypeId": "64e5d8a107e9e4337a5ba3d2",
+                "hubId": "65322ff9cc356d4bd67fcc22",
+                "field1": "Jack Ward",
+                "field2": "Menteng Jakarta",
+                "field3": "-6.1951689,106.8278573",
+                "limitUser": null
+            }
+        ]
+      },
+      "type": "object",
+      "properties" : {
+        "data" : {
+          "type" : "array",
+          "description" : "The maximum data for creating or update multiple data source is 2000 data.",
+          "items" : {
+            "type" : "object",
+            "properties" :{
+              "dataId" : {
+                "type" : "string",
+                "description" : "The identifier of fields from data type. The upsert endpoint combines the functionalities of both POST and PUT operations. Depending on the presence of a specified identifier (dataId), the endpoint will either create a new record or update an existing one. <br>**Example**: `N001`"
+              },
+              "dataTypeId" : {
+                "type" : "string",
+                "description" : "The identifier of data type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example**: `63db2fb476bc679c540369c4`"
+              },
+              "hubId" : {
+                "type" : "string",
+                "description" : "The identifier for the hub that generated by system. `hubId` is **not required** if the `commonData` configuration for the data type is true.<br>Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `63c63ffbdef63e6f641aac72`"
+              },
+              "field1" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `Jack Ward`"
+              },
+              "field2" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `Gambir Jakarta`"
+              },
+              "field3" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `-6.230815251,106.75684387`"
+              },
+              "limitUser" : {
+                "type" : "array",
+                "description" : "List of email that can see the data source."
+              }
+            },
+            "required" : ["dataId","dataTypeId"]
+          }
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "patchDataBulkRequest": {
+      "title": "patchDataBulkRequest",
+      "example": {
+        "data": [
+            {
+                "dataId": "N001",
+                "dataTypeId": "64e5d8a107e9e4337a5ba3d2",
+                "hubId": "65322ff9cc356d4bd67fcc22",
+                "field1": "Jack Ward",
+                "field2": "Gambir Jakarta",
+                "field3": "-6.230815251,106.75684387",
+                "limitUser": null
+            },
+            {
+                "dataId": "N002",
+                "dataTypeId": "64e5d8a107e9e4337a5ba3d2",
+                "hubId": "65322ff9cc356d4bd67fcc22",
+                "field1": "Jack Ward",
+                "field2": "Menteng Jakarta",
+                "field3": "-6.1951689,106.8278573",
+                "limitUser": null
+            }
+        ]
+      },
+      "type": "object",
+      "properties" : {
+        "data" : {
+          "type" : "array",
+          "description" : "The maximum data for creating or update multiple data source is 2000 data.",
+          "items" : {
+            "type" : "object",
+            "properties" :{
+              "dataId" : {
+                "type" : "string",
+                "description" : "The identifier of fields from data type. The upsert endpoint combines the functionalities of both POST and PUT operations. Depending on the presence of a specified identifier (dataId), the endpoint will either create a new record or update an existing one. <br>**Example**: `N001`"
+              },
+              "dataTypeId" : {
+                "type" : "string",
+                "description" : "The identifier of data type. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get the list of Data Type IDs.<br>**Example**: `63db2fb476bc679c540369c4`"
+              },
+              "hubId" : {
+                "type" : "string",
+                "description" : "The identifier for the hub that generated by system. `hubId` is **not required** if the `commonData` configuration for the data type is true.<br>Use <a href='#tag/Hub/operation/getHubs'>GET /hubs API</a> to get the list of Hub IDs.<br>**Example:** `63c63ffbdef63e6f641aac72`"
+              },
+              "field1" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `Jack Ward`"
+              },
+              "field2" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `Gambir Jakarta`"
+              },
+              "field3" : {
+                "type" : "string",
+                "description" : "This field's type & value is according to dataType. Use <a href='#tag/Data-Type/operation/getDataType'>GET /data-types API</a> to get fields of dataType.<br>**Example:** `-6.230815251,106.75684387`"
+              },
+              "limitUser" : {
+                "type" : "array",
+                "description" : "List of email that can see the data source."
+              }
+            },
+            "required" : ["dataId","dataTypeId"]
+          }
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "deleteDataBulkRequest": {
+      "title": "deleteDataBulkRequest",
+      "example": {
+        "data": [
+          {
+            "_id": "62067ee1cd77000042006f89"
+          },
+          {
+            "_id": "62067ee3cd77000042006f8b"
+          }
+        ]
+      },
+      "type": "object",
+      "properties" : {
+        "data" : {
+          "type" : "array",
+          "description" : "List of data (max: 3000 data)",
+          "items" : {
+            "type" : "object",
+            "properties" :{
+              "_id" : {
+                "type" : "string",
+                "description" : "Unique identifier for the data that generated by system.<br>**Example**: `62067ee1cd77000042006f89`"
+              }
+            },
+            "required" : [
+              "_id"
+            ]
+          }
+        }
+      },
+      "required": [
+        "data"
+      ]
+    }
+  }
+}

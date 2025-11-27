@@ -1,0 +1,192 @@
+---
+title: "Task Events"
+description: "Webhook payloads for task create, assign, and finish events"
+---
+
+Task webhooks are triggered when tasks are created, assigned, or completed in MileApp. The webhook payload contains task details including flow fields configured in your workflow.
+
+<Note>
+In this example, the flow called `Delivery` has 2 custom fields: **invoice** and **deliveryCoordinate**. Your actual payload will include the fields defined in your flow.
+</Note>
+
+## Event Types
+
+| Event | Trigger | Status |
+|-------|---------|--------|
+| **onCreate** | Task is created | `UNASSIGNED` |
+| **onAssign** | Task is assigned to a worker | `ONGOING` |
+| **onFinish** | Task is completed | `DONE` |
+
+## On Task Create
+
+Triggered when a new task is created in MileApp.
+
+```json
+{
+  "invoice": "INV001",
+  "deliveryCoordinate": "-6.2407825,107.042144",
+  "hubId": "640fc11832c0de76065d8922",
+  "flowId": "640fc11932c0de76065d8923",
+  "hub": {
+    "lng": 106.79073,
+    "_id": "640fc11832c0de76065d8922",
+    "deleteAccess": true,
+    "name": "Jakarta",
+    "lat": -6.17549
+  },
+  "endTime": "2023-07-19T06:57:00+00:00",
+  "assignee": [],
+  "flow": "Delivery",
+  "status": "UNASSIGNED",
+  "_id": "64b4e719dc92e91ae936d664",
+  "organizationId": "640fc0f0c53fdd421d7a8d32",
+  "startTime": "2023-07-17T06:57:00+00:00",
+  "createdTime": "2023-07-17T07:00:41+00:00",
+  "updatedTime": "2023-07-17T07:00:41+00:00",
+  "createdBy": "Jhon Web",
+  "createdFrom": "WEB",
+  "orderIndex": 168957724193012
+}
+```
+
+## On Task Assign
+
+Triggered when a task is assigned to a field worker.
+
+```json
+{
+  "invoice": "INV001",
+  "deliveryCoordinate": "-6.2407825,107.042144",
+  "hubId": "640fc11832c0de76065d8922",
+  "flowId": "640fc11932c0de76065d8923",
+  "hub": {
+    "lng": 106.79073,
+    "_id": "640fc11832c0de76065d8922",
+    "deleteAccess": true,
+    "name": "Jakarta",
+    "lat": -6.17549
+  },
+  "endTime": "2023-07-19T06:57:00+00:00",
+  "flow": "Delivery",
+  "status": "ONGOING",
+  "_id": "64b4e719dc92e91ae936d664",
+  "organizationId": "640fc0f0c53fdd421d7a8d32",
+  "startTime": "2023-07-17T06:57:00+00:00",
+  "createdTime": "2023-07-17T07:00:41+00:00",
+  "updatedTime": "2023-07-17T07:00:41+00:00",
+  "createdBy": "Jhon Web",
+  "createdFrom": "WEB",
+  "orderIndex": 168957724193012,
+  "assignedBy": "Sofia Satu",
+  "assignee": ["sofia+1@paket.id"],
+  "assignedTo": {
+    "organization": null,
+    "name": "Sofia Satu",
+    "hubId": ["640fc11832c0de76065d8922", "640fde1a0546fe0d450ae152"],
+    "role": null,
+    "_id": "640fc0f0c53fdd421d7a8d38",
+    "email": "sofia+1@paket.id"
+  },
+  "assignedTime": "2023-07-17T07:05:00+00:00"
+}
+```
+
+## On Task Finish
+
+Triggered when a task is marked as completed.
+
+```json
+{
+  "invoice": "INV001",
+  "deliveryCoordinate": "-6.2407825,107.042144",
+  "hubId": "640fc11832c0de76065d8922",
+  "flowId": "640fc11932c0de76065d8923",
+  "hub": {
+    "lng": 106.79073,
+    "_id": "640fc11832c0de76065d8922",
+    "deleteAccess": true,
+    "name": "Jakarta",
+    "lat": -6.17549
+  },
+  "endTime": "2023-07-19T06:57:00+00:00",
+  "flow": "Delivery",
+  "status": "DONE",
+  "_id": "64b4e719dc92e91ae936d664",
+  "organizationId": "640fc0f0c53fdd421d7a8d32",
+  "startTime": "2023-07-17T06:57:00+00:00",
+  "createdTime": "2023-07-17T07:00:41+00:00",
+  "updatedTime": "2023-07-17T07:00:41+00:00",
+  "createdBy": "Jhon Web",
+  "createdFrom": "WEB",
+  "orderIndex": 168957724193012,
+  "assignedBy": "Sofia Satu",
+  "assignee": ["sofia+1@paket.id"],
+  "assignedTo": {
+    "organization": null,
+    "name": "Sofia Satu",
+    "hubId": ["640fc11832c0de76065d8922", "640fde1a0546fe0d450ae152"],
+    "role": null,
+    "_id": "640fc0f0c53fdd421d7a8d38",
+    "email": "sofia+1@paket.id"
+  },
+  "assignedTime": "2023-07-17T07:05:00+00:00",
+  "doneBy": "Jhon worker",
+  "doneTime": "2023-06-20T18:47:18+00:00"
+}
+```
+
+## Payload Fields
+
+### Base Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | string | Unique identifier of the task |
+| `organizationId` | string | Organization ID associated with the task |
+| `hubId` | string | Hub ID associated with the task |
+| `flowId` | string | Flow ID associated with the task |
+| `flow` | string | Flow name |
+| `status` | string | Task status: `UNASSIGNED`, `ONGOING`, or `DONE` |
+| `startTime` | string | Expected start time (ISO 8601) |
+| `endTime` | string | Expected end time (ISO 8601) |
+| `createdTime` | string | Task creation timestamp (ISO 8601) |
+| `updatedTime` | string | Last update timestamp (ISO 8601) |
+| `createdBy` | string | Name of the user who created the task |
+| `createdFrom` | string | Source of task creation: `WEB` or `API` |
+| `orderIndex` | integer | Order index for task sorting |
+
+### Hub Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | string | Hub unique identifier |
+| `name` | string | Hub name |
+| `lat` | number | Hub latitude |
+| `lng` | number | Hub longitude |
+| `deleteAccess` | boolean | Whether delete access is allowed |
+
+### Assignment Fields (onAssign, onFinish)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `assignedBy` | string | Name of the person who assigned the task |
+| `assignee` | array | Array of assignee email addresses |
+| `assignedTo` | object | Details of the assigned worker |
+| `assignedTime` | string | Assignment timestamp (ISO 8601) |
+
+### Completion Fields (onFinish)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `doneBy` | string | Name of the worker who completed the task |
+| `doneTime` | string | Completion timestamp (ISO 8601) |
+
+## Response
+
+Your endpoint must return an HTTP 200 status code to acknowledge receipt:
+
+```json
+{
+  "status": "received"
+}
+```

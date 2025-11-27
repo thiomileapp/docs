@@ -1,0 +1,33 @@
+---
+title: "Delivery Attempts and Retries"
+description: "How MileApp handles webhook delivery and automatic retries"
+---
+
+When viewing information about a specific event through the [Automation](https://web.mile.app/flow/automation) tab, there will be information about how many times MileApp attempted to send an event to the endpoint. This shows the latest response from client endpoint, a list of all attempted webhooks, and the respective HTTP status codes MileApp received. There is also a retry button for manually retrying webhooks.
+
+<div align="center">
+  <img src="/images/retry_webhook.png" alt="Retry Webhook" width="600" />
+</div>
+
+Our webhook is designed to ensure reliable delivery by automatically retrying under certain conditions.
+
+## Retry Conditions
+
+The webhook request will **retry up to 3 times** if any of the following conditions occur:
+
+- The server returns an **HTTP status that is not 200** (indicating failure)
+- The server takes longer than **30 seconds** to respond (timeout)
+
+## Retry Timing
+
+If the first attempt fails, the webhook will automatically retry **every 2 minutes**.
+
+| Attempt | Timing |
+|---------|--------|
+| First failure | Retry after 2 minutes |
+| Second failure | Retry again after 2 minutes |
+| Third failure | Final retry after another 2 minutes |
+
+After **3 failed attempts**, the retry process will stop.
+
+The purpose of this approach is to ensure the reliability and responsiveness of our webhook. By automatically retrying, we can increase the likelihood of successfully delivering messages or taking other actions by the webhook. It also helps in addressing potential issues that may arise, such as slow network connections or disruptions on the server side.

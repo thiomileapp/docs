@@ -1,0 +1,147 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/organization/{id}": {
+      "put": {
+        "summary": "Update organization",
+        "tags": [
+          "Organization"
+        ],
+        "operationId": "updateOrganization",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RequestOrganizationPut"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "example": {
+                "status": true,
+                "message": "Success.",
+                "data": {
+                  "_id": "64d2ebcd340ac136d87e96f2",
+                  "user": {
+                    "name": "John",
+                    "country": "IDN",
+                    "phoneNumber": "+62 81248933995",
+                    "numberOfUsers": "1-100",
+                    "industry": "Home Service",
+                    "position": "Owner/Director",
+                    "email": "organization@mile.app",
+                    "companyName": "organization name",
+                    "hub": {
+                      "name": "jakarta",
+                      "displayName": "jakarta",
+                      "address": "Neo Soho Residence 2503, l Letjen S. Parman No.Kav. 28",
+                      "lat": "-6.174255236982802",
+                      "lng": "106.78960844232894"
+                    },
+                    "flows": [
+                      "62d526290b18b1039408f652"
+                    ],
+                    "type": "active"
+                  },
+                  "productId": "prod_demo",
+                  "status": "verified",
+                  "verifiedTime": "2023-08-09T01:30:27+00:00",
+                  "curPeriodEndTime": null,
+                  "curPeriodStartTime": null,
+                  "eligible": true,
+                  "updatedTime": "2024-03-28T10:15:21+00:00",
+                  "createdTime": "2023-08-09T01:28:45+00:00",
+                  "customerId": {
+                    "idr": "cus_OPqwAmhMsOPU6l",
+                    "usd": null
+                  },
+                  "language": "en",
+                  "configuration": {
+                    "filesAccessPermission": "private",
+                    "filesServerProvider": "milesto"
+                  },
+                  "country": {
+                    "code": "IDN",
+                    "phoneCode": "+62",
+                    "name": "Indonesia",
+                    "alpha2Code": "ID",
+                    "enableLanguage": true,
+                    "language": "id",
+                    "languageName": "Indonesian"
+                  }
+                }
+              },
+              "type": "object",
+              "properties": {
+                "status": {
+                  "description": "Status of response.",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Message of API response.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Detail of object organization.",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "RequestOrganizationPut": {
+      "example": {
+        "configuration": {
+          "filesServerProvider": "milesto",
+          "filesAccessPermission": "private"
+        }
+      },
+      "type": "object",
+      "properties": {
+        "configuration": {
+          "type": "array",
+          "description": "The configuration owned by the organization, such as `filesAccessPermission`. <br>",
+          "items": {
+            "type": "object",
+            "properties": {
+              "filesServerProvider": {
+                "type": "string",
+                "description": "The organization's configuration determines whether storage providers for store the uploaded file. There is 2 kind of storage provided `milesto` and `awsS3`. The default value of this file access provider is `milesto`.<br>**Example:** `milesto`",
+                "required": true
+              },
+              "filesAccessPermission": {
+                "type": "string",
+                "description": "The organization's configuration determines whether file access permissions are `private` or `public`. If access permissions are set to private, files can only be accessed by users with access to the Mileapp application and can only be viewed through the Mileapp application. If access permissions are set to public, files can be accessed by everyone and viewed on any device. The default value of this file access permission is `private`.<br>**Example:** `public`",
+                "required": true
+              }
+            },
+            "required": [
+              "filesServerProvider",
+              "filesAccessPermission"
+            ]
+          }
+        }
+      },
+      "required": [
+        "configuration"
+      ]
+    }
+  }
+}

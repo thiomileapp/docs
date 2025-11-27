@@ -1,0 +1,318 @@
+{
+    "paths": {
+        "/resync": {
+            "post": {
+                "summary": "Resync data to elastic",
+                "tags": [
+                    "Internal Tools"
+                ],
+                "operationId": "resyncData",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/resync-data"
+                        }
+                    }
+                ],
+                "description":"This endpoint is only used with tokens from internal accounts, for example, accounts using @mile.app or @paket.id",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "List of success syncronize id.",
+                                    "type": "array"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "message": "Success.",
+                                "data": [
+                                    "650c03a074bf1b50f04dd3d2"
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            },
+                            "example": {
+                                "status": false,
+                                "message": "Failed to sync data",
+                                "failedCode": "resync-001"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/resync-data": {
+            "post": {
+                "summary": "Resync data to elastic",
+                "tags": [
+                    "Internal Tools"
+                ],
+                "operationId": "resyncDatav2",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/resync-data-v2"
+                        }
+                    }
+                ],
+                "description":"This endpoint is only used with tokens from internal accounts, for example, accounts using @mile.app or @paket.id",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "List of success syncronize id.",
+                                    "type": "array"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "total": 142,
+                                "message": "Success"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            },
+                            "example": {
+                                "status": false,
+                                "message": "Failed to sync data",
+                                "failedCode": "resync-001"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/resync-license": {
+            "post": {
+                "summary": "Resync license",
+                "tags": [
+                    "Internal Tools"
+                ],
+                "operationId": "resyncicenses",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/resyncLicenseDefinition"
+                        }
+                    }
+                ],
+                "description":"This endpoint is only used with tokens from internal accounts, for example, accounts using @mile.app or @paket.id",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "List of success syncronize id.",
+                                    "type": "array"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "total": 142,
+                                "message": "Success"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            },
+                            "example": {
+                                "status": false,
+                                "message": "Failed to sync data",
+                                "failedCode": "resync-001"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "resync-data": {
+            "example": {
+                "id" : ["64c208fdec80975f0677b484"],
+                "type" : "task",
+                "skipAutomation" : false,
+                "events" : ["onTaskCreated"]
+            },
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "array",
+                    "maxItems" : 200,
+                    "description": "Unique identifier for the data that generated by system. **Example:** `['6352736c628401059b37a2e2','6352736c628401059b37a2e2']`"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of data that want to resync. **Example:** `routing`",
+                    "enum" : ["routing,task,dataSource,automation"]
+                },
+                "skipAutomation": {
+                    "type": "boolean",
+                    "description": "If the user wants to trigger automation, the user must fill in the `events` and set `skipAutomation` to false. **Default:** `true`"
+                },
+                "events": {
+                    "type": "array",
+                    "description": "Define automations events that you want to execute. The user can fill in `events` according to predefined `type`, as follows : <br> **routing** : `onRoutingResultFinished`, `onRoutingResultDispatched` <br> **task** : `onTaskCreated`, `onTaskFinished`, `onTaskAssigned` <br> **dataSource** : `onDataSourceCreated`.",
+                    "enum" : ["onTaskCreated,onTaskFinished,onTaskAssigned,onDataSourceCreated,onRoutingResultFinished"]
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ]
+        },
+        "resync-data-v2": {
+            "example": {
+                "type" : "organization",
+                "dateFrom" : "2024-06-17 00:00:00",
+                "dateTo" : "2024-07-18 23:59:59"
+            },
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Type of data that want to resync. **Example:** `routing`",
+                    "enum" : ["organization,routing,user,datasource,automation"]
+                },
+                "dateFrom": {
+                    "type": "string",
+                    "description": "Start filter for date created from"
+                },
+                "dateTo": {
+                    "type": "string",
+                    "description": "End filter for date created from"
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ]
+        },
+        "resyncLicenseDefinition": {
+            "example": {
+                "dateFrom" : "2024-06-17 00:00:00",
+                "dateTo" : "2024-07-18 23:59:59"
+            },
+            "type": "object",
+            "properties": {
+                "dateFrom": {
+                    "type": "string",
+                    "description": "Start filter for date created from"
+                },
+                "dateTo": {
+                    "type": "string",
+                    "description": "End filter for date created from"
+                }
+            },
+            "required": [
+                "dateFrom",
+                "dateTo"
+            ]
+        }
+    }
+}

@@ -1,0 +1,88 @@
+{
+    "x-webhooks": {
+        "data-source": {
+            "post": {
+                "summary": "On data source created",
+                "description": "In this example there are 2 fields on data source **name, and phone**",
+                "operationId": "data-source",
+                "tags": [
+                    "Webhook"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/dataSourceWebhookPayload"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dataSourceWebhookPayload": {
+            "title": "dataSourceWebhookPayload",
+            "example": {
+                "dataTypeId": "64b40345140e79f485069c5a",
+                "hubId": "640fc11832c0de76065d8922",
+                "name": "Jhon doe",
+                "_id": "64b40372f07e26ccb8059bbb",
+                "organizationId": "640fc0f0c53fdd421d7a8d32",
+                "dataId": "1",
+                "phone": "00112233",
+                "createdTime": "2023-07-16 14:49:22",
+                "updatedTime": "2023-07-16 14:49:22",
+                "createdBy": "jhondoe@mile.app"
+            },
+            "type": "object",
+            "properties": {
+                "dataTypeId": {
+                    "description": "A unique identifier (ID) representing the data type id.",
+                    "type": "string"
+                },
+                "hubId": {
+                    "description": "A unique identifier (ID) representing the hub associated with this data.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "A string representing the `name` associated with the data.",
+                    "type": "string"
+                },
+                "_id": {
+                    "description": "A unique identifier (ID) for this data source.",
+                    "type": "string"
+                },
+                "organizationId": {
+                    "description": " A unique identifier (ID) representing the organization associated with this data.",
+                    "type": "string"
+                },
+                "dataId": {
+                    "description": "A unique identifier (ID) representing the `data entry ID`.",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": " A string representing the `phone` number associated with the data.",
+                    "type": "string"
+                },
+                "createdTime": {
+                    "description": "A timestamp indicating the date and time when this data was created.",
+                    "type": "string"
+                },
+                "updatedTime": {
+                    "description": "A timestamp indicating the date and time when this data was last updated.",
+                    "type": "string"
+                },
+                "createdBy": {
+                    "description": "A string representing the email address or ID of the user who created this data.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

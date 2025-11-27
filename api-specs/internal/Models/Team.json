@@ -1,0 +1,91 @@
+{
+  "components": {
+    "schemas": {
+      "TeamInternal": {
+        "type": "object",
+        "description": "Internal team object with administrative details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the team (MongoDB ObjectId)",
+            "example": "65c1f68ea735b522d370ea27"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier that owns this team",
+            "example": "65c1f4eeca7c4816d94587b2"
+          },
+          "name": {
+            "type": "string",
+            "description": "Team name",
+            "example": "Jakarta Operations Team"
+          },
+          "description": {
+            "type": "string",
+            "description": "Team description and purpose",
+            "example": "Handles all operational tasks in Jakarta region"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Associated hub ID",
+            "example": "65c1f68ea735b522d370ea25"
+          },
+          "members": {
+            "type": "array",
+            "description": "Team members",
+            "items": {
+              "type": "object",
+              "properties": {
+                "userId": {"type": "string"},
+                "name": {"type": "string"},
+                "email": {"type": "string"},
+                "role": {"type": "string"},
+                "joinedDate": {"type": "string", "format": "date-time"}
+              }
+            }
+          },
+          "leaderId": {
+            "type": "string",
+            "description": "Team leader user ID",
+            "example": "65c1f68ea735b522d370ea28"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Whether team is currently active",
+            "example": true
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email of admin who created this team",
+            "example": "admin@mile.app"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when team was created",
+            "example": "2024-01-20T09:00:00.000000Z"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when team was last updated",
+            "example": "2024-02-06T16:00:00.000000Z"
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Team Module business failedCode that indicate specific failure conditions or business rule violations during team module operations. These codes help identify the failed operation of team-related and provide standardized failure identification across the system.\n\nPossible values:\n- team-032: Invalid state/condition - Team state invalid\n- team-033: Team not found - Team record does not exist\n- team-034: Team name already exists - Team name already used\n- team-035: Access forbidden - User lacks team permission\n- team-036: Cannot delete team that has users - Team has assigned members\n- team-045: Server failure - Internal server failure",
+            "enum": [
+              "team-032",
+              "team-033",
+              "team-034",
+              "team-035",
+              "team-036",
+              "team-045"
+            ]
+          }
+        },
+        "required": ["_id", "organizationId", "name", "isActive"]
+      }
+    }
+  }
+}

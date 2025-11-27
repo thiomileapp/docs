@@ -1,0 +1,689 @@
+{
+    "paths": {
+        "/app-integrations": {
+            "get": {
+                "summary": "Read App Integration",
+                "tags": [
+                    "App Integration"
+                ],
+                "operationId": "getappIntegrations",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "integrationType",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "finding data by Integration Type.<br>**Example:** `azure`"
+                    },
+                    {
+                        "name": "sortOrder",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "sortOrder is to decide ascending or descending order<br>**Example:** `asc` or `desc`.<br>**Default:** `desc`"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Limit of App Integration list. **Example:** `1`. **Default:** `20`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "description": "List object of App Integrations.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 200,
+                                "message": "Success.",
+                                "data": {
+                                    "current_page": 1,
+                                    "data": [
+                                        {
+                                            "_id": "6769323b9fb1fe63cd0c6392",
+                                            "integrationType": "azure",
+                                            "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+                                            "azureCert": "https://apistorage.mile.app/v3-public-dev/dev/66791b2bfabcde/2024/12/28/app.cer",
+                                            "organizationId": "66791b2bf001a712b77b3622",
+                                            "updatedTime": "2024-12-28T12:21:21.642000Z",
+                                            "createdTime": "2024-12-23T09:49:47.189000Z"
+                                        }
+                                    ],
+                                    "first_page_url": "https://apiwebdev.mile.app/api/v3/app-integrations?limit=1&page=1",
+                                    "from": 1,
+                                    "last_page": 1,
+                                    "last_page_url": "https://apiwebdev.mile.app/api/v3/app-integrations?limit=1&page=1",
+                                    "links": [
+                                        {
+                                            "url": null,
+                                            "label": "&laquo; Previous",
+                                            "active": false
+                                        },
+                                        {
+                                            "url": "https://apiwebdev.mile.app/api/v3/app-integrations?limit=1&page=1",
+                                            "label": "1",
+                                            "active": true
+                                        },
+                                        {
+                                            "url": null,
+                                            "label": "Next &raquo;",
+                                            "active": false
+                                        }
+                                    ],
+                                    "next_page_url": null,
+                                    "path": "https://apiwebdev.mile.app/api/v3/app-integrations",
+                                    "per_page": 1,
+                                    "prev_page_url": null,
+                                    "to": 1,
+                                    "total": 1
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/app-integration/{appIntegrationId}": {
+            "get": {
+                "summary": "Read App Integration by ID",
+                "tags": [
+                    "App Integration"
+                ],
+                "operationId": "getappIntegrationId",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "appIntegrationId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the App Integration that generated by system.<br>**Example**: `63c7705c8608d52094785374`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "description": "Code of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Detail of object App Integration.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 200,
+                                "message": "Success.",
+                                "data": {
+                                    "_id": "6769323b9fb1fe63cd0c6392",
+                                    "integrationType": "azure",
+                                    "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+                                    "azureCert": "https://apistorage.mile.app/v3-public-dev/dev/66791b2bfabcde/2024/12/28/app.cer",
+                                    "organizationId": "66791b2bf001a712b77b3622",
+                                    "updatedTime": "2024-12-28T12:21:21.642000Z",
+                                    "createdTime": "2024-12-23T09:49:47.189000Z"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found",
+                        "schema": {
+                            "$ref": "#/parameters/responses/notFound/schema"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/app-integration": {
+            "post": {
+                "summary": "Create App Integration",
+                "tags": [
+                    "App Integration"
+                ],
+                "operationId": "CreateappIntegration",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json",
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "integrationType",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string",
+                        "description": "this parameter for integration type, Currently available for `azure`"
+                    },
+                    {
+                        "name": "azureAuthUrl",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "description": "this parameter for auth url provided by `azure`"
+                    },
+                    {
+                        "name": "azureCert",
+                        "in": "formData",
+                        "required": true,
+                        "type": "file",
+                        "description": "this parameter for certificate file provided by `azure`"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Detail object of created App Integration.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 201,
+                                "message": "Integration has been added successfully.",
+                                "data": {
+                                    "integrationType": "azure",
+                                    "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+                                    "azureCert": "https://apistorage.mile.app/v3-public-dev/dev/66791b2bfabcde/2024/12/28/app.cer",
+                                    "organizationId": "66791b2bf001a712b77b3622",
+                                    "updatedTime": "2024-12-29T13:01:01.924000Z",
+                                    "createdTime": "2024-12-29T13:01:01.924000Z",
+                                    "_id": "6771480dc13375875909b693"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/app-integration/{appIntegrationId}/": {
+            "post": {
+                "summary": "Update App Integration",
+                "tags": [
+                    "App Integration"
+                ],
+                "operationId": "updateappIntegration",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json",
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "integrationType",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string",
+                        "description": "this parameter for integration type, Currently available for `azure`"
+                    },
+                    {
+                        "name": "azureAuthUrl",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "description": "this parameter for auth url provided by `azure`"
+                    },
+                    {
+                        "name": "azureCert",
+                        "in": "formData",
+                        "required": true,
+                        "type": "file",
+                        "description": "this parameter for certificate file provided by `azure`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "description": "Code of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Detail of object export config.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 200,
+                                "message": "Integration has been updated successfully.",
+                                "data": {
+                                    "_id": "6771480dc13375875909b693",
+                                    "integrationType": "azure",
+                                    "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+                                    "azureCert": "https://apistorage.mile.app/v3-public-dev/dev/66791b2bfabcde/2024/12/28/app.cer",
+                                    "organizationId": "66791b2bf001a712b77b3622",
+                                    "updatedTime": "2024-12-29T13:01:01.924000Z",
+                                    "createdTime": "2024-12-29T13:01:01.924000Z"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found",
+                        "schema": {
+                            "$ref": "#/parameters/responses/notFound/schema"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete App Integration",
+                "tags": [
+                    "App Integration"
+                ],
+                "operationId": "DeleteappIntegration",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "appIntegrationId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the App Integration that generated by system.<br>**Example**: `642634bde1428d414838c882`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "description": "Code of response.",
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Detail of object export config.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 200,
+                                "message": "Integration has been deleted successfully.",
+                                "data": {
+                                    "_id": "6771480dc13375875909b693",
+                                    "integrationType": "azure",
+                                    "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+                                    "azureCert": "https://apistorage.mile.app/v3-public-dev/dev/66791b2bfabcde/2024/12/28/app.cer",
+                                    "organizationId": "66791b2bf001a712b77b3622",
+                                    "updatedTime": "2024-12-29T13:01:01.924000Z",
+                                    "createdTime": "2024-12-29T13:01:01.924000Z"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found",
+                        "schema": {
+                            "$ref": "#/parameters/responses/notFound/schema"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "appIntegrationCreateRequest": {
+            "example": {
+                "integrationType": "azure",
+                "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+                "azureCert": "Template for daily report with bill item detail"
+            },
+            "parameters": [
+                {
+                    "name": "forRenameFile",
+                    "in": "formData",
+                    "required": false,
+                    "type": "string",
+                    "description": "this parameter for rename file what to want, after timestamp. <br>**Example**: `62b2744ee22400003b006bb2_0_photo1`"
+                },
+                {
+                    "name": "photo",
+                    "in": "formData",
+                    "required": true,
+                    "type": "file",
+                    "description": "mime file jpg"
+                }
+            ]
+        },
+        "appIntegrationUpdateRequest": {
+            "example": {
+                "_id": "67459c0b9778e36baa076802",
+                "name": "Report Daily",
+                "description": "Template for daily report with bill item detail",
+                "collection": "task",
+                "fields": [
+                    {
+                        "component": "input",
+                        "id": "flow",
+                        "type": "String",
+                        "source": "reservedKey",
+                        "title": "Flow",
+                        "uniqueTitle": "Flow"
+                    },
+                    {
+                        "component": "input",
+                        "id": "_id",
+                        "type": "String",
+                        "source": "reservedKey",
+                        "title": "Id",
+                        "uniqueTitle": "Id"
+                    },
+                    {
+                        "component": "input",
+                        "id": "hub",
+                        "type": "String",
+                        "source": "reservedKey",
+                        "title": "Hub",
+                        "uniqueTitle": "Hub"
+                    },
+                    {
+                        "component": "input",
+                        "id": "title",
+                        "type": "String",
+                        "source": "reservedKey",
+                        "title": "Title",
+                        "uniqueTitle": "Title"
+                    },
+                    {
+                        "component": "input",
+                        "id": "status",
+                        "type": "String",
+                        "source": "reservedKey",
+                        "title": "Status",
+                        "uniqueTitle": "Status"
+                    },
+                    {
+                        "component": "input",
+                        "id": "orderNumber",
+                        "title": "Order Number",
+                        "type": "String",
+                        "default": null,
+                        "routeAs": null,
+                        "showAs": "title",
+                        "required": false,
+                        "visible": true,
+                        "page": "page0",
+                        "flowId": [
+                            "66a988d53ae08a7ab52867c2",
+                            "66c6a05440d39b2616275622",
+                            "66c6a05c40d39b2616275624",
+                            "66c6a06412d3f54e2f425e22"
+                        ],
+                        "flowName": [
+                            "Export Bill",
+                            "Flow A",
+                            "Flow B",
+                            "Flow C"
+                        ],
+                        "uniqueTitle": "Order Number"
+                    },
+                    {
+                        "component": "bill",
+                        "id": "billItem",
+                        "title": "Bill Item",
+                        "addNew": true,
+                        "required": false,
+                        "value": null,
+                        "editable": [],
+                        "costs": [
+                            "Discount",
+                            "Shipping Cost"
+                        ],
+                        "visible": true,
+                        "masterItems": [
+                            {
+                                "name": "Snack",
+                                "unit_price": 10000
+                            },
+                            {
+                                "name": "Cold Drink",
+                                "unit_price": 5000
+                            },
+                            {
+                                "name": "Bread",
+                                "unit_price": 7000
+                            },
+                            {
+                                "name": "Egg",
+                                "unit_price": 2500
+                            }
+                        ],
+                        "masterCosts": [
+                            {
+                                "type": "discount",
+                                "name": "Discount",
+                                "amount": 10000
+                            },
+                            {
+                                "type": "cost",
+                                "name": "Shipping Cost",
+                                "amount": 7000
+                            }
+                        ],
+                        "qtyRule": null,
+                        "page": "page1",
+                        "flowId": [
+                            "66a988d53ae08a7ab52867c2"
+                        ],
+                        "flowName": [
+                            "Export Bill"
+                        ],
+                        "additionalField": [
+                            "billItem.Discount",
+                            "billItem.Shipping Cost",
+                            "billItem.totalCost"
+                        ],
+                        "uniqueTitle": "Bill Item"
+                    }
+                ],
+                "flowIds": [
+                    "66a988d53ae08a7ab52867c2",
+                    "66c6a05440d39b2616275622",
+                    "66c6a05c40d39b2616275624",
+                    "66c6a06412d3f54e2f425e22"
+                ],
+                "organizationId": "66791b2bf001a712b77b3622",
+                "updatedTime": "2024-11-26T09:59:39.860000Z",
+                "createdTime": "2024-11-26T09:59:39.860000Z"
+            },
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of App Integration. Name must be unique.<br>**Example**: `Report Daily`"
+                },
+                "collection": {
+                    "type": "string",
+                    "description": "The collection from which the data will be exported.<br>**Example**: `task`"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A brief description of the App Integrationuration.<br>**Example**: `Template for daily report detail bill item`"
+                },
+                "flowIds": {
+                    "type": "array",
+                    "description": "The flow identifier used to filter the components refers only to the selected flow IDs. Use <a href='#tag/Flow/operation/getflow' target='_blank'>Flow /flows API</a> to get the list of flow id.<br>**Example:** `['66a988d53ae08a7ab52867c2']`"
+                },
+                "fields": {
+                    "type": "array",
+                    "description": "The optional fields to be included in the exported data that ref to Flow reserved key and User fields. <br> **To see the details of reserved key of task, please follow <a href='#tag/task_model'> this link </a>**",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "An unique identifier for flow component. The value that cannot be input is the reserved key task."
+                            },
+                            "component": {
+                                "type": "string",
+                                "description": "Type of Component."
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "Title of Component."
+                            },
+                            "source": {
+                                "type": "string",
+                                "description": "Flag for reserved key Component."
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "component",
+                            "title"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "collection",
+                "flowIds",
+                "fields"
+            ]
+        }
+    }
+}
