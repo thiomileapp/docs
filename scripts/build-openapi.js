@@ -1285,8 +1285,8 @@ async function main() {
 
   const target = process.argv[2] || 'all';
 
-  // Define tag groups to match Laravel menu structure
-  const tagGroups = {
+  // Define tag groups to match Laravel menu structure (for public API)
+  const publicTagGroups = {
     'Task': ['Task', 'Location History', 'Task Schedule'],
     'Routing': ['Vehicle', 'Routing'],
     'Flow': ['Flow', 'Automation'],
@@ -1294,7 +1294,21 @@ async function main() {
     'Setting': ['User', 'Role', 'App Integration', 'Hub', 'Team', 'Plugin'],
     'ImportExport': ['Data Import', 'Export Task', 'Export Config'],
     'File': ['File']
-    // Note: Activity is internal-only (not in public Laravel API docs)
+  };
+
+  // Define tag groups for internal API (includes internal-only endpoints)
+  const internalTagGroups = {
+    'Task': ['Task', 'Location History', 'Task Schedule', 'Export Config', 'Activity'],
+    'Routing': ['Vehicle', 'Routing', 'Configuration', 'Capacity Constraint', 'Geocode', 'Geotagging'],
+    'Flow': ['Flow', 'Automation'],
+    'Data': ['Data Source', 'Data Type', 'Data Import'],
+    'Setting': ['User', 'Role', 'App Integration', 'Hub', 'Team', 'Plugin', 'Organization', 'Custom Module', 'Organization Data', 'Template', 'Version Management', 'Data Version', 'Password Policy', 'Privacy Policy'],
+    'Billing': ['Licenses', 'Subscriptions', 'Payment Methods', 'Invoices', 'Listener'],
+    'Activity': ['Activity', 'Dashboard'],
+    'Auth': ['Authentication', 'Token'],
+    'Tools': ['Internal Tools', 'Plugin'],
+    'Workflow': ['Workflow', 'Currency'],
+    'File': ['File']
   };
 
   // Ensure output directories exist
@@ -1318,7 +1332,7 @@ async function main() {
 
     // Split by tag groups for Mintlify navigation
     console.log('\n📂 Splitting by tag groups...');
-    const splitSpecs = splitByTagGroups(openapi3Spec, tagGroups);
+    const splitSpecs = splitByTagGroups(openapi3Spec, publicTagGroups);
     for (const [groupName, groupSpec] of Object.entries(splitSpecs)) {
       const fileName = `openapi-${groupName.toLowerCase()}.json`;
       saveJson(path.join(OUTPUT_PUBLIC, fileName), groupSpec);
@@ -1337,8 +1351,20 @@ async function main() {
     console.log('  🚫 Adding noindex metadata to internal API...');
     openapi3Spec = addNoindexMetadata(openapi3Spec);
 
+    // Save full spec
     saveJson(path.join(OUTPUT_INTERNAL, 'openapi-full.json'), openapi3Spec);
     console.log(`  Paths (OpenAPI 3.0): ${Object.keys(openapi3Spec.paths || {}).length}`);
+
+    // Split by tag groups for Mintlify navigation (same as public API)
+    console.log('\n📂 Splitting internal API by tag groups...');
+    const splitSpecs = splitByTagGroups(openapi3Spec, internalTagGroups);
+    for (const [groupName, groupSpec] of Object.entries(splitSpecs)) {
+      // Add noindex to split specs too
+      const noindexSpec = addNoindexMetadata(groupSpec);
+      const fileName = `openapi-${groupName.toLowerCase()}.json`;
+      saveJson(path.join(OUTPUT_INTERNAL, fileName), noindexSpec);
+      console.log(`  ${groupName}: ${Object.keys(noindexSpec.paths || {}).length} paths`);
+    }
   }
 
   console.log('\n✅ Build complete!');
