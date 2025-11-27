@@ -1,0 +1,462 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Activity"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/internal/activity": {
+      "post": {
+        "summary": "Create activity from workflow",
+        "tags": [
+          "Activity"
+        ],
+        "description": "Creates an activity from a workflow template. An activity represents a workflow execution instance with multiple tasks created based on workflow steps.",
+        "operationId": "CreateActivityInternal",
+        "deprecated": false,
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateActivityRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Activity created successfully",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request - validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Workflow not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateActivityRequest": {
+      "type": "object",
+      "required": [
+        "workflowId",
+        "tasks"
+      ],
+      "properties": {
+        "workflowId": {
+          "type": "string",
+          "description": "Workflow ID to create activity from"
+        },
+        "hubId": {
+          "type": "string",
+          "description": "Hub ID for the activity (optional)"
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Task configurations for each workflow step",
+          "items": {
+            "type": "object",
+            "description": "Task data corresponding to workflow step order"
+          }
+        }
+      },
+      "example": {
+        "workflowId": "64d9932e2beb9037735ff022",
+        "hubId": "64c863d1d7e8d0458d004fcd",
+        "tasks": [
+          {
+            "startTime": "2024-10-17T08:00:00Z",
+            "endTime": "2024-10-17T10:00:00Z",
+            "assignee": ["driver@mile.app"]
+          },
+          {
+            "startTime": "2024-10-17T10:30:00Z",
+            "endTime": "2024-10-17T12:00:00Z",
+            "assignee": ["driver@mile.app"]
+          }
+        ]
+      }
+    },
+    "ActivityObject": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Activity ID (actually a task ID with taskType='activityMaster')"
+        },
+        "name": {
+          "type": "string",
+          "description": "Activity name"
+        },
+        "workflowId": {
+          "type": "string",
+          "description": "Source workflow ID"
+        },
+        "workflow": {
+          "type": "object",
+          "description": "Embedded workflow object for performance optimization",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "organizationId": {
+              "type": "string"
+            },
+            "steps": {
+              "type": "array",
+              "description": "Array of workflow steps with field mappings and schemas",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "order": {
+                    "type": "integer"
+                  },
+                  "flowId": {
+                    "type": "string"
+                  },
+                  "flowName": {
+                    "type": "string"
+                  },
+                  "assigneeId": {
+                    "type": "string"
+                  },
+                  "statusMapping": {
+                    "type": "string"
+                  },
+                  "fieldMappings": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "fieldSchema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "customStatuses": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "createdBy": {
+              "type": "string"
+            },
+            "updatedBy": {
+              "type": "string"
+            },
+            "createdTime": {
+              "type": "string"
+            },
+            "updatedTime": {
+              "type": "string"
+            }
+          }
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Organization identifier"
+        },
+        "hubId": {
+          "type": "string",
+          "description": "Hub identifier"
+        },
+        "hub": {
+          "type": "object",
+          "description": "Populated hub object with complete location data",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "lat": {
+              "type": "number"
+            },
+            "lng": {
+              "type": "number"
+            },
+            "countryCode": {
+              "type": "string"
+            },
+            "organizationId": {
+              "type": "string"
+            },
+            "createdTime": {
+              "type": "string"
+            },
+            "updatedTime": {
+              "type": "string"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["ONGOING", "COMPLETED", "FAILED"],
+          "description": "Activity status"
+        },
+        "tasks": {
+          "type": "array",
+          "description": "Array of task IDs created for this activity (activityChild tasks)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subId": {
+          "type": "array",
+          "description": "Same as tasks - array of child task IDs (for consistency with task model)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taskType": {
+          "type": "string",
+          "enum": ["activityMaster"],
+          "description": "Always 'activityMaster' for activities"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Creator email"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Last updater email"
+        },
+        "createdTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp in ISO 8601 format"
+        },
+        "updatedTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp in ISO 8601 format"
+        }
+      },
+      "example": {
+        "_id": "68f1a2dded2d97a1d9015792",
+        "name": "E-commerce Order",
+        "workflowId": "68f1a18877f72639710075c2",
+        "taskType": "activityMaster",
+        "workflow": {
+          "_id": "68f1a18877f72639710075c2",
+          "name": "E-commerce Order",
+          "organizationId": "677213ce1d84c3e40f06f083",
+          "steps": [
+            {
+              "order": 0,
+              "flowId": "68f193b5df93fc9352020c02",
+              "flowName": "Packing Order",
+              "assigneeId": "677213ce1d84c3e40f06f088",
+              "statusMapping": "Packing",
+              "fieldMappings": [
+                {
+                  "targetField": "customerName",
+                  "sourceType": "manual",
+                  "sourceStepId": null,
+                  "sourceField": "John Doe"
+                },
+                {
+                  "targetField": "item",
+                  "sourceType": "manual",
+                  "sourceStepId": null,
+                  "sourceField": "Laptop"
+                }
+              ],
+              "fieldSchema": [
+                {
+                  "component": "input",
+                  "id": "customerName",
+                  "title": "Customer Name",
+                  "type": "String",
+                  "required": true,
+                  "visible": true,
+                  "page": "page0"
+                },
+                {
+                  "component": "input",
+                  "id": "item",
+                  "title": "Item",
+                  "type": "String",
+                  "required": true,
+                  "visible": true,
+                  "page": "page0"
+                },
+                {
+                  "component": "photo",
+                  "id": "packingPhoto",
+                  "title": "Packing Photo",
+                  "min": 0,
+                  "max": "1",
+                  "visible": true,
+                  "page": "page1"
+                }
+              ]
+            }
+          ],
+          "customStatuses": [
+            {
+              "name": "Unassigned",
+              "isDefault": true
+            },
+            {
+              "name": "Packing",
+              "isDefault": false
+            }
+          ],
+          "createdBy": "admin@mile.app",
+          "updatedBy": "admin@mile.app",
+          "createdTime": "2025-10-17T01:53:12+00:00",
+          "updatedTime": "2025-10-17T01:53:12+00:00"
+        },
+        "organizationId": "677213ce1d84c3e40f06f083",
+        "hubId": "68ec57882a8ea32a6c095082",
+        "hub": {
+          "_id": "68ec57882a8ea32a6c095082",
+          "name": "Jakarta Hub",
+          "address": "Jalan Sudirman No. 123, Jakarta Pusat, 10220, Indonesia",
+          "lat": -6.2088,
+          "lng": 106.8456,
+          "countryCode": "IDN",
+          "organizationId": "677213ce1d84c3e40f06f083",
+          "createdTime": "2025-10-13T01:36:08.551000Z",
+          "updatedTime": "2025-10-13T01:36:08.551000Z"
+        },
+        "status": "ONGOING",
+        "tasks": [
+          "68f1a2dded2d97a1d9015793"
+        ],
+        "subId": [
+          "68f1a2dded2d97a1d9015793"
+        ],
+        "createdBy": "admin@mile.app",
+        "updatedBy": "admin@mile.app",
+        "createdTime": "2025-10-17T01:58:53+00:00",
+        "updatedTime": "2025-10-17T01:58:54+00:00"
+      }
+    },
+    "ActivityResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ActivityObject"
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "data": {
+          "_id": "670a1b5f8c9d1e2f3a4b5c6d",
+          "name": "Standard Delivery Workflow",
+          "workflowId": "64d9932e2beb9037735ff022",
+          "taskType": "activityMaster",
+          "status": "ONGOING",
+          "tasks": [
+            "670a1c5f8c9d1e2f3a4b5c7e",
+            "670a1d5f8c9d1e2f3a4b5c7f"
+          ],
+          "subId": [
+            "670a1c5f8c9d1e2f3a4b5c7e",
+            "670a1d5f8c9d1e2f3a4b5c7f"
+          ],
+          "createdBy": "manager@mile.app",
+          "createdTime": "2024-10-17T07:30:00Z"
+        },
+        "status": true,
+        "code": 201,
+        "message": "activity_created"
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "default": false
+        },
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "failedCode": {
+          "type": "string",
+          "description": "Error code for debugging"
+        }
+      },
+      "example": {
+        "status": false,
+        "code": 404,
+        "message": "activity_not_found",
+        "failedCode": "ACTIV_NOT_FOUND"
+      }
+    }
+  }
+}

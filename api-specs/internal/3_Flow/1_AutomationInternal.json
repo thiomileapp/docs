@@ -1,0 +1,95 @@
+{
+    "swagger": "2.0",
+    "paths": {
+        "/internal/automation-repush": {
+            "post": {
+                "summary": "Repush Automation",
+                "tags": [
+                    "Automation"
+                ],
+                "operationId": "repushAutomation",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/BodyManualRepush"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Object data events, if there's and id inside event mean automation actions triggered.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 200,
+                                "message": "Success.",
+                                "data": {
+                                    "onDataSourceCreated": ["64f525b763a7987c6705d972"]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "BodyManualRepush": {
+            "title": "POSTVehicleRequestCreate",
+            "example": {
+                "id" : "64f525b763a7987c6705d972",
+                "type" : "data",
+                "events" : ["onDataSourceCreated"]
+            },
+            "type": "object",
+            "required": [
+                "id",
+                "type",
+                "events"
+            ],
+            "properties": {
+                "id": {
+                    "description": "ID of automation data (task id / routing result id / data source id) .<br>**Example**: 64f525b763a7987c6705d972",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Type of automation data.<br>**Example**: task",
+                    "type": "string",
+                    "enum" : ["task, data, routingResult"]
+                },
+                "events": {
+                    "description": "Events of automation.<br>**Example**: onTaskCreated",
+                    "type": "string",
+                    "enum" : ["onTaskCreated, onTaskFinished, onTaskAssigned, onDataSourceCreated, onRoutingResultFinished"]
+                }
+            }
+        }
+    }
+}

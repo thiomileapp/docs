@@ -1,0 +1,186 @@
+{
+  "components" : {
+    "schemas" : {
+      "InvoiceInternal": {
+        "type": "object",
+        "description": "Internal invoice object with comprehensive billing and administrative details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the invoice."
+          },
+          "planName": {
+            "type": "string",
+            "description": "Name of the plan associated with the invoice."
+          },
+          "orderIndex": {
+            "type": "integer",
+            "description": "Order index of the invoice."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Unique identifier for the organization associated with the invoice."
+          },
+          "subscriptionId": {
+            "type": "string",
+            "description": "Unique identifier for the subscription associated with the invoice."
+          },
+          "stripeInvoiceId": {
+            "type": "string",
+            "description": "Unique identifier for the Stripe invoice. This is ID of Invoice Stripe see this link for full documentation <a href='https://stripe.com/docs/api/invoices/object'>https://stripe.com/docs/api/invoices/object</a>"
+          },
+          "invoiceUrl": {
+            "type": "string",
+            "description": "URL to view the invoice, this is genereted by Stripe."
+          },
+          "invoicePdf": {
+            "type": "string",
+            "description": "URL to download the invoice as PDF. this is genereted by Stripe."
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/InvoiceItem"
+            },
+            "description": "List of invoice items."
+          },
+          "subTotal": {
+            "type": "integer",
+            "description": "Subtotal amount of the invoice."
+          },
+          "tax": {
+            "type": "integer",
+            "description": "Tax amount of the invoice."
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total amount of the invoice."
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code of the invoice."
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "description": "Invoice number."
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the invoice. Can be one of the following values: `OPEN` (The invoice is currently open and pending payment) or `EXPIRED` (The invoice has expired and payment is overdue).",
+            "enum": ["OPEN", "EXPIRED"]
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "Payment method used for the invoice."
+          },
+          "paidTime": {
+            "type": "string",
+            "description": "Timestamp of when the invoice was paid."
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Start date of the invoice period."
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date of the invoice period."
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "Due date of the invoice."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Timestamp of the last update to the invoice."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Timestamp of when the invoice was created."
+          },
+          "billingPeriod": {
+            "type": "string",
+            "description": "Billing period information."
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "License Module business failedCode that indicate specific failure conditions or business rule violations during license module operations. These codes help identify the failed operation of license-related and provide standardized failure identification across the system.\n\nPossible values:\n- inv-032: Invalid state/condition - Invoice state invalid\n- inv-033: Invoice not found - Please verify the invoice number\n- inv-035: Access forbidden - User lacks invoice permission\n- inv-039: Unpaid invoice blocks operation - Operation blocked by unpaid invoice\n- inv-045: Server failure - Internal server failure",
+            "enum": [
+              "inv-032",
+              "inv-033",
+              "inv-035",
+              "inv-039",
+              "inv-045"
+            ]
+          }
+        },
+        "example": {
+          "data": {
+              "_id": "6523fa771fff3d49110f7004",
+              "planName": "Paid",
+              "orderIndex": 3,
+              "organizationId": "6523685ffcab2513ab52e9fa",
+              "subscriptionId": "65236a90105aa81de9066c24",
+              "stripeInvoiceId": "in_1NzJ8iFONuq90qMo8PmJ2NTi",
+              "invoiceUrl": "https://invoice.stripe.com/i/acct_1LY2BOFONuq90qMo/test_YWNjdF8xTFkyQk9GT051cTkwcU1vLF9PbXN1eHlPUGlkenNSaVBqTElQU0xUdlRgqR0xjVEdiLDg3Mzk3NDk302000jRs1mgC?s=ap",
+              "invoicePdf": "https://pay.stripe.com/invoice/acct_1LY2BOFONuq90qMo/test_YWNjdF8xTFkyQk9GT051cTkwcU1vLF9PbXN1eHlPUGlkenNSaVBqTElQU0xUdlRgqR0xjVEdiLDg3Mzk3NDk302000jRs1mgC/pdf?s=ap",
+              "items": [
+              {
+                  "priceId": "il_1OLGYkFONuq90qMoijj8GTepP",
+                  "name": "Main Task",
+                  "description": "Paid Plan, limit for 2500 tasks.",
+                  "quantity": 1,
+                  "subTotal": 2000000
+              },
+              {
+                  "priceId": "il_1OLGYmFONuq90qMoibQdICzK",
+                  "name": "Task",
+                  "description": "1000 Extra Task from Latest Cycle (at IDR 400 / Extra Task)",
+                  "quantity": 1000,
+                  "subTotal": 400000
+              }
+              ],
+              "subTotal": 2664000,
+              "tax": 264000,
+              "total": 2664000,
+              "currency": "idr",
+              "invoiceNumber": "D934756A-0003",
+              "status": "OPEN",
+              "paymentMethod": "Bank Transfer",
+              "paidTime": null,
+              "startDate": "2023-12-09T02:46:30.000000Z",
+              "endDate": "2024-01-09T02:46:30.000000Z",
+              "dueDate": "2023-12-16T02:50:00.000000Z",
+              "updatedTime": "2023-10-09T13:04:58.605000Z",
+              "createdTime": "2023-10-09T13:04:55.677000Z",
+              "billingPeriod": null
+          }
+        }
+      },
+      "InvoiceItem": {
+        "type": "object",
+        "properties": {
+          "priceId": {
+            "type": "string",
+            "description": "Unique identifier for the invoice item price."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the invoice item."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the invoice item."
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantity of the invoice item."
+          },
+          "subTotal": {
+            "type": "integer",
+            "description": "Subtotal amount for the invoice item."
+          }
+        }
+      }
+    }
+  }
+}

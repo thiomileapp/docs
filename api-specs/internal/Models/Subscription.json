@@ -1,0 +1,152 @@
+{
+    "components": {
+        "schemas": {
+            "Subscription": {
+                "type": "object",
+                "description": "Internal subscription object with comprehensive billing and administrative details",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Unique identifier for the subscription."
+                    },
+                    "orderIndex": {
+                        "type": "integer",
+                        "description": "Order index of the subscription."
+                    },
+                    "organizationId": {
+                        "type": "string",
+                        "description": "Unique identifier for the organization associated with the subscription."
+                    },
+                    "productId": {
+                        "type": "string",
+                        "description": "Unique identifier for the product associated with the subscription. This is ID of Product Stripe see this link for full documentation <a href='https://stripe.com/docs/api/products/object'>https://stripe.com/docs/api/products/object</a>"
+                    },
+                    "planName": {
+                        "type": "string",
+                        "description": "Name of the subscription plan."
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/SubscriptionItem"
+                        },
+                        "description": "List of subscription items."
+                    },
+                    "curPeriodStartTime": {
+                        "type": "string",
+                        "description": "Start time of the current subscription period."
+                    },
+                    "curPeriodEndTime": {
+                        "type": "string",
+                        "description": "End time of the current subscription period."
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Status of the subscription. Can be one of the following values: `active` (The subscription is currently active), `inactive` (The subscription is currently inactive), or `unpaid` (The subscription is unpaid, and payment is pending).",
+                        "enum": [
+                            "active",
+                            "inactive",
+                            "unpaid"
+                        ]
+                    },
+                    "nextState": {
+                        "type": "string",
+                        "description": "Next state of the subscription. Can be one of the following values: `active` (The subscription will become active) or `inactive` (The subscription will become inactive).",
+                        "enum": ["active", "inactive"]
+                    },
+                    "isDeleted": {
+                        "type": "boolean",
+                        "description": "Flag indicating whether the subscription is deleted."
+                    },
+                    "updatedTime": {
+                        "type": "string",
+                        "description": "Timestamp of the last update to the subscription."
+                    },
+                    "createdTime": {
+                        "type": "string",
+                        "description": "Timestamp of when the subscription was created."
+                    },
+                    "failedCode": {
+                        "type": "string",
+                        "description": "Subscription Module business failedCode that indicate specific failure conditions or business rule violations during subscription module operations. These codes help identify the failed operation of subscription-related and provide standardized failure identification across the system.\n\nPossible values:\n- subs-031: Duplicate entry - Subscription already exists\n- subs-033: Subscription not found - Please verify your subscription ID\n- subs-035: Access forbidden - User lacks billing permission\n- subs-040: Subscription limit exceeded - Subscription limit reached\n- subs-045: Server error - Internal server failure",
+                        "enum": [
+                            "subs-031",
+                            "subs-033",
+                            "subs-035",
+                            "subs-040",
+                            "subs-045"
+                        ]
+                    }
+                },
+                "example": {
+                    "status": true,
+                    "data": {
+                        "_id": "651c3e4b8c1bf18656000934",
+                        "orderIndex": 2,
+                        "organizationId": "64f7e34c52b92e1a4a1f3722",
+                        "productId": "prod_OaZOlUL01AiiNl",
+                        "planName": "Paid",
+                        "items": [
+                            {
+                                "priceId": "price_1NnOO3FONuq90qMoWEksBGHt",
+                                "name": "Main Task",
+                                "mainPrice": 2000000,
+                                "stripeSubsItemId": "si_OkgdSnVwPRwPLk"
+                            },
+                            {
+                                "priceId": "price_1NtCzSFONuq90qMoyMtxfuk6",
+                                "name": "Automation",
+                                "extraPrice": 10,
+                                "stripeSubsItemId": "si_Okgdh7e6diGSVz"
+                            },
+                            {
+                                "priceId": "price_1NtD1DFONuq90qMo22os1GjE",
+                                "name": "Visit",
+                                "extraPrice": 200,
+                                "stripeSubsItemId": "si_OkgdskYhF2i92g"
+                            },
+                            {
+                                "priceId": "price_1Nve4aFONuq90qMoBv1D3Wcl",
+                                "name": "Task",
+                                "extraPrice": 400,
+                                "stripeSubsItemId": "si_OkgdYEM4R8WUZr"
+                            }
+                        ],
+                        "curPeriodStartTime": "2024-05-20T18:38:00+00:00",
+                        "curPeriodEndTime": "2024-06-20T18:38:00+00:00",
+                        "status": "unpaid",
+                        "nextState": "active",
+                        "isDeleted": false,
+                        "updatedTime": "2023-10-03T16:16:11+00:00",
+                        "createdTime": "2023-10-03T16:16:11+00:00"
+                    }
+                }
+            },
+            "SubscriptionItem": {
+                "type": "object",
+                "properties": {
+                    "priceId": {
+                        "type": "string",
+                        "description": "Unique identifier for the subscription item price. This is ID of Product Price Stripe see this link for full documentation <a href='https://stripe.com/docs/api/prices/object'>https://stripe.com/docs/api/prices/object</a>"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the subscription item."
+                    },
+                    "mainPrice": {
+                        "type": "integer",
+                        "description": "Main price for the subscription item."
+                    },
+                    "extraPrice": {
+                        "type": "integer",
+                        "description": "Extra price for the subscription item."
+                    },
+                    "stripeSubsItemId": {
+                        "type": "string",
+                        "description": "Unique identifier for the Stripe subscription item."
+                    }
+                }
+            }
+        }
+    }
+}

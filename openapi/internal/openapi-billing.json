@@ -14906,231 +14906,46 @@
           "role"
         ]
       },
-      "appIntegrationCreateRequest": {
-        "type": "object",
+      "TeamCreateRequest": {
         "example": {
-          "example": {
-            "integrationType": "azure",
-            "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
-            "azureCert": "Template for daily report with bill item detail"
-          },
-          "parameters": [
-            {
-              "name": "forRenameFile",
-              "in": "formData",
-              "required": false,
-              "type": "string",
-              "description": "this parameter for rename file what to want, after timestamp. \n**Example**: `62b2744ee22400003b006bb2_0_photo1`"
-            },
-            {
-              "name": "photo",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "description": "mime file jpg"
-            }
-          ]
-        },
-        "additionalProperties": true
-      },
-      "appIntegrationUpdateRequest": {
-        "example": {
-          "_id": "67459c0b9778e36baa076802",
-          "name": "Report Daily",
-          "description": "Template for daily report with bill item detail",
-          "collection": "task",
-          "fields": [
-            {
-              "component": "input",
-              "id": "flow",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Flow",
-              "uniqueTitle": "Flow"
-            },
-            {
-              "component": "input",
-              "id": "_id",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Id",
-              "uniqueTitle": "Id"
-            },
-            {
-              "component": "input",
-              "id": "hub",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Hub",
-              "uniqueTitle": "Hub"
-            },
-            {
-              "component": "input",
-              "id": "title",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Title",
-              "uniqueTitle": "Title"
-            },
-            {
-              "component": "input",
-              "id": "status",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Status",
-              "uniqueTitle": "Status"
-            },
-            {
-              "component": "input",
-              "id": "orderNumber",
-              "title": "Order Number",
-              "inputType": "string",
-              "default": null,
-              "routeAs": null,
-              "showAs": "title",
-              "required": false,
-              "visible": true,
-              "page": "page0",
-              "flowId": [
-                "66a988d53ae08a7ab52867c2",
-                "66c6a05440d39b2616275622",
-                "66c6a05c40d39b2616275624",
-                "66c6a06412d3f54e2f425e22"
-              ],
-              "flowName": [
-                "Export Bill",
-                "Flow A",
-                "Flow B",
-                "Flow C"
-              ],
-              "uniqueTitle": "Order Number"
-            },
-            {
-              "component": "bill",
-              "id": "billItem",
-              "title": "Bill Item",
-              "addNew": true,
-              "required": false,
-              "value": null,
-              "editable": [],
-              "costs": [
-                "Discount",
-                "Shipping Cost"
-              ],
-              "visible": true,
-              "masterItems": [
-                {
-                  "name": "Snack",
-                  "unit_price": 10000
-                },
-                {
-                  "name": "Cold Drink",
-                  "unit_price": 5000
-                },
-                {
-                  "name": "Bread",
-                  "unit_price": 7000
-                },
-                {
-                  "name": "Egg",
-                  "unit_price": 2500
-                }
-              ],
-              "masterCosts": [
-                {
-                  "type": "number",
-                  "name": "Discount",
-                  "amount": 10000
-                },
-                {
-                  "type": "number",
-                  "name": "Shipping Cost",
-                  "amount": 7000
-                }
-              ],
-              "qtyRule": null,
-              "page": "page1",
-              "flowId": [
-                "66a988d53ae08a7ab52867c2"
-              ],
-              "flowName": [
-                "Export Bill"
-              ],
-              "additionalField": [
-                "billItem.Discount",
-                "billItem.Shipping Cost",
-                "billItem.totalCost"
-              ],
-              "uniqueTitle": "Bill Item"
-            }
-          ],
-          "flowIds": [
-            "66a988d53ae08a7ab52867c2",
-            "66c6a05440d39b2616275622",
-            "66c6a05c40d39b2616275624",
-            "66c6a06412d3f54e2f425e22"
-          ],
-          "organizationId": "66791b2bf001a712b77b3622",
-          "updatedTime": "2024-11-26T09:59:39.860000Z",
-          "createdTime": "2024-11-26T09:59:39.860000Z"
+          "name": "Team Delivery",
+          "hubId": "642634bde1428d414838c882"
         },
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "The name of App Integration. Name must be unique.\n**Example**: `Report Daily`"
+            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
           },
-          "collection": {
+          "hubId": {
             "type": "string",
-            "description": "The collection from which the data will be exported.\n**Example**: `task`"
-          },
-          "description": {
-            "type": "string"
-          },
-          "flowIds": {
-            "type": "array",
-            "description": "The flow identifier used to filter the components refers only to the selected flow IDs. Use [Flow /flows API](#tag/Flow/operation/getflow) to get the list of flow id.\n**Example:** `['66a988d53ae08a7ab52867c2']`",
-            "items": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "fields": {
-            "type": "array",
-            "description": "The optional fields to be included in the exported data that ref to Flow reserved key and User fields. \n **To see the details of reserved key of task, please follow [ this link ](#tag/task_model)**",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "description": "An unique identifier for flow component. The value that cannot be input is the reserved key task."
-                },
-                "component": {
-                  "type": "string",
-                  "description": "Type of Component."
-                },
-                "title": {
-                  "type": "string",
-                  "description": "Title of Component."
-                },
-                "source": {
-                  "type": "string",
-                  "description": "Flag for reserved key Component."
-                }
-              },
-              "required": [
-                "id",
-                "component",
-                "title"
-              ]
-            }
+            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
           }
         },
         "required": [
           "name",
-          "collection",
-          "flowIds",
-          "fields"
+          "hubId"
+        ]
+      },
+      "TeamUpdateRequest": {
+        "example": {
+          "name": "Team Delivery Update",
+          "hubId": "642634bde1428d414838c882"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
+          }
+        },
+        "required": [
+          "name",
+          "hubId"
         ]
       },
       "PermissionDetailCheckinCheckout": {
@@ -15480,6 +15295,233 @@
           "configuration"
         ]
       },
+      "appIntegrationCreateRequest": {
+        "type": "object",
+        "example": {
+          "example": {
+            "integrationType": "azure",
+            "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+            "azureCert": "Template for daily report with bill item detail"
+          },
+          "parameters": [
+            {
+              "name": "forRenameFile",
+              "in": "formData",
+              "required": false,
+              "type": "string",
+              "description": "this parameter for rename file what to want, after timestamp. \n**Example**: `62b2744ee22400003b006bb2_0_photo1`"
+            },
+            {
+              "name": "photo",
+              "in": "formData",
+              "required": true,
+              "type": "string",
+              "description": "mime file jpg"
+            }
+          ]
+        },
+        "additionalProperties": true
+      },
+      "appIntegrationUpdateRequest": {
+        "example": {
+          "_id": "67459c0b9778e36baa076802",
+          "name": "Report Daily",
+          "description": "Template for daily report with bill item detail",
+          "collection": "task",
+          "fields": [
+            {
+              "component": "input",
+              "id": "flow",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Flow",
+              "uniqueTitle": "Flow"
+            },
+            {
+              "component": "input",
+              "id": "_id",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Id",
+              "uniqueTitle": "Id"
+            },
+            {
+              "component": "input",
+              "id": "hub",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Hub",
+              "uniqueTitle": "Hub"
+            },
+            {
+              "component": "input",
+              "id": "title",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Title",
+              "uniqueTitle": "Title"
+            },
+            {
+              "component": "input",
+              "id": "status",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Status",
+              "uniqueTitle": "Status"
+            },
+            {
+              "component": "input",
+              "id": "orderNumber",
+              "title": "Order Number",
+              "inputType": "string",
+              "default": null,
+              "routeAs": null,
+              "showAs": "title",
+              "required": false,
+              "visible": true,
+              "page": "page0",
+              "flowId": [
+                "66a988d53ae08a7ab52867c2",
+                "66c6a05440d39b2616275622",
+                "66c6a05c40d39b2616275624",
+                "66c6a06412d3f54e2f425e22"
+              ],
+              "flowName": [
+                "Export Bill",
+                "Flow A",
+                "Flow B",
+                "Flow C"
+              ],
+              "uniqueTitle": "Order Number"
+            },
+            {
+              "component": "bill",
+              "id": "billItem",
+              "title": "Bill Item",
+              "addNew": true,
+              "required": false,
+              "value": null,
+              "editable": [],
+              "costs": [
+                "Discount",
+                "Shipping Cost"
+              ],
+              "visible": true,
+              "masterItems": [
+                {
+                  "name": "Snack",
+                  "unit_price": 10000
+                },
+                {
+                  "name": "Cold Drink",
+                  "unit_price": 5000
+                },
+                {
+                  "name": "Bread",
+                  "unit_price": 7000
+                },
+                {
+                  "name": "Egg",
+                  "unit_price": 2500
+                }
+              ],
+              "masterCosts": [
+                {
+                  "type": "number",
+                  "name": "Discount",
+                  "amount": 10000
+                },
+                {
+                  "type": "number",
+                  "name": "Shipping Cost",
+                  "amount": 7000
+                }
+              ],
+              "qtyRule": null,
+              "page": "page1",
+              "flowId": [
+                "66a988d53ae08a7ab52867c2"
+              ],
+              "flowName": [
+                "Export Bill"
+              ],
+              "additionalField": [
+                "billItem.Discount",
+                "billItem.Shipping Cost",
+                "billItem.totalCost"
+              ],
+              "uniqueTitle": "Bill Item"
+            }
+          ],
+          "flowIds": [
+            "66a988d53ae08a7ab52867c2",
+            "66c6a05440d39b2616275622",
+            "66c6a05c40d39b2616275624",
+            "66c6a06412d3f54e2f425e22"
+          ],
+          "organizationId": "66791b2bf001a712b77b3622",
+          "updatedTime": "2024-11-26T09:59:39.860000Z",
+          "createdTime": "2024-11-26T09:59:39.860000Z"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of App Integration. Name must be unique.\n**Example**: `Report Daily`"
+          },
+          "collection": {
+            "type": "string",
+            "description": "The collection from which the data will be exported.\n**Example**: `task`"
+          },
+          "description": {
+            "type": "string"
+          },
+          "flowIds": {
+            "type": "array",
+            "description": "The flow identifier used to filter the components refers only to the selected flow IDs. Use [Flow /flows API](#tag/Flow/operation/getflow) to get the list of flow id.\n**Example:** `['66a988d53ae08a7ab52867c2']`",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "fields": {
+            "type": "array",
+            "description": "The optional fields to be included in the exported data that ref to Flow reserved key and User fields. \n **To see the details of reserved key of task, please follow [ this link ](#tag/task_model)**",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "An unique identifier for flow component. The value that cannot be input is the reserved key task."
+                },
+                "component": {
+                  "type": "string",
+                  "description": "Type of Component."
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of Component."
+                },
+                "source": {
+                  "type": "string",
+                  "description": "Flag for reserved key Component."
+                }
+              },
+              "required": [
+                "id",
+                "component",
+                "title"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "collection",
+          "flowIds",
+          "fields"
+        ]
+      },
       "ModuleRequestPut": {
         "example": {
           "name": "Custom report update",
@@ -15544,48 +15586,6 @@
           "label",
           "type",
           "url"
-        ]
-      },
-      "TeamCreateRequest": {
-        "example": {
-          "name": "Team Delivery",
-          "hubId": "642634bde1428d414838c882"
-        },
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
-          },
-          "hubId": {
-            "type": "string",
-            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
-          }
-        },
-        "required": [
-          "name",
-          "hubId"
-        ]
-      },
-      "TeamUpdateRequest": {
-        "example": {
-          "name": "Team Delivery Update",
-          "hubId": "642634bde1428d414838c882"
-        },
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
-          },
-          "hubId": {
-            "type": "string",
-            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
-          }
-        },
-        "required": [
-          "name",
-          "hubId"
         ]
       },
       "OrgDataCreateRequest": {
@@ -30964,5 +30964,27 @@
         }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Licenses",
+      "description": "This API provides information about licenses, including their names, product IDs, billing details, and associated features.\n\n**To see the details of license object, please follow [this link](#tag/license_model)**"
+    },
+    {
+      "name": "Subscriptions",
+      "description": "API documentation for MileApp billing system.\n\n**To see the details of subscription object, please follow [this link](#tag/subscription_model)**"
+    },
+    {
+      "name": "Payment Methods",
+      "description": "Payment method management endpoints for billing and payment configuration."
+    },
+    {
+      "name": "Invoices",
+      "description": "API documentation for MileApp billing system.\n\n**To see the details of invoice object, please follow [this link](#tag/invoice_model)**"
+    },
+    {
+      "name": "Listener",
+      "description": "API documentation for MileApp billing system webhook listeners."
+    }
+  ]
 }

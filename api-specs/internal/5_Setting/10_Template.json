@@ -1,0 +1,644 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Template",
+    "operationId": "Template",
+    "description": " \n  **Below is detail of each field for API Template** \n \n| Field | Type | Description |  \n|---|---|---|\n| name           | string | Name of Template | \n| category           | array of object | Type of Category / Industry | \n| configuration           | string | Stringify json detail of Flow Name and Pages | \n| description           | string | Description of template | \n| createdTime           | datetime | Template created time.<br> *format:* `Y-m-d H:i:s`,`Y-m-d\\TH:i:s.vP`,`Y-m-d\\TH:i:sP` | \n| updatedTime           | datetime | Template updated time.<br> *format:* `Y-m-d H:i:s`,`Y-m-d\\TH:i:s.vP`,`Y-m-d\\TH:i:sP` |"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/template": {
+      "post": {
+        "summary": "Create",
+        "tags": [
+          "Template"
+        ],
+        "operationId": "postTemplate",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": " \n  **Below is detail each field for Body API Template** \n \n| Field | Type | Required | \n|---|---|---| \n| name           | string | true | \n| category           | string | true |\n| configuration           | string | true |\n| description           | string | false |",
+            "schema": {
+              "$ref": "#/definitions/postRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response | \n| template | object| Detail of template |",
+            "schema": {
+              "$ref": "#/definitions/postResponse"
+            },
+            "headers": {
+              "X-RateLimit-Limit": {
+                "type": "string",
+                "default": "1000000"
+              },
+              "X-RateLimit-Remaining": {
+                "type": "string",
+                "default": "999999"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/templates": {
+      "get": {
+        "summary": "Read",
+        "tags": [
+          "Template"
+        ],
+        "operationId": "getTemplate",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "description": " \n| Field | Type | Description | \n|---|---|---| \n| limit | int | Limit result of the collection. *Default* is `20`. *Show All* is `-1` | \n| page | int | Current page of the collection. *Default* is `1`. | \n| fields | string | Limit field result of the collection | \n| category | string | Key Search for specified category/industry | \n",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "format": "int32",
+            "description": "page of object list"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "format": "int32",
+            "description": "limit of Object list"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "type": "string",
+            "description": "key of each template"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "type": "string",
+            "description": "key search of template category field"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response | \n| template | object| Detail of template list |",
+            "schema": {
+              "$ref": "#/definitions/List"
+            },
+            "headers": {
+              "X-RateLimit-Limit": {
+                "type": "string",
+                "default": "1000000"
+              },
+              "X-RateLimit-Remaining": {
+                "type": "string",
+                "default": "999999"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/template/{templateId}": {
+      "get": {
+        "summary": "Read by ID",
+        "tags": [
+          "Template"
+        ],
+        "operationId": "getTemplateById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "description": " \n| Field | Type | Description | required | \n|---|---|---|---| \n| templateID | string | ID of template | true| \n",
+        "parameters": [
+          {
+            "name": "templateID",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of template"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response | \n| template | object| Detail of template |",
+            "schema": {
+              "$ref": "#/definitions/Listbyid"
+            },
+            "headers": {
+              "X-RateLimit-Limit": {
+                "type": "string",
+                "default": "1000000"
+              },
+              "X-RateLimit-Remaining": {
+                "type": "string",
+                "default": "999998"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update",
+        "tags": [
+          "Template"
+        ],
+        "operationId": "putTemplateById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": " \n  **Below is detail each field for Body API Template** \n \n| Field | Type | Required | \n|---|---|---| \n| name           | string | true | \n| category           | string | true |\n| configuration           | string | true |\n| description           | string | false |",
+            "schema": {
+              "$ref": "#/definitions/putRequest"
+            }
+          },
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response | \n| template | object| Detail of template |",
+            "schema": {
+              "$ref": "#/definitions/putResponse"
+            },
+            "headers": {
+              "X-RateLimit-Limit": {
+                "type": "string",
+                "default": "1000000"
+              },
+              "X-RateLimit-Remaining": {
+                "type": "string",
+                "default": "999998"
+              }
+            }
+          },
+          "400": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response |",
+            "schema": {
+              "$ref": "#/definitions/DataNotFound"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update Partially",
+        "tags": [
+          "Template"
+        ],
+        "operationId": "patchTemplateById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": " \n  **Below is detail each field for Body API Template** \n \n| Field | Type | Required | \n|---|---|---| \n| name           | string | true | \n| category           | string | true |\n| configuration           | string | true |\n| description           | string | false |",
+            "schema": {
+              "$ref": "#/definitions/patchRequest"
+            }
+          },
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response | \n| template | object| Detail of template |",
+            "schema": {
+              "$ref": "#/definitions/patchResponse"
+            },
+            "headers": {
+              "X-RateLimit-Limit": {
+                "type": "string",
+                "default": "1000000"
+              },
+              "X-RateLimit-Remaining": {
+                "type": "string",
+                "default": "999998"
+              }
+            }
+          },
+          "400": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response |",
+            "schema": {
+              "$ref": "#/definitions/DataNotFound"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete",
+        "tags": [
+          "Template"
+        ],
+        "operationId": "deleteTemplateById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "templateID",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response | \n| data | object| Detail of template |",
+            "schema": {
+              "$ref": "#/definitions/deleteResponse"
+            },
+            "headers": {
+              "X-RateLimit-Limit": {
+                "type": "string",
+                "default": "1000000"
+              },
+              "X-RateLimit-Remaining": {
+                "type": "string",
+                "default": "999998"
+              }
+            }
+          },
+          "400": {
+            "description": " \n  **Below is detail each field for Response API Template** \n \n| Field | Type | Description | \n|---|---|---| \n| status | boolean | Status of response | \n| message | string | detail message of response |",
+            "schema": {
+              "$ref": "#/definitions/DataNotFound"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "postRequest": {
+      "title": "postRequest",
+      "example": {
+        "name": "Delivery",
+        "category":"Transport and Logistics",
+        "configuration":"{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+        "description":"Delivery Template of Transport and Logistics"
+    },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pages": {
+          "type": "Object"
+        }
+      },
+      "required": [
+        "Template",
+        "hubId"
+      ]
+    },
+    "putRequest": {
+      "title": "putRequest",
+      "example": {
+        "name": "Delivery",
+        "category":"Transport and Logistics",
+        "configuration":"{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+        "description":"Delivery Template of Transport and Logistics to Depo"
+    },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pages": {
+          "type": "Object"
+        }
+      },
+      "required": [
+        "Template",
+        "hubId"
+      ]
+    },
+    "patchRequest": {
+      "title": "putRequest",
+      "example": {
+        "name": "Delivery",
+        "category":"Transport and Logistics",
+        "configuration":"{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+        "description":"Delivery Template of Transport and Logistics to Depo"
+    },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pages": {
+          "type": "Object"
+        }
+      },
+      "required": [
+        "Template",
+        "hubId"
+      ]
+    },
+    "postResponse": {
+      "title": "postResponse",
+      "example": {
+        "status": true,
+        "message": "Template has been created",
+        "template": {
+            "name": "Delivery",
+            "category": "Transport and Logistics",
+            "configuration": "{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+            "description": "Delivery Template of Transport and Logistics",
+            "createdBy": "husni",
+            "updatedTime": "2022-03-17T06:15:21.583000Z",
+            "createdTime": "2022-03-17T06:15:21.583000Z",
+            "_id": "6232d1f9fa4c0000e9003ed6"
+        }
+    },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "template": {
+          "type": "object"
+        }
+      }
+    },
+    "putResponse": {
+      "title": "putResponse",
+      "example": {
+        "status": true,
+        "message": "Success",
+        "template": {
+            "_id": "6232d1f9fa4c0000e9003ed6",
+            "name": "Delivery",
+            "category": "Transport and Logistics",
+            "configuration": "{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+            "description": "Delivery Template of Transport and Logistics to Depo",
+            "createdBy": "husni",
+            "updatedTime": "2022-03-17T06:31:05.414000Z",
+            "createdTime": "2022-03-17T06:15:21.583000Z",
+            "updatedBy": "husni"
+        }
+    },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "template": {
+          "type": "object"
+        }
+      }
+    },
+    "patchResponse": {
+      "title": "putResponse",
+      "example": {
+        "status": true,
+        "message": "Success",
+        "template": {
+            "_id": "6232d1f9fa4c0000e9003ed6",
+            "name": "Delivery",
+            "category": "Transport and Logistics",
+            "configuration": "{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+            "description": "Delivery Template of Transport and Logistics to Depo",
+            "createdBy": "husni",
+            "updatedTime": "2022-03-17T06:31:05.414000Z",
+            "createdTime": "2022-03-17T06:15:21.583000Z",
+            "updatedBy": "husni"
+        }
+    },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "template": {
+          "type": "object"
+        }
+      }
+    },
+    "deleteResponse": {
+      "title": "putResponse",
+      "example": {
+        "status": true,
+        "message": "Success",
+        "data": {
+            "_id": "6232d1f9fa4c0000e9003ed6",
+            "name": "Delivery",
+            "category": "Transport and Logistics",
+            "configuration": "{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+            "description": "Delivery Template of Transport and Logistics to Depo",
+            "createdBy": "husni",
+            "updatedTime": "2022-03-17T06:31:05.414000Z",
+            "createdTime": "2022-03-17T06:15:21.583000Z",
+            "updatedBy": "husni"
+        }
+    },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "template": {
+          "type": "object"
+        }
+      }
+    },
+    "List": {
+      "title": "List",
+      "example": {
+        "status": true,
+        "message": "Success",
+        "templates": {
+            "current_page": 1,
+            "data": [
+                {
+                    "_id": "6232d1f9fa4c0000e9003ed6",
+                    "name": "Delivery",
+                    "category": "Transport and Logistics",
+                    "configuration": "{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }"
+                },
+                {
+                    "_id": "62315c32dd5e3b36143b50a3",
+                    "name": "TC Audit",
+                    "category": "Emergency Services",
+                    "configuration": "{\"name\":\"TC Audit\",\"pages\":[{\"id\":\"page1\",\"components\":[{\"title\":\"Audittitle\",\"id\":\"q1\",\"type\":\"String\",\"component\":\"input\"},{\"title\":\"DocumentNo.\",\"id\":\"q2\",\"type\":\"String\",\"component\":\"input\"},{\"title\":\"Client/site\",\"id\":\"q3\",\"type\":\"String\",\"component\":\"input\"},{\"title\":\"Conductedon\",\"id\":\"q4\",\"type\":\"Date\",\"component\":\"input\"},{\"title\":\"Preparedby\",\"id\":\"q5\",\"type\":\"String\",\"component\":\"input\"},{\"title\":\"Location\",\"id\":\"q6\",\"type\":\"Geolocation\",\"component\":\"input\"},{\"title\":\"Personnel\",\"id\":\"q7\",\"type\":\"String\",\"component\":\"input\"}]},{\"id\":\"page2\",\"components\":[{\"title\":\"Bins\",\"id\":\"q8\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q9\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"FixeMats\",\"id\":\"q10\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floor\",\"id\":\"q11\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"ToiletArea\",\"id\":\"q12\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"WindowsInternal&External\",\"id\":\"q13\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Air/WaterMachine\",\"id\":\"q14\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Bins\",\"id\":\"q15\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"CarWash-FloorArea\",\"id\":\"q16\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"CarWash-JetWash\",\"id\":\"q17\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Pumps\",\"id\":\"q18\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"StainRemoval\",\"id\":\"q19\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sweep&LitterPick\",\"id\":\"q20\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Bins\",\"id\":\"q21\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"LitterPick&Sweep\",\"id\":\"q22\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"LitterPickLandscapeAreas\",\"id\":\"q23\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"SweepStairwells&Lifts\",\"id\":\"q24\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"UnderCanopies&EntranceExternals\",\"id\":\"q25\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"CheckoutCases\",\"id\":\"q26\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"CheckoutTops\",\"id\":\"q27\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"CustomerServicesDeskFloor\",\"id\":\"q28\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Glass\",\"id\":\"q29\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Entrance&ExitLobby\",\"id\":\"q30\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"FixedMats&ProduceMats\",\"id\":\"q31\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"SalesFloorincludingCheckouts\",\"id\":\"q32\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Windows&Frames\",\"id\":\"q33\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q34\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q35\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sink&Basins\",\"id\":\"q36\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"BufferArea,Gangway,WarehouseFloor\",\"id\":\"q37\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q38\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"FixedMats&Wells\",\"id\":\"q39\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"GoodsLifts\",\"id\":\"q40\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sinks&Basins\",\"id\":\"q41\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Corners&Edges\",\"id\":\"q42\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q43\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q44\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sinks&Basins\",\"id\":\"q45\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"VentilationGrills\",\"id\":\"q46\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Walls\",\"id\":\"q47\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Corners&Edges\",\"id\":\"q48\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q49\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"FixedMats&Wells\",\"id\":\"q50\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"FloorsincludingScrape&Sweep\",\"id\":\"q51\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sinks&Basins\",\"id\":\"q52\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"VentilationGrills,Louvers,Canopies\",\"id\":\"q53\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Walls&Columns\",\"id\":\"q54\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"BabyChangingFacility\",\"id\":\"q55\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Bins\",\"id\":\"q56\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q57\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q58\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Partitions&Doors\",\"id\":\"q59\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"SanitaryWare\",\"id\":\"q60\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sinks&Basins\",\"id\":\"q61\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Walls\",\"id\":\"q62\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Corners&Edges\",\"id\":\"q63\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q64\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q65\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sinks&Basins\",\"id\":\"q66\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"VentilationLouvers&Grills\",\"id\":\"q67\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Carpet-Vacuum&SpotClean\",\"id\":\"q68\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Corners&Edges\",\"id\":\"q69\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q70\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"FixedMatsWells\",\"id\":\"q71\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q72\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"VentilationLouvers&Grills\",\"id\":\"q73\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Windows/GlazedScreensInternal&External\",\"id\":\"q74\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Bins\",\"id\":\"q75\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q76\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q77\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q78\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q79\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Handrails&Equipment\",\"id\":\"q80\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Equipment\",\"id\":\"q81\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Janitor\",\"id\":\"q82\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"ChillerFloorSweep&Scrub\",\"id\":\"q83\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q84\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Walls&Ceilings\",\"id\":\"q85\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Bins\",\"id\":\"q86\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q87\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floor\",\"id\":\"q88\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"LockerSurfaces\",\"id\":\"q89\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"SanitaryWare\",\"id\":\"q90\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"ShowerCubicles/Partitions\",\"id\":\"q91\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sinks&Basins\",\"id\":\"q92\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Bins\",\"id\":\"q93\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Carpet-Vacuum&SpotClean\",\"id\":\"q94\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Corners&Edges\",\"id\":\"q95\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q96\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q97\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"VentilationLouvers&Grills\",\"id\":\"q98\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Corners&Edges\",\"id\":\"q99\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Doors&Frames\",\"id\":\"q100\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Floors\",\"id\":\"q101\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"Sinks&Basins\",\"id\":\"q102\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"VentilationLouvers&Grills\",\"id\":\"q103\",\"options\":[\"Yes\",\"No\",\"N/A\"],\"min\":0,\"max\":1,\"component\":\"select\"},{\"title\":\"AuditorSignature\",\"id\":\"q104\",\"component\":\"signature\"},{\"title\":\"CustomerSignature\",\"id\":\"q105\",\"component\":\"signature\"}]}]}"
+                }
+            ],
+            "first_page_url": "http://localhost:8002/api/templates?fields=category%2Cconfiguration&limit=-1&page=1",
+            "from": 1,
+            "last_page": 1,
+            "last_page_url": "http://localhost:8002/api/templates?fields=category%2Cconfiguration&limit=-1&page=1",
+            "links": [
+                {
+                    "url": null,
+                    "label": "&laquo; Previous",
+                    "active": false
+                },
+                {
+                    "url": "http://localhost:8002/api/templates?fields=category%2Cconfiguration&limit=-1&page=1",
+                    "label": "1",
+                    "active": true
+                },
+                {
+                    "url": null,
+                    "label": "Next &raquo;",
+                    "active": false
+                }
+            ],
+            "next_page_url": null,
+            "path": "http://localhost:8002/api/templates",
+            "per_page": -1,
+            "prev_page_url": null,
+            "to": 17,
+            "total": 17
+        }
+    },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "Listbyid": {
+      "title": "List",
+      "example": {
+        "status": true,
+        "message": "Success",
+        "template": {
+            "_id": "6232d1f9fa4c0000e9003ed6",
+            "name": "Delivery",
+            "category": "Transport and Logistics",
+            "configuration": "{ \"name\": \"Delivery\", \"pages\": [ { \"id\": \"page0\", \"components\": [ { \"component\": \"input\", \"id\": \"title\", \"type\": \"string\", \"default\": null, \"title\": \"Title\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"content\", \"type\": \"string\", \"default\": null, \"title\": \"Content\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"namaPenerima\", \"type\": \"string\", \"default\": \"albi\", \"title\": \"Nama Penerima\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"jumlahBarang\", \"type\": \"number\", \"default\": \"1\", \"title\": \"jumlah barang\", \"showAsTitle\": true }, { \"component\": \"input\", \"id\": \"waktuPengiriman\", \"type\": \"date\", \"default\": null, \"title\": \"Waktu Pengiriman\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"label\", \"default\": null, \"options\": [ \"CGR\", \"HDR\", \"HJK\", \"NYT\" ], \"min\": 0, \"max\": 2, \"title\": \"Label\", \"showAsTitle\": true }, { \"component\": \"select\", \"id\": \"statusPengiriman\", \"options\": [ \"success\", \"failed\" ], \"default\": \"success\", \"title\": \"Status Pengiriman\", \"min\": 0, \"max\": 1 } ] }, { \"id\": \"page1\", \"components\": [ { \"component\": \"input\", \"id\": \"receiver\", \"type\": \"string\", \"default\": null, \"title\": \"Receiver\" }, { \"component\": \"input\", \"id\": \"codAmount\", \"type\": \"number\", \"default\": \"1\", \"title\": \"codAmount\" }, { \"component\": \"select\", \"id\": \"statusDelivery\", \"default\": null, \"options\": [ \"Success\", \"Failed\" ], \"min\": 0, \"max\": 1, \"title\": \"Status Delivery\" } ] } ] }",
+            "description": "Delivery Template of Transport and Logistics",
+            "createdBy": "husni",
+            "updatedTime": "2022-03-17T06:15:21.583000Z",
+            "createdTime": "2022-03-17T06:15:21.583000Z"
+        }
+    },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "DataNotFound": {
+      "title": "Data Not Found",
+      "example": {
+        "status": false,
+        "message": "Data not found. Please check the ID/reference number and try again.",
+        "failedCode": "templ-033"
+    },
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": []
+}

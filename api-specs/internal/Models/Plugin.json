@@ -1,0 +1,256 @@
+{
+  "components": {
+    "schemas": {
+      "PluginInternal": {
+        "type": "object",
+        "description": "Internal plugin object with comprehensive administrative and operational details",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique plugin identifier (MongoDB ObjectId). **Example**: `68b440c9dad4c5d45707f6d2`"
+          },
+          "name": {
+            "type": "string",
+            "description": "Plugin display name (3-100 characters). **Example**: `Custom Dashboard Widget`"
+          },
+          "description": {
+            "type": "string",
+            "description": "Plugin functional description (10-500 characters). **Example**: `A custom widget for displaying real-time analytics data`"
+          },
+          "resourceFile": {
+            "type": "string",
+            "description": "Original filename of the JavaScript resource. **Example**: `1756656087_Custom-Dashboard-Widget.js`"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Full URL to the plugin icon (PNG/SVG format). Can be null if no icon provided. **Example**: `http://host.docker.internal:9000/v3-public-dev/dev/icons/2025/08/31/686cc0ff083ca8093204f002/1756656087_dashboard-widget.svg`"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier. 'system' for global plugins, organization ID for custom plugins. **Example**: `686cc0ff083ca8093204f002` or `system`"
+          },
+          "resourceUrl": {
+            "type": "string",
+            "description": "Full CDN URL where the JavaScript resource is hosted. **Example**: `http://host.docker.internal:9000/v3-public-dev/dev/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js`"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email address of the user who created the plugin. **Example**: `user@mile.app`"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "Email address of the user who last updated the plugin. May be null if never updated. **Example**: `user@mile.app`"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp with microseconds when the plugin was created. **Format**: `YYYY-MM-DDTHH:mm:ss.ffffffZ` or `YYYY-MM-DDTHH:mm:ss+TZ`. **Example**: `2025-08-31T10:30:00.000000Z`"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp with microseconds when the plugin was last updated. **Format**: `YYYY-MM-DDTHH:mm:ss.ffffffZ` or `YYYY-MM-DDTHH:mm:ss+TZ`. **Example**: `2025-08-31T10:35:00.000000Z`"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "Human-readable organization name. 'Global' for system plugins, actual organization name for custom plugins. **Example**: `MileApp` or `Global`"
+          },
+          "isUsed": {
+            "type": "boolean",
+            "description": "Indicates if the plugin is currently active/installed. **Example**: `false`"
+          },
+          "customModuleId": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of associated custom module or null if standalone. **Example**: `null` or `62846484ed5be87b6f4358f3`"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "inactive", "draft"],
+            "description": "Plugin status. Optional field that may appear in some responses. **Example**: `active`"
+          },
+          "version": {
+            "type": "string",
+            "description": "Semantic version of the plugin. Optional field. **Example**: `1.0.0`"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of permission strings required by the plugin. Optional field. **Example**: `['read:tasks', 'write:data']`"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "configurable": {
+                "type": "boolean",
+                "description": "Whether the plugin has configurable settings"
+              },
+              "defaultConfig": {
+                "type": "object",
+                "description": "Default configuration object for the plugin"
+              }
+            },
+            "description": "Plugin-specific settings. Optional field that contains configuration metadata."
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string",
+                "description": "Plugin category classification"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Array of tags for plugin classification"
+              },
+              "compatibility": {
+                "type": "object",
+                "properties": {
+                  "minVersion": {
+                    "type": "string",
+                    "description": "Minimum Mile V3 version required"
+                  },
+                  "maxVersion": {
+                    "type": "string",
+                    "description": "Maximum Mile V3 version supported"
+                  }
+                },
+                "description": "Version compatibility information"
+              }
+            },
+            "description": "Additional metadata for the plugin. Optional field that may contain category, tags, and compatibility information."
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "installCount": {
+                "type": "integer",
+                "description": "Number of times the plugin has been installed"
+              },
+              "activeInstalls": {
+                "type": "integer", 
+                "description": "Number of currently active installations"
+              },
+              "lastUsed": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp of last plugin usage"
+              },
+              "usageCount": {
+                "type": "integer",
+                "description": "Total usage count metrics"
+              }
+            },
+            "description": "Usage statistics for the plugin. Optional field that tracks installation and usage metrics."
+          },
+          "deletedTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Soft delete timestamp. Present only for soft-deleted plugins. **Example**: `2025-08-31T11:00:00.000000Z`"
+          },
+          "internalNotes": {
+            "type": "string",
+            "description": "Internal administrative notes (not visible to public API)",
+            "example": "Plugin requires security audit before production deployment"
+          },
+          "auditLog": {
+            "type": "array",
+            "description": "Plugin activity audit log",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": {"type": "string"},
+                "timestamp": {"type": "string", "format": "date-time"},
+                "userId": {"type": "string"},
+                "details": {"type": "object"}
+              }
+            }
+          },
+          "systemMetadata": {
+            "type": "object",
+            "description": "Internal system metadata",
+            "properties": {
+              "migrationStatus": {"type": "string"},
+              "dataVersion": {"type": "integer"},
+              "lastHealthCheck": {"type": "string", "format": "date-time"}
+            }
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Plugin Module business failedCode that indicate specific failure conditions or business rule violations during plugin module operations. These codes help identify the failed operation of plugin-related and provide standardized failure identification across the system.\n\nPossible values:\n- plugn-032: Invalid state/condition - Plugin state invalid\n- plugn-033: Plugin not found - Plugin does not exist\n- plugn-035: Access forbidden - User lacks plugin permission\n- plugn-036: Plugin creation failed - Failed to create plugin\n- plugn-037: Plugin update failed - Failed to update plugin\n- plugn-038: Plugin delete failed - Failed to delete plugin\n- plugn-040: License limitation for plugin - Plugin license limit\n- plugn-041: External service error - External service failure\n- plugn-045: Server error - Internal server failure",
+            "enum": [
+              "plugn-032",
+              "plugn-033",
+              "plugn-035",
+              "plugn-036",
+              "plugn-037",
+              "plugn-038",
+              "plugn-040",
+              "plugn-041",
+              "plugn-045"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description", 
+          "resourceFile",
+          "organizationId",
+          "resourceUrl",
+          "createdBy",
+          "createdTime",
+          "updatedTime",
+          "organizationName",
+          "isUsed"
+        ],
+        "example": {
+          "id": "68b440c9dad4c5d45707f6d2",
+          "name": "Custom Dashboard Widget",
+          "description": "A custom widget for displaying real-time analytics data",
+          "resourceFile": "1756656087_Custom-Dashboard-Widget.js",
+          "icon": "http://host.docker.internal:9000/v3-public-dev/dev/icons/2025/08/31/686cc0ff083ca8093204f002/1756656087_dashboard-widget.svg",
+          "organizationId": "686cc0ff083ca8093204f002",
+          "resourceUrl": "http://host.docker.internal:9000/v3-public-dev/dev/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js",
+          "createdBy": "user@mile.app",
+          "updatedBy": "user@mile.app",
+          "createdTime": "2025-08-31T10:30:00.000000Z",
+          "updatedTime": "2025-08-31T10:35:00.000000Z",
+          "organizationName": "MileApp",
+          "isUsed": false,
+          "customModuleId": null,
+          "status": "active",
+          "version": "1.0.0",
+          "permissions": ["read:tasks", "write:data"],
+          "settings": {
+            "configurable": true,
+            "defaultConfig": {
+              "theme": "dark",
+              "refreshInterval": 30000
+            }
+          },
+          "metadata": {
+            "category": "dashboard",
+            "tags": ["analytics", "widget", "dashboard"],
+            "compatibility": {
+              "minVersion": "3.0.0",
+              "maxVersion": "3.9.9"
+            }
+          },
+          "usage": {
+            "installCount": 5,
+            "activeInstalls": 3,
+            "lastUsed": "2025-08-31T09:15:00.000000Z",
+            "usageCount": 127
+          }
+        }
+      }
+    }
+  }
+}

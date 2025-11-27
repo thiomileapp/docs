@@ -1,0 +1,296 @@
+{
+  "components":{
+    "schemas": {
+      "LicenseInternal": {
+        "type": "object",
+        "description": "Internal license object with comprehensive feature and administrative details",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the license."
+          },
+          "productId": {
+            "type": "string",
+            "description": "Product ID of the license. This is ID of Product Stripe see this link for full documentation of Product Stripe <a href='https://stripe.com/docs/api/products/object'>https://stripe.com/docs/api/products/object</a>"
+          },
+          "rule": {
+            "$ref": "#/definitions/LicenseRule"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the license."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the license."
+          },
+          "billingPeriod": {
+            "type": "string",
+            "description": "Billing period of the license."
+          },
+          "orderIndex": {
+            "type": "integer",
+            "description": "Order index of the license."
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/LicenseItem"
+            }
+          },
+          "feature": {
+            "$ref": "#/definitions/LicenseFeature"
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "License Module business failedCode that indicate specific failure conditions or business rule violations during license module operations. These codes help identify the failed operation of license-related and provide standardized failure identification across the system.\n\nPossible values:\n- lcns-032: Invalid state/condition - License state invalid\n- lcns-033: License not found - License record does not exist\n- lcns-035: Access forbidden - User lacks license permission\n- lcns-036: Organization not verified - Organization verification required\n- lcns-037: Invalid license type - License type not recognized\n- lcns-042: Feature not available - Feature not in license plan\n- lcns-043: License/subscription error - General license error\n- lcns-045: Server error - Internal server failure",
+            "enum": [
+              "lcns-032",
+              "lcns-033",
+              "lcns-035",
+              "lcns-036",
+              "lcns-037",
+              "lcns-042",
+              "lcns-043",
+              "lcns-045"
+            ]
+          }
+        },
+        "example": {
+            "productId": "prod_OaZOlUL01AiiNl",
+            "orderIndex": 2,
+            "name": "Paid",
+            "type": "regularId",
+            "billingPeriod": "Monthly",
+            "description": "Suitable for small business to manage task & track daily progress with easy",
+            "rule": {
+                "taskLimit": 2500,
+                "allowExtraTask": true,
+                "visitLimit": 2500,
+                "allowExtraVisit": true,
+                "automationLimit": 2500,
+                "allowExtraAutomation": true,
+                "userLimit": -1,
+                "allowExtraUser": false,
+                "dataRetention": "1 Year",
+                "customRole": 10,
+                "teams": true,
+                "imageQuality": "standard",
+                "dataSourceTypeLimit": 10000,
+                "allowExtraDataSourceType": false,
+                "sla": false,
+                "sso": false,
+                "privacyPolicy": "default",
+                "useBigData": false,
+                "professionalService": false,
+                "minimumContract": "No Contract"
+            },
+            "items": [
+                {
+                    "priceId": "price_1NnOO3FONuq90qMoWEksBGHt",
+                    "name": "Main Task",
+                    "mainPrice": 2000000
+                },
+                {
+                    "priceId": "price_1NxQtkFONuq90qMo9SlPhkgv",
+                    "name": "Visit",
+                    "extraPrice": 200
+                },
+                {
+                    "priceId": "price_1NxQshFONuq90qMoxbg4bPmd",
+                    "name": "Automation",
+                    "extraPrice": 10
+                },
+                {
+                    "priceId": "price_1Nve4aFONuq90qMoBv1D3Wcl",
+                    "name": "Task",
+                    "extraPrice": 400
+                }
+            ],
+            "cache": false
+        }
+      },
+      "LicenseRule": {
+        "type": "object",
+        "properties": {
+          "taskLimit": {
+            "type": "string",
+            "description": "Task limit per month."
+          },
+          "allowExtraTask": {
+            "type": "boolean",
+            "description": "Flag to indicate if extra tasks are allowed."
+          },
+          "visitLimit": {
+            "type": "string",
+            "description": "Routing limit per month."
+          },
+          "allowExtraVisit": {
+            "type": "boolean",
+            "description": "Flag to indicate if extra visits are allowed."
+          },
+          "automationLimit": {
+            "type": "string",
+            "description": "Automation limit per month."
+          },
+          "allowExtraAutomation": {
+            "type": "boolean",
+            "description": "Flag to indicate if extra automations are allowed."
+          },
+          "userLimit": {
+            "type": "integer",
+            "description": "User limit."
+          },
+          "allowExtraUser": {
+            "type": "boolean",
+            "description": "Flag to indicate if extra users are allowed."
+          },
+          "dataRetention": {
+            "type": "string",
+            "description": "Data retention period."
+          },
+          "customRole": {
+            "type": "string",
+            "description": "Custom role value."
+          },
+          "teams": {
+            "type": "boolean",
+            "description": "Flag to indicate if teams are allowed."
+          },
+          "imageQuality": {
+            "type": "string",
+            "description": "Image quality setting."
+          },
+          "dataSourceTypeLimit": {
+            "type": "string",
+            "description": "Data source type limit."
+          },
+          "allowExtraDataSourceType": {
+            "type": "boolean",
+            "description": "Flag to indicate if extra data source types are allowed."
+          },
+          "sla": {
+            "type": "boolean",
+            "description": "Flag to indicate if SLA is included."
+          },
+          "sso": {
+            "type": "boolean",
+            "description": "Flag to indicate if SSO is included."
+          },
+          "privacyPolicy": {
+            "type": "string",
+            "description": "Privacy policy setting."
+          },
+          "useBigData": {
+            "type": "boolean",
+            "description": "Flag to indicate if Big Data access is included."
+          },
+          "professionalService": {
+            "type": "boolean",
+            "description": "Flag to indicate if professional services are included."
+          },
+          "minimumContract": {
+            "type": "string",
+            "description": "Minimum contract setting."
+          }
+        }
+      },
+      "LicenseItem": {
+        "type": "object",
+        "properties": {
+          "priceId": {
+            "type": "string",
+            "description": "Price ID of the item. This is ID of Product Price Stripe see this link for full documentation of Product Stripe <a href='https://stripe.com/docs/api/prices/object'>https://stripe.com/docs/api/prices/object</a>"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the item."
+          },
+          "mainPrice": {
+            "type": "integer",
+            "description": "Main price of the item."
+          },
+          "extraPrice": {
+            "type": "integer",
+            "description": "Extra price of the item."
+          }
+        }
+      },
+      "LicenseFeature": {
+        "type": "object",
+        "properties": {
+          "taskLimit": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "visitLimit": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "automationLimit": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "userLimit": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "dataRetention": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "customRole": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "teams": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "imageQuality": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "dataSourceTypeLimit": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "sla": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "sso": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "privacyPolicy": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "useBigData": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "professionalService": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          },
+          "minimumContract": {
+            "$ref": "#/definitions/LicenseFeatureItem"
+          }
+        }
+      },
+      "LicenseFeatureItem": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the feature item."
+          },
+          "value": {
+            "type": ["string", "integer", "boolean"],
+            "description": "Value of the feature item."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the feature item."
+          },
+          "textValue": {
+            "type": "string",
+            "description": "Text representation of the feature value."
+          },
+          "allowExtra": {
+            "type": "boolean",
+            "description": "Flag to indicate if extra is allowed."
+          }
+        }
+      }
+    }
+  }
+}

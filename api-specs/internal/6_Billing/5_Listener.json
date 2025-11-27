@@ -1,0 +1,1198 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Stripe Webhook",
+    "version": "1.0.0",
+    "description": "API for managing invoices."
+  },
+  "host": "billing.mile.app",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/id/webhook/subscription": {
+      "post": {
+        "summary": "Subscription",
+        "tags": [
+          "Listener"
+        ],
+        "operationId": "stripe-webhook",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "example": {
+                "id": "evt_1O4tVcFONuq90qMoByQkgvpy",
+                "object": "event",
+                "api_version": "2022-08-01",
+                "created": 1698188136,
+                "data": {
+                  "object": {
+                    "id": "sub_1O4tVcFONuq90qMorlwvOCE8",
+                    "object": "subscription",
+                    "application": null,
+                    "application_fee_percent": null,
+                    "automatic_tax": {
+                      "enabled": false
+                    },
+                    "billing_cycle_anchor": 1698188136,
+                    "billing_thresholds": null,
+                    "cancel_at": null,
+                    "cancel_at_period_end": false,
+                    "canceled_at": null,
+                    "cancellation_details": {
+                      "comment": null,
+                      "feedback": null,
+                      "reason": null
+                    },
+                    "collection_method": "send_invoice",
+                    "created": 1698188136,
+                    "currency": "idr",
+                    "current_period_end": 1698274536,
+                    "current_period_start": 1698188136,
+                    "customer": "cus_OsdlQEgI9DehqI",
+                    "days_until_due": 29,
+                    "default_payment_method": null,
+                    "default_source": null,
+                    "default_tax_rates": [
+                      {
+                        "id": "txr_1LckeNFONuq90qMoQbblOQA5",
+                        "object": "tax_rate",
+                        "active": true,
+                        "country": "ID",
+                        "created": 1661928227,
+                        "description": null,
+                        "display_name": "VAT",
+                        "effective_percentage": null,
+                        "inclusive": false,
+                        "jurisdiction": null,
+                        "livemode": false,
+                        "metadata": {},
+                        "percentage": 11,
+                        "state": null,
+                        "tax_type": null
+                      }
+                    ],
+                    "description": null,
+                    "discount": null,
+                    "ended_at": null,
+                    "items": {
+                      "object": "list",
+                      "data": [
+                        {
+                          "id": "si_OseprNA0l41Gek",
+                          "object": "subscription_item",
+                          "billing_thresholds": null,
+                          "created": 1698188136,
+                          "metadata": {},
+                          "plan": {
+                            "id": "price_1O4ckeFONuq90qMoP7MkQoPm",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": "sum",
+                            "amount": null,
+                            "amount_decimal": null,
+                            "billing_scheme": "tiered",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Task",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "tiers_mode": "graduated",
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "metered"
+                          },
+                          "price": {
+                            "id": "price_1O4ckeFONuq90qMoP7MkQoPm",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "tiered",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Task",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "recurring": {
+                              "aggregate_usage": "sum",
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "metered"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": "graduated",
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": null,
+                            "unit_amount_decimal": null
+                          },
+                          "subscription": "sub_1O4tVcFONuq90qMorlwvOCE8",
+                          "tax_rates": []
+                        },
+                        {
+                          "id": "si_Osep3HXHfqQZ0c",
+                          "object": "subscription_item",
+                          "billing_thresholds": null,
+                          "created": 1698188136,
+                          "metadata": {},
+                          "plan": {
+                            "id": "price_1O4ckeFONuq90qMoK7s9jNv6",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": null,
+                            "amount": 1000000,
+                            "amount_decimal": "1000000",
+                            "billing_scheme": "per_unit",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Main Task",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "tiers_mode": null,
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "licensed"
+                          },
+                          "price": {
+                            "id": "price_1O4ckeFONuq90qMoK7s9jNv6",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "per_unit",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Main Task",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "recurring": {
+                              "aggregate_usage": null,
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "licensed"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": null,
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": 1000000,
+                            "unit_amount_decimal": "1000000"
+                          },
+                          "quantity": 1,
+                          "subscription": "sub_1O4tVcFONuq90qMorlwvOCE8",
+                          "tax_rates": []
+                        },
+                        {
+                          "id": "si_OsepMsqdv49cAn",
+                          "object": "subscription_item",
+                          "billing_thresholds": null,
+                          "created": 1698188136,
+                          "metadata": {},
+                          "plan": {
+                            "id": "price_1O4ckeFONuq90qMoRNviorgf",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": "sum",
+                            "amount": null,
+                            "amount_decimal": null,
+                            "billing_scheme": "tiered",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Visit",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "tiers_mode": "graduated",
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "metered"
+                          },
+                          "price": {
+                            "id": "price_1O4ckeFONuq90qMoRNviorgf",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "tiered",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Visit",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "recurring": {
+                              "aggregate_usage": "sum",
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "metered"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": "graduated",
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": null,
+                            "unit_amount_decimal": null
+                          },
+                          "subscription": "sub_1O4tVcFONuq90qMorlwvOCE8",
+                          "tax_rates": []
+                        },
+                        {
+                          "id": "si_OsepgisFip59ww",
+                          "object": "subscription_item",
+                          "billing_thresholds": null,
+                          "created": 1698188136,
+                          "metadata": {},
+                          "plan": {
+                            "id": "price_1O4ckeFONuq90qMoiy7xCk27",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": "sum",
+                            "amount": null,
+                            "amount_decimal": null,
+                            "billing_scheme": "tiered",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Automation",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "tiers_mode": "graduated",
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "metered"
+                          },
+                          "price": {
+                            "id": "price_1O4ckeFONuq90qMoiy7xCk27",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "tiered",
+                            "created": 1698123720,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Automation",
+                            "product": "prod_OsNVQ3zRMwVYro",
+                            "recurring": {
+                              "aggregate_usage": "sum",
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "metered"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": "graduated",
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": null,
+                            "unit_amount_decimal": null
+                          },
+                          "subscription": "sub_1O4tVcFONuq90qMorlwvOCE8",
+                          "tax_rates": []
+                        }
+                      ],
+                      "has_more": false,
+                      "total_count": 4,
+                      "url": "/v1/subscription_items?subscription=sub_1O4tVcFONuq90qMorlwvOCE8"
+                    },
+                    "latest_invoice": "in_1O4tVcFONuq90qMoBhB08i9O",
+                    "livemode": false,
+                    "metadata": {},
+                    "next_pending_invoice_item_invoice": null,
+                    "on_behalf_of": null,
+                    "pause_collection": null,
+                    "payment_settings": {
+                      "payment_method_options": null,
+                      "payment_method_types": null,
+                      "save_default_payment_method": "off"
+                    },
+                    "pending_invoice_item_interval": null,
+                    "pending_setup_intent": null,
+                    "pending_update": null,
+                    "plan": null,
+                    "quantity": null,
+                    "schedule": null,
+                    "start_date": 1698188136,
+                    "status": "active",
+                    "test_clock": null,
+                    "transfer_data": null,
+                    "trial_end": null,
+                    "trial_settings": {
+                      "end_behavior": {
+                        "missing_payment_method": "create_invoice"
+                      }
+                    },
+                    "trial_start": null
+                  }
+                },
+                "livemode": false,
+                "pending_webhooks": 5,
+                "request": {
+                  "id": "req_xQctaNViSffio0",
+                  "idempotency_key": "8348dc20-47b6-4e5a-b1f6-1f1b0b47236f"
+                },
+                "type": "customer.subscription.created"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "status": true,
+                "message": "Subscription created",
+                "organization": {
+                  "_id": "65383bc8f76a6064de18e842",
+                  "user": {
+                    "name": "Pren",
+                    "country": "IDN",
+                    "phoneNumber": "+62 81232322",
+                    "numberOfUsers": "1-100",
+                    "industry": "Last Mile",
+                    "position": "Owner/Director",
+                    "email": "thecoderacer+billing-1@gmail.com",
+                    "companyName": "Bram Corp",
+                    "hub": {
+                      "name": "Stasiun Bandung",
+                      "displayName": "Stasiun Bandung",
+                      "address": "Bandung Kota 40292, Indonesia",
+                      "lat": "-6.95035",
+                      "lng": "107.67769"
+                    },
+                    "flows": [
+                      "62d526290b18b1039408f652",
+                      "62d525fe2f12035a550a55e3",
+                      "63a561c0fd378bcce9877d2f",
+                      "63a561c0fd378bcce9877d30",
+                      "62d526540b18b1039408f653",
+                      "63a561c0fd378bcce9877d31"
+                    ]
+                  },
+                  "productId": "prod_free",
+                  "status": "verified",
+                  "verifiedTime": {
+                    "$date": {
+                      "$numberLong": "1698184172401"
+                    }
+                  },
+                  "curPeriodEndTime": null,
+                  "curPeriodStartTime": null,
+                  "eligible": true,
+                  "updatedTime": "2023-10-24T22:42:37.675000Z",
+                  "createdTime": "2023-10-24T21:48:56.071000Z",
+                  "customerId": {
+                    "idr": "cus_OsdlQEgI9DehqI",
+                    "usd": null
+                  },
+                  "country": {
+                    "code": "IDN",
+                    "phoneCode": "+62",
+                    "name": "Indonesia",
+                    "isActive": true,
+                    "alpha2Code": "ID",
+                    "enableLanguage": true,
+                    "languageName": "Indonesian"
+                  },
+                  "subscription": {
+                    "orderIndex": 0,
+                    "organizationId": "65383bc8f76a6064de18e842",
+                    "productId": "prod_OsNVQ3zRMwVYro",
+                    "planName": "Daily - Invoice [QA TESTING]",
+                    "items": [
+                      {
+                        "priceId": "price_1O4ckeFONuq90qMoK7s9jNv6",
+                        "name": "Main Task",
+                        "mainPrice": 10000,
+                        "stripeSubsItemId": "si_Osep3HXHfqQZ0c"
+                      },
+                      {
+                        "priceId": "price_1O4ckeFONuq90qMoP7MkQoPm",
+                        "name": "Task",
+                        "extraPrice": 1,
+                        "stripeSubsItemId": "si_OseprNA0l41Gek"
+                      },
+                      {
+                        "priceId": "price_1O4ckeFONuq90qMoRNviorgf",
+                        "name": "Visit",
+                        "extraPrice": 1,
+                        "stripeSubsItemId": "si_OsepMsqdv49cAn"
+                      },
+                      {
+                        "priceId": "price_1O4ckeFONuq90qMoiy7xCk27",
+                        "name": "Automation",
+                        "extraPrice": 1,
+                        "stripeSubsItemId": "si_OsepgisFip59ww"
+                      }
+                    ],
+                    "curPeriodStartTime": "2023-10-24T22:55:36+00:00",
+                    "curPeriodEndTime": "2023-10-25T22:55:36+00:00",
+                    "status": "unpaid",
+                    "nextState": "active",
+                    "isDeleted": false,
+                    "updatedTime": "2023-10-24T22:55:37+00:00",
+                    "createdTime": "2023-10-24T22:55:37+00:00"
+                  }
+                },
+                "metadata": {
+                  "message": "Stripe metadata is set",
+                  "data": {
+                    "subscriptionId": "65384b6960340d9cef04ec95",
+                    "nextState": "active",
+                    "env": "Beta"
+                  }
+                },
+                "schedule": {
+                  "message": "Schedule not released"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "status": false,
+              "message": "Failed",
+              "failedCode": "pay-001"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/id/webhook/invoice": {
+      "post": {
+        "summary": "Invoice",
+        "tags": [
+          "Listener"
+        ],
+        "operationId": "stripe-webhook",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "example": {
+                "id": "evt_1O54tiFONuq90qMoB2RziTrk",
+                "object": "event",
+                "api_version": "2022-08-01",
+                "created": 1698231913,
+                "data": {
+                  "object": {
+                    "id": "in_1O54thFONuq90qMo13iZRSu7",
+                    "object": "invoice",
+                    "account_country": "ID",
+                    "account_name": "PT Paket Informasi Digital",
+                    "account_tax_ids": null,
+                    "amount_due": 0,
+                    "amount_paid": 0,
+                    "amount_remaining": 0,
+                    "amount_shipping": 0,
+                    "application": null,
+                    "application_fee_amount": null,
+                    "attempt_count": 0,
+                    "attempted": false,
+                    "auto_advance": true,
+                    "automatic_tax": {
+                      "enabled": false,
+                      "status": null
+                    },
+                    "billing_reason": "subscription_cycle",
+                    "charge": null,
+                    "collection_method": "send_invoice",
+                    "created": 1698231913,
+                    "currency": "idr",
+                    "custom_fields": null,
+                    "customer": "cus_OrLezAgqGlrKXm",
+                    "customer_address": {
+                      "city": null,
+                      "country": "ID",
+                      "line1": null,
+                      "line2": null,
+                      "postal_code": null,
+                      "state": null
+                    },
+                    "customer_email": "malih+1daily@mile.app",
+                    "customer_name": "User Daily test",
+                    "customer_phone": null,
+                    "customer_shipping": null,
+                    "customer_tax_exempt": "none",
+                    "customer_tax_ids": [],
+                    "default_payment_method": null,
+                    "default_source": null,
+                    "default_tax_rates": [
+                      {
+                        "id": "txr_1LckeNFONuq90qMoQbblOQA5",
+                        "object": "tax_rate",
+                        "active": true,
+                        "country": "ID",
+                        "created": 1661928227,
+                        "description": null,
+                        "display_name": "VAT",
+                        "effective_percentage": null,
+                        "inclusive": false,
+                        "jurisdiction": null,
+                        "livemode": false,
+                        "metadata": {},
+                        "percentage": 11,
+                        "state": null,
+                        "tax_type": null
+                      }
+                    ],
+                    "description": "Payment Method\nI Online Paymet\nYou can also make payments by manual transfer to the account below. After making the transfer, please confirm the payment to email finance@paket.id\nII Bank Transfer\nBank : BCA\nAccount Holder : PT Paket Informasi Digital\nAcc. Number : 3102173799\n\n*The amount stated above are subject to withholding tax of 2% (PPH 23).",
+                    "discount": null,
+                    "discounts": [],
+                    "due_date": 1700737470,
+                    "effective_at": null,
+                    "ending_balance": null,
+                    "footer": null,
+                    "from_invoice": null,
+                    "hosted_invoice_url": null,
+                    "invoice_pdf": null,
+                    "last_finalization_error": null,
+                    "latest_revision": null,
+                    "lines": {
+                      "object": "list",
+                      "data": [
+                        {
+                          "id": "il_1O54thFONuq90qMoVDFZhoAE",
+                          "object": "line_item",
+                          "amount": 0,
+                          "amount_excluding_tax": 0,
+                          "currency": "idr",
+                          "description": "0 × Daily invoice [TEST] (at Rp50,000.00 / day)",
+                          "discount_amounts": [],
+                          "discountable": true,
+                          "discounts": [],
+                          "livemode": false,
+                          "metadata": {
+                            "nextState": "active",
+                            "subscriptionId": "6533b0408627a700d9028b74",
+                            "env": "Beta"
+                          },
+                          "period": {
+                            "end": 1698231613,
+                            "start": 1698145175
+                          },
+                          "plan": {
+                            "id": "price_1O3cqGFONuq90qMo6GhSFQMn",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": "sum",
+                            "amount": 5000000,
+                            "amount_decimal": "5000000",
+                            "billing_scheme": "per_unit",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Main Task",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "tiers_mode": null,
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "metered"
+                          },
+                          "price": {
+                            "id": "price_1O3cqGFONuq90qMo6GhSFQMn",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "per_unit",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Main Task",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "recurring": {
+                              "aggregate_usage": "sum",
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "metered"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": null,
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": 5000000,
+                            "unit_amount_decimal": "5000000"
+                          },
+                          "proration": false,
+                          "proration_details": {
+                            "credited_items": null
+                          },
+                          "quantity": 0,
+                          "subscription": "sub_1O3cyoFONuq90qMoGJNxJ6FF",
+                          "subscription_item": "si_OrLgap5IIs51zE",
+                          "tax_amounts": [
+                            {
+                              "amount": 0,
+                              "inclusive": false,
+                              "tax_rate": "txr_1LckeNFONuq90qMoQbblOQA5",
+                              "taxability_reason": null,
+                              "taxable_amount": 0
+                            }
+                          ],
+                          "tax_rates": [],
+                          "type": "subscription",
+                          "unit_amount_excluding_tax": null
+                        },
+                        {
+                          "id": "il_1O54thFONuq90qMo9ZZf5coT",
+                          "object": "line_item",
+                          "amount": 0,
+                          "amount_excluding_tax": 0,
+                          "currency": "idr",
+                          "description": "0 × Daily invoice [TEST] (Tier 1 at Rp0.00 / day)",
+                          "discount_amounts": [],
+                          "discountable": true,
+                          "discounts": [],
+                          "livemode": false,
+                          "metadata": {
+                            "nextState": "active",
+                            "subscriptionId": "6533b0408627a700d9028b74",
+                            "env": "Beta"
+                          },
+                          "period": {
+                            "end": 1698231613,
+                            "start": 1698145175
+                          },
+                          "plan": {
+                            "id": "price_1O3cqGFONuq90qMoR8Zh27B2",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": "sum",
+                            "amount": null,
+                            "amount_decimal": null,
+                            "billing_scheme": "tiered",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Visit",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "tiers_mode": "graduated",
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "metered"
+                          },
+                          "price": {
+                            "id": "price_1O3cqGFONuq90qMoR8Zh27B2",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "tiered",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Visit",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "recurring": {
+                              "aggregate_usage": "sum",
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "metered"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": "graduated",
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": null,
+                            "unit_amount_decimal": null
+                          },
+                          "proration": false,
+                          "proration_details": {
+                            "credited_items": null
+                          },
+                          "quantity": 0,
+                          "subscription": "sub_1O3cyoFONuq90qMoGJNxJ6FF",
+                          "subscription_item": "si_OrLgfJQlPyK92D",
+                          "tax_amounts": [
+                            {
+                              "amount": 0,
+                              "inclusive": false,
+                              "tax_rate": "txr_1LckeNFONuq90qMoQbblOQA5",
+                              "taxability_reason": null,
+                              "taxable_amount": 0
+                            }
+                          ],
+                          "tax_rates": [],
+                          "type": "subscription",
+                          "unit_amount_excluding_tax": null
+                        },
+                        {
+                          "id": "il_1O54thFONuq90qMoUOEGW88r",
+                          "object": "line_item",
+                          "amount": 0,
+                          "amount_excluding_tax": 0,
+                          "currency": "idr",
+                          "description": "0 × Daily invoice [TEST] (Tier 1 at Rp0.00 / day)",
+                          "discount_amounts": [],
+                          "discountable": true,
+                          "discounts": [],
+                          "livemode": false,
+                          "metadata": {
+                            "nextState": "active",
+                            "subscriptionId": "6533b0408627a700d9028b74",
+                            "env": "Beta"
+                          },
+                          "period": {
+                            "end": 1698231613,
+                            "start": 1698145175
+                          },
+                          "plan": {
+                            "id": "price_1O3cqGFONuq90qMoM6C82BJf",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": "sum",
+                            "amount": null,
+                            "amount_decimal": null,
+                            "billing_scheme": "tiered",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Automation",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "tiers_mode": "graduated",
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "metered"
+                          },
+                          "price": {
+                            "id": "price_1O3cqGFONuq90qMoM6C82BJf",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "tiered",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Automation",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "recurring": {
+                              "aggregate_usage": "sum",
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "metered"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": "graduated",
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": null,
+                            "unit_amount_decimal": null
+                          },
+                          "proration": false,
+                          "proration_details": {
+                            "credited_items": null
+                          },
+                          "quantity": 0,
+                          "subscription": "sub_1O3cyoFONuq90qMoGJNxJ6FF",
+                          "subscription_item": "si_OrLgbbIzZaIDxv",
+                          "tax_amounts": [
+                            {
+                              "amount": 0,
+                              "inclusive": false,
+                              "tax_rate": "txr_1LckeNFONuq90qMoQbblOQA5",
+                              "taxability_reason": null,
+                              "taxable_amount": 0
+                            }
+                          ],
+                          "tax_rates": [],
+                          "type": "subscription",
+                          "unit_amount_excluding_tax": null
+                        },
+                        {
+                          "id": "il_1O54thFONuq90qMoYWe7Z8ZV",
+                          "object": "line_item",
+                          "amount": 0,
+                          "amount_excluding_tax": 0,
+                          "currency": "idr",
+                          "description": "0 × Daily invoice [TEST] (Tier 1 at Rp0.00 / day)",
+                          "discount_amounts": [],
+                          "discountable": true,
+                          "discounts": [],
+                          "livemode": false,
+                          "metadata": {
+                            "nextState": "active",
+                            "subscriptionId": "6533b0408627a700d9028b74",
+                            "env": "Beta"
+                          },
+                          "period": {
+                            "end": 1698231613,
+                            "start": 1698145175
+                          },
+                          "plan": {
+                            "id": "price_1O3cqGFONuq90qMojgbBKUcP",
+                            "object": "plan",
+                            "active": true,
+                            "aggregate_usage": "sum",
+                            "amount": null,
+                            "amount_decimal": null,
+                            "billing_scheme": "tiered",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "interval": "day",
+                            "interval_count": 1,
+                            "livemode": false,
+                            "metadata": {},
+                            "nickname": "Task",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "tiers_mode": "graduated",
+                            "transform_usage": null,
+                            "trial_period_days": null,
+                            "usage_type": "metered"
+                          },
+                          "price": {
+                            "id": "price_1O3cqGFONuq90qMojgbBKUcP",
+                            "object": "price",
+                            "active": true,
+                            "billing_scheme": "tiered",
+                            "created": 1697885740,
+                            "currency": "idr",
+                            "custom_unit_amount": null,
+                            "livemode": false,
+                            "lookup_key": null,
+                            "metadata": {},
+                            "nickname": "Task",
+                            "product": "prod_OrLXmEMtDrv3zh",
+                            "recurring": {
+                              "aggregate_usage": "sum",
+                              "interval": "day",
+                              "interval_count": 1,
+                              "trial_period_days": null,
+                              "usage_type": "metered"
+                            },
+                            "tax_behavior": "unspecified",
+                            "tiers_mode": "graduated",
+                            "transform_quantity": null,
+                            "type": "recurring",
+                            "unit_amount": null,
+                            "unit_amount_decimal": null
+                          },
+                          "proration": false,
+                          "proration_details": {
+                            "credited_items": null
+                          },
+                          "quantity": 0,
+                          "subscription": "sub_1O3cyoFONuq90qMoGJNxJ6FF",
+                          "subscription_item": "si_OrLgawM8bEAldI",
+                          "tax_amounts": [
+                            {
+                              "amount": 0,
+                              "inclusive": false,
+                              "tax_rate": "txr_1LckeNFONuq90qMoQbblOQA5",
+                              "taxability_reason": null,
+                              "taxable_amount": 0
+                            }
+                          ],
+                          "tax_rates": [],
+                          "type": "subscription",
+                          "unit_amount_excluding_tax": null
+                        }
+                      ],
+                      "has_more": false,
+                      "total_count": 4,
+                      "url": "/v1/invoices/in_1O54thFONuq90qMo13iZRSu7/lines"
+                    },
+                    "livemode": false,
+                    "metadata": {},
+                    "next_payment_attempt": null,
+                    "number": null,
+                    "on_behalf_of": null,
+                    "paid": false,
+                    "paid_out_of_band": false,
+                    "payment_intent": null,
+                    "payment_settings": {
+                      "default_mandate": null,
+                      "payment_method_options": null,
+                      "payment_method_types": null
+                    },
+                    "period_end": 1698231870,
+                    "period_start": 1698145470,
+                    "post_payment_credit_notes_amount": 0,
+                    "pre_payment_credit_notes_amount": 0,
+                    "quote": null,
+                    "receipt_number": null,
+                    "rendering": null,
+                    "rendering_options": null,
+                    "shipping_cost": null,
+                    "shipping_details": null,
+                    "starting_balance": 0,
+                    "statement_descriptor": null,
+                    "status": "draft",
+                    "status_transitions": {
+                      "finalized_at": null,
+                      "marked_uncollectible_at": null,
+                      "paid_at": null,
+                      "voided_at": null
+                    },
+                    "subscription": "sub_1O3cyoFONuq90qMoGJNxJ6FF",
+                    "subscription_details": {
+                      "metadata": {
+                        "nextState": "active",
+                        "subscriptionId": "6533b0408627a700d9028b74",
+                        "env": "Beta"
+                      }
+                    },
+                    "subtotal": 0,
+                    "subtotal_excluding_tax": 0,
+                    "tax": 0,
+                    "test_clock": null,
+                    "total": 0,
+                    "total_discount_amounts": [],
+                    "total_excluding_tax": 0,
+                    "total_tax_amounts": [
+                      {
+                        "amount": 0,
+                        "inclusive": false,
+                        "tax_rate": "txr_1LckeNFONuq90qMoQbblOQA5",
+                        "taxability_reason": null,
+                        "taxable_amount": 0
+                      }
+                    ],
+                    "transfer_data": null,
+                    "webhooks_delivered_at": null
+                  }
+                },
+                "livemode": false,
+                "pending_webhooks": 5,
+                "request": {
+                  "id": null,
+                  "idempotency_key": null
+                },
+                "type": "invoice.created"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "status": true,
+                "message": "Webhook invoice created for subscription :6533b0408627a700d9028b74",
+                "data": {
+                  "planName": "Daily invoice [TEST]",
+                  "orderIndex": 0,
+                  "organizationId": "6533afafa59d0f4754056d32",
+                  "subscriptionId": "6533b0408627a700d9028b74",
+                  "stripeInvoiceId": "in_1O54thFONuq90qMo13iZRSu7",
+                  "invoiceUrl": null,
+                  "invoicePdf": null,
+                  "items": [
+                    {
+                      "priceId": "price_1O3cqGFONuq90qMo6GhSFQMn",
+                      "name": "Main Task",
+                      "description": "0 × Daily invoice [TEST] (at Rp50,000.00 / day)",
+                      "quantity": 0,
+                      "subTotal": 0
+                    },
+                    {
+                      "priceId": "price_1O3cqGFONuq90qMoM6C82BJf",
+                      "name": "Automation",
+                      "description": "0 × Daily invoice [TEST] (Tier 1 at Rp0.00 / day)",
+                      "quantity": 0,
+                      "subTotal": 0
+                    },
+                    {
+                      "priceId": "price_1O3cqGFONuq90qMoR8Zh27B2",
+                      "name": "Visit",
+                      "description": "0 × Daily invoice [TEST] (Tier 1 at Rp0.00 / day)",
+                      "quantity": 0,
+                      "subTotal": 0
+                    },
+                    {
+                      "priceId": "price_1O3cqGFONuq90qMojgbBKUcP",
+                      "name": "Task",
+                      "description": "0 × Daily invoice [TEST] (Tier 1 at Rp0.00 / day)",
+                      "quantity": 0,
+                      "subTotal": 0
+                    }
+                  ],
+                  "subTotal": 0,
+                  "tax": 0,
+                  "total": 0,
+                  "currency": "idr",
+                  "invoiceNumber": null,
+                  "status": "DRAFT",
+                  "paymentMethod": "Bank Transfer",
+                  "paidTime": null,
+                  "startDate": "2023-10-24T11:04:30+00:00",
+                  "endDate": "2023-10-25T11:04:30+00:00",
+                  "dueDate": "2023-11-23T11:04:30+00:00",
+                  "updatedTime": "2023-10-25T11:05:16+00:00",
+                  "createdTime": "2023-10-25T11:05:16+00:00",
+                  "_id": "6538f66ca86318d9b20d73d4",
+                  "billingPeriod": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "status": false,
+              "message": "Failed",
+              "failedCode": "pay-001"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/id/webhook/product": {
+      "post": {
+        "summary": "Product",
+        "tags": [
+          "Listener"
+        ],
+        "operationId": "stripe-webhook",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "example": {
+                "id": "evt_1O4ckgFONuq90qMoXViPrThU",
+                "object": "event",
+                "api_version": "2022-08-01",
+                "created": 1698123722,
+                "data": {
+                  "object": {
+                    "id": "prod_OsNVQ3zRMwVYro",
+                    "object": "product",
+                    "active": true,
+                    "attributes": [],
+                    "created": 1698123719,
+                    "default_price": "price_1O4ckeFONuq90qMoK7s9jNv6",
+                    "description": "For testing QA daily usage",
+                    "features": [],
+                    "images": [],
+                    "livemode": false,
+                    "metadata": {
+                      "automationLimit": "10",
+                      "visitLimit": "10",
+                      "paymentType": "prepaid",
+                      "allowExtraAutomation": "true",
+                      "customRole": "10",
+                      "taskLimit": "10",
+                      "imageQuality": "standard",
+                      "dataSourceTypeLimit": "10",
+                      "teams": "true",
+                      "allowExtraVisit": "true",
+                      "allowExtraTask": "true",
+                      "dataRetention": "1 Year",
+                      "privacyPolicy": "default",
+                      "productType": "customId"
+                    },
+                    "name": "Daily - Invoice [QA TESTING]",
+                    "package_dimensions": null,
+                    "shippable": null,
+                    "statement_descriptor": null,
+                    "tax_code": null,
+                    "type": "service",
+                    "unit_label": null,
+                    "updated": 1698123722,
+                    "url": null
+                  },
+                  "previous_attributes": {
+                    "default_price": null,
+                    "updated": 1698123719
+                  }
+                },
+                "livemode": false,
+                "pending_webhooks": 3,
+                "request": {
+                  "id": "req_vvBlBb0nVneH7a",
+                  "idempotency_key": "b97d7c28-a237-44ff-8130-51d7680dcaa2"
+                },
+                "type": "product.updated"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "status": true,
+                "message": "Success."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "status": false,
+              "message": "Failed",
+              "failedCode": "pay-001"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {}
+}

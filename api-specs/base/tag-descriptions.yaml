@@ -1,0 +1,273 @@
+# Tag descriptions for OpenAPI documentation
+# These descriptions appear in the sidebar when a tag group is expanded
+# Source: Laravel initial.yaml (https://apidoc.mile.app/api/compile)
+# Last synced: 2025-01-27
+
+# ============ TASK MODULE ============
+Task: |
+  A task is an item of work intended for completion by an assignee. It can embody activities like pickups, deliveries, planning, inspections, sales visits, or other work-related actions within your organization. Tasks encompass essential attributes, including IDs, flow, time, status indicators, assignee information, order index, and other pertinent data. The content of a task is configurable based on your specified flow settings. For instance, tasks can serve as visits during the route optimization process, functioning as pivotal elements. The task can also represent a visit in route optimization, please follow [this link](#tag/Routing) to read more detail.
+
+  **To see the details of task object, please follow [this link](#tag/task_model)**
+
+Location History: |
+  Location history is data that stores the user's location points that are sent periodically from the MileApp mobile application if the user activates the tracking feature. However, this endpoint can also be useful for integration into the user's IoT devices such as GPS or other mobile trackers. All location data sent can be visualized in MileApp in real time and makes it easier for users to monitor field activities more accurately.
+
+  **Related Guide:** [Start Finish Feature](https://doc.clickup.com/3837933/p/h/3n3zd-81962/aa00834626ae24f/3n3zd-95602)
+
+Task Schedule: |
+  Task Schedule is a mechanism to generate tasks according to the schedule that is set by you. The task schedule attributes consist of IDs, repetition period data (daily, weekly, etc.), flow structure, task content, and time of the schedule's start & end. This schedule could help you to set a task that will be repeated at a certain period.
+
+  **To see the details of task schedule object, please follow [this link](#tag/task_schedule_model)**
+
+Activity: |
+  An Activity represents a workflow execution instance consisting of multiple sequential tasks (steps). Each activity is a master task that orchestrates a series of child tasks based on a predefined workflow. Activities enable you to manage complex multi-step processes where each step can be assigned to different workers and tracked independently. The activity master automatically updates its status based on the completion of child tasks through the ActivityConsumer. Activity attributes consist of IDs, workflow reference, child task IDs (subId array), aggregated assignees, status indicators, and embedded workflow data.
+
+# ============ ROUTING MODULE ============
+Vehicle: |
+  The vehicle represents a car, bike, truck, or other form of transportation used in your organization. They are utilized to optimize the route planning process, determining the most efficient path for completing multiple tasks or visits. The vehicle attributes contain IDs, capacity, speed, working hours, tags, and constraints.
+
+  **To see the details of vehicle object, please follow [this link](#tag/vehicle_model)**
+
+Routing: |
+  The **Routing** refers to process of finding the most effective routes for vehicles to travel from one visit to another. The optimization process will generate a result that could update the respective task data when dispatched. With the ability to handle complex constraints and variables such as capacity, time windows, and vehicle availability, the API can be customized to meet the specific needs of any business or organization.
+
+  **This section is for the v2 of routing api, if you still use the old one, please follow [this link](/v1) to see documentation**.
+
+  **Routing results** are collection of route optimization's results that already successfully processed and saved in the database. Routing results contains list of routed visits and dropped visits.
+
+  1. Routed visits are sequence recommendation of visits/tasks list according to most suitable vehicle and best route.
+  2. Dropped visits are list of tasks/visits that out of range of the calculation.
+
+  **To see the details of routing object, please follow [this link](#tag/route_model)**
+
+  ## Why use Route Optimization
+
+  With Route Optimization API, you can establish or refine an automated dispatch or route planning process that improves the operational efficiency of your transportation needs. With parameters to express your unique operational objectives and constraints, and an algorithm built on top of the trusted Google Maps data, the service generates the best possible route plans to meet those constraints. Some use-case examples follow:
+
+  - A **logistics company** uses Route Optimization to optimize the assignments of all next-day shipments, providing a route for each shipment that optimizes for distance and time efficiency, cost saving, on time delivery, and driver and end customer satisfaction.
+
+  - A **field service provider** uses Route Optimization to find the optimal route and sequence for technician's service appointments, and re-optimize when condition changes occur, such as en route delays.
+
+  - An **on demand food delivery** company uses Route Optimization in their real-time dispatch process to choose the best active driver to pick up several new orders and insert it in their existing routes.
+
+  - A **medical service provider** uses Route Optimization to map health providers to appointments, improving the efficiency of the routes for each provider across their day.
+
+  ## How Route Optimization works
+
+  The Route Optimization API uses a number of inputs to return a route plan. Inputs include vehicles, visits or shipments, configurations, and constraints. A route plan includes tasks assignment to vehicles, the multi-stop routes for each vehicle, and the related metrics.
+
+Configuration: |
+  Configuration endpoints for managing routing and optimization settings including time windows, constraints, and optimization parameters.
+
+Capacity Constraint: |
+  Capacity Constraint endpoints for managing vehicle capacity constraints in route optimization. Define weight, volume, and other capacity limits for vehicles.
+
+Geocode: |
+  Geocode endpoints for address geocoding and location services. Convert addresses to coordinates and vice versa.
+
+Geotagging: |
+  Geotagging endpoints for location tagging and geographic data management.
+
+Geo Tagging: |
+  Geotagging endpoints for location tagging and geographic data management.
+
+Routing Result: |
+  Routing results are collection of route optimization's results that already successfully processed and saved in the database. Routing results contains list of routed visits and dropped visits:
+  1. Routed visits are sequence recommendation of visits/tasks list according to most suitable vehicle and best route.
+  2. Dropped visits are list of tasks/visits that out of range of the calculation.
+
+# ============ FLOW MODULE ============
+Flow: |
+  Flow in MileApp is the mobile field application workflow, setting it correctly is critical to the success of the field workers in doing their job efficiently. Flow attributes consist of IDs, pages, components, configurations, and time. The Flow will be used at Task, Automation, or Schedule.
+
+  **To see the details of flow object, please follow [this link](#tag/flow_model)**
+
+Automation: |
+  Automation enables you to set up automation based on tasks' events and data source's events. It might help you automate creation of tasks, task assignment, task placement, task webhook, data source update, datasource creation, and data source webhook. Automation attributes consist of IDs, automation name, automation type, automation details, and rules.
+
+  **To see the details of automation object, please follow [this link](#tag/automation_model)**
+
+Webhook: |
+  A webhook is a mechanism in web development and APIs that allows real-time communication between applications or services. It enables one application to send data to another application whenever a specific event or trigger occurs. Webhooks are commonly used to automate and integrate systems, enabling seamless data exchange and event-driven workflows. In our end, you can follow [this doc](https://doc.clickup.com/3837933/p/h/3n3zd-81962/aa00834626ae24f/3n3zd-154042) to set up the webhook.
+
+  ## How does it work
+
+  When your application endpoint is enabled on MileApp to receive events, MileApp will push real-time notifications to it. These notifications contain the type of event, the epoch timestamp of when it occurred, and any relevant data for that event. On your side you can then use that to integrate MileApp with existing or new software.
+
+  ## Delivery Attempts and Retries
+
+  When viewing information about a specific event through the [Automation](https://web.mile.app/flow/automation) tab, there will be information about how many times MileApp attempted to send an event to the endpoint. This shows the latest response from client endpoint, a list of all attempted webhooks, and the respective HTTP status codes MileApp received. There's also a retry button for manually retry webhooks.
+
+  Our webhook is designed to ensure reliable delivery by automatically retrying under certain conditions. The key details are as follows:
+
+  **Retry Conditions:**
+  The webhook request will **retry up to 3 times** if any of the following conditions occur:
+  - The server returns an **HTTP status that is not 200** (indicating failure).
+  - The server takes longer than **30 seconds** to respond (timeout).
+
+  **Retry Timing:**
+  If the first attempt fails, the webhook will automatically retry **every 2 minutes**.
+  - First failure → Retry after 2 minutes.
+  - Second failure → Retry again after 2 minutes.
+  - Third failure → Final retry after another 2 minutes.
+
+  After **3 failed attempts**, the retry process will stop.
+
+  ## Quick Response Requirement
+
+  When your application receives a webhook from our service, it is crucial to return an HTTP 200 status code within 30 seconds to confirm successful receipt and avoid timeouts and retries. To maintain responsiveness, do not include complex business logic in the initial processing of the webhook. If the webhook triggers any long-running or computationally intensive tasks, offload these to a background process or a separate system.
+
+  ## Failure Monitoring and Notification Process
+
+  Our system continuously monitors the integration's performance by tracking the success and failure rates of operations. If a significant number of failures occur, this could indicate a problem with the integration.
+
+  **Failure Threshold:**
+  - **Start counter:** Operation calculation will start from the first time the failure occurs.
+  - **Threshold Level:** If the failure rate exceeds more than 5 times and 80% or more than 50 times in total of operations within a 1-hour time frame, the system will trigger a notification event.
+  - **Failure Rate Calculation:** The failure rate is calculated as the percentage of failed operations out of the total operations attempted within the monitored period.
+
+  As soon as the system identifies that the failure rate has exceeded the threshold, it will automatically send an email notification to all owners email.
+
+# ============ DATA MODULE ============
+Data: |
+  The Data source could help you simplify the process of filling in task information based on existing data at MileApp. This data could consist of information such as name, number, date, coordinate, and multiple options. The Data typically represents entities such as customers, products, employees, suppliers, or any other critical data elements that are used across the application.
+
+  **To see the details of data source object, please follow [this link](#tag/data_source_model)**
+
+Data Source: |
+  The Data source could help you simplify the process of filling in task information based on existing data at MileApp. This data could consist of information such as name, number, date, coordinate, and multiple options. The Data typically represents entities such as customers, products, employees, suppliers, or any other critical data elements that are used across the application.
+
+  **To see the details of data source object, please follow [this link](#tag/data_source_model)**
+
+Data Type: |
+  The Data type is the structure of data fields that is customizable to suit your business needs. Data type attributes consist of IDs, name, field details, type, and primary key. This data type structure will be used at Data Source and Flow.
+
+  **To see the details of data type object, please follow [this link](#tag/data_type_model)**
+
+Data Import: |
+  The Data Import module allows users to upload and import data source records from Excel or CSV files. Import operations are processed in the background via queue system for scalability and can handle large datasets. The import process validates data against data type schemas, tracks processing status in real-time, and generates detailed reports including failed records for review. All import activities can be monitored through import-monitoring endpoints with 30-day data retention.
+
+# ============ SETTING MODULE ============
+User: |
+  User data includes information contained within a user account, such as details that define a user's hub access and role within the system. Hub access determines the locations or areas of the application a user can access or the specific actions they can perform. User attributes consist of the user ID, name, email, and status.
+
+  MileApp provides five predefined user roles, and you can create custom roles based on your organization's needs. The predefined roles are **Owner, Admin, Planner, and Field user**. A user can only hold one role at a time but can be granted access to multiple hubs.
+
+Team: |
+  This API allows you to manage teams. It serves as a tool to effectively manage and restrict user task assignments within your organization.
+
+  **To see the details of team object, please follow [this link](#tag/team_model)**
+
+Role: |
+  This API enables you to retrieve a list of predefined roles and any custom roles associated with your account. By making a GET request to this API, you can obtain information about the available roles within the system. The predefined roles refer to a set of role types that are already defined by the system. In this particular case, the predefined roles include Finance, Owner, Planner, Admin, and Field User. Additionally, the API may also return any custom roles that have been created within your account.
+
+  **To see the details of role object, please follow [this link](#tag/role_model)**
+
+Hub: |
+  In our system, a Hub is a fundamental entity within an organization, serving as the central point for managing various operational components. It acts as the parent structure for a wide range of resources and functionalities, including tasks, visits, users, vehicles, routing results, routing configurations, and data sources.
+
+  **To see the details of hub object, please follow [this link](#tag/hub_model)**
+
+  ## Conceptual Understanding of Hubs
+
+  - **User Perspective:** For users, a Hub represents their headquarters or primary working area. It is where they carry out their daily activities and manage their tasks effectively. Each user interacts with the Hub to access resources and perform operations specific to their roles.
+
+  - **Task Perspective:** From the perspective of task management, the Hub signifies the working area for tasks. It is the location where tasks are initiated, monitored, and completed. The Hub facilitates organization and efficiency in task execution.
+
+  - **Routing Perspective:** In the context of routing and logistics, a Hub serves as a critical location for vehicles. It is where vehicles begin their routes, return after completing their journeys, and may make strategic stops along the way. The routing module relies on the Hub to optimize vehicle assignments and manage routes effectively.
+
+Organization: |
+  Organization management endpoints for configuring organization-level settings and preferences.
+
+App Integration: |
+  This API allows you to manage Integration of enterprise app. Currently available for Azure.
+
+  **To see the details of integration object, please follow [this link](#tag/app_integration_model)**
+
+Custom Module: |
+  A "custom module" is like a personalized menu option in MileApp. It's something you can create and customize to make it easy to access specific features or content.
+
+Organization Data: |
+  Organization Data provides a flexible key-value storage system for managing dynamic configurations, plugin settings, and custom data at the organization level. This feature allows you to store any JSON structure with a unique name identifier, making it ideal for plugin configurations, feature flags, custom settings, or any structured data that needs to be accessed across your organization. The data field accepts any valid JSON object, providing maximum flexibility for various use cases.
+
+Plugin: |
+  The Plugin API allows developers to create and manage custom add-ons within the Mile V3 platform. Plugins enable dynamic functionality through JavaScript resources and custom icons, allowing organizations to extend platform capabilities with custom features and integrations.
+
+  **To see the details of plugin object, please follow [this link](#tag/plugin_model)**
+
+Template: |
+  Template management endpoints for creating and managing reusable templates for flows and automations.
+
+Version Management: |
+  API documentation for version management.
+
+  **To see the details of version object, please follow [this link](#tag/version_model)**
+
+Data Version: |
+  Data version logic:
+  1. As default when user has no activity at data source it will return current time
+  2. As long as user has no activity at data source it will always return current time
+  3. If there's an activity, data version will return latest update time
+  4. If user has no activity for 3 days, data version will back to return current time (redis expired 3 days)
+
+Password Policy: |
+  Password Policy endpoints for configuring password requirements and security policies for your organization.
+
+Privacy Policy: |
+  Privacy Policy endpoints for managing privacy policy configurations and compliance settings.
+
+# ============ IMPORT/EXPORT MODULE ============
+Export Task: |
+  The Export Task module provides functionality to export task data and data source records to various formats (XLSX, JSON). It supports both direct export for small datasets and background processing for large exports. Users can customize exports using export configurations, filter data by multiple criteria, and monitor export operations through export logs. Export files are stored securely with 30-day retention period.
+
+Export Config: |
+  The Export Config module is used to save and manage the specific fields that a user wants included in export results. This allows users to customize their exported data by selecting only the necessary fields for each export, ensuring that the output contains exactly the information they need.
+
+  **To see the details of export config object, please follow [this link](#tag/export_config_model)**
+
+# ============ FILE MODULE ============
+File: |
+  The endpoint serves as a gateway for accessing private files through our API. This function enables authorized users to view files that are restricted or intended for specific access. It acts as a secure passage, allowing authenticated individuals to access these files programmatically. By utilizing this endpoint, users can seamlessly retrieve and interact with private files within our system, ensuring controlled and authorized access to sensitive information.
+
+# ============ BILLING MODULE ============
+Licenses: |
+  This API provides information about licenses, including their names, product IDs, billing details, and associated features.
+
+  **To see the details of license object, please follow [this link](#tag/license_model)**
+
+Subscriptions: |
+  API documentation for MileApp billing system.
+
+  **To see the details of subscription object, please follow [this link](#tag/subscription_model)**
+
+Payment Methods: |
+  Payment method management endpoints for billing and payment configuration.
+
+Invoices: |
+  API documentation for MileApp billing system.
+
+  **To see the details of invoice object, please follow [this link](#tag/invoice_model)**
+
+Listener: |
+  API documentation for MileApp billing system webhook listeners.
+
+# ============ AUTH MODULE ============
+Authentication: |
+  Authentication flow: if user is not using OTP, it will return HTTP code 200 and token data. But if user is using OTP, once login it will return HTTP code 202 and token session ID. If using OTP, after login user will be redirected to OTP page with session ID and validate into API. User cannot open OTP page without valid ID. User with OTP will be able to login after POST /secret succeeds.
+
+Token: |
+  Personal access token is a secure way for users to authenticate with your API. It's typically used when users want to access their own data or perform actions on their behalf programmatically, such as using a mobile app to interact with their account.
+
+# ============ WORKFLOW MODULE ============
+Workflow: |
+  Workflow is a template system for creating multi-step task processes with field mappings between steps. It defines the sequence of flows (task types) that need to be completed, allowing for data transfer and transformation between steps. Workflows serve as reusable templates for complex business processes and can be used to create activities with master-child task architecture.
+
+Currency: |
+  The Currency API provides access to currency reference data including ISO codes, symbols, and locale information. This endpoint supports filtering by ISO 4217 currency codes and returns active currencies sorted by country code. Currency data is publicly accessible for listing, while administrative operations (create, update, delete) require organization edit permissions.
+
+# ============ OTHER MODULE ============
+Dashboard: |
+  Dashboard endpoints for analytics and reporting data visualization.
+
+Internal Tools: |
+  Internal tools endpoints for administrative operations and system management.

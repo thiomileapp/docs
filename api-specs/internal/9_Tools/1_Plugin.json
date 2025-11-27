@@ -1,0 +1,893 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/plugin": {
+      "post": {
+        "summary": "Create new plugin",
+        "description": "Creates a new add-on/plugin with JavaScript resource file and optional SVG icon. This endpoint allows developers to upload custom plugins to extend Mile V3 functionality.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "createPlugin",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Name of the plugin (3-100 characters). **Example**: `Custom Dashboard Widget`"
+          },
+          {
+            "name": "description",
+            "in": "formData", 
+            "required": true,
+            "type": "string",
+            "description": "Description of the plugin functionality (10-500 characters). **Example**: `A custom widget for displaying real-time analytics data`"
+          },
+          {
+            "name": "resourceFile",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "JavaScript file (.js) containing the plugin code (max 5MB). **Example**: `plugin.js`"
+          },
+          {
+            "name": "icon",
+            "in": "formData",
+            "required": false,
+            "type": "file",
+            "description": "SVG icon file (.svg) for the plugin (max 500KB). **Example**: `icon.svg`"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Plugin created successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginCreateResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict - Plugin with same name already exists",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "413": {
+            "description": "Payload Too Large - File exceeds size limit",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type - Invalid file type",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - Invalid JavaScript syntax",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/plugin/{id}": {
+      "put": {
+        "summary": "Update plugin",
+        "description": "Updates an existing plugin's name and description. Note: This endpoint uses form data with _method=PUT due to file upload constraints.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "updatePlugin",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Plugin ID (MongoDB ObjectId). **Example**: `68b440c9dad4c5d45707f6d2`"
+          },
+          {
+            "name": "_method",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "enum": ["PUT"],
+            "description": "HTTP method override for form data. Must be 'PUT'. **Example**: `PUT`"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Updated name of the plugin (3-100 characters). **Example**: `Enhanced Dashboard Widget`"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "required": true,
+            "type": "string", 
+            "description": "Updated description of the plugin (10-500 characters). **Example**: `An enhanced widget for displaying real-time analytics with filtering capabilities`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugin updated successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginUpdateResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found - Plugin not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict - Plugin name already exists",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete plugin",
+        "description": "Permanently removes a plugin from the system. This action cannot be undone.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "deletePlugin",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Plugin ID (MongoDB ObjectId). **Example**: `68aeb4b3dca6bbc8310b0eb2`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugin deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginDeleteResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Insufficient permissions",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found - Plugin not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Get plugin details",
+        "description": "Retrieves detailed information about a specific plugin including its configuration, URLs, and metadata.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "getPluginById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Plugin ID (MongoDB ObjectId). **Example**: `68b471d7f5729e50f30c8424`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugin details retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginDetailsResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found - Plugin not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/plugins": {
+      "get": {
+        "summary": "List plugins",
+        "description": "Retrieves a paginated list of all plugins with optional search and sorting capabilities. Returns both system plugins (global) and organization-specific plugins.",
+        "tags": [
+          "Plugin"
+        ],
+        "operationId": "listPlugins",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Search query to filter plugins by name or description. **Example**: `Dashboard`"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": ["name", "createdTime", "updatedTime", "usageCount"],
+            "description": "Field to sort by. **Options**: `name`, `createdTime`, `updatedTime`, `usageCount`. **Example**: `createdTime`"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": ["asc", "desc"],
+            "description": "Sort order. **Options**: `asc`, `desc`. **Default**: `desc`. **Example**: `desc`"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number for pagination. **Default**: `1`. **Example**: `1`"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Number of items per page. **Default**: `10`, **Maximum**: `100`. **Example**: `20`"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": ["active", "inactive", "draft"],
+            "description": "Filter by plugin status. **Options**: `active`, `inactive`, `draft`. **Example**: `active`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plugin list retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/PluginListResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid query parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Plugin": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique plugin identifier (MongoDB ObjectId). **Example**: `68b440c9dad4c5d45707f6d2`"
+        },
+        "name": {
+          "type": "string",
+          "description": "Plugin display name (3-100 characters). **Example**: `Custom Dashboard Widget`"
+        },
+        "description": {
+          "type": "string",
+          "description": "Plugin functional description (10-500 characters). **Example**: `A custom widget for displaying real-time analytics data`"
+        },
+        "resourceFile": {
+          "type": "string",
+          "description": "Original filename of the JavaScript resource. **Example**: `1756656087_Custom-Dashboard-Widget.js`"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Full URL to the plugin icon (PNG/SVG format). **Example**: `http://host.docker.internal:9000/v3-public-dev/dev/icons/2025/08/31/686cc0ff083ca8093204f002/1756656087_dashboard-widget.svg`"
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Organization identifier. 'system' for global plugins, organization ID for custom plugins. **Example**: `686cc0ff083ca8093204f002` or `system`"
+        },
+        "resourceUrl": {
+          "type": "string",
+          "description": "Full CDN URL where the JavaScript resource is hosted. **Example**: `http://host.docker.internal:9000/v3-public-dev/dev/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js`"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Email address of the user who created the plugin. **Example**: `user@mile.app`"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Email address of the user who last updated the plugin. **Example**: `user@mile.app`"
+        },
+        "createdTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp with microseconds when the plugin was created. **Example**: `2025-08-31T10:30:00.000000Z`"
+        },
+        "updatedTime": {
+          "type": "string",
+          "format": "date-time", 
+          "description": "ISO 8601 timestamp with microseconds when the plugin was last updated. **Example**: `2025-08-31T10:35:00.000000Z`"
+        },
+        "organizationName": {
+          "type": "string",
+          "description": "Human-readable organization name. 'Global' for system plugins, actual organization name for custom plugins. **Example**: `MileApp` or `Global`"
+        },
+        "isUsed": {
+          "type": "boolean",
+          "description": "Indicates if the plugin is currently active/installed. **Example**: `false`"
+        },
+        "customModuleId": {
+          "type": "string",
+          "description": "ID of associated custom module or null if standalone. **Example**: `null`"
+        }
+      },
+      "required": [
+        "id",
+        "name", 
+        "description",
+        "resourceFile",
+        "organizationId",
+        "resourceUrl",
+        "createdBy",
+        "createdTime",
+        "updatedTime",
+        "organizationName",
+        "isUsed"
+      ],
+      "example": {
+        "id": "68b440c9dad4c5d45707f6d2",
+        "name": "Custom Dashboard Widget",
+        "description": "A custom widget for displaying real-time analytics data",
+        "resourceFile": "1756656087_Custom-Dashboard-Widget.js",
+        "icon": "http://host.docker.internal:9000/v3-public-dev/dev/icons/2025/08/31/686cc0ff083ca8093204f002/1756656087_dashboard-widget.svg",
+        "organizationId": "686cc0ff083ca8093204f002",
+        "resourceUrl": "http://host.docker.internal:9000/v3-public-dev/dev/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js",
+        "createdBy": "user@mile.app",
+        "updatedTime": "2025-08-31T10:30:00.000000Z",
+        "createdTime": "2025-08-31T10:30:00.000000Z",
+        "organizationName": "MileApp",
+        "isUsed": false,
+        "customModuleId": null
+      }
+    },
+    "PluginCreateResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Request success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Response message",
+          "example": "Plugin created successfully"
+        },
+        "data": {
+          "$ref": "#/definitions/Plugin"
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ],
+      "example": {
+        "status": true,
+        "message": "Plugin created successfully",
+        "data": {
+          "name": "Custom Dashboard Widget",
+          "description": "A custom widget for displaying real-time analytics data",
+          "resourceFile": "1756656087_Custom-Dashboard-Widget.js",
+          "icon": "http://host.docker.internal:9000/v3-public-dev/dev/icons/2025/08/31/686cc0ff083ca8093204f002/1756656087_dashboard-widget.svg",
+          "organizationId": "686cc0ff083ca8093204f002",
+          "resourceUrl": "http://host.docker.internal:9000/v3-public-dev/dev/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Custom-Dashboard-Widget.js",
+          "createdBy": "user@mile.app",
+          "updatedTime": "2025-08-31T10:30:00.000000Z",
+          "createdTime": "2025-08-31T10:30:00.000000Z",
+          "id": "68b440c9dad4c5d45707f6d2",
+          "organizationName": "MileApp",
+          "isUsed": false,
+          "customModuleId": null
+        }
+      }
+    },
+    "PluginUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Request success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Response message",
+          "example": "Plugin updated successfully"
+        },
+        "data": {
+          "$ref": "#/definitions/Plugin"
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ],
+      "example": {
+        "status": true,
+        "message": "Plugin updated successfully",
+        "data": {
+          "name": "Enhanced Dashboard Widget",
+          "description": "An enhanced widget for displaying real-time analytics with filtering capabilities",
+          "resourceFile": "1756656087_Enhanced-Dashboard-Widget.js",
+          "icon": "http://host.docker.internal:9000/v3-public-dev/dev/icons/2025/08/31/686cc0ff083ca8093204f002/1756656087_dashboard-widget.svg",
+          "organizationId": "686cc0ff083ca8093204f002",
+          "resourceUrl": "http://host.docker.internal:9000/v3-public-dev/dev/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_Enhanced-Dashboard-Widget.js",
+          "createdBy": "user@mile.app",
+          "updatedBy": "user@mile.app",
+          "updatedTime": "2025-08-31T10:35:00.000000Z",
+          "createdTime": "2025-08-31T10:30:00.000000Z",
+          "id": "68b440c9dad4c5d45707f6d2",
+          "organizationName": "MileApp",
+          "isUsed": false,
+          "customModuleId": null
+        }
+      }
+    },
+    "PluginDeleteResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Request success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Response message",
+          "example": "Plugin deleted successfully"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "deletedPluginId": {
+              "type": "string",
+              "description": "ID of the deleted plugin",
+              "example": "68aeb4b3dca6bbc8310b0eb2"
+            },
+            "deletedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when the plugin was deleted",
+              "example": "2025-08-31T10:40:00.000000Z"
+            }
+          },
+          "required": [
+            "deletedPluginId",
+            "deletedAt"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ],
+      "example": {
+        "status": true,
+        "message": "Plugin deleted successfully",
+        "data": {
+          "deletedPluginId": "68aeb4b3dca6bbc8310b0eb2",
+          "deletedAt": "2025-08-31T10:40:00.000000Z"
+        }
+      }
+    },
+    "PluginDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Request success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Response message",
+          "example": "Success."
+        },
+        "data": {
+          "$ref": "#/definitions/Plugin"
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ],
+      "example": {
+        "status": true,
+        "message": "Success.",
+        "data": {
+          "name": "Test",
+          "description": "This is plugin test",
+          "resourceFile": "1756656087_GetUser-Internal-Tools.js",
+          "icon": "http://host.docker.internal:9000/v3-public-dev/dev/icons/2025/08/31/686cc0ff083ca8093204f002/1756656087_cloud-arrow-up-fill.02a7d7e2.svg",
+          "organizationId": "686cc0ff083ca8093204f002",
+          "resourceUrl": "http://host.docker.internal:9000/v3-public-dev/dev/plugins/2025/08/31/686cc0ff083ca8093204f002/1756656087_GetUser-Internal-Tools.js",
+          "createdBy": "anggara+dev@mile.app",
+          "updatedTime": "2025-08-31T16:01:27.344000Z",
+          "createdTime": "2025-08-31T16:01:27.344000Z",
+          "id": "68b471d7f5729e50f30c8424",
+          "organizationName": "MileApp",
+          "isUsed": false,
+          "customModuleId": null
+        }
+      }
+    },
+    "PluginListResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Request success status",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "description": "Response message",
+          "example": "Success."
+        },
+        "data": {
+          "type": "object",
+          "description": "Laravel pagination structure",
+          "properties": {
+            "current_page": {
+              "type": "integer",
+              "description": "Current page number",
+              "example": 1
+            },
+            "data": {
+              "type": "array",
+              "description": "Array of plugin objects",
+              "items": {
+                "$ref": "#/definitions/Plugin"
+              }
+            },
+            "first_page_url": {
+              "type": "string",
+              "description": "URL for the first page",
+              "example": "https://apiwebdev.mile.app/api/v3/plugins?page=1"
+            },
+            "from": {
+              "type": "integer",
+              "description": "First item number on current page",
+              "example": 1
+            },
+            "last_page": {
+              "type": "integer",
+              "description": "Total number of pages",
+              "example": 1
+            },
+            "last_page_url": {
+              "type": "string",
+              "description": "URL for the last page",
+              "example": "https://apiwebdev.mile.app/api/v3/plugins?page=1"
+            },
+            "links": {
+              "type": "array",
+              "description": "Pagination links for UI",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "URL for the link"
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Label for the link"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "Whether the link is active"
+                  }
+                }
+              }
+            },
+            "next_page_url": {
+              "type": "string",
+              "description": "URL for next page (null if last page)",
+              "example": null
+            },
+            "path": {
+              "type": "string",
+              "description": "Base API path",
+              "example": "https://apiwebdev.mile.app/api/v3/plugins"
+            },
+            "per_page": {
+              "type": "integer",
+              "description": "Items per page limit",
+              "example": 1000
+            },
+            "prev_page_url": {
+              "type": "string",
+              "description": "URL for previous page (null if first page)",
+              "example": null
+            },
+            "to": {
+              "type": "integer",
+              "description": "Last item number on current page",
+              "example": 2
+            },
+            "total": {
+              "type": "integer",
+              "description": "Total number of items across all pages",
+              "example": 2
+            }
+          },
+          "required": [
+            "current_page",
+            "data",
+            "first_page_url",
+            "from",
+            "last_page",
+            "last_page_url",
+            "links",
+            "next_page_url",
+            "path",
+            "per_page",
+            "prev_page_url",
+            "to",
+            "total"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "message",
+        "data"
+      ],
+      "example": {
+        "status": true,
+        "message": "Success.",
+        "data": {
+          "current_page": 1,
+          "data": [
+            {
+              "id": "68b159178eb51ba6720eaf42",
+              "name": "PDF Generator",
+              "description": "PDF Generator",
+              "resourceFile": "1756529893_PluginPdfGenerator.js",
+              "icon": "https://apistorage.mile.app/v3-public-dev/dev/icons/2025/08/29/system/1756453143_PDF%20Generator.png",
+              "organizationId": "system",
+              "resourceUrl": "https://apistorage.mile.app/v3-public-dev/dev/plugins/2025/08/30/system/1756529893_PluginPdfGenerator.js",
+              "updatedBy": "dayat.tur@paket.id",
+              "createdBy": "dayat.tur@paket.id",
+              "updatedTime": "2025-08-30T04:58:14+00:00",
+              "createdTime": "2025-08-29T07:39:03+00:00",
+              "organizationName": "Global",
+              "isUsed": false,
+              "customModuleId": null
+            },
+            {
+              "id": "68af1118c10bc46c670d0c52",
+              "name": "Test Face Recognition Plugin",
+              "description": "Automated test plugin for face recognition",
+              "resourceFile": "1756303640_PluginFaceRecognition.js",
+              "icon": "https://apistorage.mile.app/v3-public-dev/dev/icons/2025/08/27/system/1756305756_updated-icon.svg",
+              "organizationId": "system",
+              "resourceUrl": "https://apistorage.mile.app/v3-public-dev/dev/plugins/2025/08/27/system/1756303640_PluginFaceRecognition.js",
+              "updatedBy": "dayat.tur@paket.id",
+              "createdBy": "dayat.tur@paket.id",
+              "updatedTime": "2025-08-27T14:42:37+00:00",
+              "createdTime": "2025-08-27T14:07:20+00:00",
+              "organizationName": "Global",
+              "isUsed": false,
+              "customModuleId": null
+            }
+          ],
+          "first_page_url": "https://apiwebdev.mile.app/api/v3/plugins?page=1",
+          "from": 1,
+          "last_page": 1,
+          "last_page_url": "https://apiwebdev.mile.app/api/v3/plugins?page=1",
+          "links": [
+            {
+              "url": null,
+              "label": "&laquo; Previous",
+              "active": false
+            },
+            {
+              "url": "https://apiwebdev.mile.app/api/v3/plugins?page=1",
+              "label": "1",
+              "active": true
+            },
+            {
+              "url": null,
+              "label": "Next &raquo;",
+              "active": false
+            }
+          ],
+          "next_page_url": null,
+          "path": "https://apiwebdev.mile.app/api/v3/plugins",
+          "per_page": 1000,
+          "prev_page_url": null,
+          "to": 2,
+          "total": 2
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Request success status (always false for errors)",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "description": "Error message description",
+          "example": "Validation failed"
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code identifier",
+              "example": "VALIDATION_ERROR"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detailed error information",
+              "example": "Name field is required and must be between 3-100 characters"
+            },
+            "field": {
+              "type": "string",
+              "description": "Field name for validation errors",
+              "example": "name"
+            }
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Error timestamp",
+          "example": "2025-08-31T10:45:00.000000Z"
+        },
+        "failedCode": {
+          "type": "string",
+          "description": "Standardized error code for debugging and error tracking",
+          "example": "plugn-033"
+        }
+      },
+      "required": [
+        "status",
+        "message"
+      ],
+      "example": {
+        "status": false,
+        "message": "Plugin not found",
+        "error": {
+          "code": "PLUGIN_NOT_FOUND",
+          "details": "No plugin found with ID: 68aeb4b3dca6bbc8310b0eb2"
+        },
+        "timestamp": "2025-08-31T10:45:00.000000Z",
+        "failedCode": "plugn-033"
+      }
+    }
+  }
+}

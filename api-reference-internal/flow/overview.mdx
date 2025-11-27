@@ -1,0 +1,61 @@
+---
+title: 'Flow'
+description: 'Mobile field application workflows for efficient task execution'
+---
+
+## What is a Flow?
+
+Flow in MileApp is the mobile field application workflow. Setting it correctly is critical to the success of the field workers in doing their job efficiently. Flow attributes consist of IDs, pages, components, configurations, and time. The Flow will be used at Task, Automation, or Schedule.
+
+A Flow defines:
+- **Pages** - The screens that field workers see in the mobile app
+- **Components** - Input fields, photos, signatures, and other data capture elements
+- **Configurations** - Settings for how the flow behaves
+- **Validations** - Rules for data entry requirements
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="List Flows" icon="list" href="/api-reference-internal/flow/flow/read-flows">
+    Retrieve all flow templates
+  </Card>
+  <Card title="Get Flow" icon="file" href="/api-reference-internal/flow/flow/read-flow-by-id">
+    Get a specific flow by ID
+  </Card>
+  <Card title="Create Flow" icon="plus" href="/api-reference-internal/flow/flow/create-flow">
+    Create a new flow template
+  </Card>
+  <Card title="Update Flow" icon="pen" href="/api-reference-internal/flow/flow/update-flow-by-id">
+    Update an existing flow
+  </Card>
+</CardGroup>
+
+## Flow Components
+
+Flows can include various component types:
+
+| Component | Description |
+|-----------|-------------|
+| **Input** | Text, number, date, time, phone, URL, currency |
+| **Select** | Single or multiple choice options |
+| **Photo** | Camera capture or gallery upload |
+| **Signature** | Digital signature capture |
+| **Bill** | Invoice/billing details |
+| **List** | Repeatable item lists |
+| **Timer** | Time tracking |
+| **Voice Note** | Audio recording |
+
+## Usage in MileApp
+
+Flows are used in multiple contexts:
+
+1. **Tasks** - Define how field workers complete tasks
+2. **Automation** - Trigger automated workflows based on flow completion
+3. **Schedule** - Create recurring tasks with consistent data collection
+
+To see the details of flow object, please follow [this link](/api-reference-internal/objects/flow-object).
+
+## Related Resources
+
+- [Task](/api-reference-internal/task/overview) - Tasks use flows for data collection
+- [Flow Object](/api-reference-internal/objects/flow-object) - Flow data structure

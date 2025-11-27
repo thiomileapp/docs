@@ -1,0 +1,561 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "License API",
+    "version": "1.0.0",
+    "description": "API for retrieving licenses. This API provides information about licenses, including their names, product IDs, billing details, and associated features.\n\n| Field         | Type     | Description                         |\n|---------------|----------|-------------------------------------|\n| status        | boolean  | Status of the operation.            |\n| data          | array    | Array of license objects.           |\n\n### License Object\n\nThe license object has the following properties:\n\n| Field         | Type     | Description                         |\n|---------------|----------|-------------------------------------|\n| name          | string   | Name of the license.                |\n| productId     | string   | Product ID of the license.         |\n| rule          | object   | License rule details.               |\n| type          | string   | Type of the license.                |\n| description   | string   | Description of the license.        |\n| billingPeriod | string   | Billing period of the license.     |\n| orderIndex    | integer  | Order index of the license.         |\n| items         | array    | Array of license item objects.      |\n| feature       | object   | License feature details.            |\n\n### License Rule Object\n\nThe license rule object contains details about the rules associated with the license. It has the following properties:\n\n| Field                 | Type     | Description                                               |\n|-----------------------|----------|-----------------------------------------------------------|\n| taskLimit             | string   | Task limit per month.                                    |\n| allowExtraTask        | boolean  | Flag to indicate if extra tasks are allowed.             |\n| visitLimit            | string   | Routing limit per month.                                 |\n| allowExtraVisit       | boolean  | Flag to indicate if extra visits are allowed.           |\n| automationLimit       | string   | Automation limit per month.                              |\n| allowExtraAutomation  | boolean  | Flag to indicate if extra automations are allowed.       |\n| userLimit             | integer  | User limit.                                              |\n| allowExtraUser        | boolean  | Flag to indicate if extra users are allowed.            |\n| dataRetention         | string   | Data retention period.                                   |\n| customRole            | string   | Custom role value.                                       |\n| teams                 | boolean  | Flag to indicate if teams are allowed.                  |\n| imageQuality          | string   | Image quality setting.                                   |\n| dataSourceTypeLimit   | string   | Data source type limit.                                  |\n| allowExtraDataSourceType | boolean  | Flag to indicate if extra data source types are allowed. |\n| sla                   | boolean  | Flag to indicate if SLA is included.                    |\n| sso                   | boolean  | Flag to indicate if SSO is included.                    |\n| privacyPolicy         | string   | Privacy policy setting.                                  |\n| useBigData            | boolean  | Flag to indicate if Big Data access is included.         |\n| professionalService   | boolean  | Flag to indicate if professional services are included.  |\n| minimumContract       | string   | Minimum contract setting.                                |\n\n### License Item Object\n\nThe license item object represents individual items associated with the license. It has the following properties:\n\n| Field       | Type     | Description               |\n|-------------|----------|---------------------------|\n| priceId     | string   | Price ID of the item.     |\n| name        | string   | Name of the item.         |\n| mainPrice   | integer  | Main price of the item.   |\n| extraPrice  | integer  | Extra price of the item.  |\n\n### License Feature Object\n\nThe license feature object provides details about various features associated with the license. It has properties for different features:\n\n| Field         | Type     | Description                         |\n|---------------|----------|-------------------------------------|\n| taskLimit     | object   | Task limit feature details.         |\n| visitLimit    | object   | Routing limit feature details.      |\n| automationLimit | object  | Automation limit feature details.   |\n| userLimit     | object   | User limit feature details.         |\n| dataRetention | object   | Data retention feature details.     |\n| customRole    | object   | Custom role feature details.        |\n| teams         | object   | Teams feature details.              |\n| imageQuality  | object   | Image quality feature details.      |\n| dataSourceTypeLimit | object | Data source type limit feature details. |\n| sla           | object   | SLA feature details.                |\n| sso           | object   | SSO feature details.                |\n| privacyPolicy | object   | Privacy policy feature details.      |\n| useBigData    | object   | Dashboard feature details.          |\n| professionalService | object | Professional service feature details. |\n| minimumContract | object  | Minimum contract feature details.   |\n\nEach feature object contains properties like title, value, description, textValue, and allowExtra, providing detailed information about the respective feature."
+  },
+  "host": "billing.mile.app",
+  "basePath": "/api",
+  "schemes": ["https"],
+  "paths": {
+    "/licenses": {
+      "get": {
+        "summary": "Get Licenses",
+        "description": "Retrieve license information.",
+        "tags": ["Licenses"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "clearCache",
+            "in": "query",
+            "type": "boolean",
+            "required": true,
+            "description": "Clear the cache for license information."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/LicenseResponse"
+            },
+            "examples": {
+              "application/json": {
+                "status": true,
+                "data": [
+                  {
+                    "name": "Free",
+                    "productId": "prod_free",
+                    "rule": {
+                      "taskLimit": 500,
+                      "allowExtraTask": false,
+                      "visitLimit": 100,
+                      "allowExtraVisit": false,
+                      "automationLimit": 100,
+                      "allowExtraAutomation": false,
+                      "userLimit": -1,
+                      "allowExtraUser": false,
+                      "dataRetention": "1 Month",
+                      "customRole": 4,
+                      "teams": false,
+                      "imageQuality": "low",
+                      "dataSourceTypeLimit": 100,
+                      "allowExtraDataSourceType": false,
+                      "sla": false,
+                      "sso": false,
+                      "privacyPolicy": "default",
+                      "useBigData": false,
+                      "professionalService": false,
+                      "minimumContract": "No Contract"
+                    },
+                    "type": "regularId",
+                    "description": "Get to know MileApp. Manage up to 100 tasks/month with full mobile app capabilities. Free forever",
+                    "billingPeriod": "Unlimited",
+                    "orderIndex": 1,
+                    "items": [],
+                    "feature": {
+                      "taskLimit": {
+                        "title": "Task limit / month",
+                        "value": 500,
+                        "description": "Maximize task creation within your billing cycle. Exceeding this limit incurs additional charges.",
+                        "textValue": "500 tasks.",
+                        "allowExtra": false
+                      },
+                      "visitLimit": {
+                        "title": "Routing limit / month",
+                        "value": 100,
+                        "description": "Optimize visits up to a set limit. Beyond that, extra routing incurs additional costs.",
+                        "textValue": "100 visit.",
+                        "allowExtra": false
+                      },
+                      "automationLimit": {
+                        "title": "Automation limit / month",
+                        "value": 100,
+                        "description": "Simplify task management with automatic processes.",
+                        "textValue": "100 automations.",
+                        "allowExtra": false
+                      },
+                      "userLimit": {
+                        "title": "User Limit",
+                        "value": -1,
+                        "description": "-",
+                        "textValue": -1,
+                        "allowExtra": false
+                      },
+                      "dataRetention": {
+                        "title": "Data Retention",
+                        "value": "1 Month",
+                        "description": "We store your data for a specified duration.",
+                        "textValue": "1 Month"
+                      },
+                      "customRole": {
+                        "title": "Custom Role",
+                        "value": 4,
+                        "description": "Create unique roles to match your organization's structure.",
+                        "textValue": 4
+                      },
+                      "teams": {
+                        "title": "Teams",
+                        "value": false,
+                        "description": "Easily create and manage teams.",
+                        "textValue": "-"
+                      },
+                      "imageQuality": {
+                        "title": "Image Quality",
+                        "value": "low",
+                        "description": "We optimize storage by compressing images.",
+                        "textValue": "low"
+                      },
+                      "dataSourceTypeLimit": {
+                        "title": "Data Source Type",
+                        "value": 100,
+                        "description": "Data sources are usable during task creation.",
+                        "textValue": "100.",
+                        "allowExtra": false
+                      },
+                      "sla": {
+                        "title": "SLA",
+                        "value": false,
+                        "description": "Monthly SLA report, aiming for 99.5% uptime.",
+                        "textValue": "-"
+                      },
+                      "sso": {
+                        "title": "SSO",
+                        "value": false,
+                        "description": "Seamless Single Sign-On integration for easy access.",
+                        "textValue": "-"
+                      },
+                      "privacyPolicy": {
+                        "title": "Privacy Policy",
+                        "value": "default",
+                        "description": "Customize your privacy policy to meet specific needs.",
+                        "textValue": "default"
+                      },
+                      "useBigData": {
+                        "title": "Dashboard",
+                        "value": false,
+                        "description": "Access and customize Kibana for tailored data insights.",
+                        "textValue": "-"
+                      },
+                      "professionalService": {
+                        "title": "Professional Service",
+                        "value": false,
+                        "description": "Our consultant team can assist with all your needs, including integrations and more.",
+                        "textValue": "-"
+                      },
+                      "minimumContract": {
+                        "title": "Minimum Contract",
+                        "value": "No Contract",
+                        "description": "-",
+                        "textValue": "No Contract"
+                      }
+                    }
+                  },
+                  {
+                    "productId": "prod_OaZOlUL01AiiNl",
+                    "orderIndex": 2,
+                    "name": "Paid",
+                    "type": "regularId",
+                    "billingPeriod": "Monthly",
+                    "description": "Suitable for small business to manage tasks & track daily progress with ease",
+                    "rule": {
+                      "taskLimit": "2500",
+                      "allowExtraTask": true,
+                      "visitLimit": "1000",
+                      "allowExtraVisit": true,
+                      "automationLimit": "1000",
+                      "allowExtraAutomation": true,
+                      "userLimit": -1,
+                      "allowExtraUser": false,
+                      "dataRetention": "1 Year",
+                      "customRole": "10",
+                      "teams": false,
+                      "imageQuality": "standard",
+                      "dataSourceTypeLimit": "10000",
+                      "allowExtraDataSourceType": false,
+                      "sla": false,
+                      "sso": false,
+                      "privacyPolicy": "default",
+                      "useBigData": false,
+                      "professionalService": false,
+                      "minimumContract": "No Contract"
+                    },
+                    "items": [
+                      {
+                        "priceId": "price_1NnOO3FONuq90qMoWEksBGHt",
+                        "name": "Main Task",
+                        "mainPrice": 2000000
+                      },
+                      {
+                        "priceId": "price_1Nve4aFONuq90qMoBv1D3Wcl",
+                        "name": "Task",
+                        "extraPrice": 400
+                      },
+                      {
+                        "priceId": "price_1NtD1DFONuq90qMo22os1GjE",
+                        "name": "Visit",
+                        "extraPrice": 200
+                      },
+                      {
+                        "priceId": "price_1NtCzSFONuq90qMoyMtxfuk6",
+                        "name": "Automation",
+                        "extraPrice": 10
+                      }
+                    ],
+                    "feature": {
+                      "taskLimit": {
+                        "title": "Task limit / month",
+                        "value": "2500",
+                        "description": "Maximize task creation within your billing cycle. Exceeding this limit incurs additional charges.",
+                        "textValue": "2,500 tasks (extra task @IDR 400).",
+                        "allowExtra": true
+                      },
+                      "visitLimit": {
+                        "title": "Routing limit / month",
+                        "value": "1000",
+                        "description": "Optimize visits up to a set limit. Beyond that, extra routing incurs additional costs.",
+                        "textValue": "1,000 visits (extra visit @IDR 200).",
+                        "allowExtra": true
+                      },
+                      "automationLimit": {
+                        "title": "Automation limit / month",
+                        "value": "1000",
+                        "description": "Simplify task management with automatic processes.",
+                        "textValue": "1,000 automations (extra automation @IDR 10).",
+                        "allowExtra": true
+                      },
+                      "userLimit": {
+                        "title": "User Limit",
+                        "value": -1,
+                        "description": "-",
+                        "textValue": -1,
+                        "allowExtra": false
+                      },
+                      "dataRetention": {
+                        "title": "Data Retention",
+                        "value": "1 Year",
+                        "description": "We store your data for a specified duration.",
+                        "textValue": "1 Year"
+                      },
+                      "customRole": {
+                        "title": "Custom Role",
+                        "value": "10",
+                        "description": "Create unique roles to match your organization's structure.",
+                        "textValue": "10"
+                      },
+                      "teams": {
+                        "title": "Teams",
+                        "value": false,
+                        "description": "Easily create and manage teams.",
+                        "textValue": "-"
+                      },
+                      "imageQuality": {
+                        "title": "Image Quality",
+                        "value": "standard",
+                        "description": "We optimize storage by compressing images.",
+                        "textValue": "standard"
+                      },
+                      "dataSourceTypeLimit": {
+                        "title": "Data Source Type",
+                        "value": "10000",
+                        "description": "Data sources are usable during task creation.",
+                        "textValue": "10,000.",
+                        "allowExtra": false
+                      },
+                      "sla": {
+                        "title": "SLA",
+                        "value": false,
+                        "description": "Monthly SLA report, aiming for 99.5% uptime.",
+                        "textValue": "-"
+                      },
+                      "sso": {
+                        "title": "SSO",
+                        "value": false,
+                        "description": "Seamless Single Sign-On integration for easy access.",
+                        "textValue": "-"
+                      },
+                      "privacyPolicy": {
+                        "title": "Privacy Policy",
+                        "value": "default",
+                        "description": "Customize your privacy policy to meet specific needs.",
+                        "textValue": "default"
+                      },
+                      "useBigData": {
+                        "title": "Dashboard",
+                        "value": false,
+                        "description": "Access and customize Kibana for tailored data insights.",
+                        "textValue": "-"
+                      },
+                      "professionalService": {
+                        "title": "Professional Service",
+                        "value": false,
+                        "description": "Our consultant team can assist with all your needs, including integrations and more.",
+                        "textValue": "-"
+                      },
+                      "minimumContract": {
+                        "title": "Minimum Contract",
+                        "value": "No Contract",
+                        "description": "-",
+                        "textValue": "No Contract"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LicenseResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "description": "Status of the operation."
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/License"
+          }
+        }
+      }
+    },
+    "License": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the license."
+        },
+        "productId": {
+          "type": "string",
+          "description": "Product ID of the license."
+        },
+        "rule": {
+          "$ref": "#/definitions/LicenseRule"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the license."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the license."
+        },
+        "billingPeriod": {
+          "type": "string",
+          "description": "Billing period of the license."
+        },
+        "orderIndex": {
+          "type": "integer",
+          "description": "Order index of the license."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LicenseItem"
+          }
+        },
+        "feature": {
+          "$ref": "#/definitions/LicenseFeature"
+        }
+      }
+    },
+    "LicenseRule": {
+      "type": "object",
+      "properties": {
+        "taskLimit": {
+          "type": "string",
+          "description": "Task limit per month."
+        },
+        "allowExtraTask": {
+          "type": "boolean",
+          "description": "Flag to indicate if extra tasks are allowed."
+        },
+        "visitLimit": {
+          "type": "string",
+          "description": "Routing limit per month."
+        },
+        "allowExtraVisit": {
+          "type": "boolean",
+          "description": "Flag to indicate if extra visits are allowed."
+        },
+        "automationLimit": {
+          "type": "string",
+          "description": "Automation limit per month."
+        },
+        "allowExtraAutomation": {
+          "type": "boolean",
+          "description": "Flag to indicate if extra automations are allowed."
+        },
+        "userLimit": {
+          "type": "integer",
+          "description": "User limit."
+        },
+        "allowExtraUser": {
+          "type": "boolean",
+          "description": "Flag to indicate if extra users are allowed."
+        },
+        "dataRetention": {
+          "type": "string",
+          "description": "Data retention period."
+        },
+        "customRole": {
+          "type": "string",
+          "description": "Custom role value."
+        },
+        "teams": {
+          "type": "boolean",
+          "description": "Flag to indicate if teams are allowed."
+        },
+        "imageQuality": {
+          "type": "string",
+          "description": "Image quality setting."
+        },
+        "dataSourceTypeLimit": {
+          "type": "string",
+          "description": "Data source type limit."
+        },
+        "allowExtraDataSourceType": {
+          "type": "boolean",
+          "description": "Flag to indicate if extra data source types are allowed."
+        },
+        "sla": {
+          "type": "boolean",
+          "description": "Flag to indicate if SLA is included."
+        },
+        "sso": {
+          "type": "boolean",
+          "description": "Flag to indicate if SSO is included."
+        },
+        "privacyPolicy": {
+          "type": "string",
+          "description": "Privacy policy setting."
+        },
+        "useBigData": {
+          "type": "boolean",
+          "description": "Flag to indicate if Big Data access is included."
+        },
+        "professionalService": {
+          "type": "boolean",
+          "description": "Flag to indicate if professional services are included."
+        },
+        "minimumContract": {
+          "type": "string",
+          "description": "Minimum contract setting."
+        }
+      }
+    },
+    "LicenseItem": {
+      "type": "object",
+      "properties": {
+        "priceId": {
+          "type": "string",
+          "description": "Price ID of the item."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the item."
+        },
+        "mainPrice": {
+          "type": "integer",
+          "description": "Main price of the item."
+        },
+        "extraPrice": {
+          "type": "integer",
+          "description": "Extra price of the item."
+        }
+      }
+    },
+    "LicenseFeature": {
+      "type": "object",
+      "properties": {
+        "taskLimit": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "visitLimit": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "automationLimit": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "userLimit": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "dataRetention": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "customRole": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "teams": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "imageQuality": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "dataSourceTypeLimit": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "sla": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "sso": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "privacyPolicy": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "useBigData": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "professionalService": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        },
+        "minimumContract": {
+          "$ref": "#/definitions/LicenseFeatureItem"
+        }
+      }
+    },
+    "LicenseFeatureItem": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the feature item."
+        },
+        "value": {
+          "type": ["string", "integer", "boolean"],
+          "description": "Value of the feature item."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the feature item."
+        },
+        "textValue": {
+          "type": "string",
+          "description": "Text representation of the feature value."
+        },
+        "allowExtra": {
+          "type": "boolean",
+          "description": "Flag to indicate if extra is allowed."
+        }
+      }
+    }
+  }
+}

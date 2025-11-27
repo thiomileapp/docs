@@ -1225,6 +1225,12 @@ function buildInternal() {
   return result;
 }
 
+// Load tag descriptions from YAML file
+const TAG_DESCRIPTIONS_FILE = path.join(BASE_DIR, 'tag-descriptions.yaml');
+const TAG_DESCRIPTIONS = fs.existsSync(TAG_DESCRIPTIONS_FILE)
+  ? yaml.load(fs.readFileSync(TAG_DESCRIPTIONS_FILE, 'utf8')) || {}
+  : {};
+
 // Split OpenAPI spec by tag groups (for separate navigation sections in Mintlify)
 function splitByTagGroups(spec, tagGroups) {
   const results = {};
@@ -1267,10 +1273,12 @@ function splitByTagGroups(spec, tagGroups) {
       }
     }
 
-    // Filter tags array
-    if (spec.tags) {
-      groupSpec.tags = spec.tags.filter(t => tagSet.has(t.name));
-    }
+    // Create tags array in the specified order (this controls sidebar order in Mintlify)
+    // Use descriptions from tag-descriptions.yaml
+    groupSpec.tags = tags.map(tagName => ({
+      name: tagName,
+      description: TAG_DESCRIPTIONS[tagName] ? TAG_DESCRIPTIONS[tagName].trim() : `${tagName} endpoints`
+    }));
 
     results[groupName] = groupSpec;
   }
@@ -1291,7 +1299,7 @@ async function main() {
     'Routing': ['Vehicle', 'Routing'],
     'Flow': ['Flow', 'Automation'],
     'Data': ['Data Source', 'Data Type'],
-    'Setting': ['User', 'Role', 'App Integration', 'Hub', 'Team', 'Plugin'],
+    'Setting': ['User', 'Team', 'Role', 'Hub', 'App Integration', 'Plugin'],
     'ImportExport': ['Data Import', 'Export Task', 'Export Config'],
     'File': ['File']
   };
@@ -1302,7 +1310,7 @@ async function main() {
     'Routing': ['Vehicle', 'Routing', 'Configuration', 'Capacity Constraint', 'Geocode', 'Geotagging'],
     'Flow': ['Flow', 'Automation'],
     'Data': ['Data Source', 'Data Type', 'Data Import'],
-    'Setting': ['User', 'Role', 'App Integration', 'Hub', 'Team', 'Plugin', 'Organization', 'Custom Module', 'Organization Data', 'Template', 'Version Management', 'Data Version', 'Password Policy', 'Privacy Policy'],
+    'Setting': ['User', 'Team', 'Role', 'Hub', 'Organization', 'App Integration', 'Custom Module', 'Organization Data', 'Plugin', 'Template', 'Version Management', 'Data Version', 'Password Policy', 'Privacy Policy'],
     'Billing': ['Licenses', 'Subscriptions', 'Payment Methods', 'Invoices', 'Listener'],
     'Activity': ['Activity', 'Dashboard'],
     'Auth': ['Authentication', 'Token'],

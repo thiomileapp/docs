@@ -1,0 +1,253 @@
+{
+  "components": {
+    "schemas": {
+      "VehicleInternal": {
+        "type": "object",
+        "description": "Internal vehicle object with comprehensive details for system administration and operations",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the vehicle (MongoDB ObjectId)",
+            "example": "65c1f68ea735b522d370ea22"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier that owns this vehicle",
+            "example": "65c1f4eeca7c4816d94587b2"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Hub identifier where vehicle is assigned",
+            "example": "65c1f68ea735b522d370ea25"
+          },
+          "name": {
+            "type": "string",
+            "description": "Vehicle name or identifier",
+            "example": "Truck-01"
+          },
+          "type": {
+            "type": "string",
+            "description": "Vehicle type classification",
+            "enum": ["car", "motorcycle", "truck", "van", "bicycle"],
+            "example": "truck"
+          },
+          "licensePlate": {
+            "type": "string",
+            "description": "Vehicle license plate number",
+            "example": "B 1234 XYZ"
+          },
+          "capacity": {
+            "type": "object",
+            "description": "Vehicle capacity constraints",
+            "properties": {
+              "weight": {
+                "type": "number",
+                "description": "Maximum weight capacity in kg",
+                "example": 1000
+              },
+              "volume": {
+                "type": "number",
+                "description": "Maximum volume capacity in cubic meters",
+                "example": 10.5
+              }
+            }
+          },
+          "assigneeId": {
+            "type": "string",
+            "description": "ID of assigned driver/operator",
+            "example": "65c1f68ea735b522d370ea26"
+          },
+          "assignee": {
+            "type": "object",
+            "description": "Assigned driver information",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Driver user ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Driver full name"
+              },
+              "email": {
+                "type": "string",
+                "description": "Driver email address"
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Current vehicle status",
+            "enum": ["active", "inactive", "maintenance", "assigned"],
+            "example": "active"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Vehicle classification tags",
+            "items": {
+              "type": "string"
+            },
+            "example": ["refrigerated", "express"]
+          },
+          "workingHours": {
+            "type": "object",
+            "description": "Vehicle operating hours configuration",
+            "properties": {
+              "start": {
+                "type": "string",
+                "format": "time",
+                "description": "Daily start time",
+                "example": "08:00"
+              },
+              "end": {
+                "type": "string",
+                "format": "time",
+                "description": "Daily end time",
+                "example": "17:00"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "Timezone for working hours",
+                "example": "Asia/Jakarta"
+              }
+            }
+          },
+          "coordinates": {
+            "type": "object",
+            "description": "Current vehicle location",
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "format": "float",
+                "description": "Latitude coordinate",
+                "example": -6.2088
+              },
+              "longitude": {
+                "type": "number",
+                "format": "float",
+                "description": "Longitude coordinate",
+                "example": 106.8456
+              }
+            }
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email of user who created this vehicle record",
+            "example": "admin@mile.app"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "Email of user who last updated this vehicle",
+            "example": "admin@mile.app"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when vehicle was created",
+            "example": "2024-02-06T08:15:30.000000Z"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when vehicle was last updated",
+            "example": "2024-02-06T14:20:15.000000Z"
+          },
+          "internalNotes": {
+            "type": "string",
+            "description": "Internal administrative notes (not visible to public API)",
+            "example": "Vehicle requires weekly maintenance check"
+          },
+          "auditLog": {
+            "type": "array",
+            "description": "Internal audit trail for vehicle changes",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": {"type": "string"},
+                "timestamp": {"type": "string", "format": "date-time"},
+                "userId": {"type": "string"},
+                "changes": {"type": "object"}
+              }
+            }
+          },
+          "systemMetadata": {
+            "type": "object",
+            "description": "Internal system metadata for debugging and monitoring",
+            "properties": {
+              "lastSyncTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "dataVersion": {
+                "type": "integer"
+              },
+              "migrationStatus": {
+                "type": "string"
+              }
+            }
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Vehicle Module business failedCode that indicate specific failure conditions or business rule violations during vehicle module operations. These codes help identify the failed operation of vehicle-related and provide standardized failure identification across the system.\n\nPossible values:\n- vehic-032: Invalid state/condition - Vehicle state transition invalid\n- vehic-033: Vehicle not found - Vehicle record does not exist\n- vehic-035: Access forbidden - User lacks vehicle permission\n- vehic-036: Invalid hub assignment - Vehicle assigned to invalid hub\n- vehic-037: Invalid assignee - Invalid driver/user assignment\n- vehic-040: Limit exceeded - Vehicle limit exceeded",
+            "enum": [
+              "vehic-032",
+              "vehic-033",
+              "vehic-035",
+              "vehic-036",
+              "vehic-037",
+              "vehic-040"
+            ]
+          }
+        },
+        "required": ["_id", "organizationId", "hubId", "name", "type", "status"],
+        "example": {
+          "_id": "65c1f68ea735b522d370ea22",
+          "organizationId": "65c1f4eeca7c4816d94587b2",
+          "hubId": "65c1f68ea735b522d370ea25",
+          "name": "Truck-01",
+          "type": "truck",
+          "licensePlate": "B 1234 XYZ",
+          "status": "active",
+          "capacity": {
+            "weight": 1000,
+            "volume": 10.5
+          },
+          "assigneeId": "65c1f68ea735b522d370ea26",
+          "assignee": {
+            "id": "65c1f68ea735b522d370ea26",
+            "name": "John Driver",
+            "email": "john.driver@mile.app"
+          },
+          "tags": ["refrigerated", "express"],
+          "workingHours": {
+            "start": "08:00",
+            "end": "17:00",
+            "timezone": "Asia/Jakarta"
+          },
+          "coordinates": {
+            "latitude": -6.2088,
+            "longitude": 106.8456
+          },
+          "createdBy": "admin@mile.app",
+          "updatedBy": "admin@mile.app",
+          "createdTime": "2024-02-06T08:15:30.000000Z",
+          "updatedTime": "2024-02-06T14:20:15.000000Z",
+          "internalNotes": "Vehicle requires weekly maintenance check",
+          "auditLog": [
+            {
+              "action": "created",
+              "timestamp": "2024-02-06T08:15:30.000000Z",
+              "userId": "65c1f4eeca7c4816d94587b3",
+              "changes": {}
+            }
+          ],
+          "systemMetadata": {
+            "lastSyncTime": "2024-02-06T14:20:15.000000Z",
+            "dataVersion": 1,
+            "migrationStatus": "completed"
+          }
+        }
+      }
+    }
+  }
+}

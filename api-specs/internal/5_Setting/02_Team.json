@@ -1,0 +1,460 @@
+{
+    "paths": {
+        "/teams": {
+            "get": {
+                "summary": "Read team",
+                "tags": [
+                    "Team"
+                ],
+                "operationId": "getTeams",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref" : "#/parameters/pageInQuery"
+                    },
+                    {
+                      "$ref" : "#/parameters/limitInQuery"
+                    },
+                    {
+                        "$ref": "#/parameters/hubIdInQuery"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "description": "List object of teams.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "data": {
+                                    "current_page": 1,
+                                    "data": [
+                                        {
+                                            "_id": "650138dee2683e0e7c6b0ed2",
+                                            "name": "Team Delivery Day 2",
+                                            "hubId": "64d9932e2beb9037735ff022",
+                                            "organizationId": "64d99303be0ad015c461c932",
+                                            "updatedTime": "2023-09-13T04:21:50.211000Z",
+                                            "createdTime": "2023-09-13T04:21:50.211000Z",
+                                            "totalUser": 0
+                                        }
+                                    ],
+                                    "first_page_url": "https://apiwebdev.mile.app/api/v3/teams?hubId=64d9932e2beb9037735ff022%2Ctes&page=1",
+                                    "from": 1,
+                                    "last_page": 1,
+                                    "last_page_url": "https://apiwebdev.mile.app/api/v3/teams?hubId=64d9932e2beb9037735ff022%2Ctes&page=1",
+                                    "links": [
+                                        {
+                                            "url": null,
+                                            "label": "&laquo; Previous",
+                                            "active": false
+                                        },
+                                        {
+                                            "url": "https://apiwebdev.mile.app/api/v3/teams?hubId=64d9932e2beb9037735ff022%2Ctes&page=1",
+                                            "label": "1",
+                                            "active": true
+                                        },
+                                        {
+                                            "url": null,
+                                            "label": "Next &raquo;",
+                                            "active": false
+                                        }
+                                    ],
+                                    "next_page_url": null,
+                                    "path": "https://apiwebdev.mile.app/api/v3/teams",
+                                    "per_page": 10,
+                                    "prev_page_url": null,
+                                    "to": 1,
+                                    "total": 1
+                                },
+                                "status": true,
+                                "code": 200
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        }
+                    },
+                    "500": {
+                      "description": "Server error",
+                      "schema": {
+                        "$ref": "#/parameters/responses/serverError/schema"
+                      }
+                    }
+                },
+                "security": [
+                    {
+                      "AccessToken": []
+                    }
+                  ]
+            }
+        },
+        "/team/{teamId}": {
+            "get": {
+                "summary": "Read team by ID",
+                "tags": [
+                    "Team"
+                ],
+                "operationId": "getTeamId",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "teamId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the team that generated by system.<br>**Example**: `63c7705c8608d52094785374`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Detail of object team.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "data": {
+                                    "_id": "650151e4c8a55842604f1662",
+                                    "name": "Team Delivery Day 2",
+                                    "hubId": "64d9932e2beb9037735ff022",
+                                    "organizationId": "64d99303be0ad015c461c932",
+                                    "updatedTime": "2023-09-13T06:08:36.025000Z",
+                                    "createdTime": "2023-09-13T06:08:36.025000Z",
+                                    "totalUser": 0
+                                },
+                                "status": true,
+                                "code": 200
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found",
+                        "schema": {
+                          "$ref": "#/parameters/responses/notFound/schema"
+                        }
+                    },
+                    "500": {
+                      "description": "Server error",
+                      "schema": {
+                        "$ref": "#/parameters/responses/serverError/schema"
+                      }
+                    }
+                },
+                "security": [
+                    {
+                      "AccessToken": []
+                    }
+                  ]
+            }
+        },
+        "/team": {
+            "post": {
+                "summary": "Create team",
+                "tags": [
+                    "Team"
+                ],
+                "operationId": "CreateTeam",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/TeamCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "description": "Detail object of created team.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "data": {
+                                    "name": "Team Delivery",
+                                    "hubId": "64d9932e2beb9037735ff022",
+                                    "organizationId": "64d99303be0ad015c461c932",
+                                    "updatedTime": "2023-09-13T06:08:36.025000Z",
+                                    "createdTime": "2023-09-13T06:08:36.025000Z",
+                                    "_id": "650151e4c8a55842604f1662",
+                                    "totalUser": 0
+                                },
+                                "code": 201,
+                                "message": "Data successfully created."
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                          }
+                    },
+                    "500": {
+                      "description": "Server error",
+                      "schema": {
+                        "$ref": "#/parameters/responses/serverError/schema"
+                      }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/team/{teamId}/": {
+            "put": {
+                "summary": "Update team",
+                "tags": [
+                    "Team"
+                ],
+                "operationId": "updateTeam",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "teamId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the team that generated by system.<br>**Example**: `642634bde1428d414838c882`"
+                    },
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/TeamUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "string"
+                                },
+                                "property": {
+                                    "description": "Detail of updated team.",
+                                    "type": "object"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 200,
+                                "message": "Data successfully updated.",
+                                "data": {
+                                    "_id": "650151e4c8a55842604f1662",
+                                    "name": "Team Delivery Update",
+                                    "hubId": "64d9932e2beb9037735ff022",
+                                    "organizationId": "64d99303be0ad015c461c932",
+                                    "updatedTime": "2023-09-13T06:12:26.124000Z",
+                                    "createdTime": "2023-09-13T06:08:36.025000Z",
+                                    "totalUser": 0
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                          }
+                    },
+                    "404": {
+                        "description": "Data not found",
+                        "schema": {
+                          "$ref": "#/parameters/responses/notFound/schema"
+                        }
+                    },
+                    "500": {
+                      "description": "Server error",
+                      "schema": {
+                        "$ref": "#/parameters/responses/serverError/schema"
+                      }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete team",
+                "tags": [
+                    "Team"
+                ],
+                "operationId": "DeleteTeam",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "teamId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the team that generated by system.<br>**Example**: `642634bde1428d414838c882`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "boolean",
+                                    "description": "Status of response."
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "code": 200,
+                                "message": "Data successfully deleted.",
+                                "data": {
+                                    "_id": "650151e4c8a55842604f1662",
+                                    "name": "Team Delivery Update",
+                                    "hubId": "64d9932e2beb9037735ff022",
+                                    "organizationId": "64d99303be0ad015c461c932",
+                                    "updatedTime": "2023-09-13T06:12:26.124000Z",
+                                    "createdTime": "2023-09-13T06:08:36.025000Z",
+                                    "totalUser": 0
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "data not found",
+                                "failedCode": "team-033"
+                            }
+                        }
+                    },
+                    "500": {
+                      "description": "Server error",
+                      "schema": {
+                        "$ref": "#/parameters/responses/serverError/schema"
+                      }
+                    }
+                },
+                "security": [
+                    {
+                      "AccessToken": []
+                    }
+                  ]
+            }
+        }
+        
+    },
+    "definitions": {
+        "TeamCreateRequest": {
+            "example": {
+                "name": "Team Delivery",
+                "hubId": "642634bde1428d414838c882"
+            },
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of team. Name must be unique at per-hub.<br>**Example**: `Team Delivery`"
+                },
+                "hubId": {
+                    "type": "string",
+                    "description": "Unique identifier for the hub that generated by system.<br>**Example**: `63c7705c8608d52094785374`"
+                }
+            },
+            "required": [
+                "name",
+                "hubId"
+            ]
+        },
+        "TeamUpdateRequest": {
+            "example": {
+                "name": "Team Delivery Update",
+                "hubId": "642634bde1428d414838c882"
+            },
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of team. Name must be unique at per-hub.<br>**Example**: `Team Delivery`"
+                },
+                "hubId": {
+                    "type": "string",
+                    "description": "Unique identifier for the hub that generated by system.<br>**Example**: `63c7705c8608d52094785374`"
+                }
+            },
+            "required": [
+                "name",
+                "hubId"
+            ]
+        }
+    }
+}

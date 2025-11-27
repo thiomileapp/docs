@@ -1,5 +1,5 @@
 ---
-title: 'Import/Export Overview'
+title: 'Import/Export'
 description: 'Import data from files and export tasks and configurations'
 ---
 
@@ -20,10 +20,10 @@ Import data from files into MileApp. Supports multiple import types with backgro
 | `GET /import-monitoring/{id}` | Get import monitoring by ID |
 
 <CardGroup cols={2}>
-  <Card title="Import Data" icon="file-import" href="/api-reference/importexport/post-dataimport">
+  <Card title="Import Data" icon="file-import" href="/api-reference/importexport/data-import/import-data-source-from-file">
     Import data from CSV or Excel files
   </Card>
-  <Card title="Monitor Import" icon="chart-line" href="/api-reference/importexport/get-import-monitoring">
+  <Card title="Monitor Import" icon="chart-line" href="/api-reference/importexport/data-import/read-import-monitoring-records">
     Track import job progress and status
   </Card>
 </CardGroup>
@@ -52,10 +52,10 @@ Export tasks and data sources to files for reporting and backup purposes.
 | `GET /tasks/export-log` | Get task export history |
 
 <CardGroup cols={2}>
-  <Card title="Export Tasks" icon="file-export" href="/api-reference/importexport/post-tasksexport">
+  <Card title="Export Tasks" icon="file-export" href="/api-reference/importexport/export-task/export-tasks">
     Export tasks to CSV or Excel
   </Card>
-  <Card title="Export Log" icon="clock-rotate-left" href="/api-reference/importexport/get-tasksexport-log">
+  <Card title="Export Log" icon="clock-rotate-left" href="/api-reference/importexport/export-task/get-export-log-history">
     View export history and download files
   </Card>
 </CardGroup>
@@ -73,25 +73,13 @@ Create and manage export templates for consistent, repeatable exports.
 | `DELETE /export-config/{exportConfigId}` | Delete export configuration |
 
 <CardGroup cols={2}>
-  <Card title="List Configs" icon="list" href="/api-reference/importexport/get-export-configs">
+  <Card title="List Configs" icon="list" href="/api-reference/importexport/export-config/read-export-config">
     View all export configurations
   </Card>
-  <Card title="Create Config" icon="plus" href="/api-reference/importexport/post-export-config">
+  <Card title="Create Config" icon="plus" href="/api-reference/importexport/export-config/create-export-config">
     Create a new export template
   </Card>
 </CardGroup>
-
-## Import/Export Flow
-
-```mermaid
-graph LR
-    A[Upload File] --> B[Queue Processing]
-    B --> C[Validation]
-    C --> D[Import Records]
-    D --> E[Complete]
-    C --> F[Errors]
-    F --> G[Review Logs]
-```
 
 ## Export Configuration Features
 
@@ -122,16 +110,16 @@ Export configurations allow you to:
 ## Common Operations
 
 <CardGroup cols={2}>
-  <Card title="Import Data" icon="upload" href="/api-reference/importexport/post-dataimport">
+  <Card title="Import Data" icon="upload" href="/api-reference/importexport/data-import/import-data-source-from-file">
     Upload and import data files
   </Card>
-  <Card title="Export Tasks" icon="download" href="/api-reference/importexport/post-tasksexport">
+  <Card title="Export Tasks" icon="download" href="/api-reference/importexport/export-task/export-tasks">
     Export tasks to files
   </Card>
-  <Card title="Monitor Jobs" icon="list-check" href="/api-reference/importexport/get-import-monitoring">
+  <Card title="Monitor Jobs" icon="list-check" href="/api-reference/importexport/data-import/read-import-monitoring-records">
     Track import/export progress
   </Card>
-  <Card title="Manage Templates" icon="gear" href="/api-reference/importexport/get-export-configs">
+  <Card title="Manage Templates" icon="gear" href="/api-reference/importexport/export-config/read-export-config">
     Configure export templates
   </Card>
 </CardGroup>

@@ -1,5 +1,5 @@
 ---
-title: 'Task Overview'
+title: 'Task'
 description: 'Manage tasks - the core unit of work in MileApp'
 ---
 
@@ -37,31 +37,19 @@ Tasks encompass essential attributes including:
 The content of a task is configurable based on your specified flow settings. Tasks can also serve as visits during the route optimization process.
 </Note>
 
-## Task Lifecycle
-
-```mermaid
-graph LR
-    A[Created] --> B[Assigned]
-    B --> C[In Progress]
-    C --> D[Completed]
-    C --> E[Failed]
-    B --> F[Unassigned]
-    F --> B
-```
-
 ## Common Operations
 
 <CardGroup cols={2}>
-  <Card title="List Tasks" icon="list" href="/api-reference/task/get-tasks">
+  <Card title="List Tasks" icon="list" href="/api-reference/task/task/read-tasks">
     Retrieve all tasks with filtering options
   </Card>
-  <Card title="Create Task" icon="plus" href="/api-reference/task/post-task">
+  <Card title="Create Task" icon="plus" href="/api-reference/task/task/create-task">
     Create a new task
   </Card>
-  <Card title="Update Task" icon="pen" href="/api-reference/task/put-tasktaskid">
+  <Card title="Update Task" icon="pen" href="/api-reference/task/task/update-task-by-id">
     Update an existing task
   </Card>
-  <Card title="Assign Task" icon="user-plus" href="/api-reference/task/put-tasktaskidassign">
+  <Card title="Assign Task" icon="user-plus" href="/api-reference/task/task/assign-task-by-id">
     Assign a task to a user
   </Card>
 </CardGroup>
@@ -88,6 +76,6 @@ For more information about route optimization, see the [Routing](/api-reference/
 
 ## Related Resources
 
-- [Location History](/api-reference/location-history/overview) - Track task execution locations
-- [Task Schedule](/api-reference/task-schedule/overview) - Create recurring tasks
+- [Location History](/api-reference/task/location-history-overview) - Track task execution locations
+- [Task Schedule](/api-reference/task/task-schedule-overview) - Create recurring tasks
 - [Flow](/api-reference/flow/overview) - Configure task templates

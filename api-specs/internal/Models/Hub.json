@@ -1,0 +1,320 @@
+{
+  "components": {
+    "schemas": {
+      "HubInternal": {
+        "type": "object",
+        "description": "Internal hub object with comprehensive administrative and operational details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the hub (MongoDB ObjectId)",
+            "example": "65c1f68ea735b522d370ea25"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier that owns this hub",
+            "example": "65c1f4eeca7c4816d94587b2"
+          },
+          "name": {
+            "type": "string",
+            "description": "Hub name or identifier",
+            "example": "Jakarta Central Hub"
+          },
+          "code": {
+            "type": "string",
+            "description": "Short code for the hub",
+            "example": "JKT-CTR"
+          },
+          "address": {
+            "type": "string",
+            "description": "Full address of the hub",
+            "example": "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta 10220"
+          },
+          "coordinates": {
+            "type": "object",
+            "description": "Hub geographic coordinates",
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "format": "float",
+                "description": "Latitude coordinate",
+                "example": -6.2088
+              },
+              "longitude": {
+                "type": "number",
+                "format": "float",
+                "description": "Longitude coordinate",
+                "example": 106.8456
+              }
+            }
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Hub timezone",
+            "example": "Asia/Jakarta"
+          },
+          "workingHours": {
+            "type": "object",
+            "description": "Hub operating hours",
+            "properties": {
+              "monday": {
+                "type": "object",
+                "properties": {
+                  "open": {"type": "string", "format": "time"},
+                  "close": {"type": "string", "format": "time"},
+                  "isOpen": {"type": "boolean"}
+                }
+              },
+              "tuesday": {
+                "type": "object",
+                "properties": {
+                  "open": {"type": "string", "format": "time"},
+                  "close": {"type": "string", "format": "time"},
+                  "isOpen": {"type": "boolean"}
+                }
+              },
+              "wednesday": {
+                "type": "object",
+                "properties": {
+                  "open": {"type": "string", "format": "time"},
+                  "close": {"type": "string", "format": "time"},
+                  "isOpen": {"type": "boolean"}
+                }
+              },
+              "thursday": {
+                "type": "object",
+                "properties": {
+                  "open": {"type": "string", "format": "time"},
+                  "close": {"type": "string", "format": "time"},
+                  "isOpen": {"type": "boolean"}
+                }
+              },
+              "friday": {
+                "type": "object",
+                "properties": {
+                  "open": {"type": "string", "format": "time"},
+                  "close": {"type": "string", "format": "time"},
+                  "isOpen": {"type": "boolean"}
+                }
+              },
+              "saturday": {
+                "type": "object",
+                "properties": {
+                  "open": {"type": "string", "format": "time"},
+                  "close": {"type": "string", "format": "time"},
+                  "isOpen": {"type": "boolean"}
+                }
+              },
+              "sunday": {
+                "type": "object",
+                "properties": {
+                  "open": {"type": "string", "format": "time"},
+                  "close": {"type": "string", "format": "time"},
+                  "isOpen": {"type": "boolean"}
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Hub operational status",
+            "enum": ["active", "inactive", "maintenance"],
+            "example": "active"
+          },
+          "capacity": {
+            "type": "object",
+            "description": "Hub capacity and limits",
+            "properties": {
+              "maxVehicles": {
+                "type": "integer",
+                "description": "Maximum vehicles that can be assigned to this hub",
+                "example": 50
+              },
+              "maxUsers": {
+                "type": "integer",
+                "description": "Maximum users that can access this hub",
+                "example": 100
+              },
+              "storageArea": {
+                "type": "number",
+                "description": "Storage area in square meters",
+                "example": 500.5
+              }
+            }
+          },
+          "contactInfo": {
+            "type": "object",
+            "description": "Hub contact information",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "description": "Hub phone number",
+                "example": "+6221123456"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Hub contact email",
+                "example": "jakarta.hub@mile.app"
+              },
+              "manager": {
+                "type": "string",
+                "description": "Hub manager name",
+                "example": "Ahmad Supriadi"
+              }
+            }
+          },
+          "services": {
+            "type": "array",
+            "description": "Services available at this hub",
+            "items": {
+              "type": "string"
+            },
+            "example": ["loading", "unloading", "storage", "maintenance", "fueling"]
+          },
+          "vehicles": {
+            "type": "array",
+            "description": "Vehicles assigned to this hub",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "type": {"type": "string"},
+                "status": {"type": "string"}
+              }
+            }
+          },
+          "users": {
+            "type": "array",
+            "description": "Users with access to this hub",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "email": {"type": "string"},
+                "role": {"type": "string"}
+              }
+            }
+          },
+          "statistics": {
+            "type": "object",
+            "description": "Hub operational statistics",
+            "properties": {
+              "totalTasks": {"type": "integer"},
+              "completedTasks": {"type": "integer"},
+              "activeVehicles": {"type": "integer"},
+              "activeUsers": {"type": "integer"}
+            }
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email of admin who created this hub",
+            "example": "admin@mile.app"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "Email of admin who last updated this hub",
+            "example": "admin@mile.app"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when hub was created",
+            "example": "2024-01-10T08:00:00.000000Z"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when hub was last updated",
+            "example": "2024-02-06T15:30:00.000000Z"
+          },
+          "internalNotes": {
+            "type": "string",
+            "description": "Internal administrative notes (not visible to public API)",
+            "example": "Hub requires infrastructure upgrade for increased capacity"
+          },
+          "maintenanceSchedule": {
+            "type": "array",
+            "description": "Scheduled maintenance activities",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {"type": "string"},
+                "scheduledDate": {"type": "string", "format": "date-time"},
+                "description": {"type": "string"},
+                "status": {"type": "string"}
+              }
+            }
+          },
+          "systemMetadata": {
+            "type": "object",
+            "description": "Internal system metadata",
+            "properties": {
+              "migrationStatus": {"type": "string"},
+              "dataVersion": {"type": "integer"},
+              "lastSyncTime": {"type": "string", "format": "date-time"}
+            }
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Hub Module business failedCode that indicate specific failure conditions or business rule violations during hub module operations. These codes help identify the failed operation of hub-related and provide standardized failure identification across the system.\n\nPossible values:\n- hub-031: Duplicate entry - Hub identifier already exists\n- hub-033: Hub not found - Hub record does not exist\n- hub-034: Hub name already exists - Hub name already used\n- hub-035: Access forbidden - User lacks hub permission\n- hub-036: Hub creation failed - Failed to create hub\n- hub-037: Hub update failed - Failed to update hub\n- hub-038: Hub update failed by coordinate - Invalid coordinates provided\n- hub-039: Hub delete failed assosiated to other things - Hub has associated resources\n- hub-045: Server failure - Internal server failure",
+            "enum": [
+              "hub-031",
+              "hub-033",
+              "hub-034",
+              "hub-035",
+              "hub-036",
+              "hub-037",
+              "hub-038",
+              "hub-039",
+              "hub-045"
+            ]
+          }
+        },
+        "required": ["_id", "organizationId", "name", "address", "coordinates", "status"],
+        "example": {
+          "_id": "65c1f68ea735b522d370ea25",
+          "organizationId": "65c1f4eeca7c4816d94587b2",
+          "name": "Jakarta Central Hub",
+          "code": "JKT-CTR",
+          "address": "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta 10220",
+          "coordinates": {
+            "latitude": -6.2088,
+            "longitude": 106.8456
+          },
+          "timezone": "Asia/Jakarta",
+          "status": "active",
+          "capacity": {
+            "maxVehicles": 50,
+            "maxUsers": 100,
+            "storageArea": 500.5
+          },
+          "contactInfo": {
+            "phone": "+6221123456",
+            "email": "jakarta.hub@mile.app",
+            "manager": "Ahmad Supriadi"
+          },
+          "services": ["loading", "unloading", "storage", "maintenance"],
+          "statistics": {
+            "totalTasks": 1250,
+            "completedTasks": 1180,
+            "activeVehicles": 35,
+            "activeUsers": 85
+          },
+          "createdBy": "admin@mile.app",
+          "updatedBy": "admin@mile.app",
+          "createdTime": "2024-01-10T08:00:00.000000Z",
+          "updatedTime": "2024-02-06T15:30:00.000000Z",
+          "internalNotes": "Hub requires infrastructure upgrade for increased capacity",
+          "systemMetadata": {
+            "migrationStatus": "completed",
+            "dataVersion": 1,
+            "lastSyncTime": "2024-02-06T15:30:00.000000Z"
+          }
+        }
+      }
+    }
+  }
+}

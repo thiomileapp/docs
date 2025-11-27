@@ -14906,231 +14906,46 @@
           "role"
         ]
       },
-      "appIntegrationCreateRequest": {
-        "type": "object",
+      "TeamCreateRequest": {
         "example": {
-          "example": {
-            "integrationType": "azure",
-            "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
-            "azureCert": "Template for daily report with bill item detail"
-          },
-          "parameters": [
-            {
-              "name": "forRenameFile",
-              "in": "formData",
-              "required": false,
-              "type": "string",
-              "description": "this parameter for rename file what to want, after timestamp. \n**Example**: `62b2744ee22400003b006bb2_0_photo1`"
-            },
-            {
-              "name": "photo",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "description": "mime file jpg"
-            }
-          ]
-        },
-        "additionalProperties": true
-      },
-      "appIntegrationUpdateRequest": {
-        "example": {
-          "_id": "67459c0b9778e36baa076802",
-          "name": "Report Daily",
-          "description": "Template for daily report with bill item detail",
-          "collection": "task",
-          "fields": [
-            {
-              "component": "input",
-              "id": "flow",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Flow",
-              "uniqueTitle": "Flow"
-            },
-            {
-              "component": "input",
-              "id": "_id",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Id",
-              "uniqueTitle": "Id"
-            },
-            {
-              "component": "input",
-              "id": "hub",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Hub",
-              "uniqueTitle": "Hub"
-            },
-            {
-              "component": "input",
-              "id": "title",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Title",
-              "uniqueTitle": "Title"
-            },
-            {
-              "component": "input",
-              "id": "status",
-              "inputType": "string",
-              "source": "reservedKey",
-              "title": "Status",
-              "uniqueTitle": "Status"
-            },
-            {
-              "component": "input",
-              "id": "orderNumber",
-              "title": "Order Number",
-              "inputType": "string",
-              "default": null,
-              "routeAs": null,
-              "showAs": "title",
-              "required": false,
-              "visible": true,
-              "page": "page0",
-              "flowId": [
-                "66a988d53ae08a7ab52867c2",
-                "66c6a05440d39b2616275622",
-                "66c6a05c40d39b2616275624",
-                "66c6a06412d3f54e2f425e22"
-              ],
-              "flowName": [
-                "Export Bill",
-                "Flow A",
-                "Flow B",
-                "Flow C"
-              ],
-              "uniqueTitle": "Order Number"
-            },
-            {
-              "component": "bill",
-              "id": "billItem",
-              "title": "Bill Item",
-              "addNew": true,
-              "required": false,
-              "value": null,
-              "editable": [],
-              "costs": [
-                "Discount",
-                "Shipping Cost"
-              ],
-              "visible": true,
-              "masterItems": [
-                {
-                  "name": "Snack",
-                  "unit_price": 10000
-                },
-                {
-                  "name": "Cold Drink",
-                  "unit_price": 5000
-                },
-                {
-                  "name": "Bread",
-                  "unit_price": 7000
-                },
-                {
-                  "name": "Egg",
-                  "unit_price": 2500
-                }
-              ],
-              "masterCosts": [
-                {
-                  "type": "number",
-                  "name": "Discount",
-                  "amount": 10000
-                },
-                {
-                  "type": "number",
-                  "name": "Shipping Cost",
-                  "amount": 7000
-                }
-              ],
-              "qtyRule": null,
-              "page": "page1",
-              "flowId": [
-                "66a988d53ae08a7ab52867c2"
-              ],
-              "flowName": [
-                "Export Bill"
-              ],
-              "additionalField": [
-                "billItem.Discount",
-                "billItem.Shipping Cost",
-                "billItem.totalCost"
-              ],
-              "uniqueTitle": "Bill Item"
-            }
-          ],
-          "flowIds": [
-            "66a988d53ae08a7ab52867c2",
-            "66c6a05440d39b2616275622",
-            "66c6a05c40d39b2616275624",
-            "66c6a06412d3f54e2f425e22"
-          ],
-          "organizationId": "66791b2bf001a712b77b3622",
-          "updatedTime": "2024-11-26T09:59:39.860000Z",
-          "createdTime": "2024-11-26T09:59:39.860000Z"
+          "name": "Team Delivery",
+          "hubId": "642634bde1428d414838c882"
         },
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "The name of App Integration. Name must be unique.\n**Example**: `Report Daily`"
+            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
           },
-          "collection": {
+          "hubId": {
             "type": "string",
-            "description": "The collection from which the data will be exported.\n**Example**: `task`"
-          },
-          "description": {
-            "type": "string"
-          },
-          "flowIds": {
-            "type": "array",
-            "description": "The flow identifier used to filter the components refers only to the selected flow IDs. Use [Flow /flows API](#tag/Flow/operation/getflow) to get the list of flow id.\n**Example:** `['66a988d53ae08a7ab52867c2']`",
-            "items": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "fields": {
-            "type": "array",
-            "description": "The optional fields to be included in the exported data that ref to Flow reserved key and User fields. \n **To see the details of reserved key of task, please follow [ this link ](#tag/task_model)**",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "description": "An unique identifier for flow component. The value that cannot be input is the reserved key task."
-                },
-                "component": {
-                  "type": "string",
-                  "description": "Type of Component."
-                },
-                "title": {
-                  "type": "string",
-                  "description": "Title of Component."
-                },
-                "source": {
-                  "type": "string",
-                  "description": "Flag for reserved key Component."
-                }
-              },
-              "required": [
-                "id",
-                "component",
-                "title"
-              ]
-            }
+            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
           }
         },
         "required": [
           "name",
-          "collection",
-          "flowIds",
-          "fields"
+          "hubId"
+        ]
+      },
+      "TeamUpdateRequest": {
+        "example": {
+          "name": "Team Delivery Update",
+          "hubId": "642634bde1428d414838c882"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
+          }
+        },
+        "required": [
+          "name",
+          "hubId"
         ]
       },
       "PermissionDetailCheckinCheckout": {
@@ -15480,6 +15295,233 @@
           "configuration"
         ]
       },
+      "appIntegrationCreateRequest": {
+        "type": "object",
+        "example": {
+          "example": {
+            "integrationType": "azure",
+            "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+            "azureCert": "Template for daily report with bill item detail"
+          },
+          "parameters": [
+            {
+              "name": "forRenameFile",
+              "in": "formData",
+              "required": false,
+              "type": "string",
+              "description": "this parameter for rename file what to want, after timestamp. \n**Example**: `62b2744ee22400003b006bb2_0_photo1`"
+            },
+            {
+              "name": "photo",
+              "in": "formData",
+              "required": true,
+              "type": "string",
+              "description": "mime file jpg"
+            }
+          ]
+        },
+        "additionalProperties": true
+      },
+      "appIntegrationUpdateRequest": {
+        "example": {
+          "_id": "67459c0b9778e36baa076802",
+          "name": "Report Daily",
+          "description": "Template for daily report with bill item detail",
+          "collection": "task",
+          "fields": [
+            {
+              "component": "input",
+              "id": "flow",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Flow",
+              "uniqueTitle": "Flow"
+            },
+            {
+              "component": "input",
+              "id": "_id",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Id",
+              "uniqueTitle": "Id"
+            },
+            {
+              "component": "input",
+              "id": "hub",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Hub",
+              "uniqueTitle": "Hub"
+            },
+            {
+              "component": "input",
+              "id": "title",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Title",
+              "uniqueTitle": "Title"
+            },
+            {
+              "component": "input",
+              "id": "status",
+              "inputType": "string",
+              "source": "reservedKey",
+              "title": "Status",
+              "uniqueTitle": "Status"
+            },
+            {
+              "component": "input",
+              "id": "orderNumber",
+              "title": "Order Number",
+              "inputType": "string",
+              "default": null,
+              "routeAs": null,
+              "showAs": "title",
+              "required": false,
+              "visible": true,
+              "page": "page0",
+              "flowId": [
+                "66a988d53ae08a7ab52867c2",
+                "66c6a05440d39b2616275622",
+                "66c6a05c40d39b2616275624",
+                "66c6a06412d3f54e2f425e22"
+              ],
+              "flowName": [
+                "Export Bill",
+                "Flow A",
+                "Flow B",
+                "Flow C"
+              ],
+              "uniqueTitle": "Order Number"
+            },
+            {
+              "component": "bill",
+              "id": "billItem",
+              "title": "Bill Item",
+              "addNew": true,
+              "required": false,
+              "value": null,
+              "editable": [],
+              "costs": [
+                "Discount",
+                "Shipping Cost"
+              ],
+              "visible": true,
+              "masterItems": [
+                {
+                  "name": "Snack",
+                  "unit_price": 10000
+                },
+                {
+                  "name": "Cold Drink",
+                  "unit_price": 5000
+                },
+                {
+                  "name": "Bread",
+                  "unit_price": 7000
+                },
+                {
+                  "name": "Egg",
+                  "unit_price": 2500
+                }
+              ],
+              "masterCosts": [
+                {
+                  "type": "number",
+                  "name": "Discount",
+                  "amount": 10000
+                },
+                {
+                  "type": "number",
+                  "name": "Shipping Cost",
+                  "amount": 7000
+                }
+              ],
+              "qtyRule": null,
+              "page": "page1",
+              "flowId": [
+                "66a988d53ae08a7ab52867c2"
+              ],
+              "flowName": [
+                "Export Bill"
+              ],
+              "additionalField": [
+                "billItem.Discount",
+                "billItem.Shipping Cost",
+                "billItem.totalCost"
+              ],
+              "uniqueTitle": "Bill Item"
+            }
+          ],
+          "flowIds": [
+            "66a988d53ae08a7ab52867c2",
+            "66c6a05440d39b2616275622",
+            "66c6a05c40d39b2616275624",
+            "66c6a06412d3f54e2f425e22"
+          ],
+          "organizationId": "66791b2bf001a712b77b3622",
+          "updatedTime": "2024-11-26T09:59:39.860000Z",
+          "createdTime": "2024-11-26T09:59:39.860000Z"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of App Integration. Name must be unique.\n**Example**: `Report Daily`"
+          },
+          "collection": {
+            "type": "string",
+            "description": "The collection from which the data will be exported.\n**Example**: `task`"
+          },
+          "description": {
+            "type": "string"
+          },
+          "flowIds": {
+            "type": "array",
+            "description": "The flow identifier used to filter the components refers only to the selected flow IDs. Use [Flow /flows API](#tag/Flow/operation/getflow) to get the list of flow id.\n**Example:** `['66a988d53ae08a7ab52867c2']`",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "fields": {
+            "type": "array",
+            "description": "The optional fields to be included in the exported data that ref to Flow reserved key and User fields. \n **To see the details of reserved key of task, please follow [ this link ](#tag/task_model)**",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "An unique identifier for flow component. The value that cannot be input is the reserved key task."
+                },
+                "component": {
+                  "type": "string",
+                  "description": "Type of Component."
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of Component."
+                },
+                "source": {
+                  "type": "string",
+                  "description": "Flag for reserved key Component."
+                }
+              },
+              "required": [
+                "id",
+                "component",
+                "title"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "collection",
+          "flowIds",
+          "fields"
+        ]
+      },
       "ModuleRequestPut": {
         "example": {
           "name": "Custom report update",
@@ -15544,48 +15586,6 @@
           "label",
           "type",
           "url"
-        ]
-      },
-      "TeamCreateRequest": {
-        "example": {
-          "name": "Team Delivery",
-          "hubId": "642634bde1428d414838c882"
-        },
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
-          },
-          "hubId": {
-            "type": "string",
-            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
-          }
-        },
-        "required": [
-          "name",
-          "hubId"
-        ]
-      },
-      "TeamUpdateRequest": {
-        "example": {
-          "name": "Team Delivery Update",
-          "hubId": "642634bde1428d414838c882"
-        },
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of team. Name must be unique at per-hub.\n**Example**: `Team Delivery`"
-          },
-          "hubId": {
-            "type": "string",
-            "description": "Unique identifier for the hub that generated by system.\n**Example**: `63c7705c8608d52094785374`"
-          }
-        },
-        "required": [
-          "name",
-          "hubId"
         ]
       },
       "OrgDataCreateRequest": {
@@ -31788,983 +31788,16 @@
           }
         }
       }
-    },
-    "/internal/workflows": {
-      "get": {
-        "summary": "Get All Workflows",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Retrieves a paginated list of workflows for the organization. Results are ordered by createdTime descending (newest first).",
-        "operationId": "GetWorkflowsInternal",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Page number for pagination",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "description": "Number of items per page (max 2000 if limit=-1)",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Workflows retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      },
-      "post": {
-        "summary": "Create Workflow",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Create a new workflow template with defined steps and field mappings.\n\n**Process:**\n1. Validates workflow name uniqueness within organization\n2. Validates each step's flowId exists and is unique within workflow\n3. Validates assigneeId exists if provided (optional)\n4. Auto-populates flowName and fieldSchema from Flow documents\n5. Auto-generates step order from array index\n6. Validates field mappings for steps after first step (index > 0)\n7. Sets default customStatuses if not provided (Unassigned, Ongoing, Done)\n\n**Important Notes:**\n- Workflow name must be unique within organization (2-100 characters)\n- Maximum 10 steps allowed per workflow\n- No duplicate flowIds allowed within same workflow\n- Field mappings only allowed for steps after first step (index > 0)\n- Backend auto-populates: order, flowName, fieldSchema, createdTime, updatedTime, createdBy, updatedBy",
-        "operationId": "CreateWorkflow",
-        "deprecated": false,
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "name",
-                  "steps"
-                ],
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 2,
-                    "maxLength": 100,
-                    "description": "Workflow name (must be unique within organization).\n**Example:** `Testing untuk Payload`"
-                  },
-                  "steps": {
-                    "type": "array",
-                    "minItems": 1,
-                    "maxItems": 10,
-                    "description": "Array of workflow steps. No duplicate flowIds allowed.\n**Note:** Frontend may send `order` and `flowName`, but backend auto-generates these fields.",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "flowId"
-                      ],
-                      "properties": {
-                        "flowId": {
-                          "type": "string",
-                          "description": "Flow ID (must exist and be unique within workflow).\n**Example:** `68f745b22fd43e839c0cfa92`"
-                        },
-                        "assigneeId": {
-                          "type": "string",
-                          "description": "Optional default assignee user ID (must exist if provided). Empty string treated as null.\n**Example:** `677213ce1d84c3e40f06f088` or `\"\"`"
-                        },
-                        "statusMapping": {
-                          "type": "string",
-                          "description": "Custom status name from customStatuses array.\n**Example:** `Done`, `Pickup`, `Delivered`"
-                        },
-                        "fieldMappings": {
-                          "type": "array",
-                          "description": "Field mappings from previous steps (only for step index > 0).\nFirst step should have empty array.",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "targetField": {
-                                "type": "string",
-                                "description": "Target field ID in current step.\n**Example:** `requesterName`"
-                              },
-                              "sourceType": {
-                                "type": "string",
-                                "enum": [
-                                  "manual",
-                                  "step",
-                                  "direct"
-                                ],
-                                "description": "Type of mapping source.\n**Example:** `manual`"
-                              },
-                              "sourceStepId": {
-                                "description": "Source step ID (null for manual type).\n**Example:** `null`",
-                                "nullable": true,
-                                "type": "string"
-                              },
-                              "sourceField": {
-                                "type": "string",
-                                "description": "Source field ID or static value.\n**Example:** `Test 1` (manual value)"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "customStatuses": {
-                    "type": "array",
-                    "description": "Custom status definitions. If empty, defaults to: Unassigned, Ongoing, Done.",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "name"
-                      ],
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 50,
-                          "description": "Status name.\n**Example:** `Pickup`, `Delivered`"
-                        },
-                        "isDefault": {
-                          "type": "boolean",
-                          "description": "Whether this is a default system status.\n**Example:** `true` (for Unassigned, Ongoing, Done), `false` (custom)"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "name": "Testing untuk Payload",
-                  "steps": [
-                    {
-                      "order": 1,
-                      "flowId": "68f745b22fd43e839c0cfa92",
-                      "flowName": "Delivery A",
-                      "assigneeId": "677213ce1d84c3e40f06f088",
-                      "statusMapping": "Done",
-                      "fieldMappings": []
-                    },
-                    {
-                      "order": 2,
-                      "flowId": "68f1eaa8b0c75de883077522",
-                      "flowName": "Finish",
-                      "assigneeId": "",
-                      "statusMapping": "Pickup",
-                      "fieldMappings": [
-                        {
-                          "targetField": "requesterName",
-                          "sourceType": "manual",
-                          "sourceStepId": null,
-                          "sourceField": "Test 1"
-                        },
-                        {
-                          "targetField": "item",
-                          "sourceType": "manual",
-                          "sourceStepId": null,
-                          "sourceField": "dwadawd"
-                        }
-                      ]
-                    },
-                    {
-                      "order": 3,
-                      "flowId": "68b67402cbed0bf35c055b62",
-                      "flowName": "Picking",
-                      "assigneeId": "677213ce1d84c3e40f06f088",
-                      "statusMapping": "Delivered",
-                      "fieldMappings": [
-                        {
-                          "targetField": "customerName",
-                          "sourceType": "manual",
-                          "sourceStepId": null,
-                          "sourceField": "Test 1"
-                        }
-                      ]
-                    }
-                  ],
-                  "customStatuses": [
-                    {
-                      "name": "Unassigned",
-                      "isDefault": true
-                    },
-                    {
-                      "name": "Ongoing",
-                      "isDefault": true
-                    },
-                    {
-                      "name": "Done",
-                      "isDefault": true
-                    },
-                    {
-                      "name": "Pickup",
-                      "isDefault": false
-                    },
-                    {
-                      "name": "Delivered",
-                      "isDefault": false
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "description": "Workflow creation payload",
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Workflow created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "code": {
-                      "type": "integer",
-                      "example": 201
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Workflow created successfully"
-                    },
-                    "data": {
-                      "type": "object",
-                      "description": "Workflow object with auto-populated fields (order, flowName, fieldSchema)",
-                      "properties": {
-                        "_id": {
-                          "type": "string",
-                          "example": "634e98098ce07d29474a7e22"
-                        },
-                        "name": {
-                          "type": "string",
-                          "example": "Testing untuk Payload"
-                        },
-                        "organizationId": {
-                          "type": "string",
-                          "example": "634e98098ce07d29474a7e20"
-                        },
-                        "steps": {
-                          "type": "array",
-                          "description": "Steps with auto-populated order, flowName, and fieldSchema from Flow documents",
-                          "items": {
-                            "type": "object",
-                            "additionalProperties": true
-                          },
-                          "example": [
-                            {
-                              "order": 0,
-                              "flowId": "68f745b22fd43e839c0cfa92",
-                              "flowName": "Delivery A",
-                              "assigneeId": "677213ce1d84c3e40f06f088",
-                              "statusMapping": "Done",
-                              "fieldMappings": [],
-                              "fieldSchema": []
-                            }
-                          ]
-                        },
-                        "customStatuses": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "additionalProperties": true
-                          },
-                          "example": [
-                            {
-                              "name": "Unassigned",
-                              "isDefault": true
-                            },
-                            {
-                              "name": "Ongoing",
-                              "isDefault": true
-                            },
-                            {
-                              "name": "Done",
-                              "isDefault": true
-                            },
-                            {
-                              "name": "Pickup",
-                              "isDefault": false
-                            },
-                            {
-                              "name": "Delivered",
-                              "isDefault": false
-                            }
-                          ]
-                        },
-                        "createdBy": {
-                          "type": "string",
-                          "example": "admin@example.com"
-                        },
-                        "updatedBy": {
-                          "type": "string",
-                          "example": "admin@example.com"
-                        },
-                        "createdTime": {
-                          "type": "string",
-                          "example": "2023-01-01T07:30:00+07:00"
-                        },
-                        "updatedTime": {
-                          "type": "string",
-                          "example": "2023-01-01T07:30:00+07:00"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed or duplicate name",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "code": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Workflow name already exists"
-                    },
-                    "failedCode": {
-                      "type": "string",
-                      "example": "WORKF_DUPLICATE_NAME"
-                    },
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "Step 1: Flow ID not found",
-                        "Step 2: Invalid assignee ID"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "code": {
-                      "type": "integer",
-                      "example": 500
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Workflow creation failed"
-                    },
-                    "failedCode": {
-                      "type": "string",
-                      "example": "WORKF_SERVER_ERROR"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/internal/workflows/search": {
-      "get": {
-        "summary": "Search Workflows",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Search workflows using MongoDB text search with advanced filters.\n\n**Search Features:**\n- MongoDB text search on workflow name (query parameter: q)\n- Filter by creator email (createdBy)\n- Filter by step count range (stepsCountMin, stepsCountMax)\n- Pagination support (page, limit)\n- Automatic organizationId filtering\n\n**Performance Notes:**\n- Uses MongoDB text index on name field\n- Returns search metadata including query and filters\n- Indicates data source: mongodb_text_search",
-        "operationId": "SearchWorkflows",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "description": "Search query for workflow name (MongoDB text search)",
-            "schema": {
-              "type": "string",
-              "maxLength": 255
-            }
-          },
-          {
-            "name": "createdBy",
-            "in": "query",
-            "required": false,
-            "description": "Filter by creator email",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stepsCountMin",
-            "in": "query",
-            "required": false,
-            "description": "Minimum number of steps",
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "stepsCountMax",
-            "in": "query",
-            "required": false,
-            "description": "Maximum number of steps",
-            "schema": {
-              "type": "integer",
-              "maximum": 10
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Page number",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "description": "Items per page",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Search results retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowSearchResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/workflow/{id}": {
-      "get": {
-        "summary": "Get Workflow by ID",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Retrieve single workflow template by ID with complete step configuration.\n\n**Security:**\n- Automatically filtered by organizationId (IDOR protection)\n- Only returns workflows belonging to authenticated user's organization\n\n**Performance:**\n- Direct _id lookup (primary key)\n- Complete workflow object with all steps, fieldSchema, and customStatuses included",
-        "operationId": "GetWorkflowById",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "Workflow identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Workflow retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowDetailResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Workflow not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      },
-      "put": {
-        "summary": "Update Workflow",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Update an existing workflow template configuration.\n\n**Process:**\n1. Validates workflow exists and belongs to organization\n2. Validates workflow name uniqueness if name is being changed\n3. Validates steps configuration if steps are being updated (same as create)\n4. Auto-populates flowName and fieldSchema for updated steps\n5. Updates updatedBy and updatedTime automatically\n\n**Important Notes:**\n- All fields are optional (partial update supported)\n- Name must be unique within organization if changed\n- Steps validation follows same rules as create (max 10, no duplicate flowIds)\n- Backend auto-populates: order, flowName, fieldSchema, updatedBy, updatedTime",
-        "operationId": "UpdateWorkflow",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "Workflow identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateWorkflowRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Workflow updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed or duplicate name",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Workflow not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete Workflow",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Permanently delete a workflow template (hard delete).\n\n**Process:**\n1. Validates workflow exists and belongs to organization (IDOR protection)\n2. Performs forceDelete (permanent deletion, no soft delete)\n3. Clears workflow cache after successful deletion\n\n**Important Notes:**\n- Cannot be undone (hard delete, not soft delete)\n- Force and confirmed parameters available but currently not enforced\n- Consider checking workflow usage in activities before deletion\n- Deleting workflow does NOT delete existing activities created from this template",
-        "operationId": "DeleteWorkflow",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "Workflow identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "force",
-            "in": "query",
-            "required": false,
-            "description": "Force delete even if in use (requires confirmed=true)",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "confirmed",
-            "in": "query",
-            "required": false,
-            "description": "Confirmation for force delete",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Workflow deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteWorkflowResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - confirmation required or validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Workflow not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/workflow/{id}/steps/{stepOrder}/field-mapping-data": {
-      "get": {
-        "summary": "Get Field Mapping Data",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Retrieve available fields from current and previous steps for field mapping configuration.\n\n**Use Case:**\n- Used by frontend when configuring field mappings for a workflow step\n- Provides list of available source fields from previous steps\n- Shows current step's target fields\n- Returns existing mappings if any\n\n**Response Data:**\n- currentStep: Current step info with flowId, flowName, and available fields (fieldSchema)\n- previousSteps: Array of previous steps with their available fields\n- existingMappings: Current field mappings if already configured\n\n**Important Notes:**\n- stepOrder is 0-based index (first step = 0, second step = 1, etc.)\n- Only steps before current step are returned in previousSteps\n- First step (stepOrder=0) will have empty previousSteps array",
-        "operationId": "GetFieldMappingData",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "Workflow identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stepOrder",
-            "in": "path",
-            "required": true,
-            "description": "Step order index (0-based)",
-            "schema": {
-              "type": "integer",
-              "minimum": 0
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Field mapping data retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FieldMappingDataResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - invalid stepOrder",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Workflow or step not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
-    },
-    "/workflow/{id}/steps/{stepOrder}/validate-field-mappings": {
-      "post": {
-        "summary": "Validate Field Mappings",
-        "tags": [
-          "Workflow"
-        ],
-        "description": "Validate field mappings configuration for a specific workflow step before saving.\n\n**Validation Rules:**\n- Target field must exist in current step's fieldSchema\n- Source field must exist in source step's fieldSchema (for sourceType='step')\n- Source step must be before current step (sourceStepIndex < currentStepIndex)\n- Required fields must have valid mappings\n- Field type compatibility check between source and target\n\n**Use Case:**\n- Frontend validates mappings before saving workflow\n- Prevents invalid field mapping configuration\n- Provides detailed error messages for debugging\n\n**Response Data:**\n- valid: Boolean indicating if validation passed\n- errors: Array of validation error messages\n- warnings: Array of non-critical warnings",
-        "operationId": "ValidateFieldMappings",
-        "deprecated": false,
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "Workflow identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stepOrder",
-            "in": "path",
-            "required": true,
-            "description": "Step order index (0-based)",
-            "schema": {
-              "type": "integer",
-              "minimum": 0
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ValidateFieldMappingsRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Validation completed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Workflow or step not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "x-mint": {
-          "metadata": {
-            "noindex": true
-          }
-        }
-      }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Flow",
+      "description": "Flow in MileApp is the mobile field application workflow, setting it correctly is critical to the success of the field workers in doing their job efficiently. Flow attributes consist of IDs, pages, components, configurations, and time. The Flow will be used at Task, Automation, or Schedule.\n\n**To see the details of flow object, please follow [this link](#tag/flow_model)**"
+    },
+    {
+      "name": "Automation",
+      "description": "Automation enables you to set up automation based on tasks' events and data source's events. It might help you automate creation of tasks, task assignment, task placement, task webhook, data source update, datasource creation, and data source webhook. Automation attributes consist of IDs, automation name, automation type, automation details, and rules.\n\n**To see the details of automation object, please follow [this link](#tag/automation_model)**"
+    }
+  ]
 }

@@ -1,0 +1,33 @@
+---
+title: 'Location History'
+description: 'Location history is data that stores the user''s location points that are sent periodically from the ...'
+---
+
+## What is Location History?
+
+Location history is data that stores the user's location points that are sent periodically from the MileApp mobile application if the user activates the tracking feature. However, this endpoint can also be useful for integration into the user's IoT devices such as GPS or other mobile trackers. All location data sent can be visualized in MileApp in real time and makes it easier for users to monitor field activities more accurately.
+
+**Related Guide:** [Start Finish Feature](/pages/configuration/start-trip-end-trip-feature)
+
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Read location history" icon="list" href="/api-reference/task/location-history/read-location-history">
+    GET /location-histories
+  </Card>
+  <Card title="Read location history by ID" icon="list" href="/api-reference/task/location-history/read-location-history-by-id">
+    GET /location-history/{id}
+  </Card>
+  <Card title="Read location history by token" icon="list" href="/api-reference/task/location-history/read-location-history-by-token">
+    GET /location-history/tracking/{token}
+  </Card>
+  <Card title="Create location history (bulk)" icon="plus" href="/api-reference/task/location-history/bulk-create-location-history">
+    POST /location-history/bulk
+  </Card>
+</CardGroup>
+
+## Related Resources
+
+- [Location History Object](/api-reference/objects/location-history-object) - Location History data structure
+

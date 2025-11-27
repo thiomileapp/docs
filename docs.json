@@ -317,13 +317,33 @@
             ]
           },
           {
+            "group": "Webhook",
+            "openapi": {
+              "source": "openapi/public/openapi-webhooks.json",
+              "directory": "api-reference/webhooks"
+            },
+            "pages": [
+              "api-reference/webhooks/how-it-works",
+              "api-reference/webhooks/delivery-attempts",
+              "api-reference/webhooks/quick-response",
+              "api-reference/webhooks/failure-monitoring"
+            ]
+          },
+          {
             "group": "Task",
             "openapi": {
               "source": "openapi/public/openapi-task.json",
               "directory": "api-reference/task"
             },
             "pages": [
-              "api-reference/task/overview"
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/task/overview",
+                  "api-reference/task/location-history-overview",
+                  "api-reference/task/task-schedule-overview"
+                ]
+              }
             ]
           },
           {
@@ -331,21 +351,49 @@
             "openapi": {
               "source": "openapi/public/openapi-routing.json",
               "directory": "api-reference/routing"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/routing/overview",
+                  "api-reference/routing/vehicle-overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Flow",
             "openapi": {
               "source": "openapi/public/openapi-flow.json",
               "directory": "api-reference/flow"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/flow/overview",
+                  "api-reference/flow/automation-overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Data",
             "openapi": {
               "source": "openapi/public/openapi-data.json",
               "directory": "api-reference/data"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/data/overview",
+                  "api-reference/data/data-source-overview",
+                  "api-reference/data/data-type-overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Setting",
@@ -354,7 +402,18 @@
               "directory": "api-reference/setting"
             },
             "pages": [
-              "api-reference/setting/overview"
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/setting/overview",
+                  "api-reference/setting/user-overview",
+                  "api-reference/setting/team-overview",
+                  "api-reference/setting/role-overview",
+                  "api-reference/setting/hub-overview",
+                  "api-reference/setting/app-integration-overview",
+                  "api-reference/setting/plugin-overview"
+                ]
+              }
             ]
           },
           {
@@ -364,7 +423,15 @@
               "directory": "api-reference/importexport"
             },
             "pages": [
-              "api-reference/importexport/overview"
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/importexport/overview",
+                  "api-reference/importexport/data-import-overview",
+                  "api-reference/importexport/export-task-overview",
+                  "api-reference/importexport/export-config-overview"
+                ]
+              }
             ]
           },
           {
@@ -413,46 +480,107 @@
             ]
           },
           {
+            "group": "Webhook",
+            "openapi": {
+              "source": "openapi/internal/openapi-webhooks.json",
+              "directory": "api-reference-internal/webhooks"
+            },
+            "pages": [
+              "api-reference-internal/webhooks/how-it-works",
+              "api-reference-internal/webhooks/delivery-attempts",
+              "api-reference-internal/webhooks/quick-response",
+              "api-reference-internal/webhooks/failure-monitoring"
+            ]
+          },
+          {
             "group": "Task",
             "openapi": {
               "source": "openapi/internal/openapi-task.json",
               "directory": "api-reference-internal/task"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference-internal/task/overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Routing",
             "openapi": {
               "source": "openapi/internal/openapi-routing.json",
               "directory": "api-reference-internal/routing"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference-internal/routing/overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Flow",
             "openapi": {
               "source": "openapi/internal/openapi-flow.json",
               "directory": "api-reference-internal/flow"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference-internal/flow/overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Data",
             "openapi": {
               "source": "openapi/internal/openapi-data.json",
               "directory": "api-reference-internal/data"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference-internal/data/overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Setting",
             "openapi": {
               "source": "openapi/internal/openapi-setting.json",
               "directory": "api-reference-internal/setting"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference-internal/setting/overview"
+                ]
+              }
+            ]
           },
           {
             "group": "File",
             "openapi": {
               "source": "openapi/internal/openapi-file.json",
               "directory": "api-reference-internal/file"
-            }
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference-internal/file/overview"
+                ]
+              }
+            ]
           },
           {
             "group": "Billing",

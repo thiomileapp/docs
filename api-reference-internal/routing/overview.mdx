@@ -1,0 +1,63 @@
+---
+title: 'Routing'
+description: 'Route optimization for efficient field operations'
+---
+
+## What is Route Optimization?
+
+The **Routing** refers to process of finding the most effective routes for vehicles to travel from one visit to another. The optimization process will generate a result that could update the respective task data when dispatched. With the ability to handle complex constraints and variables such as capacity, time windows, and vehicle availability, the API can be customized to meet the specific needs of any business or organization.
+
+**Routing results** are collection of route optimization's results that already successfully processed and saved in the database. Routing results contains list of routed visits and dropped visits:
+
+1. **Routed visits** are sequence recommendation of visits/tasks list according to most suitable vehicle and best route.
+2. **Dropped visits** are list of tasks/visits that out of range of the calculation.
+
+## Why use Route Optimization?
+
+With Route Optimization API, you can establish or refine an automated dispatch or route planning process that improves the operational efficiency of your transportation needs. With parameters to express your unique operational objectives and constraints, and an algorithm built on top of the trusted Google Maps data, the service generates the best possible route plans to meet those constraints.
+
+## How Route Optimization Works
+
+The Route Optimization API uses a number of inputs to return a route plan. Inputs include vehicles, visits or shipments, configurations, and constraints. A route plan includes tasks assignment to vehicles, the multi-stop routes for each vehicle, and the related metrics.
+
+## Key Components
+
+<CardGroup cols={2}>
+  <Card title="Vehicle" icon="truck" href="/api-reference-internal/routing/vehicle/read-vehicle">
+    Manage vehicles for route optimization
+  </Card>
+  <Card title="Routing" icon="route" href="/api-reference-internal/routing/routing/create-routing">
+    Execute route optimization
+  </Card>
+</CardGroup>
+
+### Vehicle
+
+The vehicle represents a car, bike, truck, or other form of transportation used in your organization. They are utilized to optimize the route planning process, determining the most efficient path for completing multiple tasks or visits.
+
+Vehicle attributes include:
+- IDs and identification
+- Capacity (weight, volume, etc.)
+- Speed and travel parameters
+- Working hours and availability
+- Tags for matching with visits
+- Constraints and limitations
+
+To see the details of vehicle object, please follow [this link](/api-reference-internal/objects/vehicle-object).
+
+### Routing Results
+
+After optimization, results contain:
+
+| Field | Description |
+|-------|-------------|
+| `routedVisits` | Optimized sequence of visits per vehicle |
+| `droppedVisits` | Visits that couldn't be included |
+| `totalDistance` | Total distance for all routes |
+| `totalDuration` | Total time for all routes |
+| `vehicleAssignments` | Which vehicle handles which visits |
+
+## Related Resources
+
+- [Task](/api-reference-internal/task/overview) - Tasks can serve as visits in route optimization
+- [Vehicle Object](/api-reference-internal/objects/vehicle-object) - Vehicle data structure

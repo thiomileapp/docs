@@ -1,0 +1,50 @@
+---
+title: 'Data'
+description: 'Master data management for field operations'
+---
+
+## What is Data Source?
+
+The Data source could help you simplify the process of filling in task information based on existing data at MileApp. This data could consist of information such as name, number, date, coordinate, and multiple options. The Data typically represents entities such as customers, products, employees, suppliers, or any other critical data elements that are used across the application.
+
+## Key Components
+
+<CardGroup cols={2}>
+  <Card title="Data Source" icon="database" href="/api-reference-internal/data/data-source/read-data-source">
+    Manage master data records
+  </Card>
+  <Card title="Data Type" icon="table" href="/api-reference-internal/data/data-type/read-data-type">
+    Define data structure schemas
+  </Card>
+</CardGroup>
+
+### Data Source
+
+Data sources store the actual records that can be used across your organization:
+
+- Customer information (names, addresses, contacts)
+- Product catalogs (SKUs, prices, descriptions)
+- Location data (coordinates, addresses)
+- Any custom business data
+
+### Data Type
+
+Data types define the structure and schema for your data sources:
+
+- Field definitions (text, number, date, coordinate, etc.)
+- Primary key configuration
+- Required field settings
+- Validation rules
+
+## Usage in MileApp
+
+Data sources are used in multiple contexts:
+
+1. **Task Creation** - Auto-fill task fields from data source records
+2. **Flow Components** - Link data sources to input fields
+3. **Automation** - Trigger actions based on data source events
+
+## Related Resources
+
+- [Flow](/api-reference-internal/flow/overview) - Connect data sources to flow components
+- [Task](/api-reference-internal/task/overview) - Use data sources in task creation

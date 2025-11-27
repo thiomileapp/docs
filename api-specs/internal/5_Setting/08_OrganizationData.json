@@ -1,0 +1,670 @@
+{
+    "paths": {
+        "/org-data": {
+            "get": {
+                "summary": "Read organization data with search capabilities",
+                "description": "Retrieve a paginated list of organization data with optional search filters. The `q` parameter supports case-insensitive partial matching (e.g., 'config' matches 'MyConfig', 'test_config', 'CONFIG'). The `name` parameter provides exact case-sensitive matching.",
+                "tags": [
+                    "Organization Data"
+                ],
+                "operationId": "getOrgData",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/pageInQuery"
+                    },
+                    {
+                        "$ref": "#/parameters/limitInQuery"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Exact match filter for organization data name (case-sensitive). This field will filter organization data using exact name matching. **Example:** `default_config` will only match records with exactly `default_config` as the name."
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Case-insensitive partial match search for organization data names. This field will search organization data using partial matching (substring search) that is case-insensitive. **Example:** `config` will match `CONFIG`, `MyConfig`, `test_config_v2`, etc."
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "sortBy is used to sort the result-set in ascending or descending order according to selected field. The value of this param is one of available fields on organization data objects.<br>**Example:** `name`, `createdTime`, etc. **Default:** `name`"
+                    },
+                    {
+                        "name": "sortOrder",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "sortOrder is to decide ascending or descending order **Example:** `asc` or `desc`. **Default:** `asc`"
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Fields is for selecting the specific fields that you can choose by multiples to show in the response using a string with a comma delimiter.<br>**Example:** `name,data,createdTime`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "description": "List object of organization data.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "data": {
+                                    "current_page": 1,
+                                    "data": [
+                                        {
+                                            "_id": "650138dee2683e0e7c6b0ed2",
+                                            "name": "default_config",
+                                            "data": {
+                                                "theme": "dark",
+                                                "notifications": true,
+                                                "language": "en"
+                                            },
+                                            "organizationId": "64d99303be0ad015c461c932",
+                                            "createdBy": "64d9930abe0ad015c461c938",
+                                            "updatedBy": "64d9930abe0ad015c461c938",
+                                            "updatedTime": "2023-09-13T04:21:50.211000Z",
+                                            "createdTime": "2023-09-13T04:21:50.211000Z"
+                                        }
+                                    ],
+                                    "first_page_url": "https://apiwebdev.mile.app/api/v3/org-data?page=1",
+                                    "from": 1,
+                                    "last_page": 1,
+                                    "last_page_url": "https://apiwebdev.mile.app/api/v3/org-data?page=1",
+                                    "links": [
+                                        {
+                                            "url": null,
+                                            "label": "&laquo; Previous",
+                                            "active": false
+                                        },
+                                        {
+                                            "url": "https://apiwebdev.mile.app/api/v3/org-data?page=1",
+                                            "label": "1",
+                                            "active": true
+                                        },
+                                        {
+                                            "url": null,
+                                            "label": "Next &raquo;",
+                                            "active": false
+                                        }
+                                    ],
+                                    "next_page_url": null,
+                                    "path": "https://apiwebdev.mile.app/api/v3/org-data",
+                                    "per_page": 10,
+                                    "prev_page_url": null,
+                                    "to": 1,
+                                    "total": 1
+                                },
+                                "status": true,
+                                "code": 200
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Cross-organization access attempt or validation error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        },
+                        "examples": {
+                            "cross_org": {
+                                "value": {
+                                    "status": false,
+                                    "message": "error.access_denied"
+                                },
+                                "summary": "Cross-organization access denied"
+                            },
+                            "validation": {
+                                "value": {
+                                    "status": false,
+                                    "message": "The data field is required."
+                                },
+                                "summary": "Validation error"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Organization data does not exist",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "Organization data not found.",
+                                "failedCode": "orgdt-033"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            },
+            "post": {
+                "summary": "Create organization data",
+                "tags": [
+                    "Organization Data"
+                ],
+                "operationId": "CreateOrgData",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/OrgDataCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "description": "Detail object of created organization data.",
+                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "status": true,
+                                "data": {
+                                    "name": "plugin_config",
+                                    "data": {
+                                        "enabled": true,
+                                        "modules": ["task", "routing"],
+                                        "settings": {
+                                            "maxUsers": 100,
+                                            "features": {
+                                                "analytics": true,
+                                                "export": false
+                                            }
+                                        }
+                                    },
+                                    "organizationId": "64d99303be0ad015c461c932",
+                                    "createdBy": "64d9930abe0ad015c461c938",
+                                    "updatedBy": "64d9930abe0ad015c461c938",
+                                    "updatedTime": "2023-09-13T06:08:36.025000Z",
+                                    "createdTime": "2023-09-13T06:08:36.025000Z",
+                                    "_id": "650151e4c8a55842604f1662"
+                                },
+                                "code": 201,
+                                "message": "Data created successfully."
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "The name is already in use. Please choose a different name.",
+                                "failedCode": "orgdt-009"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        },
+        "/org-data/{identifier}": {
+            "get": {
+                "summary": "Read organization data by ID or name",
+                "tags": [
+                    "Organization Data"
+                ],
+                "operationId": "getOrgDataById",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifier",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the organization data. Can be either the system-generated ID or the unique name.<br>**Example ID**: `63c7705c8608d52094785374`<br>**Example name**: `default_config`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "description": "Detail of organization data object. Returns empty array when data not found.",
+                                    "type": ["object", "array"]
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            },
+                            "examples": {
+                                "found": {
+                                    "value": {
+                                        "data": {
+                                            "_id": "650151e4c8a55842604f1662",
+                                            "name": "plugin_config",
+                                            "data": {
+                                                "enabled": true,
+                                                "modules": ["task", "routing"],
+                                                "settings": {
+                                                    "maxUsers": 100,
+                                                    "features": {
+                                                        "analytics": true,
+                                                        "export": false
+                                                    }
+                                                }
+                                            },
+                                            "organizationId": "64d99303be0ad015c461c932",
+                                            "createdBy": "64d9930abe0ad015c461c938",
+                                            "updatedBy": "64d9930abe0ad015c461c938",
+                                            "updatedTime": "2023-09-13T06:08:36.025000Z",
+                                            "createdTime": "2023-09-13T06:08:36.025000Z"
+                                        },
+                                        "status": true,
+                                        "code": 200,
+                                        "message": "Success."
+                                    },
+                                    "summary": "Data found"
+                                },
+                                "not_found": {
+                                    "value": {
+                                        "data": [],
+                                        "status": true,
+                                        "code": 200,
+                                        "message": "Success."
+                                    },
+                                    "summary": "Data not found (Note: In standardized API, returns 404 instead)"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            },
+            "put": {
+                "summary": "Update organization data",
+                "tags": [
+                    "Organization Data"
+                ],
+                "operationId": "updateOrgData",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifier",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the organization data. Can be either the system-generated ID or the unique name.<br>**Example ID**: `642634bde1428d414838c882`<br>**Example name**: `default_config`"
+                    },
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/OrgDataUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "description": "Status of response.",
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "description": "Detail of updated organization data or empty array if not found.",
+                                    "type": ["object", "array"]
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            },
+                            "examples": {
+                                "updated": {
+                                    "value": {
+                                        "status": true,
+                                        "code": 200,
+                                        "message": "Data updated successfully.",
+                                        "data": {
+                                            "_id": "650151e4c8a55842604f1662",
+                                            "name": "plugin_config",
+                                            "data": {
+                                                "enabled": false,
+                                                "modules": ["task"],
+                                                "settings": {
+                                                    "maxUsers": 50,
+                                                    "features": {
+                                                        "analytics": false,
+                                                        "export": true
+                                                    }
+                                                }
+                                            },
+                                            "organizationId": "64d99303be0ad015c461c932",
+                                            "createdBy": "64d9930abe0ad015c461c938",
+                                            "updatedBy": "64d9930abe0ad015c461c938",
+                                            "updatedTime": "2023-09-13T06:12:26.124000Z",
+                                            "createdTime": "2023-09-13T06:08:36.025000Z"
+                                        }
+                                    },
+                                    "summary": "Data updated successfully"
+                                },
+                                "not_found": {
+                                    "value": {
+                                        "status": false,
+                                        "code": 404,
+                                        "message": "Data not found. Please check the ID/reference number and try again."
+                                    },
+                                    "summary": "Data not found (404 in standardized API)"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Cross-organization access attempt or validation error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/badRequest/schema"
+                        },
+                        "examples": {
+                            "cross_org": {
+                                "value": {
+                                    "status": false,
+                                    "message": "error.access_denied"
+                                },
+                                "summary": "Cross-organization access denied"
+                            },
+                            "validation": {
+                                "value": {
+                                    "status": false,
+                                    "message": "The data field is required."
+                                },
+                                "summary": "Validation error"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Organization data does not exist",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": false,
+                                "message": "Organization data not found.",
+                                "failedCode": "orgdt-033"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete organization data",
+                "tags": [
+                    "Organization Data"
+                ],
+                "operationId": "DeleteOrgData",
+                "deprecated": false,
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifier",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Unique identifier for the organization data. Can be either the system-generated ID or the unique name.<br>**Example ID**: `642634bde1428d414838c882`<br>**Example name**: `default_config`"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "boolean",
+                                    "description": "Status of response."
+                                },
+                                "data": {
+                                    "description": "Detail of deleted organization data or empty array if not found.",
+                                    "type": ["object", "array"]
+                                },
+                                "message": {
+                                    "description": "Message of API response.",
+                                    "type": "string"
+                                }
+                            },
+                            "examples": {
+                                "deleted": {
+                                    "value": {
+                                        "status": true,
+                                        "code": 200,
+                                        "message": "Data deleted successfully.",
+                                        "data": {
+                                            "_id": "650151e4c8a55842604f1662",
+                                            "name": "plugin_config",
+                                            "data": {
+                                                "enabled": false,
+                                                "modules": ["task"],
+                                                "settings": {
+                                                    "maxUsers": 50,
+                                                    "features": {
+                                                        "analytics": false,
+                                                        "export": true
+                                                    }
+                                                }
+                                            },
+                                            "organizationId": "64d99303be0ad015c461c932",
+                                            "createdBy": "64d9930abe0ad015c461c938",
+                                            "updatedBy": "64d9930abe0ad015c461c938",
+                                            "updatedTime": "2023-09-13T06:12:26.124000Z",
+                                            "createdTime": "2023-09-13T06:08:36.025000Z"
+                                        }
+                                    },
+                                    "summary": "Data deleted successfully"
+                                },
+                                "not_found": {
+                                    "value": {
+                                        "status": false,
+                                        "code": 404,
+                                        "message": "Data not found. Please check the ID/reference number and try again."
+                                    },
+                                    "summary": "Data not found (404 in standardized API)"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/parameters/responses/serverError/schema"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "OrgDataCreateRequest": {
+            "example": {
+                "name": "plugin_config",
+                "data": {
+                    "enabled": true,
+                    "modules": ["task", "routing"],
+                    "settings": {
+                        "maxUsers": 100,
+                        "features": {
+                            "analytics": true,
+                            "export": false
+                        }
+                    }
+                }
+            },
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The unique name of organization data. Name must be unique within the organization. Only alphanumeric characters and underscores allowed.<br>**Pattern**: `^[a-zA-Z0-9_]+$`<br>**Max Length**: 255 characters<br>**Example**: `plugin_config`"
+                },
+                "data": {
+                    "type": "array",
+                    "description": "The flexible JSON array structure for storing any configuration or data. This field accepts any valid JSON array structure. Each element can be any JSON type.<br>**Example**: `[{\"enabled\": true}, {\"settings\": {\"key\": \"value\"}}]`"
+                }
+            },
+            "required": [
+                "name",
+                "data"
+            ]
+        },
+        "OrgDataUpdateRequest": {
+            "example": {
+                "data": {
+                    "enabled": false,
+                    "modules": ["task"],
+                    "settings": {
+                        "maxUsers": 50,
+                        "features": {
+                            "analytics": false,
+                            "export": true
+                        }
+                    }
+                }
+            },
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Optional: Update the name of the organization data. Must be unique within the organization. Only alphanumeric characters and underscores allowed.<br>**Pattern**: `^[a-zA-Z0-9_]+$`<br>**Max Length**: 255 characters<br>**Example**: `new_config_name`"
+                },
+                "data": {
+                    "type": "array",
+                    "description": "The flexible JSON array structure for storing any configuration or data. This field accepts any valid JSON array structure.<br>**Example**: `[{\"enabled\": false}, {\"settings\": {\"key\": \"new_value\"}}]`"
+                }
+            },
+            "required": [
+                "data"
+            ]
+        }
+    }
+}

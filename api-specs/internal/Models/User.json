@@ -1,0 +1,296 @@
+{
+  "components": {
+    "schemas": {
+      "UserInternal": {
+        "type": "object",
+        "description": "Internal user object with comprehensive administrative and system details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the user (MongoDB ObjectId)",
+            "example": "65c1f68ea735b522d370ea23"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier that owns this user",
+            "example": "65c1f4eeca7c4816d94587b2"
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name of the user",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address (unique within organization)",
+            "example": "john.doe@mile.app"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone number",
+            "example": "+62812345678"
+          },
+          "roleId": {
+            "type": "string",
+            "description": "ID of assigned role",
+            "example": "65c1f68ea735b522d370ea24"
+          },
+          "role": {
+            "type": "object",
+            "description": "User role information",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Role ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Role name",
+                "example": "Field User"
+              },
+              "permissions": {
+                "type": "array",
+                "description": "Role permissions array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "hubAccess": {
+            "type": "array",
+            "description": "List of hub IDs user has access to",
+            "items": {
+              "type": "string"
+            },
+            "example": ["65c1f68ea735b522d370ea25", "65c1f68ea735b522d370ea26"]
+          },
+          "hubs": {
+            "type": "array",
+            "description": "Detailed hub access information",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "address": {"type": "string"},
+                "coordinates": {
+                  "type": "object",
+                  "properties": {
+                    "latitude": {"type": "number"},
+                    "longitude": {"type": "number"}
+                  }
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "User account status",
+            "enum": ["active", "inactive", "pending", "suspended"],
+            "example": "active"
+          },
+          "lastLoginTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last successful login timestamp",
+            "example": "2024-02-06T09:30:00.000000Z"
+          },
+          "profilePicture": {
+            "type": "string",
+            "description": "URL to user's profile picture",
+            "example": "https://storage.mile.app/profiles/user123.jpg"
+          },
+          "language": {
+            "type": "string",
+            "description": "User's preferred language",
+            "example": "en",
+            "enum": ["en", "id", "ms"]
+          },
+          "timezone": {
+            "type": "string",
+            "description": "User's timezone preference",
+            "example": "Asia/Jakarta"
+          },
+          "isEmailVerified": {
+            "type": "boolean",
+            "description": "Whether user's email is verified",
+            "example": true
+          },
+          "isPhoneVerified": {
+            "type": "boolean",
+            "description": "Whether user's phone is verified",
+            "example": false
+          },
+          "twoFactorEnabled": {
+            "type": "boolean",
+            "description": "Whether 2FA is enabled for this user",
+            "example": false
+          },
+          "deviceTokens": {
+            "type": "array",
+            "description": "Push notification device tokens",
+            "items": {
+              "type": "object",
+              "properties": {
+                "token": {"type": "string"},
+                "platform": {"type": "string", "enum": ["ios", "android", "web"]},
+                "lastUsed": {"type": "string", "format": "date-time"}
+              }
+            }
+          },
+          "settings": {
+            "type": "object",
+            "description": "User application settings",
+            "properties": {
+              "notifications": {
+                "type": "object",
+                "properties": {
+                  "push": {"type": "boolean"},
+                  "email": {"type": "boolean"},
+                  "sms": {"type": "boolean"}
+                }
+              },
+              "privacy": {
+                "type": "object",
+                "properties": {
+                  "shareLocation": {"type": "boolean"},
+                  "showOnlineStatus": {"type": "boolean"}
+                }
+              }
+            }
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email of admin who created this user account",
+            "example": "admin@mile.app"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "Email of admin who last updated this user",
+            "example": "admin@mile.app"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when user was created",
+            "example": "2024-01-15T10:00:00.000000Z"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when user was last updated",
+            "example": "2024-02-06T14:20:15.000000Z"
+          },
+          "invitedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When user invitation was sent",
+            "example": "2024-01-15T10:00:00.000000Z"
+          },
+          "activatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When user account was activated",
+            "example": "2024-01-15T14:30:00.000000Z"
+          },
+          "internalNotes": {
+            "type": "string",
+            "description": "Internal administrative notes (not visible to public API)",
+            "example": "User requires additional training on new features"
+          },
+          "securityLog": {
+            "type": "array",
+            "description": "Internal security event log",
+            "items": {
+              "type": "object",
+              "properties": {
+                "event": {"type": "string"},
+                "timestamp": {"type": "string", "format": "date-time"},
+                "ipAddress": {"type": "string"},
+                "userAgent": {"type": "string"},
+                "details": {"type": "object"}
+              }
+            }
+          },
+          "systemMetadata": {
+            "type": "object",
+            "description": "Internal system metadata",
+            "properties": {
+              "migrationStatus": {"type": "string"},
+              "dataVersion": {"type": "integer"},
+              "lastBackupTime": {"type": "string", "format": "date-time"}
+            }
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "User Module business failedCode that indicate specific failure conditions or business rule violations during user module operations. These codes help identify the failed operation of user-related and provide standardized failure identification across the system.\n\nPossible values:\n- user-033: User not found - User record does not exist\n- user-034: User unauthorized access - User not authorized for operation\n- user-035: Access forbidden - Operation requires specific role/permission\n- user-036: Email already invited - Invitation already sent to email\n- user-037: Email already used - Email registered to another account\n- user-038: User has no hub assigned - User not assigned to any hub\n- user-039: Operation requires owner role - Only organization owner can perform\n- user-040: User data not found in list - User missing from specified list\n- user-041: Invalid password reset token - Token expired or invalid\n- user-042: User account not found - Account doesn't exist in system\n- user-043: Invalid activation code - Activation code incorrect/expired\n- user-044: User already activated - Account already activated\n- user-045: Cannot invite active user - User already active in system\n- user-046: User update operation failed - Failed to update user data\n- user-047: User module server failure - Internal server failure in user module\n- user-048: User update/delete status member of himself - User cannot modify self\n- user-049: User delete first organization owner - First org owner protected",
+            "enum": [
+              "user-033",
+              "user-034",
+              "user-035",
+              "user-036",
+              "user-037",
+              "user-038",
+              "user-039",
+              "user-040",
+              "user-041",
+              "user-042",
+              "user-043",
+              "user-044",
+              "user-045",
+              "user-046",
+              "user-047",
+              "user-048",
+              "user-049"
+            ]
+          }
+        },
+        "required": ["_id", "organizationId", "name", "email", "status"],
+        "example": {
+          "_id": "65c1f68ea735b522d370ea23",
+          "organizationId": "65c1f4eeca7c4816d94587b2",
+          "name": "John Doe",
+          "email": "john.doe@mile.app",
+          "phone": "+62812345678",
+          "roleId": "65c1f68ea735b522d370ea24",
+          "role": {
+            "id": "65c1f68ea735b522d370ea24",
+            "name": "Field User",
+            "permissions": ["task.read", "task.update", "location.create"]
+          },
+          "hubAccess": ["65c1f68ea735b522d370ea25"],
+          "status": "active",
+          "lastLoginTime": "2024-02-06T09:30:00.000000Z",
+          "language": "en",
+          "timezone": "Asia/Jakarta",
+          "isEmailVerified": true,
+          "isPhoneVerified": false,
+          "twoFactorEnabled": false,
+          "settings": {
+            "notifications": {
+              "push": true,
+              "email": true,
+              "sms": false
+            },
+            "privacy": {
+              "shareLocation": true,
+              "showOnlineStatus": false
+            }
+          },
+          "createdBy": "admin@mile.app",
+          "updatedBy": "admin@mile.app",
+          "createdTime": "2024-01-15T10:00:00.000000Z",
+          "updatedTime": "2024-02-06T14:20:15.000000Z",
+          "internalNotes": "User requires additional training on new features",
+          "systemMetadata": {
+            "migrationStatus": "completed",
+            "dataVersion": 2,
+            "lastBackupTime": "2024-02-06T12:00:00.000000Z"
+          }
+        }
+      }
+    }
+  }
+}

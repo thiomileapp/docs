@@ -1,0 +1,96 @@
+{
+  "components" : {
+    "schemas" : {
+      "VersionInternal": {
+        "type": "object",
+        "description": "Internal version object with comprehensive release and administrative details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the version."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Unique ID from the organization indicating specific version data for a particular organization. And if its value is null, then the version data applies to the general or all organizations."
+          },
+          "platform": {
+            "type": "string",
+            "description": "This is the platform option to choose which platform gets the version update `Android, IOS, Web, Web-mileapp`."
+          },
+          "versionNumber": {
+            "type": "integer",
+            "description": "Integer increment value for ex: `1` , `2` & up to infinity."
+          },
+          "versionName": {
+            "type": "string",
+            "description": "Required string but same as versionNumber this is increment with format (Major, Minor, Patches)."
+          },
+          "versionData": {
+            "type": "integer",
+            "description": "The integer increment value based on the `versionNumber` to indicate that the data version has been updated."
+          },
+          "releaseTime": {
+            "type": "datetime",
+            "description": "Time indicating when the feature was released."
+          },
+          "categoryUpdate": {
+            "type": "string",
+            "description": "`flexible` for update categories with low urgency & `immediate` for update categories with high urgency, effects on mobile will appear notifications must update the application"
+          },
+          "docUrl": {
+            "type": "string",
+            "description": "This is to input the release notes document url, currently the *Click Up Document* link."
+          },
+          "changeLog": {
+            "type": "string",
+            "description": "This is the log record of any changes ,use separator for point with `;` ."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Select multiple tags enumeration : `major update`, `minor update`, `new feature`, `feature improvement`, `bug fix`, `web`, `api` , `android` , `ios`"
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "App Version Module business failedCode that indicate specific failure conditions or business rule violations during app version module operations. These codes help identify the failed operation of app version-related and provide standardized failure identification across the system.\n\nPossible values:\n- versn-032: Invalid state/condition - App version state invalid\n- versn-033: App version not found - App version does not exist\n- versn-035: Access forbidden - User lacks app version permission\n- versn-036: App version creation failed - Failed to create app version\n- versn-037: App version update failed - Failed to update app version\n- versn-038: App version delete failed - Failed to delete app version\n- versn-039: Invalid mail template - Mail template invalid\n- versn-044: App version read operation failed - Failed to read app version\n- versn-045: Server failure - Internal server failure",
+            "enum": [
+              "versn-032",
+              "versn-033",
+              "versn-035",
+              "versn-036",
+              "versn-037",
+              "versn-038",
+              "versn-039",
+              "versn-044",
+              "versn-045"
+            ]
+          }
+        },
+        "example": {
+          "data": {
+            "_id": "63e4a7f8b5ecf9f20306e562",
+            "organizationId": null,
+            "platform": "Android",
+            "versionNumber": 1,
+            "versionName": "V1.1.1",
+            "versionData": 1000,
+            "releaseTime": "2022-08-30T10:33:06+07:00",
+            "categoryUpdate": "flexible",
+            "docLink": "https://doc.clickup.com/3837933/p/h/3n3zd-96542/e197dd0adc56139/3n3zd-99822",
+            "changeLog": "Changelog 1.1.1",
+            "tags": [
+              "major update",
+              "minor update",
+              "new feature",
+              "feature improvement",
+              "bug fix",
+              "web",
+              "api",
+              "android",
+              "ios"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "components": {
+    "schemas": {
+      "RoleInternal": {
+        "type": "object",
+        "description": "Internal role object with comprehensive permission and system details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the role (MongoDB ObjectId)",
+            "example": "65c1f68ea735b522d370ea24"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier that owns this role",
+            "example": "65c1f4eeca7c4816d94587b2"
+          },
+          "name": {
+            "type": "string",
+            "description": "Role display name",
+            "example": "Field Manager"
+          },
+          "code": {
+            "type": "string",
+            "description": "Role internal code",
+            "example": "field_manager"
+          },
+          "type": {
+            "type": "string",
+            "description": "Role type classification",
+            "enum": ["system", "custom", "predefined"],
+            "example": "custom"
+          },
+          "description": {
+            "type": "string",
+            "description": "Role description and purpose",
+            "example": "Manages field operations and team coordination"
+          },
+          "permissions": {
+            "type": "array",
+            "description": "Array of permission strings granted to this role",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "task.read",
+              "task.create",
+              "task.update",
+              "user.read",
+              "vehicle.read",
+              "hub.read"
+            ]
+          },
+          "permissionGroups": {
+            "type": "object",
+            "description": "Permissions organized by module/feature groups",
+            "properties": {
+              "tasks": {
+                "type": "object",
+                "properties": {
+                  "read": {"type": "boolean"},
+                  "create": {"type": "boolean"},
+                  "update": {"type": "boolean"},
+                  "delete": {"type": "boolean"}
+                }
+              },
+              "users": {
+                "type": "object",
+                "properties": {
+                  "read": {"type": "boolean"},
+                  "create": {"type": "boolean"},
+                  "update": {"type": "boolean"},
+                  "delete": {"type": "boolean"}
+                }
+              },
+              "vehicles": {
+                "type": "object",
+                "properties": {
+                  "read": {"type": "boolean"},
+                  "create": {"type": "boolean"},
+                  "update": {"type": "boolean"},
+                  "delete": {"type": "boolean"}
+                }
+              },
+              "reports": {
+                "type": "object",
+                "properties": {
+                  "read": {"type": "boolean"},
+                  "export": {"type": "boolean"}
+                }
+              }
+            }
+          },
+          "hubAccess": {
+            "type": "array",
+            "description": "Hub IDs this role can access (null means all hubs)",
+            "items": {
+              "type": "string"
+            },
+            "example": ["65c1f68ea735b522d370ea25", "65c1f68ea735b522d370ea26"]
+          },
+          "flowPermissions": {
+            "type": "object",
+            "description": "Flow-specific permissions configuration",
+            "properties": {
+              "allowedFlows": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "restrictedFlows": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Whether this role is currently active",
+            "example": true
+          },
+          "isDeletable": {
+            "type": "boolean",
+            "description": "Whether this role can be deleted (system roles cannot be deleted)",
+            "example": true
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Whether this is a default system role",
+            "example": false
+          },
+          "usersCount": {
+            "type": "integer",
+            "description": "Number of users currently assigned to this role",
+            "example": 15
+          },
+          "users": {
+            "type": "array",
+            "description": "Users assigned to this role (for internal reference)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "email": {"type": "string"},
+                "assignedDate": {"type": "string", "format": "date-time"}
+              }
+            }
+          },
+          "hierarchy": {
+            "type": "object",
+            "description": "Role hierarchy information",
+            "properties": {
+              "level": {
+                "type": "integer",
+                "description": "Role hierarchy level (1-10, 1 being highest)"
+              },
+              "parentRoleId": {
+                "type": "string",
+                "description": "Parent role ID in hierarchy"
+              },
+              "childRoles": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email of admin who created this role",
+            "example": "admin@mile.app"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "Email of admin who last updated this role",
+            "example": "admin@mile.app"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when role was created",
+            "example": "2024-01-05T14:30:00.000000Z"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when role was last updated",
+            "example": "2024-02-01T10:15:00.000000Z"
+          },
+          "internalNotes": {
+            "type": "string",
+            "description": "Internal administrative notes (not visible to public API)",
+            "example": "Custom role created for regional operations team"
+          },
+          "auditLog": {
+            "type": "array",
+            "description": "Role permission change audit log",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": {"type": "string"},
+                "timestamp": {"type": "string", "format": "date-time"},
+                "userId": {"type": "string"},
+                "permissionChanges": {"type": "object"}
+              }
+            }
+          },
+          "systemMetadata": {
+            "type": "object",
+            "description": "Internal system metadata",
+            "properties": {
+              "migrationStatus": {"type": "string"},
+              "dataVersion": {"type": "integer"},
+              "lastPermissionSync": {"type": "string", "format": "date-time"}
+            }
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Role Module business failedCode that indicate specific failure conditions or business rule violations during role module operations. These codes help identify the failed operation of role-related and provide standardized failure identification across the system.\n\nPossible values:\n- role-031: Duplicate entry - Role name already exists\n- role-032: Invalid state/condition - Role state transition invalid\n- role-033: Role not found - Role record does not exist\n- role-034: general failed create role - Failed to create role\n- role-035: Access forbidden - User lacks role permission\n- role-036: general failed delete role - Failed to delete role\n- role-037: Role update failed - Failed to update role\n- role-039: Invalid flow in role permission - Flow permission configuration invalid\n- role-040: Limit exceeded - Role limit per organization exceeded\n- role-041: License limitation - Role feature not in license\n- role-042: Update forbidden (owner role) - Cannot update owner role\n- role-043: Cannot rename owner role - Owner role name protected\n- role-044: Cannot delete default role - Default roles protected\n- role-045: Server failure - Internal server failure\n- role-046: Cannot delete role in use - Role assigned to users",
+            "enum": [
+              "role-031",
+              "role-032",
+              "role-033",
+              "role-034",
+              "role-035",
+              "role-036",
+              "role-037",
+              "role-039",
+              "role-040",
+              "role-041",
+              "role-042",
+              "role-043",
+              "role-044",
+              "role-045",
+              "role-046"
+            ]
+          }
+        },
+        "required": ["_id", "organizationId", "name", "permissions", "isActive"],
+        "example": {
+          "_id": "65c1f68ea735b522d370ea24",
+          "organizationId": "65c1f4eeca7c4816d94587b2",
+          "name": "Field Manager",
+          "code": "field_manager",
+          "type": "custom",
+          "description": "Manages field operations and team coordination",
+          "permissions": [
+            "task.read", "task.create", "task.update",
+            "user.read", "vehicle.read", "hub.read"
+          ],
+          "permissionGroups": {
+            "tasks": {
+              "read": true,
+              "create": true,
+              "update": true,
+              "delete": false
+            },
+            "users": {
+              "read": true,
+              "create": false,
+              "update": false,
+              "delete": false
+            }
+          },
+          "hubAccess": ["65c1f68ea735b522d370ea25"],
+          "isActive": true,
+          "isDeletable": true,
+          "isDefault": false,
+          "usersCount": 15,
+          "hierarchy": {
+            "level": 3,
+            "parentRoleId": "65c1f68ea735b522d370ea20",
+            "childRoles": []
+          },
+          "createdBy": "admin@mile.app",
+          "updatedBy": "admin@mile.app",
+          "createdTime": "2024-01-05T14:30:00.000000Z",
+          "updatedTime": "2024-02-01T10:15:00.000000Z",
+          "internalNotes": "Custom role created for regional operations team",
+          "systemMetadata": {
+            "migrationStatus": "completed",
+            "dataVersion": 2,
+            "lastPermissionSync": "2024-02-01T10:15:00.000000Z"
+          }
+        }
+      }
+    }
+  }
+}

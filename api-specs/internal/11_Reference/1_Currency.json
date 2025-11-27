@@ -1,0 +1,657 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Currency"
+  },
+  "host": "apiweb.mile.app",
+  "basePath": "/api/v3",
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/currency": {
+      "get": {
+        "summary": "Get all currencies",
+        "description": "Retrieve list of all active currencies. This endpoint supports optional ISO code filtering to get specific currencies. Currency data is publicly accessible and does not require authentication.",
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "getCurrencies",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iso",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter currencies by ISO 4217 code(s). Supports single or multiple comma-separated values.<br>**Single:** `USD`<br>**Multiple:** `USD,IDR,JPY`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Status of response",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "Array of currency objects",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "description": "Currency unique identifier (MongoDB ObjectId)"
+                      },
+                      "countryCode": {
+                        "type": "string",
+                        "description": "ISO 3166-1 alpha-3 country code (e.g., IDN, USA, JPN)"
+                      },
+                      "symbol": {
+                        "type": "string",
+                        "description": "Currency symbol (e.g., $, Rp, ¥)"
+                      },
+                      "iso": {
+                        "type": "string",
+                        "description": "ISO 4217 currency code (e.g., USD, IDR, JPY)"
+                      },
+                      "locale": {
+                        "type": "string",
+                        "description": "BCP 47 locale code for number formatting (e.g., id-ID, en-US, ja-JP)"
+                      },
+                      "isActive": {
+                        "type": "boolean",
+                        "description": "Currency active status"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "status": true,
+                "data": [
+                  {
+                    "_id": "676a1234567890abcdef1234",
+                    "countryCode": "IDN",
+                    "symbol": "Rp",
+                    "iso": "IDR",
+                    "locale": "id-ID",
+                    "isActive": true
+                  },
+                  {
+                    "_id": "676a1234567890abcdef1235",
+                    "countryCode": "USA",
+                    "symbol": "$",
+                    "iso": "USD",
+                    "locale": "en-US",
+                    "isActive": true
+                  },
+                  {
+                    "_id": "676a1234567890abcdef1236",
+                    "countryCode": "JPN",
+                    "symbol": "¥",
+                    "iso": "JPY",
+                    "locale": "ja-JP",
+                    "isActive": true
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Error message",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Empty array when no data found",
+                  "type": "array"
+                }
+              },
+              "example": {
+                "status": false,
+                "message": "Data not found.",
+                "data": []
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new currency",
+        "description": "Create a new currency entry. Requires organization edit permission.",
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "createCurrency",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Currency object to be created",
+            "schema": {
+              "type": "object",
+              "required": [
+                "countryCode",
+                "symbol",
+                "iso",
+                "locale"
+              ],
+              "properties": {
+                "countryCode": {
+                  "type": "string",
+                  "description": "ISO 3166-1 alpha-3 country code (exactly 3 characters, must be unique)",
+                  "example": "SGP"
+                },
+                "symbol": {
+                  "type": "string",
+                  "description": "Currency symbol",
+                  "example": "$"
+                },
+                "iso": {
+                  "type": "string",
+                  "description": "ISO 4217 currency code (exactly 3 characters, must be uppercase)",
+                  "example": "SGD"
+                },
+                "locale": {
+                  "type": "string",
+                  "description": "BCP 47 locale code",
+                  "example": "en-SG"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "description": "Currency active status",
+                  "default": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "Created currency object",
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "Currency unique identifier",
+                      "type": "string"
+                    },
+                    "countryCode": {
+                      "description": "ISO 3166-1 alpha-3 country code",
+                      "type": "string"
+                    },
+                    "symbol": {
+                      "description": "Currency symbol",
+                      "type": "string"
+                    },
+                    "iso": {
+                      "description": "ISO 4217 currency code",
+                      "type": "string"
+                    },
+                    "locale": {
+                      "description": "BCP 47 locale code",
+                      "type": "string"
+                    },
+                    "isActive": {
+                      "description": "Currency active status",
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "message": {
+                  "description": "Success message",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": true,
+                "data": {
+                  "_id": "676a1234567890abcdef1237",
+                  "countryCode": "SGP",
+                  "symbol": "$",
+                  "iso": "SGD",
+                  "locale": "en-SG",
+                  "isActive": true
+                },
+                "message": "Data created successfully."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/BadRequestError"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/UnauthorizedError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ForbiddenError"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    },
+    "/currency/{id}": {
+      "get": {
+        "summary": "Get currency by ID",
+        "description": "Retrieve a specific currency by its MongoDB ObjectId. Requires authentication.",
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "getCurrency",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Currency MongoDB ObjectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "Currency object",
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "Currency unique identifier",
+                      "type": "string"
+                    },
+                    "countryCode": {
+                      "description": "ISO 3166-1 alpha-3 country code",
+                      "type": "string"
+                    },
+                    "symbol": {
+                      "description": "Currency symbol",
+                      "type": "string"
+                    },
+                    "iso": {
+                      "description": "ISO 4217 currency code",
+                      "type": "string"
+                    },
+                    "locale": {
+                      "description": "BCP 47 locale code",
+                      "type": "string"
+                    },
+                    "isActive": {
+                      "description": "Currency active status",
+                      "type": "boolean"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "status": true,
+                "data": {
+                  "_id": "676a1234567890abcdef1234",
+                  "countryCode": "IDN",
+                  "symbol": "Rp",
+                  "iso": "IDR",
+                  "locale": "id-ID",
+                  "isActive": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Error message",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": false,
+                "message": "Data not found."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/UnauthorizedError"
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update currency",
+        "description": "Update an existing currency. Requires organization edit permission.",
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "updateCurrency",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Currency MongoDB ObjectId"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Currency fields to update",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "countryCode": {
+                  "type": "string",
+                  "description": "ISO 3166-1 alpha-3 country code (exactly 3 characters)"
+                },
+                "symbol": {
+                  "type": "string",
+                  "description": "Currency symbol"
+                },
+                "iso": {
+                  "type": "string",
+                  "description": "ISO 4217 currency code (exactly 3 characters, must be uppercase)"
+                },
+                "locale": {
+                  "type": "string",
+                  "description": "BCP 47 locale code"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "description": "Currency active status"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "data": {
+                  "description": "Updated currency object",
+                  "type": "object"
+                },
+                "message": {
+                  "description": "Success message",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": true,
+                "data": {
+                  "_id": "676a1234567890abcdef1234",
+                  "countryCode": "IDN",
+                  "symbol": "Rp",
+                  "iso": "IDR",
+                  "locale": "id-ID",
+                  "isActive": true
+                },
+                "message": "Data updated successfully."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/BadRequestError"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/UnauthorizedError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ForbiddenError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Error message",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": false,
+                "message": "Data not found."
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete currency (soft delete)",
+        "description": "Soft delete a currency by setting isActive to false. Requires organization edit permission.",
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "deleteCurrency",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Currency MongoDB ObjectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Success message",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": true,
+                "message": "Data deleted successfully."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/UnauthorizedError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ForbiddenError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "properties": {
+                "status": {
+                  "description": "Response status indicator",
+                  "type": "boolean"
+                },
+                "message": {
+                  "description": "Error message",
+                  "type": "string"
+                }
+              },
+              "example": {
+                "status": false,
+                "message": "Data not found."
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "BadRequestError": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Response status indicator",
+          "type": "boolean"
+        },
+        "message": {
+          "description": "Validation error message",
+          "type": "string"
+        }
+      },
+      "example": {
+        "status": false,
+        "message": "The country code field is required."
+      }
+    },
+    "UnauthorizedError": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Response status indicator",
+          "type": "boolean"
+        },
+        "message": {
+          "description": "Error message",
+          "type": "string"
+        }
+      },
+      "example": {
+        "status": false,
+        "message": "Unauthenticated."
+      }
+    },
+    "ForbiddenError": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Response status indicator",
+          "type": "boolean"
+        },
+        "message": {
+          "description": "Error message",
+          "type": "string"
+        }
+      },
+      "example": {
+        "status": false,
+        "message": "You do not have permission to perform this action."
+      }
+    }
+  }
+}

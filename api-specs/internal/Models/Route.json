@@ -1,0 +1,1615 @@
+{
+  "components": {
+    "schemas": {
+      "VehicleRouteInternal": {
+        "type": "object",
+        "description": "Internal vehicle route object with comprehensive routing and operational details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the vehicle record, often used for database or system reference."
+          },
+          "name": {
+            "description": "The name of vehicle. User can define vehicle name with vehicle's license plate, vehicle brand, or something else.",
+            "type": "string"
+          },
+          "assignee": {
+            "description": "Users's email that assigned to the vehicle. One vehicle can only be assigned by one worker.",
+            "type": "string"
+          },
+          "speed": {
+            "type": "string",
+            "description": "Assume the average speed (in km/h) of the vehicle.Speed cannot be less than 5 km/h."
+          },
+          "fixedCost": {
+            "type": "integer",
+            "description": "The Cost Factor value range is set from 0 to 100, with the default value being 0. A lower number signifies a higher priority for routing optimization purposes."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The tag is used for route optimization purposes. Visits that have tags will be assigned to vehicles that have the same tags."
+          },
+          "oddEven": {
+            "type": "string",
+            "description": "Odd-even license plate restriction category for this vehicle. Used to enforce odd-even traffic restrictions during specified time windows. Accepted values are 'odd' for odd-numbered plates or 'even' for even-numbered plates.",
+            "enum": ["odd", "even"]
+          },
+          "workingTime": {
+            "type": "array",
+            "description": "Working hours on vehicles containing: **startTime**, **endTime**, and **multiday**.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "description": "Time of departure of the vehicle from the hub."
+                },
+                "endTime": {
+                  "type": "string",
+                  "description": "Maximum working time of vehicle to operate."
+                },
+                "multiday": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Additional working days accumulatedbased on the number of days.<br>Implementation of **multiday** is used to add **endTime** value,<br>which means **endTime** = **endTime** + (24 hours * **multiday**)"
+                }
+              }
+            }
+          },
+          "breakTime": {
+            "type": "array",
+            "description": "Indicates that the data inside represents the break time for the vehicle. containing: **startTime**, and **endTime**.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "description": "This field specifies the starting time of the break."
+                },
+                "endTime": {
+                  "type": "string",
+                  "description": "This field specifies the ending time of the break."
+                }
+              }
+            }
+          },
+          "capacity": {
+            "type": "array",
+            "description": "Capacity is used for route optimization purposes, it's dynamic based on user needs. It has minimum and maximum value as the limit for the shelter that can be accommodated by the vehicle.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "{constraint-n}": {
+                  "type": "array",
+                  "description": "Key of capacity constraint.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "min",
+                      "max"
+                    ],
+                    "properties": {
+                      "min": {
+                        "type": "integer",
+                        "description": "Minimum value of capacity constraint."
+                      },
+                      "max": {
+                        "type": "integer",
+                        "description": "Maximum value of capacity constraint."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "hubs": {
+            "type": "array",
+            "description": "Indicates that the data inside represents the break time for the vehicle. containing: **startTime**, and **endTime**.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "An unique identifier for the hub record, often used for database or system reference."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of vehicle hub. User can define hub name with hub's location, or something else."
+                },
+                "address": {
+                  "type": "string",
+                  "description": "Location of the vehicle hub."
+                }
+              }
+            }
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Identifier for the hub that owns or manages the vehicle."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the vehicle."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Timestamp represents the last time the vehicle data was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Timestamp represents the date and time when this vehicle data was initially created."
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Route Module business failedCode that indicate specific failure conditions or business rule violations during route module operations. These codes help identify the failed operation of route-related and provide standardized failure identification across the system.\n\nPossible values:\n- route-031: Duplicate entry - Route identifier already exists\n- route-032: Invalid state/condition - Route state transition invalid\n- route-033: Route not found - Route record does not exist\n- route-035: Access forbidden - User lacks routing permission\n- route-038: Service unavailable - Routing service down\n- route-040: Limit exceeded - Route limit exceeded\n- route-041: External service error - Map/geocoding service failure\n- route-043: License/subscription error - Routing feature not in license\n- route-045: Server error - Internal server failure in routing",
+            "enum": [
+              "route-031",
+              "route-032",
+              "route-033",
+              "route-035",
+              "route-038",
+              "route-040",
+              "route-041",
+              "route-043",
+              "route-045"
+            ]
+          }
+        },
+        "example": {
+          "_id": "62ce3918d3f3e1681a3a54b2",
+          "name": "Mini Van 54",
+          "assignee": "leandro@mile.app",
+          "speed": 30,
+          "fixedCost": 15,
+          "tags": [
+            "Ganjil",
+            "Depok",
+            "B1124CC"
+          ],
+          "oddEven": "even",
+          "workingTime": {
+            "startTime": "08:00",
+            "endTime": "17:00",
+            "multiday": 0
+          },
+          "breakTime": {
+            "startTime": "11:00",
+            "endTime": "11:30"
+          },
+          "capacity": {
+            "width": {
+              "min": 10,
+              "max": 1000
+            },
+            "height": {
+              "min": 10,
+              "max": 1000
+            }
+          },
+          "hubs": {
+            "_id": "660cd7bfebcc9870d163b6b7",
+            "name": "Jakarta",
+            "address": "9, Jalan Medan Merdeka Utara, Jakarta Pusat 10110, Indonesia"
+          },
+          "hubId": "621dd813eb3ebf16b94d6969",
+          "organizationId": "621dd813eb3ebf16b94dbde3",
+          "updatedTime": "2022-07-13T03:16:40+00:00",
+          "createdTime": "2022-07-13T03:16:40+00:00"
+        }
+      },
+      "Team": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the team record, often used for database or system reference."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of team. Name must be unique at per-hub."
+          },
+          "totalUser": {
+            "type": "integer",
+            "description": "The number of total user that part of the team."
+          },
+          "hubId": {
+            "type": "string",
+            "description": "Identifier for the hub that owns or manages the team."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the team."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Timestamp represents the last time the team data was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Timestamp represents the date and time when this team data was initially created."
+          }
+        },
+        "example": {
+          "_id": "650151e4c8a55842604f1662",
+          "name": "Team Delivery",
+          "totalUser": 0,
+          "hubId": "64d9932e2beb9037735ff022",
+          "organizationId": "64d99303be0ad015c461c932",
+          "updatedTime": "2023-09-13T06:08:36.025000Z",
+          "createdTime": "2023-09-13T06:08:36.025000Z"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the user record, often used for database or system reference."
+          },
+          "name": {
+            "type": "string",
+            "description": "Indicates name of user."
+          },
+          "email": {
+            "type": "string",
+            "description": "Indicates email of user."
+          },
+          "language": {
+            "type": "string",
+            "description": "Indicates the user preferred language. Available values are: <br> `en` : English (USA) <br> `id` : Indonesia (IDN) <br> `jp` : 日本語 (JPN) <br> `zh` : 中文 (简体) (CHN) <br> `vi` : Tiếng Việt (VNM) <br> `tl` : Filipino (PHL) <br> `th` : ไทย (THA)"
+          },
+          "firstLogin": {
+            "type": "boolean",
+            "description": "Indicates whether the user has logged in for the first time."
+          },
+          "lastLogin": {
+            "type": "string",
+            "description": "Indicates the user most recent login timestamp."
+          },
+          "passwordExpired": {
+            "type": "boolean",
+            "description": "Indicates the user password expired and need to change or not."
+          },
+          "status": {
+            "type": "string",
+            "description": "Indicates the current status of the user account within an organization. Accepted values are: <br><br> \n                          `active` : The account is currently active and the user can perform actions based on their role.<br> \n                          `inactive` : The user has registered a new organization but has not completed email verification. <br> \n                          `pending` : The user has been invited to this organization but has not yet accepted the invitation. <br> \n                          `disabled` : The account has been deactivated by the organization and cannot be used. <br> \n                          `reject` : The user has either accepted an invitation from another organization or created a new organization, causing all other pending invitations to be automatically rejected."
+          },
+          "lockExpiry": {
+            "type": "datetime",
+            "description": "The Timestamp indicating when the user account is locked due to multiple incorrect login attempts. It specifies the date and time when the user can attempt to log in again."
+          },
+          "teamId": {
+            "type": "array",
+            "description": "Identifier the user is a part of what team."
+          },
+          "roleId": {
+            "type": "string",
+            "description": "Unique identifier for the user's role within the system or application"
+          },
+          "role" : {
+            "description": "This is the root object, containing all the information about the role.",
+            "type" : "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Unique identifier for the role."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of the role."
+                },
+                "isAdmin": {
+                  "type": "boolean",
+                  "description": "A boolean value indicating whether the role is an admin role."
+                },
+                "isDefault": {
+                  "type": "boolean",
+                  "description": "Another boolean value indicating whether the role is a default role."
+                },
+                "permissionList": {
+                  "type": "array of string",
+                  "description": "An array containing IDs of permissions associated with this role."
+                },
+                "permissionDetails": {
+                  "type": "array of objects",
+                  "description": "An array containing details about specific permissions associated with the role."
+                },
+                "permissions": {
+                  "type": "array of objects",
+                  "description": "An array containing details about permissions granted to this role."
+                },
+                "organizationId": {
+                  "type": "string",
+                  "description": "Unique identifier for the organization to which this role belongs."
+                },
+                "passwordPolicyId": {
+                  "type": "string",
+                  "description": "ID of the password policy associated with this role, if any."
+                },
+                "updatedTime": {
+                  "type": "string",
+                  "description": "Timestamp indicating when this role was last updated."
+                },
+                "createdTime": {
+                  "type": "object",
+                  "description": "Timestamp indicating when this role was created."
+                }
+              }
+            }
+          },
+          "hubId": {
+            "type": "array",
+            "description": "Identifier for the hub that owns or manages the user."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the user."
+          },
+          "organization" : {
+            "description": "Organization Entity Information: Encompasses the organization's name, email, and ID. This information is present in the task data upon task creation and processing.",
+            "type" : "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Unique identifier for the organization."
+                },
+                "user": {
+                  "type": "object",
+                  "description": "Information about the primary user associated with this organization."
+                },
+                "productId": {
+                  "type": "string",
+                  "description": "The product ID that subscribed by the organization."
+                },
+                "productName": {
+                  "type": "string",
+                  "description": "The product name that subscribed by the organization."
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Status of the organization."
+                },
+                "verifiedTime": {
+                  "type": "string",
+                  "description": "Timestamp indicating when the organization was verified."
+                },
+                "curPeriodStartTime": {
+                  "type": "string",
+                  "description": "Timestamp indicating the start time of the current subscription period."
+                },
+                "curPeriodEndTime": {
+                  "type": "string",
+                  "description": "Timestamp indicating the end time of the current subscription period."
+                },
+                "eligible": {
+                  "type": "boolean",
+                  "description": "A boolean value indicating whether the organization is eligible for certain benefits or services.."
+                },
+                "configuration": {
+                  "type": "object",
+                  "description": "Configuration settings associated with the organization."
+                },
+                "updatedTime": {
+                  "type": "string",
+                  "description": "Timestamp indicating when the organization's information was last updated."
+                },
+                "createdTime": {
+                  "type": "string",
+                  "description": "Timestamp indicating when the organization was created."
+                },
+                "customerId": {
+                  "type": "object",
+                  "description": "Customer details for payment gateway."
+                },
+                "country": {
+                  "type": "object",
+                  "description": "Information about the country associated with the organization."
+                }
+              }
+            }
+          },
+          "updatedTime": {
+            "type": "datetime",
+            "description": "The Timestamp represents the last time the user data was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "datetime",
+            "description": "The Timestamp represents the date and time when this user data was initially created."
+          }
+        },
+        "example": {
+          "_id": "64c70f5730ae176dbf0267fc",
+          "name": "Jhon doe",
+          "email": "jhon@mile.app",
+          "language": "en",
+          "firstLogin": false,
+          "lastLogin": "2023-10-04T02:42:34+00:00",
+          "passwordExpired": false,
+          "status": "active",
+          "teamId": [
+            "64c863d1d7e8d0458d004fcd"
+          ],
+          "roleId": "64c70f5730ae176dbf0267f8",
+          "role": {
+            "_id": "660cd75cdbd3401dc874c7b9",
+            "name": "owner",
+            "isAdmin": true,
+            "isDefault": true,
+            "permissionList": [
+                "6156d6475320c9679e337eba"
+            ],
+            "permissionDetails": [
+                {
+                    "permissionName": "view/checkincheckout",
+                    "interval": null,
+                    "checkinRadius": null,
+                    "checkoutRadius": null
+                }
+            ],
+            "permissions": [
+                {
+                    "name": "view/dashboard",
+                    "module": "dashboard",
+                    "menu": "dashboard",
+                    "displayName": "View dashboard",
+                    "access": true,
+                    "meta": {}
+                }
+            ],
+            "organizationId": "660cd75cdbd3401dc874c7b8",
+            "passwordPolicyId": null,
+            "updatedTime": "2024-04-03T04:13:16.516000Z",
+            "createdTime": "2024-04-03T04:13:16.516000Z"
+          },
+          "hubId": [
+            "64c863d1d7e8d0458d004fcd"
+          ],
+          "organizationId": "64c70f5730ae176dbf0267f6",
+          "organization": {
+            "_id": "660cd75cdbd3401dc874c7b8",
+            "user": {
+                "name": "Paketid",
+                "country": "IDN",
+                "phoneNumber": "+62 091291821",
+                "numberOfUsers": "1-50",
+                "industry": "Distribution",
+                "position": "Owner/Director",
+                "email": "jhon@mile.app",
+                "companyName": "Paketid",
+                "hub": {
+                    "name": "Jakarta",
+                    "displayName": "Jakarta",
+                    "address": "9, Jalan Medan Merdeka Utara, Jakarta Pusat 10110, Indonesia",
+                    "lat": "-6.1716049",
+                    "lng": "106.8264828"
+                },
+                "flows": [
+                    "63a561c0fd378bcce9877d31"
+                ]
+            },
+            "productId": "prod-X123ab",
+            "productName": "Enterprise",
+            "status": "verified",
+            "verifiedTime": "2024-04-03T04:14:55+00:00",
+            "curPeriodEndTime": null,
+            "curPeriodStartTime": null,
+            "eligible": true,
+            "configuration": {
+                "filesAccessPermission": "private",
+                "filesServerProvider": "milesto"
+            },
+            "updatedTime": "2024-04-03T04:14:56+00:00",
+            "createdTime": "2024-04-03T04:13:16+00:00",
+            "customerId": {
+                "idr": "cus_Pr3KtKHneZyXyP",
+                "usd": null
+            },
+            "country": {
+                "code": "IDN",
+                "phoneCode": "+62",
+                "name": "Indonesia",
+                "alpha2Code": "ID",
+                "enableLanguage": true,
+                "language": "id",
+                "languageName": "Indonesian"
+            }
+          },
+          "updatedTime": "2023-10-04T02:42:34+00:00",
+          "createdTime": "2023-07-31T01:33:11+00:00"
+        }
+      },
+      "Hub": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the hub record, often used for database or system reference."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of hub. User can define hub name with hub's location, or something else."
+          },
+          "address": {
+            "type": "string",
+            "description": "Location of the hub."
+          },
+          "lat": {
+            "type": "number",
+            "description": "Coordinate latitude of hub."
+          },
+          "lng": {
+            "type": "number",
+            "description": "Coordinate longitude of hub."
+          },
+          "country": {
+            "type": "object",
+            "description": "Details country of the hub."
+          },
+          "countryCode": {
+            "type": "number",
+            "description": "Country code of the hub."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "identifier for the organization or company that owns or manages the hub."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Timestamp represents the last time the hub data was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Timestamp represents the date and time when this hub data was initially created."
+          }
+        },
+        "example": {
+          "_id": "642634bde1428d414838c882",
+          "name": "Dukuh Atas",
+          "address": "12, Jalan Setia Budi VI, Jakarta Selatan 12910, Indonesia",
+          "lat": -6.205870636762187,
+          "lng": 106.82562818235002,
+          "country": {
+            "_id": "624fb53c88d36ab78ccdfe0e",
+            "code": "IDN",
+            "phoneCode": "+62",
+            "name": "Indonesia",
+            "isActive": true,
+            "alpha2Code": "ID",
+            "enableLanguage": true,
+            "language": "id",
+            "languageName": "Indonesian"
+          },
+          "countryCode": "IDN",
+          "organizationId": "63c76fdb88697c70e35866e2",
+          "updatedTime": "2023-03-31T01:17:49.158000Z",
+          "createdTime": "2023-03-31T01:17:49.158000Z"
+        }
+      },
+      "Module": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the custom module record, often used for database or system reference."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of custom module that will shown at custom module list and permission."
+          },
+          "url": {
+            "type": "string",
+            "description": "The url of custom module. Once user click the module icon there will be redirected into this url."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "identifier for the organization or company that owns or manages the hub."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Timestamp represents the last time the hub data was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Timestamp represents the date and time when this hub data was initially created."
+          }
+        },
+        "example": {
+          "_id": "651fb9fc4286177b840ae412",
+          "name": "Custom 1",
+          "url": "https://invalid.com",
+          "type": "WEB",
+          "organizationId": "64d99303be0ad015c461c932",
+          "isDeleted": false,
+          "updatedTime": "2023-10-06T07:40:44.554000Z",
+          "createdTime": "2023-10-06T07:40:44.554000Z"
+        }
+      },
+      "RoutingInternal": {
+        "example": {
+          "_id": "64b0f67e880af90e380ff8c7",
+          "configuration": {
+            "multitrip": true,
+            "useAllVehicle": true,
+            "defaultVisitTime": 12,
+            "autoSpeed": false,
+            "defaultSpeed": 25,
+            "returnToBase": true,
+            "name": "Default",
+            "capacityConstraint": [
+              "weight",
+              "volume"
+            ],
+            "clustering": false,
+            "useOddEven": true,
+            "oddEvenTime": [
+              {
+                "startTime": "07:00",
+                "endTime": "10:00"
+              },
+              {
+                "startTime": "17:00",
+                "endTime": "20:00"
+              }
+            ]
+          },
+          "name": "Routing 07-14 02:17",
+          "resultCode": "Route-20230801-001",
+          "result": {
+            "routing": [
+              {
+                "volumePercentage": "0%",
+                "totalDistance": 62024,
+                "totalVolume": 0,
+                "vehicleMaxWeight": 100,
+                "fixedCost": 0,
+                "workingTime": {
+                  "endTime": "17:00",
+                  "startTime": "07:00"
+                },
+                "vehicleMaxVolume": 100,
+                "speed": 25,
+                "vehicleId": "64ae56d327688e090c04eff4",
+                "totalNodes": 5,
+                "finishTime": "10:42:41",
+                "vehicleName": "BP 4877 TFV",
+                "totalVisits": 3,
+                "totalTrips": 1,
+                "vehicleMinVolume": 0,
+                "totalWeight": 0,
+                "trips": [
+                  {
+                    "isHub": true,
+                    "weight": 0,
+                    "visitId": "hub-640fc11832c0de76065d8922",
+                    "waitingTime": 42,
+                    "eta": "7:00:00",
+                    "volume": 0,
+                    "order": 0,
+                    "coordinate": "-6.17549,106.79073",
+                    "etd": "7:41:50",
+                    "visitTime": 0,
+                    "travelTime": 0,
+                    "distance": 0
+                  },
+                  {
+                    "isHub": false,
+                    "tags": null,
+                    "weight": 0,
+                    "visitId": "taskId-64ae56a8ffffa27dbb0ea0e2",
+                    "visitName": "Test 1000",
+                    "waitingTime": 0,
+                    "timeWindow": {
+                      "endTime": "17:00",
+                      "startTime": "08:00"
+                    },
+                    "timeWindows": [
+                      {
+                        "endTime": "12:00",
+                        "startTime": "08:00"
+                      },
+                      {
+                        "endTime": "17:00",
+                        "startTime": "14:00"
+                      }
+                    ],
+                    "eta": "8:00:00",
+                    "address": "Matra Jaya 2 Jl. Waru No.26 RT 7/7 Rawamangun, Pulo Gadung, Jaktim 13220) (An Bapak Erick)",
+                    "volume": 0,
+                    "order": 1,
+                    "coordinate": "-6.16390262,106.74082965",
+                    "etd": "8:10:00",
+                    "visitTime": 10,
+                    "travelTime": 19,
+                    "distance": 7571,
+                    "allowOddEven": true
+                  },
+                  {
+                    "isHub": false,
+                    "tags": null,
+                    "weight": 0,
+                    "visitId": "taskId-64afb4dc971dc3617f603332",
+                    "visitName": "Testing 123",
+                    "waitingTime": 0,
+                    "timeWindow": {
+                      "endTime": null,
+                      "startTime": null
+                    },
+                    "eta": "8:46:27",
+                    "address": "jakarta",
+                    "volume": 0,
+                    "order": 2,
+                    "coordinate": "-6.224634691640824,106.67960171349401",
+                    "etd": "8:58:27",
+                    "visitTime": 12,
+                    "travelTime": 37,
+                    "distance": 15190
+                  },
+                  {
+                    "isHub": false,
+                    "tags": null,
+                    "weight": 0,
+                    "visitId": "taskId-64ae56a8ffffa27dbb0ea0dc",
+                    "visitName": "Test 997",
+                    "waitingTime": 0,
+                    "timeWindow": {
+                      "endTime": "17:00",
+                      "startTime": "08:00"
+                    },
+                    "timeWindows": [
+                      {
+                        "endTime": "12:00",
+                        "startTime": "08:00"
+                      },
+                      {
+                        "endTime": "17:00",
+                        "startTime": "14:00"
+                      }
+                    ],
+                    "eta": "9:26:34",
+                    "address": "Jln cipinang kebembem rt 04 rw 13 no 15",
+                    "volume": 0,
+                    "order": 3,
+                    "coordinate": "-6.2784302,106.64862115",
+                    "etd": "9:36:34",
+                    "visitTime": 10,
+                    "travelTime": 29,
+                    "distance": 11717
+                  },
+                  {
+                    "isHub": true,
+                    "weight": 0,
+                    "visitId": "hub-640fc11832c0de76065d8922",
+                    "waitingTime": 0,
+                    "eta": "10:42:41",
+                    "volume": 0,
+                    "order": 4,
+                    "coordinate": "-6.17549,106.79073",
+                    "etd": "10:42:41",
+                    "visitTime": 0,
+                    "travelTime": 67,
+                    "distance": 27546
+                  }
+                ],
+                "vehicleMinWeight": 0,
+                "assignee": "macanoyen@mailnesia.com",
+                "weightPercentage": "0%",
+                "totalTravelTime": 152,
+                "vehicleTags": [
+                  "64ae56d327688e090c04eff4"
+                ],
+                "isOddEven": true,
+                "oddEven": "even"
+              },
+              {
+                "volumePercentage": "0%",
+                "totalDistance": 61798,
+                "totalVolume": 0,
+                "vehicleMaxWeight": 100,
+                "fixedCost": 0,
+                "workingTime": {
+                  "endTime": "17:00",
+                  "startTime": "07:00"
+                },
+                "vehicleMaxVolume": 100,
+                "speed": 25,
+                "vehicleId": "64ae56d327688e090c04eff3",
+                "totalNodes": 4,
+                "finishTime": "9:48:19",
+                "vehicleName": "K 9744 LAZ",
+                "totalVisits": 2,
+                "totalTrips": 1,
+                "vehicleMinVolume": 0,
+                "totalWeight": 0,
+                "trips": [
+                  {
+                    "isHub": true,
+                    "weight": 0,
+                    "visitId": "hub-640fc11832c0de76065d8922",
+                    "waitingTime": 0,
+                    "eta": "7:00:00",
+                    "volume": 0,
+                    "order": 0,
+                    "coordinate": "-6.17549,106.79073",
+                    "etd": "7:00:00",
+                    "visitTime": 0,
+                    "travelTime": 0,
+                    "distance": 0
+                  },
+                  {
+                    "isHub": false,
+                    "tags": null,
+                    "weight": 0,
+                    "visitId": "taskId-64ae56a8ffffa27dbb0ea0de",
+                    "visitName": "Test 998",
+                    "waitingTime": 0,
+                    "timeWindow": {
+                      "endTime": "17:00",
+                      "startTime": "08:00"
+                    },
+                    "timeWindows": [
+                      {
+                        "endTime": "12:00",
+                        "startTime": "08:00"
+                      },
+                      {
+                        "endTime": "17:00",
+                        "startTime": "14:00"
+                      }
+                    ],
+                    "eta": "8:02:49",
+                    "address": "Kompleks Gading Bukit Indah, Jalan Bukit Gading Raya Blok E No.17, Kelapa Gading Barat, Kelapa Gading",
+                    "volume": 0,
+                    "order": 1,
+                    "coordinate": "-6.33164676,106.84686295",
+                    "etd": "8:12:49",
+                    "visitTime": 10,
+                    "travelTime": 63,
+                    "distance": 26172
+                  },
+                  {
+                    "isHub": false,
+                    "tags": null,
+                    "weight": 0,
+                    "visitId": "taskId-64ae56a8ffffa27dbb0ea0e0",
+                    "visitName": "Test 999",
+                    "waitingTime": 0,
+                    "timeWindow": {
+                      "endTime": "17:00",
+                      "startTime": "08:00"
+                    },
+                    "timeWindows": [
+                      {
+                        "endTime": "12:00",
+                        "startTime": "08:00"
+                      },
+                      {
+                        "endTime": "17:00",
+                        "startTime": "14:00"
+                      }
+                    ],
+                    "eta": "8:38:23",
+                    "address": "Apartemen gading nias tower bogenvile lt.  8 fd",
+                    "volume": 0,
+                    "order": 2,
+                    "coordinate": "-6.3202,106.89724605",
+                    "etd": "8:48:23",
+                    "visitTime": 10,
+                    "travelTime": 26,
+                    "distance": 10652
+                  },
+                  {
+                    "isHub": true,
+                    "weight": 0,
+                    "visitId": "hub-640fc11832c0de76065d8922",
+                    "waitingTime": 0,
+                    "eta": "9:48:19",
+                    "volume": 0,
+                    "order": 3,
+                    "coordinate": "-6.17549,106.79073",
+                    "etd": "9:48:19",
+                    "visitTime": 0,
+                    "travelTime": 60,
+                    "distance": 24974
+                  }
+                ],
+                "vehicleMinWeight": 0,
+                "assignee": "macanoyen@mailnesia.com",
+                "weightPercentage": "0%",
+                "totalTravelTime": 149,
+                "vehicleTags": [
+                  "64ae56d327688e090c04eff3"
+                ]
+              }
+            ],
+            "dropped": [
+              {
+                "isHub": false,
+                "tags": null,
+                "coordinate": "-6.224634691640824,106.67960171349401",
+                "capacity": {
+                  "weight": 0,
+                  "volume": null
+                },
+                "timeWindow": {
+                  "endTime": null,
+                  "startTime": null
+                },
+                "timeWindows": [
+                  {
+                    "endTime": null,
+                    "startTime": null
+                  }
+                ],
+                "visitTime": null,
+                "id": "taskId-64ae635cd7c7984fda307d92",
+                "name": "Testing 123",
+                "address": "jakarta",
+                "reason": "Dropped due to constraint"
+              }
+            ]
+          },
+          "summary": {
+            "totalDistance": 123822,
+            "droppedVisits": 0,
+            "totalVisits": 5,
+            "totalVehicles": 2,
+            "maxFinishTime": "10:42:41",
+            "usedVehicles": 2,
+            "totalVisitTime": 52,
+            "avgSpeed": 25,
+            "totalWaitingTime": 42,
+            "minFinishTime": "9:48:19",
+            "routedVisits": 5,
+            "avgFinishTime": "10:15:30",
+            "unusedVehicles": 0,
+            "totalTravelTime": 301,
+            "capacityConstraint": [
+              {
+                "available": 200,
+                "name": "weight",
+                "optimized": 0,
+                "percentage": 0
+              },
+              {
+                "available": 200,
+                "name": "volume",
+                "optimized": 0,
+                "percentage": 0
+              },
+              {
+                "available": 0,
+                "optimized": 0,
+                "percentage": 0
+              }
+            ],
+            "totalSpentTime": 395
+          },
+          "status": "done",
+          "hubCoordinate": "-6.17549,106.79073",
+          "hubId": "640fc11832c0de76065d8922",
+          "organizationId": "640fc0f0c53fdd421d7a8d32",
+          "countryCode": "IDN",
+          "user": {
+            "name": "John doe"
+          },
+          "createdBy": "640fc0f0c53fdd421d7a8d38",
+          "createdFrom": "WEB",
+          "finishTime": "2023-07-14T07:25:18+00:00",
+          "createdTime": "2023-07-14T07:17:18+00:00",
+          "updatedTime": "2023-07-14T07:17:19+00:00"
+        },
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": " A unique identifier of this routing result."
+          },
+          "configuration": {
+            "type": "array",
+            "description": "An object containing various configuration settings for the route optimization.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "boolean",
+                  "description": "A string representing the name of this configuration."
+                },
+                "autoSpeed": {
+                  "type": "boolean",
+                  "description": "A boolean value set to **false**, mean that the vehicle speed is not automatically determined."
+                },
+                "defaultSpeed": {
+                  "type": "integer",
+                  "description": "An integer representing the default speed of vehicles."
+                },
+                "defaultVisitTime": {
+                  "type": "integer",
+                  "description": "An integer representing the default time for each visit"
+                },
+                "clustering": {
+                  "type": "boolean",
+                  "description": "A boolean value set to false, mean that clustering is not enabled"
+                },
+                "multitrip": {
+                  "type": "boolean",
+                  "description": "A boolean value set to **true**, mean that it allows for multiple trips."
+                },
+                "useAllVehicle": {
+                  "type": "boolean",
+                  "description": "A boolean value set to **true**, mean that all available vehicles are used."
+                },
+                "returnToBase": {
+                  "type": "boolean",
+                  "description": "A boolean value set to **true**, mean that vehicles return to their base after completing visits."
+                },
+                "capacityConstraint": {
+                  "type": "array of string",
+                  "description": "An array containing capacity constraint names."
+                },
+                "useOddEven": {
+                  "type": "boolean",
+                  "description": "A boolean value indicating whether odd-even license plate restrictions should be enforced during route optimization. When set to true, vehicles will only be routed during time periods that match their odd/even classification."
+                },
+                "oddEvenTime": {
+                  "type": "array",
+                  "description": "An array of time windows during which odd-even restrictions are enforced. Each object contains startTime and endTime defining the restricted periods.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "startTime": {
+                        "type": "string",
+                        "description": "Start time of the odd-even restriction period."
+                      },
+                      "endTime": {
+                        "type": "string",
+                        "description": "End time of the odd-even restriction period."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": " A string representing the name of this route optimization."
+          },
+          "resultCode": {
+            "type": "string",
+            "description": "Unique values for result optimization data as an alternative identifier."
+          },
+          "result": {
+            "type": "array",
+            "description": "The result key contains success and failed optimized visits list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "routing": {
+                  "type": "array",
+                  "description": "An array containing details of the routes.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "volumePercentage": {
+                        "type": "string",
+                        "description": "The volume percentage for this route."
+                      },
+                      "totalDistance": {
+                        "type": "numeric",
+                        "description": "The total distance covered by this route."
+                      },
+                      "totalVolume": {
+                        "type": "numeric",
+                        "description": "The total volume carried by this route."
+                      },
+                      "vehicleMaxWeight": {
+                        "type": "numeric",
+                        "description": "The maximum weight capacity of the vehicle."
+                      },
+                      "fixedCost": {
+                        "type": "integer",
+                        "description": "The cost factor for this route."
+                      },
+                      "workingTime": {
+                        "type": "array",
+                        "description": "The time window during which this vehicle can work.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "startTime": {
+                              "type": "integer",
+                              "description": "Minimum working time of vehicle to operate."
+                            },
+                            "endTime": {
+                              "type": "integer",
+                              "description": "Maximum working time of vehicle to operate."
+                            }
+                          }
+                        }
+                      },
+                      "vehicleMaxVolume": {
+                        "type": "numeric",
+                        "description": "The maximum volume capacity of the vehicle."
+                      },
+                      "speed": {
+                        "type": "integer",
+                        "description": "The speed of the vehicle."
+                      },
+                      "vehicleId": {
+                        "type": "string",
+                        "description": "The unique identifier for the vehicle."
+                      },
+                      "totalNodes": {
+                        "type": "numeric",
+                        "description": "The total number of nodes (locations) visited in this route."
+                      },
+                      "finishTime": {
+                        "type": "string",
+                        "description": "The time when this route finished."
+                      },
+                      "vehicleName": {
+                        "type": "string",
+                        "description": "The name of the vehicle."
+                      },
+                      "totalVisits": {
+                        "type": "integer",
+                        "description": "The total number of visits made in this route."
+                      },
+                      "totalTrips": {
+                        "type": "integer",
+                        "description": "The total number of trips made by the vehicle in this route."
+                      },
+                      "vehicleMinVolume": {
+                        "type": "numeric",
+                        "description": "The minimum volume capacity of the vehicle."
+                      },
+                      "totalWeight": {
+                        "type": "numeric",
+                        "description": "The total weight carried by this vehicle in this route."
+                      },
+                      "trips": {
+                        "type": "array",
+                        "description": "An array containing details of individual trips in this route. Each trip represents a visit or stop during the route.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "isHub": {
+                              "type": "boolean",
+                              "description": "A boolean value indicating whether the dropped visit was a hub (starting/ending point)."
+                            },
+                            "weight": {
+                              "type": "integer",
+                              "description": "The weight value seems to be 0, suggesting that there is no specific weight associated with this visit or hub in this context."
+                            },
+                            "visitId": {
+                              "type": "string",
+                              "description": "The visitId is likely a unique identifier for this visit or hub. It can be used to distinguish different visits or locations within the system."
+                            },
+                            "waitingTime": {
+                              "type": "string",
+                              "description": "The waitingTime indicates the time, in some unit (e.g., minutes), that one needs to wait at this hub or location before proceeding to the next destination or performing the next action."
+                            },
+                            "eta": {
+                              "type": "string",
+                              "description": "ETA stands for Estimated Time of Arrival."
+                            },
+                            "volume": {
+                              "type": "integer",
+                              "description": "The volume value seems to be 0, indicating that there is no specific volume associated with this visit or hub in this context. Volume could refer to the quantity of items or goods associated with this location."
+                            },
+                            "order": {
+                              "type": "integer",
+                              "description": "The order value also seems to be 0, suggesting that there is no specific order associated with this visit or hub. In the context of logistics or transportation, an order could refer to a sequence number of stops on a delivery route."
+                            },
+                            "coordinate": {
+                              "type": "integer",
+                              "description": "This represents the geographic coordinates (latitude and longitude) of the hub or location, placing it at approximately -6.17549 latitude and 106.79073 longitude."
+                            },
+                            "etd": {
+                              "type": "integer",
+                              "description": "ETD stands for Estimated Time of Departure. It indicates the estimated time when the visit or vehicle is expected to depart from this hub or location."
+                            },
+                            "visitTime": {
+                              "type": "integer",
+                              "description": "The visitTime appears to be set to 0, indicating that there is no specific visit time associated with this hub or visit in this context. Visit time typically refers to the time taken at a particular location for loading, unloading, or other actions."
+                            },
+                            "travelTime": {
+                              "type": "integer",
+                              "description": "The travelTime is also set to 0, suggesting that there is no specific travel time associated with this visit or hub. Travel time usually refers to the time taken to travel from one location to another."
+                            },
+                            "distance": {
+                              "type": "integer",
+                              "description": "Distance usually refers to the spatial separation between the locations"
+                            },
+                            "allowOddEven": {
+                              "type": "boolean",
+                              "description": "A boolean value indicating whether odd-even restrictions allow this trip to be made. When true, the trip timing complies with the vehicle's odd-even classification and restriction windows."
+                            }
+                          }
+                        }
+                      },
+                      "vehicleMinWeight": {
+                        "type": "numeric",
+                        "description": "The minimum weight capacity of the vehicle"
+                      },
+                      "assignee": {
+                        "type": "string",
+                        "description": "The user of the assigned for this route."
+                      },
+                      "totalTravelTime": {
+                        "type": "numeric",
+                        "description": "The total travel time for this route."
+                      },
+                      "vehicleTags": {
+                        "type": "array",
+                        "description": "An array containing vehicle tags."
+                      },
+                      "isOddEven": {
+                        "type": "boolean",
+                        "description": "A boolean value indicating whether this route is affected by odd-even license plate restrictions. When true, the vehicle's routing has been optimized considering odd-even time windows."
+                      },
+                      "oddEven": {
+                        "type": "string",
+                        "description": "The odd-even category of the vehicle used in this route. Shows whether the vehicle has 'odd' or 'even' numbered license plate.",
+                        "enum": ["odd", "even"]
+                      }
+                    }
+                  }
+                },
+                "dropped": {
+                  "type": "array",
+                  "description": "An array of dropped visit details.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "isHub": {
+                        "type": "string",
+                        "description": "A boolean value indicating whether the dropped visit was a hub (starting/ending point)."
+                      },
+                      "tags": {
+                        "type": "array",
+                        "description": "Tags associated with the dropped visit."
+                      },
+                      "coordinate": {
+                        "type": "string",
+                        "description": "The coordinates (latitude and longitude) of the dropped visit."
+                      },
+                      "capacity": {
+                        "type": "array",
+                        "description": "An object representing the capacity constraints for the dropped visit."
+                      },
+                      "timeWindow": {
+                        "type": "object",
+                        "description": "The time window during which the visit was scheduled. Note: This field is not considered when timeWindows is provided.",
+                        "properties": {
+                          "startTime": {
+                            "type": "string",
+                            "description": "Minimum visit available time."
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "description": "Maximum visit available time"
+                          }
+                        }
+                      },
+                      "timeWindows": {
+                        "type": "array",
+                        "description": "Array of time windows during which the visit was scheduled. When this field is provided, the timeWindow field will be ignored.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "startTime": {
+                              "type": "string",
+                              "description": "Minimum visit available time."
+                            },
+                            "endTime": {
+                              "type": "string",
+                              "description": "Maximum visit available time"
+                            }
+                          }
+                        }
+                      },
+                      "visitTime": {
+                        "type": "numeric",
+                        "description": "The visit time (duration of stay) for this dropped visit."
+                      },
+                      "id": {
+                        "type": "integer",
+                        "description": "The unique identifier for this visit."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the dropped visit."
+                      },
+                      "address": {
+                        "type": "numeric",
+                        "description": "The address associated with the dropped."
+                      },
+                      "reason": {
+                        "type": "string",
+                        "description": "The reason for dropping this visit."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "summary": {
+            "type": "array",
+            "description": "An object containing summary information for this route optimization:",
+            "items": {
+              "type": "object",
+              "properties": {
+                "totalDistance": {
+                  "type": "numeric",
+                  "description": "An integer representing the total distance covered in all routes."
+                },
+                "droppedVisits": {
+                  "type": "numeric",
+                  "description": "An integer representing the number of dropped visits in all routes."
+                },
+                "totalVisits": {
+                  "type": "numeric",
+                  "description": "An integer representing the total number of visits in all routes."
+                },
+                "totalVehicles": {
+                  "type": "numeric",
+                  "description": "An integer representing the total number of vehicles used in all routes."
+                },
+                "maxFinishTime": {
+                  "type": "string",
+                  "description": "A string representing the maximum finish time among all routes."
+                },
+                "usedVehicles": {
+                  "type": "integer",
+                  "description": "An integer representing the number of vehicles used in all routes."
+                },
+                "totalVisitTime": {
+                  "type": "integer",
+                  "description": "An integer representing the total time spent on visits in all routes."
+                },
+                "avgSpeed": {
+                  "type": "numeric",
+                  "description": "An integer representing the average speed of vehicles in all routes."
+                },
+                "totalWaitingTime": {
+                  "type": "numeric",
+                  "description": "An integer representing the total waiting time in all routes."
+                },
+                "minFinishTime": {
+                  "type": "string",
+                  "description": "A string representing the minimum finish time among all routes."
+                },
+                "routedVisits": {
+                  "type": "numeric",
+                  "description": "An integer representing the number of visits that were routed in all routes."
+                },
+                "avgFinishTime": {
+                  "type": "string",
+                  "description": "A string representing the average finish time among all routes."
+                },
+                "unusedVehicles": {
+                  "type": "numeric",
+                  "description": "An integer representing the number of unused vehicles in all routes."
+                },
+                "totalTravelTime": {
+                  "type": "numeric",
+                  "description": "An integer representing the total travel time in all routes."
+                },
+                "capacityConstraint": {
+                  "type": "array",
+                  "description": "An array containing capacity constraint details for weight and volume."
+                },
+                "totalSpentTime": {
+                  "type": "numeric",
+                  "description": "An integer representing the total time spent in all routes."
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "A string indicating the status of the route optimization. There will only 3 type of status : **ongoing**, **done**, and **failed**. <br> **ongoing** mean that routing executed in background and still on progress. <br> **done** mean that route optimize has successfully executed and finish the process. <br>  **failed** mean that route optimize executed but failed cause of something wrong that you can see the reason at the message field."
+          },
+          "message": {
+            "type": "string",
+            "description": "A string that will only exists when routing process has **failed** and giving the reason of it."
+          },
+          "hubCoordinate": {
+            "type": "string",
+            "description": "A string representing the latitude and longitude of the hub."
+          },
+          "hubId": {
+            "type": "array",
+            "description": " A unique identifier representing the hub associated with this route optimization."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "A unique identifier representing the organization ID associated with this route optimization."
+          },
+          "countryCode": {
+            "type": "string",
+            "description": "A string representing the country code."
+          },
+          "user": {
+            "type": "array",
+            "description": "An object containing user-related who create this route information."
+          },
+          "createdBy": {
+            "description": "A user ID, representing the user who created this routing.",
+            "type": "string"
+          },
+          "createdFrom": {
+            "type": "integer",
+            "description": "A string indicating the source from which the route optimization was created."
+          },
+          "finishTime": {
+            "description": "A timestamp representing the date and time when the routing process finish. To measure the distance between processes can be done based on **createdTime** and **finishTime**.",
+            "type": "string"
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "A timestamp representing the date and time when this route optimization was created."
+          },
+          "updatedTime": {
+            "description": "A timestamp representing the date and time when this data was last updated.",
+            "type": "string"
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Routing & Optimization Module business codes that indicate specific failure conditions or business rule violations during routing operations. These codes help identify the exact nature of routing-related failures and provide standardized failure identification across the system.\n\nPossible values:\n- route-031: Duplicate entry - Route identifier already exists\n- route-032: Invalid state/condition - Route state transition invalid\n- route-033: Route not found - Route record does not exist\n- route-034: Route optimization failed - Failed to optimize route\n- route-035: Access forbidden - User lacks routing permission\n- route-036: Route creation failed - Failed to create route\n- route-037: Route update failed - Failed to update route\n- route-038: Service unavailable - Routing service down\n- route-039: Timeout error - Route optimization timeout\n- route-040: Limit exceeded - Route limit exceeded\n- route-041: External service error - Map/geocoding service failure\n- route-042: Capacity constraint error - Vehicle capacity exceeded\n- route-043: License/subscription error - Routing feature not in license\n- route-044: Configuration error - Invalid routing configuration\n- route-045: Server error - Internal server failure in routing",
+            "enum": [
+              "route-031",
+              "route-032",
+              "route-033",
+              "route-034",
+              "route-035",
+              "route-036",
+              "route-037",
+              "route-038",
+              "route-039",
+              "route-040",
+              "route-041",
+              "route-042",
+              "route-043",
+              "route-044",
+              "route-045"
+            ]
+          }
+        }
+      },
+      "Role": {
+        "example": {
+          "_id": "6449f8ef2c481b07d40ecfc3",
+          "name": "owner",
+          "isAdmin": true,
+          "isDefault": true,
+          "permissions": [
+            {
+              "_id": "61d3f0d524406248b48615b9",
+              "name": "view/task",
+              "module": "mileField",
+              "menu": "task",
+              "displayName": "View task",
+              "access": true
+            }
+          ],
+          "permissionList": [
+            "6156d6475320c9679e337eba",
+            "615ac4ab5c3c0b3d3e83dfc1"
+          ],
+          "permissionDetails": [
+            {
+              "permissionName": "view/checkincheckout",
+              "interval": null,
+              "checkinRadius": null,
+              "checkoutRadius": null
+            }
+          ],
+          "passwordPolicyId": "621dd813eb3eblasuyjasy",
+          "organizationId": "621dd813eb3ebf16b94dbde3",
+          "updatedTime": "2023-04-27T04:24:15.217000Z",
+          "createdTime": "2023-04-27T04:24:15.217000Z"
+        },
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the role data, which can be used to reference and manage this specific role."
+          },
+          "name": {
+            "type": "string",
+            "description": "Indicates the name of the role. Roles define different levels of access and privileges within a system."
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "description": "A boolean value indicating whether the role is an admin role."
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Another boolean value indicating whether the role is a default role."
+          },
+          "permissions": {
+            "type": "array of object",
+            "description": "This is an array of permissions related to specific modules and menus within the system."
+          },
+          "permissionList": {
+            "type": "array of string",
+            "description": "This is an array of IDs that references other permissions."
+          },
+          "permissionDetails": {
+            "type": "array of object",
+            "description": "This section provides additional details about the permissions associated with the role."
+          },
+          "passwordPolicyId": {
+            "type": "string",
+            "description": "ID of the password policy associated with this role, if any."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the hub."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Timestamp represents the last time the hub data was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Timestamp represents the date and time when this hub data was initially created."
+          }
+        }
+      },
+      "AppIntegration": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "An unique identifier for the app Integration record, often used for database or system reference."
+          },
+          "integrationType": {
+            "type": "string",
+            "description": "The integration type, Currently available for `azure`."
+          },
+          "azureAuthUrl": {
+            "type": "string",
+            "description": "this parameter for auth url provided by `azure`."
+          },
+          "azureCert": {
+            "type": "file",
+            "description": "this parameter for certificate file provided by `azure`."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identifier for the organization or company that owns or manages the team."
+          },
+          "updatedTime": {
+            "type": "string",
+            "description": "Timestamp represents the last time the team data was updated. It includes date and time information."
+          },
+          "createdTime": {
+            "type": "string",
+            "description": "Timestamp represents the date and time when this team data was initially created."
+          }
+        },
+        "example": {
+          "integrationType": "azure",
+          "azureAuthUrl": "https://login.microsoftonline.com/XXX-5f2b-XXX-90a0-XXX/saml2",
+          "azureCert": "https://apistorage.mile.app/v3-public-dev/dev/66791b2bfabcde/2024/12/28/app.cer",
+          "organizationId": "66791b2bf001a712b77b3622",
+          "updatedTime": "2024-12-29T13:01:01.924000Z",
+          "createdTime": "2024-12-29T13:01:01.924000Z",
+          "_id": "6771480dc13375875909b693"
+        }
+      }
+    }
+  }
+}

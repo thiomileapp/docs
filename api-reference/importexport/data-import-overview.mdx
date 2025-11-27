@@ -1,0 +1,25 @@
+---
+title: 'Data Import'
+description: 'The Data Import module allows users to upload and import data source records from Excel or CSV files'
+---
+
+## What is Data Import?
+
+The Data Import module allows users to upload and import data source records from Excel or CSV files. Import operations are processed in the background via queue system for scalability and can handle large datasets. The import process validates data against data type schemas, tracks processing status in real-time, and generates detailed reports including failed records for review. All import activities can be monitored through import-monitoring endpoints with 30-day data retention.
+
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Import data source from file" icon="plus" href="/api-reference/importexport/data-import/import-data-source-from-file">
+    POST /data/import
+  </Card>
+  <Card title="Read import monitoring records" icon="list" href="/api-reference/importexport/data-import/read-import-monitoring-records">
+    GET /import-monitoring
+  </Card>
+  <Card title="Read import monitoring record by ID" icon="list" href="/api-reference/importexport/data-import/read-import-monitoring-record-by-id">
+    GET /import-monitoring/{id}
+  </Card>
+</CardGroup>
+
+

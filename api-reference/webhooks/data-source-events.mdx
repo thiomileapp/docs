@@ -1,0 +1,62 @@
+---
+title: "Data Source Events"
+description: "Webhook payloads for data source creation events"
+---
+
+Data source webhooks are triggered when new records are created in a MileApp data source. The webhook payload contains the data source fields configured in your data type.
+
+<Note>
+In this example, the data source has 2 custom fields: **name** and **phone**. Your actual payload will include the fields defined in your data type.
+</Note>
+
+## Event Types
+
+| Event | Trigger |
+|-------|---------|
+| **onCreate** | A new data source record is created |
+
+## On Data Source Created
+
+Triggered when a new record is added to a data source.
+
+```json
+{
+  "dataTypeId": "64b40345140e79f485069c5a",
+  "hubId": "640fc11832c0de76065d8922",
+  "name": "Jhon doe",
+  "_id": "64b40372f07e26ccb8059bbb",
+  "organizationId": "640fc0f0c53fdd421d7a8d32",
+  "dataId": "1",
+  "phone": "00112233",
+  "createdTime": "2023-07-16 14:49:22",
+  "updatedTime": "2023-07-16 14:49:22",
+  "createdBy": "jhondoe@mile.app"
+}
+```
+
+## Payload Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | string | Unique identifier for this data source record |
+| `dataTypeId` | string | Unique identifier of the data type |
+| `dataId` | string | Data entry ID within the data source |
+| `organizationId` | string | Organization ID associated with this data |
+| `hubId` | string | Hub ID associated with this data |
+| `createdTime` | string | Record creation timestamp |
+| `updatedTime` | string | Last update timestamp |
+| `createdBy` | string | Email address of the user who created the record |
+
+<Note>
+Additional fields in the payload correspond to the custom fields defined in your data type configuration.
+</Note>
+
+## Response
+
+Your endpoint must return an HTTP 200 status code to acknowledge receipt:
+
+```json
+{
+  "status": "received"
+}
+```

@@ -1,0 +1,217 @@
+{
+    "x-webhooks": {
+        "on-trips": {
+            "post": {
+                "summary": "Trip events",
+                "operationId": "on-trips",
+                "tags": [
+                    "Webhook"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/BasewebhookTripPayload"
+                            }
+                        }
+                    },
+                    "x-examples": {
+                        "application/json": {
+                            "onStartTrip": {
+                                "summary": "Payload on start trip",
+                                "value": {
+                                    "createdBy": "jhondoe2@paket.id",
+                                    "updatedBy": null,
+                                    "time": 1726734839948,
+                                    "startTime": "2024-09-19 00:00:00",
+                                    "distanceToDest": null,
+                                    "email": "jhondoe1@paket.id",
+                                    "organizationId": "66791b2bf001a712b77b3622",
+                                    "taskId": "",
+                                    "distance": 0.01821796355451168,
+                                    "notes": null,
+                                    "finish": null,
+                                    "lon": 112.7573265,
+                                    "lat": -7.3411964,
+                                    "updatedTime": "2024-09-19 08:33:59",
+                                    "speed": 1,
+                                    "duration": 1,
+                                    "createdTime": "2024-09-19 00:00:00",
+                                    "eventName": "otw",
+                                    "isLatest": true,
+                                    "_id": "66791b2bf001a712b77b3622_jhondoe1@paket.id_20240919070000s"
+                                  }
+                            },
+                            "onFinishTrip": {
+                                "summary": "Payload on finish trip",
+                                "value": {
+                                    "createdBy": "jhondoe2@paket.id",
+                                    "updatedBy": "jhondoe2@paket.id",
+                                    "time": 1726734839948,
+                                    "startTime": "2024-09-19 00:00:00",
+                                    "distanceToDest": null,
+                                    "email": "jhondoe1@paket.id",
+                                    "organizationId": "66791b2bf001a712b77b3622",
+                                    "taskId": "",
+                                    "distance": 0.01821796355451168,
+                                    "notes": null,
+                                    "finish": {
+                                      "finishTime": "2024-09-19 01:00:00",
+                                      "lat": -7.3411964,
+                                      "totalDuration": 3,
+                                      "notes": null,
+                                      "isRecalculate": 1,
+                                      "totalDistance": 0,
+                                      "lon": 112.7573265
+                                    },
+                                    "lon": 112.7573265,
+                                    "lat": -7.3411964,
+                                    "updatedTime": "2024-09-19 08:34:57",
+                                    "speed": 1,
+                                    "duration": 1,
+                                    "createdTime": "2024-09-19 00:00:00",
+                                    "eventName": "otw",
+                                    "isLatest": false,
+                                    "_id": "66791b2bf001a712b77b3622_jhondoe1@paket.id_20240919070000s"
+                                  }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "BasewebhookTripPayload": {
+            "x-discriminator": "webhookTripPayload",
+            "type": "object",
+            "properties": {
+
+                "_id": {
+                    "type": "string",
+                    "description" : "A unique identifier for the trip."
+                },
+                "createdBy": {
+                    "description": "Email address of the person who created or initiated trip.",
+                    "type": "string"
+                },
+                "createdTime": {
+                    "description": "The time when the trip was initially logged.",
+                    "type": "string"
+                },
+                "distance": {
+                    "type": "float",
+                    "description": "The distance traveled during the trip."
+                },
+                "duration": {
+                    "type": "integer",
+                    "description": "Duration of the trip."
+                },
+                "email": {
+                    "type": "string",
+                    "description": " The email address of the user associated with the trip."
+                },
+                "eventName": {
+                    "type": "string",
+                    "description": "The event type for this log entry, indicating a trip or movement in progress."
+                },
+                "isLatest": {
+                    "type": "boolean",
+                    "description": " Indicates whether this log is the latest entry for this trip."
+                },
+                "lat": {
+                    "type": "float",
+                    "description": "Latitude of the trip."
+                },
+                "lon": {
+                    "type": "float",
+                    "description": "Longitude of the trip."
+                },
+                "organizationId": {
+                    "type": "string",
+                    "description": " The ID of the organization associated with the trip."
+                },
+                "speed": {
+                    "type": "integer",
+                    "description": "The speed during the trip."
+                },
+                "startTime": {
+                    "type": "string",
+                    "description": "The time when the trip started."
+                },
+                "taskId": {
+                    "description": "Task ID associated with this trip.",
+                    "type": "string"
+                },
+                "time": {
+                    "description": "A Unix timestamp-like number.",
+                    "type": "integer"
+                },
+                "updatedTime": {
+                    "description": "The last time trip log was updated.",
+                    "type": "integer"
+                }
+            }
+        },
+        "onStartTrip": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/BasewebhookTripPayload"
+                }
+            ]
+        },
+        "onFinishTrip": {
+            "allOf": [
+                {
+                    "properties": {
+                        "finish": {
+                            "type": "array",
+                            "description": "A string value representing dispatch status.",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                  "finishTime" : {
+                                    "description" : "The time when the trip was marked as finished.",
+                                    "type" : "string"
+                                  },
+                                  "isRecalculate" : {
+                                    "description" : "Indicates whether the trip’s data was recalculated.",
+                                    "type" : "boolean"
+                                  },
+                                  "lat" : {
+                                    "description" : "The latitude of the location when the trip was finished.",
+                                    "type" : "float"
+                                  },
+                                  "lon" : {
+                                    "description" : "The longitude of the location when the trip was finished.",
+                                    "type" : "float"
+                                  },
+                                  "totalDistance" : {
+                                    "description" : "The total distance recorded for the trip.",
+                                    "type" : "integer"
+                                  },
+                                  "totalDuration" : {
+                                    "description" : "The total time for the trip.",
+                                    "type" : "integer"
+                                  }
+                                }
+                              }
+                        },
+                        "updatedBy": {
+                            "type": "string",
+                            "description": "Email of the person who last updated this trip log."
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/BasewebhookTripPayload"
+                }
+            ]
+        }
+    }
+}

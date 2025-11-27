@@ -1,0 +1,131 @@
+{
+  "components": {
+    "schemas": {
+      "CustomModuleInternal": {
+        "type": "object",
+        "description": "Custom module object with comprehensive configuration and administrative details",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the custom module (MongoDB ObjectId)",
+            "example": "62846484ed5be87b6f4358f3"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization identifier that owns this custom module",
+            "example": "61dfa3b15b32000041005113"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name for the custom module menu option",
+            "example": "Custom Report"
+          },
+          "label": {
+            "type": "string",
+            "description": "System label automatically generated from name for backend processing",
+            "example": "custom-report"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL or link that the custom module leads to",
+            "example": "https://example.com/v1"
+          },
+          "type": {
+            "type": "string",
+            "description": "Module type defining how it opens (internal iframe or external tab)",
+            "enum": ["internal", "external"],
+            "example": "external"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Whether the custom module is currently active",
+            "example": true
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "Soft delete flag indicating if custom module is deleted",
+            "example": false
+          },
+          "permissions": {
+            "type": "array",
+            "description": "List of role IDs that have access to this custom module",
+            "items": {
+              "type": "string"
+            },
+            "example": ["65c1f68ea735b522d370ea24", "65c1f68ea735b522d370ea25"]
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Additional configuration settings for the custom module",
+            "properties": {
+              "icon": {
+                "type": "string",
+                "description": "Icon class or name for menu display"
+              },
+              "order": {
+                "type": "integer",
+                "description": "Display order in menu"
+              },
+              "openInNewTab": {
+                "type": "boolean",
+                "description": "Whether to open in new tab for external type"
+              }
+            }
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when custom module was created",
+            "example": "2022-05-18T03:14:12.989Z"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when custom module was last updated",
+            "example": "2022-05-18T03:14:12.989Z"
+          },
+          "deletedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when custom module was deleted",
+            "example": "2022-05-18T05:00:58.000Z"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Email of user who created this custom module",
+            "example": "admin@mile.app"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "Email of user who last updated this custom module",
+            "example": "admin@mile.app"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata for internal system use",
+            "properties": {
+              "migrationStatus": {"type": "string"},
+              "dataVersion": {"type": "integer"},
+              "lastAccessTime": {"type": "string", "format": "date-time"}
+            }
+          },
+          "failedCode": {
+            "type": "string",
+            "description": "Custom Module business failedCode that indicate specific failure conditions or business rule violations during custom module operations. These codes help identify the failed operation of custom module-related and provide standardized failure identification across the system.\n\nPossible values:\n- cmod-031: Duplicate entry - Custom module already exists\n- cmod-033: Custom module not found - Custom module does not exist\n- cmod-035: Access forbidden - User lacks custom module permission\n- cmod-036: Custom module creation failed - Failed to create custom module\n- cmod-037: Custom module update failed - Failed to update custom module\n- cmod-038: Custom module delete failed - Failed to delete custom module\n- cmod-039: Custom module permission denied - Custom module access denied\n- cmod-045: Server failure - Internal server failure",
+            "enum": [
+              "cmod-031",
+              "cmod-033",
+              "cmod-035",
+              "cmod-036",
+              "cmod-037",
+              "cmod-038",
+              "cmod-039",
+              "cmod-045"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
