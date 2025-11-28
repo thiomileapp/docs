@@ -8,6 +8,9 @@ This document describes how to develop and update the MileApp Mintlify API docum
 # Build OpenAPI specs from source files
 node scripts/build-openapi.js
 
+# Generate/update overview pages
+node scripts/generate-tag-overviews.js --dry-run
+
 # Validate OpenAPI spec
 mint openapi-check openapi/public/openapi-full.json
 
@@ -25,7 +28,8 @@ mintlify-mileapp/
 │   ├── base/
 │   │   ├── initial.yaml          # Public API base config
 │   │   ├── initial_internal.yaml # Internal API base config
-│   │   └── params.yaml           # Shared parameters
+│   │   ├── params.yaml           # Shared parameters
+│   │   └── tag-descriptions.yaml # Tag descriptions for overview pages
 │   ├── public/                   # Public API endpoints
 │   │   ├── 1_Task/
 │   │   ├── 2_Routing/
@@ -34,7 +38,9 @@ mintlify-mileapp/
 │   │   ├── 5_Setting/
 │   │   └── 6_ImportExport/
 │   ├── internal/                 # Internal-only endpoints
-│   │   └── 7_Activity/
+│   │   ├── 7_Activity/
+│   │   ├── 8_Billing/
+│   │   └── ...
 │   └── Models/                   # Schema definitions
 │       ├── Task.json
 │       ├── Route.json
@@ -46,19 +52,121 @@ mintlify-mileapp/
 │   │   ├── openapi-routing.json
 │   │   └── ...
 │   └── internal/
-│       └── openapi-full.json     # Complete internal API
-├── api-reference/                # MDX documentation pages
+│       ├── openapi-full.json     # Complete internal API
+│       └── ...                   # Module-specific specs
+├── api-reference/                # Public API MDX pages
 │   ├── introduction.mdx
+│   ├── authentication.mdx
+│   ├── status-codes.mdx
 │   ├── task/
-│   │   └── overview.mdx
+│   │   ├── overview.mdx
+│   │   └── *-overview.mdx        # Sub-tag overview pages
 │   ├── objects/                  # Schema documentation
 │   │   ├── task-object.mdx
 │   │   └── ...
 │   └── ...
+├── api-reference-internal/       # Internal API MDX pages (noindex)
+│   ├── introduction.mdx
+│   ├── task/
+│   │   └── overview.mdx
+│   ├── webhooks/                 # Webhook documentation
+│   └── ...
 ├── scripts/
-│   └── build-openapi.js          # Build script
+│   ├── build-openapi.js          # OpenAPI build script
+│   └── generate-tag-overviews.js # Overview page generator
 └── docs.json                     # Navigation config
 ```
+
+---
+
+## Scripts
+
+### 1. build-openapi.js
+
+Compiles modular JSON files into OpenAPI 3.0 specs for Mintlify.
+
+```bash
+# Build all (public + internal)
+node scripts/build-openapi.js
+
+# Build public only
+node scripts/build-openapi.js public
+
+# Build internal only
+node scripts/build-openapi.js internal
+```
+
+**What it does:**
+1. Loads base YAML configs (`initial.yaml`, `params.yaml`)
+2. Merges module JSON files from `public/` and `internal/`
+3. Merges Models from `Models/` directory
+4. Converts Swagger 2.0 to OpenAPI 3.0
+5. Applies Mintlify compatibility fixes:
+   - Fix invalid types (`datetime` → `string` with format)
+   - Fix `type`/`required` keyword collisions
+   - Convert HTML descriptions to Markdown
+   - Fix security scheme references
+6. Adds `noindex` metadata to internal API endpoints
+7. Splits into module-specific files for navigation
+8. Outputs to `openapi/public/` and `openapi/internal/`
+
+### 2. generate-tag-overviews.js
+
+Generates MDX overview pages from `tag-descriptions.yaml`.
+
+```bash
+# Preview without writing (recommended first step)
+node scripts/generate-tag-overviews.js --dry-run
+
+# Generate all (public + internal)
+node scripts/generate-tag-overviews.js
+
+# Generate public API only
+node scripts/generate-tag-overviews.js --public
+
+# Generate internal API only
+node scripts/generate-tag-overviews.js --internal
+
+# Generate specific tag
+node scripts/generate-tag-overviews.js --tag "Workflow"
+
+# Overwrite existing files
+node scripts/generate-tag-overviews.js --force
+```
+
+**What it does:**
+1. Reads tag descriptions from `api-specs/base/tag-descriptions.yaml`
+2. Reads endpoints from generated OpenAPI specs
+3. Generates MDX files with:
+   - Frontmatter (title, description, noindex for internal)
+   - Tag description content
+   - Card links to key endpoints
+   - Related resources links
+4. Skips existing files unless `--force` is used
+
+**Safety:** The script won't overwrite existing pages by default. Use `--dry-run` first to preview.
+
+---
+
+## SEO Configuration
+
+### Public API Pages
+- Indexed by search engines (default)
+- No special frontmatter needed
+
+### Internal API Pages
+Two layers of noindex protection:
+
+1. **MDX Frontmatter** (for manually created pages):
+   ```yaml
+   ---
+   title: 'Page Title'
+   noindex: true
+   ---
+   ```
+
+2. **OpenAPI Metadata** (for auto-generated endpoint pages):
+   The `build-openapi.js` script adds `x-mint.metadata.noindex: true` to all internal API operations.
 
 ---
 
@@ -115,13 +223,8 @@ vim api-specs/public/1_Task/1_Task.json
 **Step 3: Build and validate**
 
 ```bash
-# Build OpenAPI specs
 node scripts/build-openapi.js
-
-# Validate the spec
 mint openapi-check openapi/public/openapi-full.json
-
-# Test locally
 mint dev
 ```
 
@@ -134,92 +237,41 @@ git commit -m "feat(api): add GET /your-new-endpoint"
 
 ---
 
-### 2. Modifying an Existing Endpoint
+### 2. Adding a New Tag/Module
 
-**Step 1: Find the endpoint**
+**Step 1: Add tag description**
 
-```bash
-# Search in api-specs
-grep -r "your-endpoint" api-specs/
+Edit `api-specs/base/tag-descriptions.yaml`:
 
-# Or search in generated specs
-grep "your-endpoint" openapi/public/openapi-full.json
+```yaml
+YourNewTag: |
+  Description of your new tag/module.
+  This will appear in the overview page.
+
+  **To see the details, please follow [this link](#tag/your_model)**
 ```
 
-**Step 2: Edit, build, and test**
+**Step 2: Create endpoints**
 
-```bash
-vim api-specs/public/1_Task/1_Task.json
-node scripts/build-openapi.js
-mint dev
-```
+Create JSON file in appropriate module directory.
 
----
-
-### 3. Adding a New Schema/Model
-
-**Step 1: Add to Models directory**
-
-Create or edit `api-specs/Models/YourModel.json`:
-
-```json
-{
-  "components": {
-    "schemas": {
-      "YourModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier"
-          },
-          "name": {
-            "type": "string",
-            "description": "Model name"
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-**Step 2: Build to include in OpenAPI spec**
+**Step 3: Build and generate overview**
 
 ```bash
 node scripts/build-openapi.js
+node scripts/generate-tag-overviews.js --tag "YourNewTag" --dry-run
+node scripts/generate-tag-overviews.js --tag "YourNewTag"
 ```
 
-**Step 3: Create Object page (optional)**
+**Step 4: Update navigation**
 
-Create `api-reference/objects/your-model-object.mdx`:
-
-```mdx
----
-title: "YourModel object"
-openapi-schema: openapi/public/openapi-full.json YourModel
----
-```
-
-**Step 4: Add to navigation**
-
-Edit `docs.json` and add to Objects group:
-
-```json
-{
-  "group": "Objects",
-  "pages": [
-    "api-reference/objects/task-object",
-    "api-reference/objects/your-model-object"
-  ]
-}
-```
+Edit `docs.json` to add the new group.
 
 ---
 
-### 4. Adding Internal-Only Endpoints
+### 3. Adding Internal-Only Endpoints
 
-Internal endpoints are not visible in the public API documentation.
+Internal endpoints are not visible in public API documentation and are excluded from SEO.
 
 **Step 1: Create in internal directory**
 
@@ -234,91 +286,124 @@ vim api-specs/internal/7_Activity/1_Activity.json
 node scripts/build-openapi.js internal
 ```
 
-**Step 3: Configure in docs.json (if needed)**
+**Step 3: Generate overview (with noindex)**
 
-Internal API pages go under "Internal API" tab with `"hidden": true`.
+```bash
+node scripts/generate-tag-overviews.js --internal --tag "Activity"
+```
+
+The generated MDX will automatically include `noindex: true`.
 
 ---
 
-### 5. Creating Overview/Guide Pages
+### 4. Creating/Updating Overview Pages
 
-**Step 1: Create MDX file**
+**Option A: Use the generator script (recommended)**
 
 ```bash
-vim api-reference/task/overview.mdx
+# Preview first
+node scripts/generate-tag-overviews.js --dry-run --tag "TaskSchedule"
+
+# Generate
+node scripts/generate-tag-overviews.js --tag "TaskSchedule"
 ```
 
-**Step 2: Write content**
+**Option B: Manual creation**
+
+```bash
+vim api-reference/task/task-schedule-overview.mdx
+```
 
 ```mdx
 ---
-title: "Task API Overview"
+title: 'Task Schedule Overview'
+description: 'Schedule recurring tasks'
 ---
 
-## Introduction
+## What is Task Schedule?
 
-The Task API allows you to manage tasks...
+Task Schedule is a mechanism to generate tasks...
 
-## Common Use Cases
-
-1. Creating tasks
-2. Assigning tasks
-3. Tracking task status
+<CardGroup cols={2}>
+  <Card title="Create Schedule" icon="plus" href="/api-reference/task/task-schedule/create-task-schedule">
+    POST /task-schedules
+  </Card>
+</CardGroup>
 ```
 
-**Step 3: Add to navigation**
+---
 
-Edit `docs.json`:
+### 5. Fixing Broken Card Links
+
+Card links in overview pages must match Mintlify's generated URLs.
+
+**Step 1: Find the correct URL**
+
+1. Run `mint dev`
+2. Navigate to the sidebar
+3. Click the endpoint to see the actual URL
+4. URL pattern: `/api-reference/{group}/{tag}/{endpoint-slug}`
+
+**Step 2: Update the MDX file**
+
+```mdx
+<!-- Wrong -->
+<Card href="/api-reference/task/get-tasks">
+
+<!-- Correct -->
+<Card href="/api-reference/task/task/read-tasks">
+```
+
+---
+
+## Navigation Configuration
+
+### docs.json Structure
 
 ```json
 {
-  "group": "Task",
-  "openapi": { "source": "openapi/public/openapi-task.json", "directory": "api-reference/task" },
-  "pages": ["api-reference/task/overview"]
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["api-reference/introduction", "..."]
+          },
+          {
+            "group": "Task",
+            "openapi": {
+              "source": "openapi/public/openapi-task.json",
+              "directory": "api-reference/task"
+            },
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/task/overview",
+                  "api-reference/task/location-history-overview"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Internal API",
+        "groups": [...]
+      }
+    ]
+  }
 }
 ```
 
----
+### Group Types
 
-## Build Script Details
-
-### Commands
-
-```bash
-# Build all (public + internal)
-node scripts/build-openapi.js
-
-# Build public only
-node scripts/build-openapi.js public
-
-# Build internal only
-node scripts/build-openapi.js internal
-```
-
-### What the Build Script Does
-
-1. **Loads base YAML** (`initial.yaml`, `params.yaml`)
-2. **Merges module JSON files** from `public/` and `internal/`
-3. **Merges Models** from `Models/` directory
-4. **Converts Swagger 2.0 to OpenAPI 3.0**
-5. **Applies Mintlify compatibility fixes**:
-   - Fix invalid types (e.g., `datetime` → `string` with `format: date-time`)
-   - Fix `type`/`required` keyword collisions
-   - Convert HTML descriptions to Markdown
-   - Fix security scheme references
-   - Remove invalid schema properties
-6. **Splits into module-specific files** for navigation
-7. **Outputs to `openapi/public/` and `openapi/internal/`**
-
-### Override Mechanism
-
-Internal files override public files with the same submodule name:
-
-| Scenario | Public API | Internal API |
-|----------|------------|--------------|
-| Only `public/1_Task/1_Task.json` | Included | Included |
-| Only `internal/1_Task/1_Task.json` | Not included | Included |
-| Both exist | Public version | Internal version |
+1. **Static pages** - `"pages": ["path/to/page"]`
+2. **OpenAPI auto-generated** - `"openapi": { "source": "...", "directory": "..." }`
+3. **Mixed** - Both `"openapi"` and `"pages"` (overview + auto-generated)
+4. **Nested groups** - `"pages": [{ "group": "...", "pages": [...] }]`
 
 ---
 
@@ -359,15 +444,6 @@ mint dev
 # Server runs at http://localhost:3000
 ```
 
-### Test Specific Pages
-
-```bash
-# Test API reference pages
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api-reference/introduction
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api-reference/task/get-tasks
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api-reference/objects/task-object
-```
-
 ### Kill Dev Server
 
 ```bash
@@ -378,65 +454,18 @@ lsof -ti:3000 | xargs kill -9
 
 ---
 
-## Navigation Configuration
-
-### docs.json Structure
-
-```json
-{
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": ["api-reference/introduction", "..."]
-          },
-          {
-            "group": "Task",
-            "openapi": {
-              "source": "openapi/public/openapi-task.json",
-              "directory": "api-reference/task"
-            },
-            "pages": ["api-reference/task/overview"]
-          },
-          {
-            "group": "Objects",
-            "pages": ["api-reference/objects/task-object", "..."]
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-### Group Types
-
-1. **Static pages** - `"pages": ["path/to/page"]`
-2. **OpenAPI auto-generated** - `"openapi": { "source": "...", "directory": "..." }`
-3. **Mixed** - Both `"openapi"` and `"pages"` (overview + auto-generated)
-
----
-
 ## Deployment
 
 ### Automatic Deployment
 
 Push to `main` branch triggers automatic deployment via Mintlify GitHub app.
 
-### Manual Deployment
-
-```bash
-mintlify deploy
-```
-
 ### Pre-deployment Checklist
 
 - [ ] Build OpenAPI specs: `node scripts/build-openapi.js`
 - [ ] Validate specs: `mint openapi-check openapi/public/openapi-full.json`
 - [ ] Test locally: `mint dev`
+- [ ] Check card links work (no 404s)
 - [ ] Commit all changes (api-specs, openapi, docs.json)
 
 ---
@@ -454,6 +483,13 @@ Laravel source files may have unescaped control characters. The build script han
 3. Check `paths` key exists and is not null
 4. Run `node scripts/build-openapi.js`
 
+### Card Links Return 404
+
+1. Run `mint dev`
+2. Navigate sidebar to find actual URL
+3. Update href in MDX file
+4. Common pattern: `/api-reference/{module}/{tag}/{endpoint-slug}`
+
 ### Schema Not Showing in Object Page
 
 1. Check schema name matches exactly (case-sensitive)
@@ -469,6 +505,12 @@ Laravel source files may have unescaped control characters. The build script han
 2. Restart `mint dev`
 3. Clear browser cache
 
+### Internal Pages Indexed by Search Engines
+
+1. Add `noindex: true` to MDX frontmatter
+2. Rebuild OpenAPI specs to add x-mint metadata
+3. Use `--internal` flag with generate script
+
 ---
 
 ## File Naming Conventions
@@ -477,6 +519,7 @@ Laravel source files may have unescaped control characters. The build script han
 
 ```
 api-specs/public/[order]_[Module]/[order]_[Feature].json
+api-specs/internal/[order]_[Module]/[order]_[Feature].json
 ```
 
 Examples:
@@ -487,11 +530,14 @@ Examples:
 ### MDX Pages
 
 ```
-api-reference/[module]/[page-name].mdx
+api-reference/[module]/overview.mdx           # Main module overview
+api-reference/[module]/[tag]-overview.mdx     # Sub-tag overview
+api-reference/objects/[name]-object.mdx       # Schema documentation
 ```
 
 Examples:
 - `api-reference/task/overview.mdx`
+- `api-reference/task/location-history-overview.mdx`
 - `api-reference/objects/task-object.mdx`
 
 ---
@@ -501,21 +547,25 @@ Examples:
 ```bash
 # Build
 node scripts/build-openapi.js
+node scripts/build-openapi.js public
+node scripts/build-openapi.js internal
+
+# Generate overview pages
+node scripts/generate-tag-overviews.js --dry-run
+node scripts/generate-tag-overviews.js --public
+node scripts/generate-tag-overviews.js --internal
+node scripts/generate-tag-overviews.js --tag "Workflow" --force
 
 # Validate
 mint openapi-check openapi/public/openapi-full.json
 
 # Dev server
 mint dev
-
-# Kill dev server
 pkill -f "mint"
 
-# Search endpoints
+# Search
 grep -r "endpoint-name" api-specs/
-
-# Check schema exists
-cat openapi/public/openapi-full.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('SchemaName' in d.get('components',{}).get('schemas',{}))"
+grep -r "TagName" api-specs/base/tag-descriptions.yaml
 
 # Count paths
 cat openapi/public/openapi-full.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(len(d.get('paths',{})))"
@@ -523,4 +573,4 @@ cat openapi/public/openapi-full.json | python3 -c "import json,sys; d=json.load(
 
 ---
 
-*Last Updated: 2025-11-26*
+*Last Updated: 2025-11-28*
