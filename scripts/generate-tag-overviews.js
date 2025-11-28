@@ -6,9 +6,14 @@
  * MDX overview pages for each tag that needs one.
  *
  * Usage:
- *   node scripts/generate-tag-overviews.js
- *   node scripts/generate-tag-overviews.js --dry-run
- *   node scripts/generate-tag-overviews.js --tag "Location History"
+ *   node scripts/generate-tag-overviews.js              # Generate all (public + internal)
+ *   node scripts/generate-tag-overviews.js --dry-run    # Preview without writing
+ *   node scripts/generate-tag-overviews.js --public     # Generate public API only
+ *   node scripts/generate-tag-overviews.js --internal   # Generate internal API only
+ *   node scripts/generate-tag-overviews.js --force      # Overwrite existing files
+ *   node scripts/generate-tag-overviews.js --tag "Workflow"  # Generate specific tag
+ *
+ * Internal API pages are generated with noindex: true in frontmatter.
  */
 
 const fs = require('fs');
@@ -182,12 +187,12 @@ const TAG_CONFIG = {
     skip: true // Already exists as module overview
   },
 
-  // ==========================================
-  // INTERNAL API (noindex: true for all)
-  // ==========================================
+};
 
-  // Internal Task module
-  'Task (Internal)': {
+// Internal API configuration - uses same tag names but different output paths
+// These are processed separately with noindex: true
+const INTERNAL_TAG_CONFIG = {
+  'Task': {
     module: 'task',
     outputDir: 'api-reference-internal/task',
     outputFile: 'overview.mdx',
@@ -196,9 +201,7 @@ const TAG_CONFIG = {
     objectLink: '/api-reference-internal/objects/task-object',
     noindex: true
   },
-
-  // Internal Routing module
-  'Routing (Internal)': {
+  'Routing': {
     module: 'routing',
     outputDir: 'api-reference-internal/routing',
     outputFile: 'overview.mdx',
@@ -207,9 +210,7 @@ const TAG_CONFIG = {
     objectLink: '/api-reference-internal/objects/vehicle-object',
     noindex: true
   },
-
-  // Internal Flow module
-  'Flow (Internal)': {
+  'Flow': {
     module: 'flow',
     outputDir: 'api-reference-internal/flow',
     outputFile: 'overview.mdx',
@@ -218,34 +219,39 @@ const TAG_CONFIG = {
     objectLink: '/api-reference-internal/objects/flow-object',
     noindex: true
   },
-
-  // Internal Data module
-  'Data (Internal)': {
+  'Data': {
     module: 'data',
     outputDir: 'api-reference-internal/data',
     outputFile: 'overview.mdx',
     openapiFile: 'openapi/internal/openapi-data.json',
     endpointPrefix: '/api-reference-internal/data/',
-    noindex: true
+    noindex: true,
+    descriptionKey: 'Data Source' // Use Data Source description
   },
-
-  // Internal Setting module
-  'Setting (Internal)': {
+  'Setting': {
     module: 'setting',
     outputDir: 'api-reference-internal/setting',
     outputFile: 'overview.mdx',
     openapiFile: 'openapi/internal/openapi-setting.json',
     endpointPrefix: '/api-reference-internal/setting/',
-    noindex: true
+    noindex: true,
+    descriptionKey: 'User' // Use User description as base
   },
-
-  // Internal File module
-  'File (Internal)': {
+  'File': {
     module: 'file',
     outputDir: 'api-reference-internal/file',
     outputFile: 'overview.mdx',
     openapiFile: 'openapi/internal/openapi-file.json',
     endpointPrefix: '/api-reference-internal/file/file/',
+    noindex: true
+  },
+  'Workflow': {
+    module: 'workflow',
+    outputDir: 'api-reference-internal/workflow',
+    outputFile: 'overview.mdx',
+    openapiFile: 'openapi/internal/openapi-workflow.json',
+    endpointPrefix: '/api-reference-internal/workflow/workflow/',
+    objectLink: '/api-reference-internal/objects/workflow-object',
     noindex: true
   }
 };
@@ -389,26 +395,11 @@ ${relatedResources}` : ''}
   return mdx;
 }
 
-function main() {
-  const args = process.argv.slice(2);
-  const dryRun = args.includes('--dry-run');
-  const specificTag = args.find(a => a.startsWith('--tag='))?.split('=')[1] ||
-                      (args.indexOf('--tag') > -1 ? args[args.indexOf('--tag') + 1] : null);
-
-  const basePath = path.resolve(__dirname, '..');
-  const tagDescriptions = loadTagDescriptions(basePath);
-
-  console.log('=== Tag Overview Page Generator ===\n');
-  console.log(`Mode: ${dryRun ? 'DRY RUN' : 'WRITE'}`);
-  if (specificTag) console.log(`Specific tag: ${specificTag}`);
-  console.log('');
-
-  const results = { generated: [], skipped: [], errors: [] };
-
-  for (const [tagName, config] of Object.entries(TAG_CONFIG)) {
+function processConfig(configEntries, tagDescriptions, basePath, args, dryRun, specificTag, results) {
+  for (const [tagName, config] of configEntries) {
     if (specificTag && tagName !== specificTag) continue;
 
-    console.log(`Processing: ${tagName}`);
+    console.log(`Processing: ${tagName}${config.noindex ? ' (internal)' : ''}`);
 
     if (config.skip) {
       console.log(`  ⏭️  Skipped (module-level overview exists)`);
@@ -416,9 +407,11 @@ function main() {
       continue;
     }
 
-    const description = tagDescriptions[tagName];
+    // Use descriptionKey if specified, otherwise use tagName
+    const descKey = config.descriptionKey || tagName;
+    const description = tagDescriptions[descKey];
     if (!description) {
-      console.log(`  ⚠️  No description in tag-descriptions.yaml`);
+      console.log(`  ⚠️  No description in tag-descriptions.yaml for "${descKey}"`);
       results.errors.push({ tag: tagName, error: 'No description' });
       continue;
     }
@@ -452,6 +445,38 @@ function main() {
     }
 
     results.generated.push(tagName);
+  }
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  const dryRun = args.includes('--dry-run');
+  const internalOnly = args.includes('--internal');
+  const publicOnly = args.includes('--public');
+  const specificTag = args.find(a => a.startsWith('--tag='))?.split('=')[1] ||
+                      (args.indexOf('--tag') > -1 ? args[args.indexOf('--tag') + 1] : null);
+
+  const basePath = path.resolve(__dirname, '..');
+  const tagDescriptions = loadTagDescriptions(basePath);
+
+  console.log('=== Tag Overview Page Generator ===\n');
+  console.log(`Mode: ${dryRun ? 'DRY RUN' : 'WRITE'}`);
+  console.log(`Target: ${internalOnly ? 'INTERNAL ONLY' : publicOnly ? 'PUBLIC ONLY' : 'ALL'}`);
+  if (specificTag) console.log(`Specific tag: ${specificTag}`);
+  console.log('');
+
+  const results = { generated: [], skipped: [], errors: [] };
+
+  // Process public API config
+  if (!internalOnly) {
+    console.log('--- PUBLIC API ---\n');
+    processConfig(Object.entries(TAG_CONFIG), tagDescriptions, basePath, args, dryRun, specificTag, results);
+  }
+
+  // Process internal API config
+  if (!publicOnly) {
+    console.log('\n--- INTERNAL API ---\n');
+    processConfig(Object.entries(INTERNAL_TAG_CONFIG), tagDescriptions, basePath, args, dryRun, specificTag, results);
   }
 
   console.log('\n=== Summary ===');
